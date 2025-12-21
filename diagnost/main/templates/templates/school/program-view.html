@@ -1,0 +1,230 @@
+{% extends 'school/base_one.html' %}
+{% load l10n %}
+{% load static %}
+{% load webp %}
+{% block description %}{{ title }} Образовательный центр ГБОУ 'Вершина'{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+{{ form.media }}
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/blog_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/blog_responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_responsive.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/product_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/product_responsive.css' %}">
+
+	<!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="blog">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1></h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+	          <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+	
+	<!-- Single Product -->
+
+	<div class="single_product">
+		<div class="container">
+			<div class="row">
+
+				<!-- Images -->
+<!-- Images List (Thumbnails) -->
+<div class="col-lg-2 order-lg-1 order-2">
+    <ul class="list-unstyled">
+        {% if program.photo %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{{ program.photo.url }}" alt="{{ program.title }}" data-full="{{ program.photo.url }}">
+        </li>
+        {% else %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{% static 'img/no-image.PNG' %}" alt="нет фото" data-full="{% static 'img/no-image.PNG' %}">
+        </li>
+        {% endif %}
+
+        {% if program.photo2 %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{{ program.photo2.url }}" alt="{{ program.title }}" data-full="{{ program.photo2.url }}">
+        </li>
+        {% else %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{% static 'img/no-image.PNG' %}" alt="нет фото" data-full="{% static 'img/no-image.PNG' %}">
+        </li>
+        {% endif %}
+
+        {% if program.photo3 %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{{ program.photo3.url }}" alt="{{ program.title }}" data-full="{{ program.photo3.url }}">
+        </li>
+        {% else %}
+        <li class="mb-2">
+            <img class="img-thumbnail thumb-img" src="{% static 'img/no-image.PNG' %}" alt="нет фото" data-full="{% static 'img/no-image.PNG' %}">
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+
+<!-- Selected Image (Large View) -->
+<div class="col-lg-5 order-lg-2 order-1">
+    <div class="border rounded overflow-hidden">
+        <img id="main-image" class="img-fluid" src="{% if program.photo %}{{ program.photo.url }}{% else %}{% static 'img/no-image.PNG' %}{% endif %}" alt="{{ program.title }}">
+    </div>
+</div>
+
+				<!-- Description -->
+				<div class="col-lg-5 order-3">
+					<div class="product_description">
+						<div class="product_category">{{ program.cat }}</div>
+						<div class="product_name">{{ title }}</div>
+						<div class="rating_r rating_r_4 product_rating"><i></i><i></i><i></i><i></i><i></i></div>
+						<div class="product_text"><p>{% autoescape off %}{{ program.content }}{% endautoescape %}</p></div>
+						<div class="order_info d-flex flex-row">
+						
+
+								<div class="button_container">
+								    <form method="post" action="{% url 'add_user_to_prog' program.id %}">
+								        {% csrf_token %}
+								        <button type="submit" class="button cart_button">Регистрация</button>
+								    </form>
+								    <div class="product_fav"><i class="fas fa-heart"></i></div>
+								</div>
+
+				
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+		<!-- Best Sellers -->
+
+<div class="best_sellers">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <!-- Вкладки -->
+                <ul class="nav nav-tabs tabs-right" id="programTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                    	<div class="button_container">
+                        	<button class="btn btn-primary" id="participants-tab" data-bs-toggle="tab" data-bs-target="#participants" type="button" role="tab" aria-controls="participants" aria-selected="true">Участники и порядок отбора</button>
+                    	</div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    	<div class="button_container">
+                        	<button class="btn btn-primary" id="supervisor-tab" data-bs-toggle="tab" data-bs-target="#supervisor" type="button" role="tab" aria-controls="supervisor" aria-selected="false">Руководитель программы</button>
+                    	</div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    	<div class="button_container">
+                        	<button class="btn btn-primary" id="statement-tab" data-bs-toggle="tab" data-bs-target="#statement" type="button" role="tab" aria-controls="statement" aria-selected="false">Положение о программе</button>
+                    	</div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    	<div class="button_container">
+                        	<button class="btn btn-primary" id="news-tab" data-bs-toggle="tab" data-bs-target="#news" type="button" role="tab" aria-controls="news" aria-selected="false">Новости о программе</button>
+                    	</div>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                    	<div class="button_container">
+                        	<button class="btn btn-primary" id="lectures-tab" data-bs-toggle="tab" data-bs-target="#lectures" type="button" role="tab" aria-controls="lectures" aria-selected="false">Лекции программы</button>
+                    	</div>
+                    </li>
+                </ul>
+
+
+                <!-- Контент вкладок -->
+                <div class="tab-content mt-4" id="programTabsContent">
+
+                    <!-- Вкладка 1 -->
+                    <div class="tab-pane fade show active" id="participants" role="tabpanel" aria-labelledby="participants-tab">
+                        <div class="product_text">
+                            <p>{% autoescape off %}{{ program.selection_procedure }}{% endautoescape %}</p>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка 2 -->
+                    <div class="tab-pane fade" id="supervisor" role="tabpanel" aria-labelledby="supervisor-tab">
+
+                        <p>Контент для "Руководитель программы".</p>
+                    </div>
+
+                    <!-- Вкладка 3 -->
+                    <div class="tab-pane fade" id="statement" role="tabpanel" aria-labelledby="statement-tab">
+                    	<div class="product_text">
+                            <p>{% autoescape off %}{{ program.prog_statement }}{% endautoescape %}</p>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка 4 -->
+                    <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
+                        <div class="row">
+                            <div class="col">
+                                <div class="blog_posts d-flex flex-row align-items-start justify-content-between">
+                                    {% for n in program.news_set.all %}
+                                    <div class="blog_post">
+                                        {% if n.photo %}
+                                        <div class="blog_image" style="background-image:url({{ n.photo.url }})"></div>
+                                        {% else %}
+                                        <div class="blog_image" style="background-image:url({% static 'onetech/images/no-image.PNG' %})"></div>
+                                        {% endif %}
+                                        <div class="blog_text">{{ n.title|truncatewords:7 }}</div>
+                                        <div class="blog_button"><a href="{{ n.get_absolute_url }}">Читать далее...</a></div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка 5 -->
+                    <div class="tab-pane fade" id="lectures" role="tabpanel" aria-labelledby="lectures-tab">
+                        <p>Контент для "Лекции".</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mainImage = document.getElementById('main-image');
+    const thumbnails = document.querySelectorAll('.thumb-img');
+
+    thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+            const newSrc = this.getAttribute('data-full');
+            mainImage.setAttribute('src', newSrc);
+        });
+    });
+});
+</script>
+
+
+
+
+{% endblock %}

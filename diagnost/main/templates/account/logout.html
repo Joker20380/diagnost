@@ -1,0 +1,66 @@
+{% extends "diagnost/base.html" %}
+{% load static %}
+{% load allauth i18n %}
+{% block title %}
+    {% trans "Sign Out" %}
+{% endblock title %}
+{% block content %}
+
+
+  <!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>Выйти</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Выйти</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_form_inner register_form_inner">
+						<div class="col-md-12 form-group">
+							<p>{% trans 'Are you sure you want to sign out?' %}</p>
+						</div>
+                        <div class="login_part_text_iner">
+							<form class="row login_form" action="#" method="post" novalidate="novalidate">
+								<div class="col-md-12 form-group">
+    								{% url 'account_logout' as action_url %}
+    								{% element form method="post" action=action_url no_visible_fields=True %}
+        							{% slot body %}
+            						{% csrf_token %}
+            						{% element fields form=form unlabeled=True %}
+            						{% endelement %}
+            						{% if redirect_field_value %}
+            							<input type="hidden"
+                    						name="{{ redirect_field_name }}"
+                    						value="{{ redirect_field_value }}">
+									{% endif %}
+        							{% endslot %}
+        							{% slot actions %}
+									<button type="submit" class="btn btn-primary">Выйти</button>
+        							{% endslot %}
+    								{% endelement %}
+    							</div>
+							</form>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--================End Login Box Area =================-->
+{% endblock %}

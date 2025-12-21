@@ -1,0 +1,141 @@
+{% extends 'school/base_one.html' %}
+{% load static %}
+{% load webp %}
+
+
+{% block description %}Основные документы ГБОУ "Вершина{% endblock %}
+
+{% block title %}
+Документы
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_responsive.css' %}">
+
+
+<!-- ================ start banner area ================= -->
+	<div class="home">	
+		<div class="home_background parallax-window" data-parallax="scroll" data-image-src="{% static 'onetech/images/shop_background.webp' %}"></div>
+		<div class="home_overlay"></div>
+		<div class="home_content d-flex flex-column align-items-center justify-content-center">
+			<h2 class="home_title">{{ title }}</h2>
+		</div>
+
+    </div>
+	
+			<!-- Shop -->
+
+	<div class="shop">
+		
+		<div class="container">
+            <div class="row">
+            	<div class="col-lg-3">
+					<div class="shop_sidebar">
+						<div class="sidebar_section">
+                            <nav class="custom_tabs text-center">
+								<ul class="sidebar_categories">
+                                    <li class="nav" id="nav-tab" role="tablist" style="display: flex; flex-direction: column;">
+                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                                            <p>Учредительные документы</p><hr>
+                                        </a>
+                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
+                                            <p>Нормативно-правовые акты</p><hr>
+                                        </a>
+                                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">
+                                            <p>Локальные акты</p><hr>
+                                        </a>
+                                        <a class="nav-item nav-link" id="nav-contact2-tab" data-toggle="tab" href="#nav-contact2" role="tab" aria-controls="nav-contact2" aria-selected="false">
+                                            <p>Прочие документы</p><hr>
+                                        </a>
+                                        <a class="nav-item nav-link" id="nav-contact3-tab" data-toggle="tab" href="#nav-contact3" role="tab" aria-controls="nav-contact3" aria-selected="false">
+                                            <p>Архивные документы</p><hr>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </aside>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 mb-5 mb-lg-0">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+							<div class="single_post_text">
+								<h4>Учредительные документы</h4>
+								<ol>
+									{% for d in view.constituent_documents %}
+									{% if d.pdf_file %}
+									<a href="{{ d.pdf_file.url }}">
+										<li><p>{{ d.name_pdffile }}</p></li>
+									</a>
+									{% endif %}
+									{% endfor %}
+								</ol>
+							</div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                          	<div class="single_post_text">
+								<h4>Нормативно-правовые акты</h4>
+								<ol>
+									{% for d in view.regulatory_legal_acts %}
+									{% if d.pdf_file %}
+									<a href="{{ d.pdf_file.url }}">
+										<li><p>{{ d.name_pdffile }}</p></li>
+									</a>
+									{% endif %}
+									{% endfor %}
+								</ol>
+							</div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        	<div class="single_post_text">
+								<h4>Локальные акты</h4>
+								<ol>
+									{% for d in view.local_acts %}
+									{% if d.pdf_file %}
+									<a href="{{ d.pdf_file.url }}">
+										<li><p>{{ d.name_pdffile }}</p></li>
+									</a>
+									{% endif %}
+									{% endfor %}
+								</ol>
+								
+							</div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact2" role="tabpanel" aria-labelledby="nav-profile-tab">
+                          	<div class="single_post_text">
+                          		<h4>Прочие документы</h4>
+								<ol>
+									{% for d in view.other_documents %}
+									{% if d.pdf_file %}
+									<a href="{{ d.pdf_file.url }}">
+										<li><p>{{ d.name_pdffile }}</p></li>
+									</a>
+									{% endif %}
+									{% endfor %}
+								</ol>
+							</div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-contact3" role="tabpanel" aria-labelledby="nav-profile-tab">
+                          	<div class="single_post_text">
+                          		<h4>Архивные документы</h4>
+								<ol>
+									{% for d in view.archival_documents %}
+									{% if d.pdf_file %}
+									<a href="{{ d.pdf_file.url }}">
+										<li><p>{{ d.name_pdffile }}</p></li>
+									</a>
+									{% endif %}
+									{% endfor %}
+								</ol>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+
+
+{% endblock %}	

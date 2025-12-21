@@ -1,0 +1,204 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+
+{% block title %}Осмотр подвески{% endblock %}
+{% block description %}Форма мастера для оценки состояния подвески автомобиля{% endblock %}
+
+{% block content %}
+<div class="top-shadow"></div>
+<div class="inner-page">
+  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_4.jpg' %}');">
+    <div class="container">
+      <div class="row slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+          <h1 class="pt-5"><span>Осмотр подвески</span></h1>
+          <p class="mb-5 w-75">Заполните форму оценки состояния подвески</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <form method="post">
+      {% csrf_token %}
+
+      <h4>Общие данные</h4>
+      {{ form.non_field_errors }}
+      {{ form.as_p }}
+
+      <hr>
+      <h4>Детали подвески</h4>
+
+      {{ formset.non_form_errors }}
+      {{ formset.management_form }}
+
+      <table class="table table-bordered align-middle" id="parts-table">
+        <thead>
+          <tr>
+            <th>Деталь</th>
+            <th style="width:320px;">Износ (%)</th>
+            <th>Каталожный номер</th>
+            <th>Нужна замена?</th>
+            <th style="width:120px;">Удалить</th>
+          </tr>
+        </thead>
+        <tbody id="formset-body">
+          {% for subform in formset %}
+            <tr class="part-form">
+              <td>
+                {{ subform.part_type.errors }}
+                {{ subform.part_type }}
+              </td>
+
+              <td>
+                {{ subform.wear_percent.errors }}
+                <input
+                  type="range"
+                  name="{{ subform.wear_percent.html_name }}"
+                  id="{{ subform.wear_percent.id_for_label }}"
+                  value="{{ subform.wear_percent.value|default_if_none:0 }}"
+                  min="0" max="100"
+                  class="form-range wear-slider"
+                  oninput="updateColor(this)"
+                  aria-label="Износ, проценты">
+                <span class="wear-value ms-2">{{ subform.wear_percent.value|default_if_none:0 }}%</span>
+              </td>
+
+              <td>
+                {{ subform.part_number.errors }}
+                {{ subform.part_number }}
+              </td>
+
+              <td>
+                {{ subform.needs_replacement.errors }}
+                {{ subform.needs_replacement }}
+              </td>
+
+              <td>
+                {% if subform.can_delete %}{{ subform.DELETE }}{% endif %}
+                {% if subform.can_delete %}
+                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Удалить</button>
+                {% endif %}
+              </td>
+
+              {% for hidden in subform.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <button type="button" class="btn btn-outline-primary mb-3" onclick="addForm()">Добавить деталь</button>
+      <button type="submit" class="btn btn-success">Сохранить осмотр</button>
+      <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Назад</a>
+
+      <!-- Шаблон пустой строки (на основе empty_form) -->
+      <table style="display:none;">
+        <tbody id="empty-form-template" data-prefix="{{ formset.prefix }}">
+          <tr class="part-form">
+            <td>
+              {{ formset.empty_form.part_type.errors }}
+              {{ formset.empty_form.part_type }}
+            </td>
+
+            <td>
+              {{ formset.empty_form.wear_percent.errors }}
+              <input
+                type="range"
+                name="{{ formset.empty_form.wear_percent.html_name }}"
+                id="{{ formset.empty_form.wear_percent.id_for_label }}"
+                value="0"
+                min="0" max="100"
+                class="form-range wear-slider"
+                oninput="updateColor(this)"
+                aria-label="Износ, проценты">
+              <span class="wear-value ms-2">0%</span>
+            </td>
+
+            <td>
+              {{ formset.empty_form.part_number.errors }}
+              {{ formset.empty_form.part_number }}
+            </td>
+
+            <td>
+              {{ formset.empty_form.needs_replacement.errors }}
+              {{ formset.empty_form.needs_replacement }}
+            </td>
+
+            <td>
+              {% if formset.can_delete %}{{ formset.empty_form.DELETE }}{% endif %}
+              {% if formset.can_delete %}
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Удалить</button>
+              {% endif %}
+            </td>
+
+            {% for hidden in formset.empty_form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</section>
+
+<script>
+  const prefix = "{{ formset.prefix }}";
+
+  function updateColor(slider) {
+    const value = parseInt(slider.value || 0, 10);
+    const label = slider.nextElementSibling;
+    if (label) label.textContent = value + '%';
+
+    if (value < 30) {
+      slider.style.background = '#198754'; // зелёный
+    } else if (value < 70) {
+      slider.style.background = '#ffc107'; // жёлтый
+    } else {
+      slider.style.background = '#dc3545'; // красный
+    }
+  }
+
+  function addForm() {
+    const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    const index = parseInt(totalForms.value || '0', 10);
+
+    const template = document.getElementById('empty-form-template').innerHTML;
+    const html = template.replaceAll('__prefix__', index);
+
+    const row = document.createElement('tr');
+    row.className = 'part-form';
+    row.innerHTML = html.trim();
+
+    document.getElementById('formset-body').appendChild(row);
+
+    // увеличить счётчик форм
+    totalForms.value = index + 1;
+
+    // перекрасить слайдер и показать %
+    const slider = row.querySelector('.wear-slider');
+    if (slider) slider.dispatchEvent(new Event('input'));
+  }
+
+  function removeRow(button) {
+    const row = button.closest('tr');
+    if (!row) return;
+
+    // пометить на удаление стандартным чекбоксом DELETE
+    const del = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+    if (del) {
+      del.checked = true;
+      row.style.display = 'none';
+    } else {
+      // на всякий случай
+      row.remove();
+    }
+  }
+
+  // первичная раскраска существующих слайдеров
+  document.querySelectorAll('.wear-slider').forEach(updateColor);
+</script>
+{% endblock %}

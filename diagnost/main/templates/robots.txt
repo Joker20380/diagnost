@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /static/
+Disallow: /media/
+
+Allow: /
+
+Sitemap: https://www.autozvuk15.ru/sitemap.xml

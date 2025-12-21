@@ -1,0 +1,95 @@
+{% extends "diagnost/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+{% block title %}
+    {% trans "Sign In" %}
+{% endblock title %}
+{% block content %}
+
+  <!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>Войти</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Войти</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_form_inner register_form_inner">
+                        <form class="row login_form" action="#" method="post" novalidate="novalidate">
+    						{% if not SOCIALACCOUNT_ONLY %}
+        						{% setvar link %}
+            					<a href="{{ signup_url }}">
+            						{% endsetvar %}
+            						{% setvar end_link %}
+            					</a>
+        					{% endsetvar %}
+        					<div class="col-md-12 form-group">
+        						{% element p %}
+            						{% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
+        						{% endelement %}
+        					</div>
+        					{% url 'account_login' as login_url %}
+        					{% element form form=form method="post" action=login_url tags="entrance,login" %}
+            				{% slot body %}
+            				<div class="col-md-12 form-group">
+                				{% csrf_token %}
+                				{% element fields form=form unlabeled=True %}
+                				{% endelement %}
+                				{{ redirect_field }}
+            					{% endslot %}
+            					{% slot actions %}
+								<button type="submit" class="btn btn-primary">Войти</button>
+        					 </div>
+            				{% endslot %}
+    						{% endelement %}
+    						{% endif %}
+							{% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+        					{% element hr %}
+        					{% endelement %}
+        					{% element button_group vertical=True %}
+            				{% if PASSKEY_LOGIN_ENABLED %}
+                				{% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
+                				{% trans "Sign in with a passkey" %}
+            					{% endelement %}
+            				{% endif %}
+        					{% if LOGIN_BY_CODE_ENABLED %}
+                				{% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
+                				{% trans "Mail me a sign-in code" %}
+                				{% endelement %}
+            				{% endif %}
+        					{% endelement %}
+    						{% endif %}
+    						{% if SOCIALACCOUNT_ENABLED %}
+        						{% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    						{% endif %}
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<!--================End Login Box Area =================-->
+{% endblock content %}
+{% block extra_body %}
+    {{ block.super }}
+    {% if PASSKEY_LOGIN_ENABLED %}
+        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
+    {% endif %}
+{% endblock %}

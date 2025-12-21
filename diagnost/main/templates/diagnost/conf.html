@@ -1,0 +1,63 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+{% load webp %}
+
+
+{% block description %}{{ news.content|truncatewords:40 }} организации Автозвук Владикавказ{% endblock %}
+
+{% block title %}Политика конфиденциальности{% endblock %}
+
+{% block content %} 
+   
+    <div class="top-shadow"></div>
+    
+    <div class="inner-page">
+    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+        
+        <div class="container">
+          <div class="row slider-text align-items-center justify-content-center">
+            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+              <h1 class="pt-5"><span>Политика конфиденциальности</span></h1>
+              <p class="mb-5 w-75"></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
+
+    <section class="section">
+    	{% for n in view.news_all_conf %}
+      <div class="container">
+        <div class="row">
+          <div class="col-12" style="margin-top: -150px;">
+          	{% if n.photo %}
+          	<p><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></p>
+          	{% else %}
+            <p><img src="{% static 'images/no_photo.webp' %}" alt="нет фото" class="img-fluid"></p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-8 mb-5">
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-8 mb-5">
+            <h2></h2>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <p>{% autoescape off %}{{ n.content }}{% endautoescape %}</p>
+            
+            <p><a href="#" class="btn btn-primary py-3 px-3">Подписаться</a></p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </section>
+    
+    {% endblock %}

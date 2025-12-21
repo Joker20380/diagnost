@@ -1,0 +1,22 @@
+{% load socialaccount %}
+{% load static %}
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+{% if provider.id == "openid" %}
+{% for brand in provider.get_brands %}
+<li>
+  <a title="{{ brand.name }}"
+  href="{% provider_login_url provider.id openid=brand.openid_url process=process %}">
+  	{{ brand.name }}
+  </a>
+</li>
+{% endfor %}
+{% endif %}
+  <a title="{{provider.name}}" class="socialaccount_provider"
+     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+      <img src="{% with '/img/'|add:provider.name|add:'.png' as image %}
+      {% static image %}
+     {% endwith %}" alt="{{ provider.name }}" height="50" width="50"/>
+  </a>
+{% endfor %}

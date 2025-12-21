@@ -1,0 +1,60 @@
+{% extends 'school/base_one.html' %}
+{% load static %}
+{% load webp %}
+
+
+{% block description %}{{ doc.content }}{% endblock %}
+
+{% block title %}
+{{ doc.title }}
+{% endblock %}
+
+{% block content %}
+
+	<!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="blog">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ doc.title }}</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+
+	<!-- Single Blog Post -->
+
+	<div class="single_post">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2">
+					<div class="single_post_title">{{ doc.title }}</div>
+					<div class="single_post_text">
+						<p>{% autoescape off %}{{ doc.content }}{% endautoescape %}</p>
+
+						<div class="single_post_quote text-center">
+							<div class="quote_image"><img src="images/quote.png" alt=""></div>
+							<div class="quote_name">Прикрепленный файл</div>
+							<div class="quote_text">
+								{% if doc.pdf_file %}
+                                <a href="{{ doc.pdf_file.url }}">
+                                    <li><span>{{ doc.name_pdffile }}</span></li>
+                                </a>
+                                {% endif %}
+							</div>
+						</div>
+
+						<p>Praesent ac magna sed massa euismod congue vitae vitae risus. Nulla lorem augue, mollis non est et, eleifend elementum ante. Nunc id pharetra magna.  Praesent vel orci ornare, blandit mi sed, aliquet nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

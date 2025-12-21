@@ -1,0 +1,692 @@
+{% load static %}
+{% load webp %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<title>{% block title %}{% endblock %} - Образовательный центр ГБОУ "Вершина"</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="{% block description %}{% endblock %}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="plugins/fontawesome-free-5.0.1/css/fontawesome-all.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'onetech/images/0001.webp' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/bootstrap4/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/slick-1.8.0/slick.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/main_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/responsive.css' %}">
+
+
+
+
+
+
+
+
+
+
+
+
+{% block extra_head %}{% endblock %}
+{{ form.media }}
+
+
+
+</head>
+
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	
+	<header class="header">
+
+		<!-- Top Bar -->
+
+	<div class="top_bar">
+		<div class="container">
+    		<div class="row">
+    			<div class="col d-flex flex-row">
+        			<div class="top_bar_contact_item">
+        				<div class="top_bar_icon">
+            				<img src="{% static 'onetech/images/phone.png' %}" alt="">
+        				</div>
+        				<a href="tel://+79289284479">+79289284479</a>
+        			</div>
+        			<div class="top_bar_contact_item">
+        				<div class="top_bar_icon">
+            				<img src="{% static 'onetech/images/mail.png' %}" alt="">
+        				</div>
+        				<a href="mailto:vershina@mon.alania.gov.ru">vershina@mon.alania.gov.ru</a>
+        			</div>
+        			<div class="top_bar_content ml-auto">
+        				<div class="top_bar_menu">
+            				<ul class="standard_dropdown top_bar_dropdown">
+            					<li>
+                					<a href="#">Интерфейс<i class="fas fa-chevron-down"></i></a>
+                					<ul>
+                						<li><a href="#">English</a></li>
+                						<li><a href="#">Русский</a></li>
+                					</ul>
+            					</li>
+            					<li>
+                					<a href="#">Цветовая схема<i class="fas fa-chevron-down"></i></a>
+                					<ul>
+                						<li><a href="#" id="dark-theme">Темная</a></li>
+                						<li><a href="#" id="light-theme">Светлая</a></li>
+                						<li><a href="#" id="system-theme">Системная</a></li>
+                					</ul>
+            					</li>
+            				</ul>
+        				</div>
+        			</div>
+    			</div>
+    		</div>
+		</div>		
+	</div>
+
+				<!-- Header Main -->
+
+		<div class="header_main">
+			<div class="container">
+				<div class="row">
+
+					<!-- Logo -->
+					<div class="col-lg-4 col-sm-3 col-3 order-1">
+						<div class="logo_container">
+
+           					<div class="logo">
+           						<a href="{% url 'index' %}">
+           							<img id="lazy-gif-logo" src="{% static 'onetech/images/0001.webp' %}" data-gif-src="{% static 'onetech/images/smaller.gif' %}" width="70" height="70" alt="Animation">
+           						</a>
+           					</div>
+							
+						</div>
+					</div>
+					
+
+					<!-- Search -->
+					<div class="col-lg-4 col-12 order-lg-2 order-3 text-lg-left text-right">
+						<div class="header_search">
+							<div class="header_search_content">
+								<div class="header_search_form_container">
+									<form action="{% url 'search' %}" method="get" class="header_search_form clearfix">
+										<input type="search" name="q" class="header_search_input" placeholder="Поиск по сайту...">
+
+										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="{% static 'onetech/images/search.png' %}" alt=""></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Wishlist -->
+					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+							<div class="wishlist d-flex flex-row align-items-center justify-content-end">
+								{% if request.user.is_authenticated %}
+								<div class="top_bar_user">
+									<div class="user_icon"><img src="{% static 'onetech/images/user.svg' %}" alt=""></div>
+									<div><a href="{% url 'personal_area' %}">{{ user.username }}</a></div>
+									<div><a href="{% url 'account_logout' %}">Выйти</a></div>
+								</div>
+								{% else %}
+								<div class="top_bar_user">
+									<div class="user_icon"><img src="{% static 'onetech/images/user.svg' %}" alt=""></div>
+									<div><a href="{% url 'account_signup' %}">Регистрация</a></div>
+									<div><a href="{% url 'account_login' %}">Войти</a></div>
+								</div>
+								{% endif %}
+							</div>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Main Navigation -->
+
+		<nav class="main_nav">
+			<div class="container">
+
+
+				<div class="row">
+					<div class="col">
+						
+						<div class="main_nav_content d-flex flex-row">
+
+							<!-- Categories Menu -->
+
+							<div class="cat_menu_container">
+
+								<div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+									<div class="cat_burger"><span></span><span></span><span></span></div>
+									<div class="cat_menu_text">Категории</div>
+								</div>
+
+
+								<ul class="cat_menu">
+									<li><a href="#">Наука <i class="fas fa-chevron-right ml-auto"></i></a></li>
+									<li><a href="#">Искусство<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="#">Спорт<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="#">Модельный центр<i class="fas fa-chevron-right"></i></a></li>
+
+								</ul>
+							</div>
+
+							<!-- Main Nav Menu -->
+
+							<div class="main_nav_menu ml-auto">
+								<ul class="standard_dropdown main_nav_dropdown">
+									<li class="hassubs">
+										<a href="#">О центре<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'general_information' %}">Общая информация<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'documents' %}">Документы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'blog' %}">Новости<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Лекториум<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Как попасть<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'selection_criteria' %}">Критерии отбора<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'stay_rules' %}">Правила пребывания<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'accommodation_conditions' %}">Условия размещения<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'memo_of_parents' %}">Памятка для родителей<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'required_docs' %}">Необходимые документы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'faq' %}">Часто задаваемые вопросы<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Мероприятия<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'big_challenges' %}">Большие вызовы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'sirius_summer' %}">Сириус лето<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Программы<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'educational_programs' %}">Наука<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'educational_programs' %}">Искусство<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'educational_programs' %}">Спорт<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'educational_programs' %}">Модельный центр<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li><a href="{% url 'vsosh' %}">ВсОШ<i class="fas fa-chevron-down"></i></a></li>
+									<li class="hassubs">
+										<a href="#">Контакты<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'contacts' %}">Образовательный центр "Вершина"<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'contacts' %}">Региональный модельный центр<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+							<!-- Menu Trigger -->
+
+							<div class="menu_trigger_container ml-auto">
+								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+									<div class="menu_burger">
+										<div class="menu_trigger_text">Меню</div>
+										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		
+		<!-- Menu -->
+
+		<div class="page_menu">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						
+						<div class="page_menu_content">
+							<div class="page_menu_search">
+								<form action="{% url 'search' %}" method="get">
+									<input type="search" name="q" class="page_menu_search_input" placeholder="Поиск по сайту...">
+								</form>
+							</div>
+
+							<ul class="page_menu_nav">
+								<li class="page_menu_item has-children">
+									<a href="#">О центре<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'general_information' %}">Общая информация<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'documents' %}">Документы<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'blog' %}">Новости<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Как попасть<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'selection_criteria' %}">Критерии отбора<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'stay_rules' %}">Правила пребывания<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'accommodation_conditions' %}">Условия размещения<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'memo_of_parents' %}">Памятка для родителей<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'required_docs' %}">Необходимые документы<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'faq' %}">Часто задаваемые вопросы<i class="fas fa-chevron-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Мероприятия<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'big_challenges' %}">Большие вызовы<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'sirius_summer' %}">Сириус лето<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Программы<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'educational_programs' %}">Наука<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'educational_programs' %}">Искусство<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'educational_programs' %}">Спорт<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'educational_programs' %}">Модельный центр<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item"><a href="{% url 'vsosh' %}">ВсОШ<i class="fa fa-angle-down"></i></a></li>
+								<li class="page_menu_item has-children">
+									<a href="#">Контакты<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'contacts' %}">Образовательный центр "Вершина"<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'contacts' %}">Региональный модельный центр<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Интерфейс<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Русский<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">English<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Цветовая схема<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Темная<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Светлая<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Системная<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+							</ul>
+							
+							<div class="menu_contact">
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'onetech/images/phone_white.png' %}" alt=""></div><a href="tel://+79289284479">+79289284479</a</div>
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'onetech/images/mail_white.png' %}" alt=""></div><a href="mailto:vershina@mon.alania.gov.ru">vershina@mon.alania.gov.ru</a></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>
+	
+	{% block content %}
+
+	{% endblock content %}
+	
+	
+	<!-- Newsletter -->
+
+	<div class="newsletter">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
+						<div class="newsletter_title_container">
+							<div class="newsletter_icon"><img src="{% static 'onetech/images/send.png' %}" alt=""></div>
+							<div class="newsletter_title">Наша рассылка новостей</div>
+							<div class="newsletter_text"><p>Будьте в курсе событий Учебного центра</p></div>
+						</div>
+						<div class="newsletter_content clearfix">
+							<form method="post" action="{% url 'subscribe' %}" class="newsletter_form">
+								{% csrf_token %}
+								{{ subscriber_form.email }}
+								<button type="submit" class="newsletter_button">Подписаться</button>
+							</form>
+							<div class="newsletter_unsubscribe_link"><a href="{% url 'unsubscribe_request' %}">отписаться</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-3 footer_col">
+					<div class="footer_column footer_contact">
+						<div class="logo_container">
+							<div class="logo"><a href="{% url 'index' %}">"Вершина"</a></div>
+						</div>
+						<div class="footer_title">Есть вопросы? Позвоните нам</div>
+						<div class="footer_phone"><a href="tel://+79289284479">+79289284479</a></div>
+						<div class="footer_contact_text">
+							<p>г. Владикавказ</p>
+							<p>ул. Пожарского 21</p>
+						</div>
+						<div class="footer_social">
+							<ul>
+								<li><a href="#"><i class="fab fa-vk"></i></a></li>
+								<li><a href="#"><i class="fab fa-github"></i></a></li>
+								<li><a href="#"><i class="fab fa-youtube"></i></a></li>
+								<li><a href="#"><i class="fab fa-telegram"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-2 offset-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">О центре</div>
+						<ul class="footer_list">
+							<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации</a></li>
+							<li><a href="{% url 'general_information' %}">Общая информация</a></li>
+							<li><a href="{% url 'documents' %}">Документы</a></li>
+							<li><a href="{% url 'blog' %}">Новости</a></li>
+							<li><a href="#">Лекториум</a></li>
+							<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">Как попасть</div>
+						<ul class="footer_list">
+							<li><a href="{% url 'selection_criteria' %}">Критерии отбора</a></li>
+							<li><a href="{% url 'stay_rules' %}">Правила пребывания</a></li>
+							<li><a href="{% url 'accommodation_conditions' %}">Условия размещения</a></li>
+							<li><a href="{% url 'memo_of_parents' %}">Памятка для родителей</a></li>
+							<li><a href="{% url 'required_docs' %}">Необходимые документы</a></li>
+							<li><a href="{% url 'faq' %}">Часто задаваемые вопросы</a></li>
+						</ul>
+						<div class="footer_subtitle">Контакты</div>
+							<ul class="footer_list">
+								<li><a href="{% url 'contacts' %}">Вершина</a></li>
+								<li><a href="{% url 'contacts' %}">Модельный центр</a></li>
+							</ul>
+						</div>
+					</div>
+				<div class="col-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">Мероприятия</div>
+						<ul class="footer_list">
+							<li><a href="{% url 'big_challenges' %}">Большие вызовы</a></li>
+							<li><a href="{% url 'sirius_summer' %}">Сириус лето</a></li>
+							<li><a href="{% url 'vsosh' %}">ВсОШ</a></li>
+						</ul>
+						<div class="footer_subtitle">Программы</div>
+							<ul class="footer_list">
+								<li><a href="{% url 'educational_programs' %}">Наука</a></li>
+								<li><a href="{% url 'educational_programs' %}">Искусство</a></li>
+								<li><a href="{% url 'educational_programs' %}">Спорт</a></li>
+								<li><a href="{% url 'educational_programs' %}">Модельный центр</a></li>
+							</ul>
+						</div>
+					</div>
+			</div>
+		</div>
+	</footer>
+
+	<!-- Copyright -->
+
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					
+					<div class="copyright_container d-flex flex-sm-row flex-column align-items-center justify-content-start">
+						<div class="copyright_content">
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Этот сайт был создан <a href="#">White_cat</a>
+</div>
+						<div class="logos ml-sm-auto">
+							<ul class="logos_list">
+								<li><a href="#"><img src="#" alt=""></a></li>
+								<li><a href="#"><img src="#" alt=""></a></li>
+								<li><a href="#"><img src="#" alt=""></a></li>
+								<li><a href="#"><img src="#" alt=""></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+ <script>
+   window.addEventListener('load', function() {
+     var img = document.getElementById('lazy-gif-logo');
+     if (!img) return;
+     // Небольшая задержка, чтобы не блокировать основной поток
+     setTimeout(function() {
+       img.src = img.dataset.gifSrc;
+     }, 300);
+   });
+ </script>
+ 
+
+
+
+
+
+ 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/ru.js"></script>
+<script src="{% static 'admin/js/core.js' %}"></script>
+<!--<script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>-->
+<script src="{% static 'admin/js/admin/RelatedObjectLookup.js' %}"></script>
+<script src="{% static 'admin/js/vendor/select2/select2.full.js' %}"></script>
+
+<!--<script src="{% static 'onetech/js/jquery-3.3.1.min.js' %}"></script>-->
+<script src="{% static 'onetech/styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'onetech/styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/TimelineMax.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/animation.gsap.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+<script src="{% static 'onetech/plugins/slick-1.8.0/slick.js' %}"></script>
+<script src="{% static 'onetech/plugins/easing/easing.js' %}"></script>
+<script src="{% static 'onetech/js/custom.js' %}"></script>
+<script src="{% static 'onetech/plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script src="{% static 'onetech/js/shop_custom.js' %}"></script>
+
+
+{% include 'includes/cookie_notice.html' %}
+
+{% if messages %}
+    <div id="message-banner">
+        {% for message in messages %}
+            <div class="message-card 
+                {% if 'error' in message.tags %}error
+                {% elif 'warning' in message.tags %}warning
+                {% elif 'success' in message.tags %}success
+                {% else %}info
+                {% endif %}">
+                <div class="message-content">
+                    <div class="typewriter">
+                        <span>{{ message }}</span><span class="cursor">|</span>
+                    </div>
+                </div>
+                <button class="close-btn" aria-label="Закрыть">&times;</button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        #message-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+            max-width: 90%;
+        }
+
+        .message-card {
+            position: relative;
+            padding: 12px 40px 12px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            font-size: 14px;
+            min-width: 300px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fade-in 0.5s forwards;
+        }
+
+        .message-card.auto-hide {
+            animation: fade-in 0.5s forwards, fade-out 0.5s forwards 5s;
+        }
+
+        .message-card.info { background: rgba(0, 123, 255, 0.85); }
+        .message-card.success { background: rgba(40, 167, 69, 0.85); }
+        .message-card.warning { background: rgba(255, 193, 7, 0.9); color: #222; }
+        .message-card.error { background: rgba(220, 53, 69, 0.85); }
+
+        .message-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #ddd;
+            transform: scale(1.2);
+        }
+
+        .typewriter {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .typewriter span:first-child {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 0.15em solid transparent;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.15em;
+            margin-left: 2px;
+            animation: blink-caret 0.8s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { opacity: 0 }
+            50% { opacity: 1 }
+        }
+
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fade-out {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(10px); }
+        }
+
+        @media (max-width: 600px) {
+            .message-card {
+                min-width: auto;
+                width: 100%;
+                font-size: 13px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const typewriters = document.querySelectorAll('.typewriter span:first-child');
+            typewriters.forEach(span => {
+                const length = span.textContent.length;
+                span.style.animation = `typing ${Math.min(3, length * 0.1)}s steps(${length}) forwards`;
+            });
+
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.message-card');
+                    card.style.animation = 'fade-out 0.5s forwards';
+                    setTimeout(() => {
+                        card.remove();
+                    }, 500);
+                });
+            });
+
+            // auto-hide for non-manual close
+            document.querySelectorAll('.message-card').forEach(card => {
+                card.classList.add('auto-hide');
+            });
+        });
+    </script>
+{% endif %}
+
+
+
+
+
+
+</body>
+
+</html>

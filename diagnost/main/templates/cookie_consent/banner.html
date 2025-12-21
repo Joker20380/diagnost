@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="{% static 'cookie_consent/cookie_consent.css' %}">
+
+{% for message in messages %}
+    {% if 'cookies' in message.message|lower %}
+        <div id="cookie-banner">
+            <span>{{ message }}</span>
+            <button id="accept-cookies">Принять</button>
+        </div>
+    {% endif %}
+{% endfor %}
+
+<script src="{% static 'cookie_consent/cookie_consent.js' %}"></script>

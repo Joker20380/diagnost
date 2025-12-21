@@ -1,0 +1,117 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+
+{% block title %}Результат диагностики{% endblock %}
+{% block description %}Детали сессии диагностики{% endblock %}
+
+{% block content %}
+<div class="top-shadow"></div>
+<div class="inner-page">
+  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+    <div class="container">
+      <div class="row slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+          <h1 class="pt-5"><span>Результат диагностики</span></h1>
+          <p class="mb-5 w-75">Анализ сессии и рекомендации</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <div class="mb-4">
+      <h4>Общая информация</h4>
+      <p><strong>VIN:</strong> {{ session.vin }}</p>
+      <p><strong>Модель:</strong> {{ session.vehicle_model }}</p>
+      <p><strong>Дата:</strong> {{ session.created_at|date:"d.m.Y H:i" }}</p>
+      <p><strong>Статус:</strong> {{ session.status }}</p>
+    </div>
+
+    <div class="mb-4">
+      <h4>Найденные коды ошибок</h4>
+      {% if codes %}
+        <ul class="list-group">
+          {% for code in codes %}
+            <li class="list-group-item">
+              <strong>{{ code.code }}</strong> — {{ code.description|default:"Описание отсутствует" }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Нет найденных кодов ошибок.</p>
+      {% endif %}
+    </div>
+
+    <div class="mb-4">
+      <h4>Рекомендации</h4>
+      {% if session.recommendation %}
+        <pre class="bg-light p-3">{{ session.recommendation }}</pre>
+      {% else %}
+        <p>Рекомендации пока не сформированы.</p>
+      {% endif %}
+    </div>
+
+    {# --- Блок подвески --- #}
+    {% if session.status == 'suspension_pending' %}
+      <div class="mb-4">
+        <h4>Ходовая часть</h4>
+        <p>⚠️ Ожидается осмотр подвески</p>
+        <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-warning">Провести осмотр подвески</a>
+      </div>
+
+    {% elif session.status == 'suspension_done' %}
+      {% with inspection=session.suspension_inspection %}
+        {% if inspection %}
+          <div class="mb-4">
+            <h4>Ходовая часть</h4>
+            <p><strong>Мастер:</strong> {{ inspection.inspector|default:"—" }}</p>
+            <p><strong>Комментарий:</strong> {{ inspection.comment|default:"—" }}</p>
+
+            {% with parts=inspection.parts.all %}
+              {% if parts|length %}
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Деталь</th>
+                      <th>Износ</th>
+                      <th>Каталожный номер</th>
+                      <th>Замена</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for part in parts %}
+                      <tr>
+                        {# если part_type — FK/choices, это поле обычно печатается корректно через __str__ #}
+                        <td>
+                          {{ part.part_type }}
+                          {# если нужно принудительно для choices: {{ part.get_part_type_display }} #}
+                        </td>
+                        <td>{{ part.wear_percent }}%</td>
+                        <td>{{ part.part_number|default:"—" }}</td>
+                        <td>{% if part.needs_replacement %}<span class="text-danger">Да</span>{% else %}Нет{% endif %}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% else %}
+                <p>Нет добавленных деталей.</p>
+              {% endif %}
+            {% endwith %}
+          </div>
+        {% else %}
+          <div class="mb-4">
+            <h4>Ходовая часть</h4>
+            <p>Данные осмотра не найдены.</p>
+            <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">Заполнить осмотр</a>
+          </div>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+
+    <a href="{% url 'diagnostic_upload' %}" class="btn btn-outline-primary">Загрузить новый отчёт</a>
+  </div>
+</section>
+{% endblock %}

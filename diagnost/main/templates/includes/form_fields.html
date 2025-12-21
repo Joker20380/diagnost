@@ -1,0 +1,70 @@
+
+
+{% for field in form %}
+    <div class="col-md-12 form-group">
+        {% if field|widget_type == "checkbox" %}
+            <div class="form-check">
+                {{ field|add_class:"form-check-input newsletter_input" }}
+                {{ field.label_tag|add_class:"form-check-label" }}
+                {% if field.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ field.errors.as_text|linebreaksbr }}
+                    </div>
+                {% endif %}
+            </div>
+
+        {% elif field|widget_type == "radioselect" %}
+            <label>{{ field.label }}</label>
+            <div>
+                {% for subwidget in field %}
+                    <div class="form-check">
+                        {{ subwidget.tag|add_class:"form-check-input newsletter_input" }}
+                        <label class="form-check-label" for="{{ subwidget.id_for_label }}">
+                            {{ subwidget.choice_label }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if field.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ field.errors.as_text|linebreaksbr }}
+                </div>
+            {% endif %}
+
+        {% elif field|widget_type == "password" %}
+            {{ field.label_tag }}
+            <div class="input-group">
+                {% if field.errors %}
+                    {{ field|add_class:"form-control is-invalid newsletter_input" }}
+                {% else %}
+                    {{ field|add_class:"form-control newsletter_input" }}
+                {% endif %}
+                <button type="button" class="btn btn-outline-secondary toggle-password" tabindex="-1">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            {% if field.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ field.errors.as_text|linebreaksbr }}
+                </div>
+            {% endif %}
+
+        {% else %}
+            {{ field.label_tag }}
+            {% if field.errors %}
+                {{ field|add_class:"form-control is-invalid newsletter_input" }}
+                <div class="invalid-feedback d-block">
+                    {{ field.errors.as_text|linebreaksbr }}
+                </div>
+            {% else %}
+                {{ field|add_class:"form-control newsletter_input" }}
+            {% endif %}
+        {% endif %}
+
+        {% if field.help_text %}
+            <small class="form-text text-muted help-text" style="display: none;">
+                {{ field.help_text }}
+            </small>
+        {% endif %}
+    </div>
+{% endfor %}

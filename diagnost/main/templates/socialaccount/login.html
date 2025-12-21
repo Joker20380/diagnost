@@ -1,0 +1,75 @@
+
+{% extends "school/base_one.html" %}
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+{% block title %}
+    {% trans "Sign In" %}
+{% endblock title %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_responsive.css' %}">
+
+  <!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>Войти</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Войти</li>
+            </ol>
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+	<!-- ================ end banner area ================= -->
+
+  <!--================Login Box Area =================-->
+	<section class="login_box_area section-margin">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_form_inner register_form_inner">
+                        <form class="row login_form" action="#" method="post" novalidate="novalidate">
+                        	 <div class="col-md-12 form-group">
+    {% if process == "connect" %}
+        {% element h1 %}
+            {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+        {% endelement %}
+        
+        	{% element p %}
+            	{% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider_img }}.{% endblocktrans %}
+        	{% endelement %}
+      
+    {% else %}
+        {% element h1 %}
+            {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+        {% endelement %}
+        {% element p %}
+            {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+        {% endelement %}
+    {% endif %}
+      </div>
+    {% element form method="post" no_visible_fields=True %}
+        {% slot actions %}
+            {% csrf_token %}
+           <div class="col-md-12 form-group">
+                <button type="submit" class="btn btn-primary">{% trans "Continue" %}</button>
+           </div>
+        {% endslot %}
+    {% endelement %}
+
+
+
+                        </form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock content %}

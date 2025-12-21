@@ -1,0 +1,48 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+{% load webp %}
+
+{% block description %}Загрузка отчёта с диагностикой авто{% endblock %}
+{% block title %}Загрузить диагностику{% endblock %}
+
+{% block content %}
+<div class="top-shadow"></div>
+<div class="inner-page">
+  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+    <div class="container">
+      <div class="row slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+          <h1 class="pt-5"><span>Загрузка диагностики</span></h1>
+          <p class="mb-5 w-75">Передайте файл с Launch X431, чтобы мы проанализировали результаты</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <form method="post" enctype="multipart/form-data" id="diagnostic_upload_form">
+          {% csrf_token %}
+          <div class="form-group mb-3">
+            <label for="{{ form.vin.id_for_label }}">VIN автомобиля</label>
+            {{ form.vin }}
+          </div>
+          <div class="form-group mb-3">
+            <label for="{{ form.vehicle_model.id_for_label }}">Модель автомобиля</label>
+            {{ form.vehicle_model }}
+          </div>
+          <div class="form-group mb-4">
+            <label for="{{ form.raw_file.id_for_label }}">Файл отчёта</label>
+            {{ form.raw_file }}
+          </div>
+          <button type="submit" class="btn btn-primary px-4 py-2">Загрузить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

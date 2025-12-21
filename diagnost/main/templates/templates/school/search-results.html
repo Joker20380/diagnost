@@ -1,0 +1,66 @@
+{% extends 'school/base_one.html' %}
+{% load l10n %}
+{% load static %}
+{% load webp %}
+
+{% block description %}Результаты поиска по ключевой фразе Образовательный центр ГБОУ 'Вершина'{% endblock %}
+
+{% block title %}
+Результаты поиска
+{% endblock %}
+
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/shop_responsive.css' %}">
+
+  <!-- ================ start banner area ================= -->
+	<section class="blog-banner-area" id="category">
+		<div class="container h-100">
+			<div class="blog-banner">
+				<div class="text-center">
+					<h1>Результаты поиска</h1>
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            			<ol class="breadcrumb">
+            				<li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+            				<li class="breadcrumb-item active" aria-current="page">Результаты поиска</li>
+            			</ol>
+        			</nav>
+				</div>
+			</div>
+    	</div>
+	</section>
+	
+	<!-- Cart -->
+
+
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-10 offset-lg-1">
+					<div class="cart_container">
+						<div class="cart_items">
+							<ul class="cart_list">
+								<li class="cart_item clearfix">
+									<div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
+										<div class="cart_item_name cart_info_col">
+											<div class="cart_item_title">Название документа</div>
+												<ol>
+													{% for d in view.get_queryset %}
+													{% if d.pdf_file %}
+													<a href="{{ d.pdf_file.url }}">
+														<li><p>{{ d.name_pdffile }}</p></li>
+													</a>
+													{% endif %}
+													{% endfor %}
+												</ol>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+{% endblock %}

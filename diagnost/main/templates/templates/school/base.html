@@ -1,0 +1,477 @@
+{% load static %}
+{% load webp %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<title>{% block title %}{% endblock %} - Образовательный центр ГБОУ "Вершина"</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="{% block description %}{% endblock %}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'onetech/images/0001.gif' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/bootstrap4/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/plugins/slick-1.8.0/slick.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/main_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/responsive.css' %}">
+
+
+
+
+
+</head>
+
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	
+	<header class="header">
+
+		<!-- Top Bar -->
+
+		<div class="top_bar">
+			<div class="container">
+				<div class="row">
+					<div class="col d-flex flex-row">
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{% static 'onetech/images/phone.png' %}" alt=""></div><a href="tel://+79289284479">+79289284479</a></div>
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{% static 'onetech/images/mail.png' %}" alt=""></div><a href="mailto:vershina@mon.alania.gov.ru">vershina@mon.alania.gov.ru</a></div>
+						<div class="top_bar_content ml-auto">
+							<div class="top_bar_menu">
+								<ul class="standard_dropdown top_bar_dropdown">
+									<li>
+										<a href="#">Интерфейс<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="#">English</a></li>
+											<li><a href="#">Русский</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="#">Цветовая схема<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="#">Темная</a></li>
+											<li><a href="#">Светлая</a></li>
+											<li><a href="#">Системная</a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>		
+		</div>
+		
+        {% if messages %}
+        <div class="alert alert-success">
+        	{% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+		<!-- Header Main -->
+
+		<div class="header_main">
+			<div class="container">
+				<div class="row">
+
+					<!-- Logo -->
+					<div class="col-lg-2 col-sm-3 col-3 order-1">
+						<div class="logo_container">
+							<div class="logo"><a href="{% url 'index' %}"><img width="70px" src="{% static 'onetech/images/0001.gif' %}" alt=""></a></div>
+						</div>
+					</div>
+
+					<!-- Search -->
+					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+						<div class="header_search">
+							<div class="header_search_content">
+								<div class="header_search_form_container">
+									<form action="{% url 'search' %}" method="get" class="header_search_form clearfix">
+										<input type="search" name="q" class="header_search_input" placeholder="Поиск по сайту...">
+										<div class="custom_dropdown">
+											<div class="custom_dropdown_list">
+												<span class="custom_dropdown_placeholder clc">Все категории</span>
+												<i class="fas fa-chevron-down"></i>
+											</div>
+										</div>
+										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="{% static 'onetech/images/search.png' %}" alt=""></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Wishlist -->
+					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+							<div class="wishlist d-flex flex-row align-items-center justify-content-end">
+								{% if request.user.is_authenticated %}
+								<div class="top_bar_user">
+									<div class="user_icon"><img src="{% static 'onetech/images/user.svg' %}" alt=""></div>
+									<div><a href="{% url 'personal_area' %}">{{ user.username }}</a></div>
+									<div><a href="{% url 'account_logout' %}">Выйти</a></div>
+								</div>
+								{% else %}
+								<div class="top_bar_user">
+									<div class="user_icon"><img src="{% static 'onetech/images/user.svg' %}" alt=""></div>
+									<div><a href="{% url 'account_signup' %}">Регистрация</a></div>
+									<div><a href="{% url 'account_login' %}">Войти</a></div>
+								</div>
+								{% endif %}
+							</div>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Main Navigation -->
+
+		<nav class="main_nav">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						
+						<div class="main_nav_content d-flex flex-row">
+
+							<!-- Categories Menu -->
+
+							<div class="cat_menu_container">
+								<div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+									<div class="cat_burger"><span></span><span></span><span></span></div>
+									<div class="cat_menu_text">Категории</div>
+								</div>
+
+								<ul class="cat_menu">
+									<li><a href="#">Наука <i class="fas fa-chevron-right ml-auto"></i></a></li>
+									<li><a href="#">Искусство<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="#">Спорт<i class="fas fa-chevron-right"></i></a></li>
+									<li><a href="#">Модельный центр<i class="fas fa-chevron-right"></i></a></li>
+
+								</ul>
+							</div>
+
+							<!-- Main Nav Menu -->
+
+							<div class="main_nav_menu ml-auto">
+								<ul class="standard_dropdown main_nav_dropdown">
+									<li class="hassubs">
+										<a href="#">О центре<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'general_information' %}">Общая информация<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'documents' %}">Документы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'blog' %}">Новости<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Лекториум<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Как попасть<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'selection_criteria' %}">Критерии отбора<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'stay_rules' %}">Правила пребывания<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{% url 'accommodation_conditions' %}">Условия размещения<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Памятка для родителей<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Необходимые документы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Часто задаваемые вопросы<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Мероприятия<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="shop.html">Большие вызовы<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="product.html">Сириус лето<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Программы<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="shop.html">Наука<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="product.html">Искусство<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="blog.html">Спорт<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="blog_single.html">Модельный центр<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li><a href="contact.html">ВсОШ<i class="fas fa-chevron-down"></i></a></li>
+									<li class="hassubs">
+										<a href="#">Контакты<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li><a href="{% url 'contacts' %}">Образовательный центр "Вершина"<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="product.html">Региональный модельный центр<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+							<!-- Menu Trigger -->
+
+							<div class="menu_trigger_container ml-auto">
+								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+									<div class="menu_burger">
+										<div class="menu_trigger_text">Меню</div>
+										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		
+		<!-- Menu -->
+
+		<div class="page_menu">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						
+						<div class="page_menu_content">
+							<div class="page_menu_search">
+								<form action="{% url 'search' %}" method="get">
+									<input type="search" name="q" class="page_menu_search_input" placeholder="Поиск по сайту...">
+								</form>
+							</div>
+
+							<ul class="page_menu_nav">
+								<li class="page_menu_item has-children">
+									<a href="#">О центре<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'general_information' %}">Общая информация<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'documents' %}">Документы<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'blog' %}">Новости<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Как попасть<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'selection_criteria' %}">Критерии отбора<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'stay_rules' %}">Правила пребывания<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="{% url 'accommodation_conditions' %}">Условия размещения<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="#">Памятка для родителей<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="#">Необходимые документы<i class="fas fa-chevron-down"></i></a></li>
+										<li><a href="#">Часто задаваемые вопросы<i class="fas fa-chevron-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Мероприятия<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Большие вызовы<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Сириус лето<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Программы<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Наука<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Искусство<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Спорт<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Модельный центр<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item"><a href="blog.html">ВсОШ<i class="fa fa-angle-down"></i></a></li>
+								<li class="page_menu_item has-children">
+									<a href="#">Контакты<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="{% url 'contacts' %}">Образовательный центр "Вершина"<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Региональный модельный центр<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Интерфейс<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Русский<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">English<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+								<li class="page_menu_item has-children">
+									<a href="#">Цветовая схема<i class="fa fa-angle-down"></i></a>
+									<ul class="page_menu_selection">
+										<li><a href="#">Темная<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Светлая<i class="fa fa-angle-down"></i></a></li>
+										<li><a href="#">Системная<i class="fa fa-angle-down"></i></a></li>
+									</ul>
+								</li>
+							</ul>
+							
+							<div class="menu_contact">
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'onetech/images/phone_white.png' %}" alt=""></div><a href="tel://+79289284479">+79289284479</a></div>
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'onetech/images/mail_white.png' %}" alt=""></div><a href="mailto:vershina@mon.alania.gov.ru">vershina@mon.alania.gov.ru</a></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>
+	
+
+	
+	{% block content %}
+
+	{% endblock content %}
+	
+	
+	<!-- Newsletter -->
+
+	<div class="newsletter">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="newsletter_container d-flex flex-lg-row flex-column align-items-lg-center align-items-center justify-content-lg-start justify-content-center">
+						<div class="newsletter_title_container">
+							<div class="newsletter_icon"><img src="{% static 'onetech/images/send.png' %}" alt=""></div>
+							<div class="newsletter_title">Наша рассылка новостей</div>
+							<div class="newsletter_text"><p>Будьте в курсе событий Учебного центра</p></div>
+						</div>
+						<div class="newsletter_content clearfix">
+							<form method="post" action="{% url 'subscribe' %}" class="newsletter_form">
+								{% csrf_token %}
+								{{ subscriber_form.email }}
+								<button type="submit" class="newsletter_button">Подписаться</button>
+							</form>
+							<div class="newsletter_unsubscribe_link"><a href="{% url 'unsubscribe_request' %}">отписаться</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-3 footer_col">
+					<div class="footer_column footer_contact">
+						<div class="logo_container">
+							<div class="logo"><a href="{% url 'index' %}">"Вершина"</a></div>
+						</div>
+						<div class="footer_title">Есть вопросы? Позвоните нам</div>
+						<div class="footer_phone"><a href="tel://+79289284479">+79289284479</a></div>
+						<div class="footer_contact_text">
+							<p>г. Владикавказ</p>
+							<p>ул. Пожарского 21</p>
+						</div>
+						<div class="footer_social">
+							<ul>
+								<li><a href="#"><i class="fab fa-vk"></i></a></li>
+								<li><a href="#"><i class="fab fa-github"></i></a></li>
+								<li><a href="#"><i class="fab fa-youtube"></i></a></li>
+								<li><a href="#"><i class="fab fa-telegram"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-2 offset-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">О центре</div>
+						<ul class="footer_list">
+							<li><a href="{% url 'intelligence' %}">Сведения об образовательной организации</a></li>
+							<li><a href="{% url 'general_information' %}">Общая информация</a></li>
+							<li><a href="{% url 'documents' %}">Документы</a></li>
+							<li><a href="{% url 'blog' %}">Новости</a></li>
+							<li><a href="#">Лекториум</a></li>
+							<li><a href="{% url 'confidential_information' %}">Политика конфиденциальности</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">Как попасть</div>
+						<ul class="footer_list">
+							<li><a href="{% url 'selection_criteria' %}">Критерии отбора</a></li>
+							<li><a href="{% url 'stay_rules' %}">Правила пребывания</a></li>
+							<li><a href="{% url 'accommodation_conditions' %}">Условия размещения</a></li>
+							<li><a href="#">Памятка для родителей</a></li>
+							<li><a href="#">Необходимые документы</a></li>
+							<li><a href="#">Часто задаваемые вопросы</a></li>
+							<li><a href="#">Контакты</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-lg-2">
+					<div class="footer_column">
+						<div class="footer_title">Мероприятия</div>
+						<ul class="footer_list">
+							<li><a href="#">Большие вызовы</a></li>
+							<li><a href="#">Сириус лето</a></li>
+							<li><a href="#">ВсОШ</a></li>
+						</ul>
+						<div class="footer_subtitle">Программы</div>
+							<ul class="footer_list">
+								<li><a href="#">Наука</a></li>
+								<li><a href="#">Искусство</a></li>
+								<li><a href="#">Спорт</a></li>
+								<li><a href="#">Модельный центр</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+	</footer>
+
+	<!-- Copyright -->
+
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					
+					<div class="copyright_container d-flex flex-sm-row flex-column align-items-center justify-content-start">
+						<div class="copyright_content"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> Этот сайт был создан <a href="#" target="_blank">White_Cat</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</div>
+						<div class="logos ml-sm-auto">
+							<ul class="logos_list">
+								<li><a href="#"><img src="images/logos_1.png" alt=""></a></li>
+								<li><a href="#"><img src="images/logos_2.png" alt=""></a></li>
+								<li><a href="#"><img src="images/logos_3.png" alt=""></a></li>
+								<li><a href="#"><img src="images/logos_4.png" alt=""></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script src="{% static 'onetech/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'onetech/styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'onetech/styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/TimelineMax.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/animation.gsap.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'onetech/plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+<script src="{% static 'onetech/plugins/slick-1.8.0/slick.js' %}"></script>
+<script src="{% static 'onetech/plugins/easing/easing.js' %}"></script>
+<script src="{% static 'onetech/js/custom.js' %}"></script>
+<script src="{% static 'onetech/plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script src="{% static 'onetech/js/shop_custom.js' %}"></script>
+</body>
+
+</html>

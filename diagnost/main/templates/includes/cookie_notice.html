@@ -1,0 +1,89 @@
+{% if not request.COOKIES.cookies_accepted %}
+    <style>
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: fit-content;
+            max-width: 90%;
+            background: rgba(255, 106, 0, 0.9); /* тёплый полупрозрачный фон */
+            backdrop-filter: blur(10px);
+            color: #fff4e6; /* светло-кремовый */
+            padding: 12px 20px;
+            border-radius: 12px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            font-size: 14px;
+            z-index: 9999;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #cookie-banner.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #cookie-banner a {
+            color: #ffd8a8; /* мягкий бежевый */
+            text-decoration: underline;
+        }
+
+        #accept-cookies {
+            background: #ff6a00;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        #accept-cookies:hover {
+            background: #ff8c1a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            #cookie-banner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                text-align: center;
+            }
+
+            #accept-cookies {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <div id="cookie-banner">
+        <span>
+            Мы используем cookies для улучшения сайта. Подробнее в 
+            <a href="{% url 'conf' %}">политике конфиденциальности</a>.
+        </span>
+        <button id="accept-cookies">Принять</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('cookie-banner');
+            if (banner) {
+                setTimeout(() => {
+                    banner.classList.add('show');
+                }, 200);
+
+                document.getElementById('accept-cookies')?.addEventListener('click', function() {
+                    banner.classList.remove('show');
+                    document.cookie = "cookies_accepted=true; path=/; max-age=" + 60*60*24*365;
+                    setTimeout(() => {
+                        banner.style.display = 'none';
+                    }, 600);
+                });
+            }
+        });
+    </script>
+{% endif %}

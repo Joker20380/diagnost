@@ -1,0 +1,186 @@
+{% extends "diagnost/base.html" %}
+{% load static %}
+{% load allauth i18n %}
+{% block title %}
+    {% trans "Signup" %}
+{% endblock title %}
+{% block content %}
+
+
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Регистрация</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Регистрация</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section-margin">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_form_inner register_form_inner">
+                    <form class="row login_form" action="{% url 'account_signup' %}" method="post" novalidate="novalidate">
+                        {% csrf_token %}
+
+                        <!-- Отображение общих ошибок формы (не связанных с конкретными полями) -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Скрытое поле для redirect (если используется) -->
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+
+                        <!-- Кнопка отправки формы -->
+                        <div class="col-md-12 form-group">
+							<button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                        </div>
+
+                        <!-- Ссылка на вход, если аккаунт уже существует -->
+                        <div class="col-md-12 form-group">
+                            <p>
+                                Уже есть аккаунт? <a href="{{ login_url }}">Войдите</a>.
+                            </p>
+                        </div>
+
+                        <!-- Дополнительные опции (например, регистрация через passkey или социальные сети) -->
+                        {% if PASSKEY_SIGNUP_ENABLED %}
+                            <div class="col-md-12 form-group p_star">
+                                <a href="{{ signup_by_passkey_url }}" class="button button-register w-100">
+                                    Зарегистрироваться с помощью passkey
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if SOCIALACCOUNT_ENABLED %}
+                            <div class="col-md-12 form-group p_star">
+                                {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const password1 = document.getElementById("id_password1");
+    const password2 = document.getElementById("id_password2");
+
+    const showError = (input, message) => {
+        input.classList.add("is-invalid");
+        let feedback = input.parentNode.querySelector(".invalid-feedback");
+        if (!feedback) {
+            feedback = document.createElement("div");
+            feedback.className = "invalid-feedback d-block";
+            input.parentNode.appendChild(feedback);
+        }
+        feedback.textContent = message;
+        feedback.style.display = 'block';
+    };
+
+    const clearError = (input) => {
+        input.classList.remove("is-invalid");
+        const feedback = input.parentNode.querySelector(".invalid-feedback");
+        if (feedback) {
+            feedback.textContent = "";
+            feedback.style.display = 'none';
+        }
+    };
+
+    const isPasswordComplex = (password) => {
+        const lengthCheck = password.length >= 8;
+        const upperCheck = /[A-ZА-Я]/.test(password);
+        const lowerCheck = /[a-zа-я]/.test(password);
+        const digitCheck = /\d/.test(password);
+        const specialCheck = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+        return lengthCheck && upperCheck && lowerCheck && digitCheck && specialCheck;
+    };
+
+    const validatePasswords = () => {
+        let valid = true;
+        const pwd = password1?.value;
+        const pwd2 = password2?.value;
+
+        if (password1 && !isPasswordComplex(pwd)) {
+            showError(password1, "Пароль должен содержать минимум:\n• 8 символов\n• заглавную и строчную буквы\n• цифру\n• спецсимвол");
+            valid = false;
+        } else if (password1) {
+            clearError(password1);
+        }
+
+        if (password1 && password2 && pwd !== pwd2) {
+            showError(password2, "Пароли не совпадают.");
+            valid = false;
+        } else if (password2) {
+            clearError(password2);
+        }
+
+        return valid;
+    };
+
+    // Валидация при отправке формы
+    const form = document.querySelector("form");
+    form?.addEventListener("submit", function (e) {
+        if (!validatePasswords()) {
+            e.preventDefault();
+        }
+    });
+
+    // Подсказки (help-text) при фокусе
+    document.querySelectorAll(".form-control").forEach(input => {
+        const helpText = input.closest(".form-group")?.querySelector(".help-text");
+        if (helpText) {
+            input.addEventListener("focus", () => helpText.style.display = "block");
+            input.addEventListener("blur", () => {
+                if (!input.value || input.validity.valid) {
+                    helpText.style.display = "none";
+                }
+            });
+        }
+    });
+
+    password1?.addEventListener("input", validatePasswords);
+    password2?.addEventListener("input", validatePasswords);
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".toggle-password").forEach(button => {
+        button.addEventListener("click", function () {
+            const input = this.closest(".input-group").querySelector("input");
+            const icon = this.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    });
+});
+</script>
+
+
+<!--================End Login Box Area =================-->
+{% endblock content %}

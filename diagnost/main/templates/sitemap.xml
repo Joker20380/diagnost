@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+   <!-- Главная страница -->
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}/</loc>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+   </url>
+
+   <!-- Страница "О нас" -->
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}{% url 'about' %}</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <!-- Новости -->
+   {% for object in news %}
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
+      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.9</priority>
+   </url>
+   {% endfor %}
+
+   <!-- Программы -->
+   {% for object in programs %}
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
+      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   {% endfor %}
+
+   <!-- Документы -->
+   {% for object in docs %}
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
+      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   {% endfor %}
+
+   <!-- Лекции -->
+   {% for object in lectures %}
+   <url>
+      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
+      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   {% endfor %}
+
+</urlset>
