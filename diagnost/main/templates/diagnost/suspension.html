@@ -21,12 +21,74 @@
 
 <section class="section">
   <div class="container">
+
+    {% if inspection.status == 'signed' %}
+      <div class="alert alert-success">
+        <strong>Осмотр подписан.</strong>
+        {% if inspection.inspector %} Мастер: {{ inspection.inspector }}.{% endif %}
+        {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+        <div class="small text-muted mt-1">Редактирование заблокировано.</div>
+      </div>
+    {% else %}
+      <div class="alert alert-warning">
+        <strong>Черновик.</strong> Можно править до подписи.
+      </div>
+    {% endif %}
+
     <form method="post">
       {% csrf_token %}
 
       <h4>Общие данные</h4>
+
       {{ form.non_field_errors }}
-      {{ form.as_p }}
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.inspector.label }}</label>
+          {{ form.inspector }}
+          {% if form.inspector.errors %}<div class="text-danger small">{{ form.inspector.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.mileage_km.label }}</label>
+          {{ form.mileage_km }}
+          {% if form.mileage_km.errors %}<div class="text-danger small">{{ form.mileage_km.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label class="form-label">{{ form.overall_risk.label }}</label>
+          {{ form.overall_risk }}
+          {% if form.overall_risk.errors %}<div class="text-danger small">{{ form.overall_risk.errors }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="row align-items-center">
+        <div class="col-md-3 mb-2">
+          <div class="form-check">
+            {{ form.lift_used }}
+            <label class="form-check-label" for="{{ form.lift_used.id_for_label }}">
+              {{ form.lift_used.label }}
+            </label>
+          </div>
+          {% if form.lift_used.errors %}<div class="text-danger small">{{ form.lift_used.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-3 mb-2">
+          <div class="form-check">
+            {{ form.test_drive }}
+            <label class="form-check-label" for="{{ form.test_drive.id_for_label }}">
+              {{ form.test_drive.label }}
+            </label>
+          </div>
+          {% if form.test_drive.errors %}<div class="text-danger small">{{ form.test_drive.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6 mb-2">
+          <label class="form-label">{{ form.comment.label }}</label>
+          {{ form.comment }}
+          {% if form.comment.errors %}<div class="text-danger small">{{ form.comment.errors }}</div>{% endif %}
+        </div>
+      </div>
 
       <hr>
       <h4>Детали подвески</h4>
@@ -39,11 +101,15 @@
           <tr>
             <th>Деталь</th>
             <th style="width:320px;">Износ (%)</th>
-            <th>Каталожный номер</th>
-            <th>Нужна замена?</th>
-            <th style="width:120px;">Удалить</th>
+            <th style="width:160px;">Критичность</th>
+            <th style="min-width:200px;">Причина</th>
+            <th style="min-width:260px;">Признаки / замеры</th>
+            <th style="min-width:170px;">Каталожный номер</th>
+            <th style="width:220px;">Нужна замена?</th>
+            <th style="width:140px;">Удалить</th>
           </tr>
         </thead>
+
         <tbody id="formset-body">
           {% for subform in formset %}
             <tr class="part-form">
@@ -61,9 +127,24 @@
                   value="{{ subform.wear_percent.value|default_if_none:0 }}"
                   min="0" max="100"
                   class="form-range wear-slider"
-                  oninput="updateColor(this)"
+                  oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
                   aria-label="Износ, проценты">
                 <span class="wear-value ms-2">{{ subform.wear_percent.value|default_if_none:0 }}%</span>
+              </td>
+
+              <td>
+                {{ subform.severity.errors }}
+                {{ subform.severity }}
+              </td>
+
+              <td>
+                {{ subform.reason.errors }}
+                {{ subform.reason }}
+              </td>
+
+              <td>
+                {{ subform.evidence.errors }}
+                {{ subform.evidence }}
               </td>
 
               <td>
@@ -71,9 +152,20 @@
                 {{ subform.part_number }}
               </td>
 
-              <td>
+              <td class="text-center">
                 {{ subform.needs_replacement.errors }}
-                {{ subform.needs_replacement }}
+                <div class="d-flex flex-column align-items-center gap-1">
+                  {{ subform.needs_replacement }}
+
+                  {# ✅ Backend single source of truth: показываем рекомендацию с сервера #}
+                  {% if subform.repl_hint_text %}
+                    <small class="replacement-hint {{ subform.repl_hint_class }}">
+                      {{ subform.repl_hint_text }}
+                    </small>
+                  {% else %}
+                    <small class="replacement-hint text-muted"></small>
+                  {% endif %}
+                </div>
               </td>
 
               <td>
@@ -91,9 +183,21 @@
         </tbody>
       </table>
 
-      <button type="button" class="btn btn-outline-primary mb-3" onclick="addForm()">Добавить деталь</button>
-      <button type="submit" class="btn btn-success">Сохранить осмотр</button>
-      <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Назад</a>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        {% if inspection.status != 'signed' %}
+          <button type="button" class="btn btn-outline-primary" onclick="addForm()">Добавить деталь</button>
+
+          <button type="submit" name="action" value="save" class="btn btn-success">
+            Сохранить (черновик)
+          </button>
+
+          <button type="submit" name="action" value="sign" class="btn btn-primary">
+            Подписать осмотр
+          </button>
+        {% endif %}
+
+        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Назад</a>
+      </div>
 
       <!-- Шаблон пустой строки (на основе empty_form) -->
       <table style="display:none;">
@@ -113,9 +217,24 @@
                 value="0"
                 min="0" max="100"
                 class="form-range wear-slider"
-                oninput="updateColor(this)"
+                oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
                 aria-label="Износ, проценты">
               <span class="wear-value ms-2">0%</span>
+            </td>
+
+            <td>
+              {{ formset.empty_form.severity.errors }}
+              {{ formset.empty_form.severity }}
+            </td>
+
+            <td>
+              {{ formset.empty_form.reason.errors }}
+              {{ formset.empty_form.reason }}
+            </td>
+
+            <td>
+              {{ formset.empty_form.evidence.errors }}
+              {{ formset.empty_form.evidence }}
             </td>
 
             <td>
@@ -123,9 +242,13 @@
               {{ formset.empty_form.part_number }}
             </td>
 
-            <td>
+            <td class="text-center">
               {{ formset.empty_form.needs_replacement.errors }}
-              {{ formset.empty_form.needs_replacement }}
+              <div class="d-flex flex-column align-items-center gap-1">
+                {{ formset.empty_form.needs_replacement }}
+                {# empty_form не аннотируется сервером — стартуем с нейтрального, JS обновит #}
+                <small class="replacement-hint text-muted"></small>
+              </div>
             </td>
 
             <td>
@@ -141,6 +264,7 @@
           </tr>
         </tbody>
       </table>
+
     </form>
   </div>
 </section>
@@ -154,12 +278,83 @@
     if (label) label.textContent = value + '%';
 
     if (value < 30) {
-      slider.style.background = '#198754'; // зелёный
+      slider.style.background = '#198754';
     } else if (value < 70) {
-      slider.style.background = '#ffc107'; // жёлтый
+      slider.style.background = '#ffc107';
     } else {
-      slider.style.background = '#dc3545'; // красный
+      slider.style.background = '#dc3545';
     }
+  }
+
+  function syncSeverityByWear(slider) {
+    const row = slider.closest('tr');
+    if (!row) return;
+
+    const value = parseInt(slider.value || 0, 10);
+    const sev = row.querySelector('select[name$="-severity"]');
+    if (!sev) return;
+
+    if (sev.dataset.touched === "1") return;
+
+    if (value >= 70) {
+      sev.value = 'crit';
+    } else if (value >= 40) {
+      sev.value = 'warn';
+    } else {
+      sev.value = 'ok';
+    }
+  }
+
+  // ✅ JS теперь только “live update” UI (сервер уже отдает рекомендацию на GET/POST),
+  // но при движении слайдера мы хотим обновлять бейдж сразу.
+  function updateReplacementHint(slider) {
+    const row = slider.closest('tr');
+    if (!row) return;
+
+    const value = parseInt(slider.value || 0, 10);
+
+    const checkbox = row.querySelector('input[type="checkbox"][name$="-needs_replacement"]');
+    const hint = row.querySelector('.replacement-hint');
+    if (!hint) return;
+
+    // если мастер уже трогал чекбокс — не спорим
+    if (checkbox && checkbox.dataset.touched === "1") {
+      hint.textContent = "";
+      hint.className = "replacement-hint text-muted";
+      return;
+    }
+
+    if (value >= 70) {
+      hint.textContent = "Рекомендация: заменить";
+      hint.className = "replacement-hint badge bg-danger";
+    } else if (value >= 40) {
+      hint.textContent = "Рекомендация: наблюдать / перепроверить";
+      hint.className = "replacement-hint badge bg-warning text-dark";
+    } else {
+      hint.textContent = "Рекомендация: замена не требуется";
+      hint.className = "replacement-hint badge bg-success";
+    }
+  }
+
+  function bindSeverityTouched(row) {
+    const sev = row.querySelector('select[name$="-severity"]');
+    if (!sev) return;
+    sev.addEventListener('change', () => {
+      sev.dataset.touched = "1";
+    });
+  }
+
+  function bindReplacementTouched(row) {
+    const checkbox = row.querySelector('input[type="checkbox"][name$="-needs_replacement"]');
+    if (!checkbox) return;
+    checkbox.addEventListener('change', () => {
+      checkbox.dataset.touched = "1";
+      const hint = row.querySelector('.replacement-hint');
+      if (hint) {
+        hint.textContent = "";
+        hint.className = "replacement-hint text-muted";
+      }
+    });
   }
 
   function addForm() {
@@ -169,36 +364,60 @@
     const template = document.getElementById('empty-form-template').innerHTML;
     const html = template.replaceAll('__prefix__', index);
 
-    const row = document.createElement('tr');
-    row.className = 'part-form';
-    row.innerHTML = html.trim();
+    const wrapper = document.createElement('tbody');
+    wrapper.innerHTML = html.trim();
+    const newRow = wrapper.querySelector('tr.part-form');
 
-    document.getElementById('formset-body').appendChild(row);
-
-    // увеличить счётчик форм
+    document.getElementById('formset-body').appendChild(newRow);
     totalForms.value = index + 1;
 
-    // перекрасить слайдер и показать %
-    const slider = row.querySelector('.wear-slider');
-    if (slider) slider.dispatchEvent(new Event('input'));
+    bindSeverityTouched(newRow);
+    bindReplacementTouched(newRow);
+
+    const slider = newRow.querySelector('.wear-slider');
+    if (slider) {
+      updateColor(slider);
+      syncSeverityByWear(slider);
+      updateReplacementHint(slider);
+    }
   }
 
   function removeRow(button) {
     const row = button.closest('tr');
     if (!row) return;
 
-    // пометить на удаление стандартным чекбоксом DELETE
     const del = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
     if (del) {
       del.checked = true;
       row.style.display = 'none';
     } else {
-      // на всякий случай
       row.remove();
     }
   }
 
-  // первичная раскраска существующих слайдеров
-  document.querySelectorAll('.wear-slider').forEach(updateColor);
+  // init
+  document.querySelectorAll('#formset-body tr.part-form').forEach(row => {
+    bindSeverityTouched(row);
+    bindReplacementTouched(row);
+
+    const slider = row.querySelector('.wear-slider');
+    if (slider) {
+      updateColor(slider);
+      syncSeverityByWear(slider);
+      // сервер уже отдал подсказку, но на всякий случай синхронизируем при наличии пустого hint
+      const hint = row.querySelector('.replacement-hint');
+      if (hint && hint.textContent.trim() === "") {
+        updateReplacementHint(slider);
+      }
+    }
+  });
+
+  {% if inspection.status == 'signed' %}
+    document.querySelectorAll('input, select, textarea, button').forEach(el => {
+      if (el.tagName.toLowerCase() === 'a') return;
+      if (el.closest('a')) return;
+      el.disabled = true;
+    });
+  {% endif %}
 </script>
 {% endblock %}

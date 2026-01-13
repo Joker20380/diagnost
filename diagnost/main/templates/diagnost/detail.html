@@ -12,7 +12,7 @@
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
           <h1 class="pt-5"><span>Результат диагностики</span></h1>
-          <p class="mb-5 w-75">Анализ сессии и рекомендации</p>
+          <p class="mb-5 w-75 mx-auto">Анализ сессии и рекомендации</p>
         </div>
       </div>
     </div>
@@ -24,10 +24,10 @@
 
     <div class="mb-4">
       <h4>Общая информация</h4>
-      <p><strong>VIN:</strong> {{ session.vin }}</p>
-      <p><strong>Модель:</strong> {{ session.vehicle_model }}</p>
+      <p><strong>VIN:</strong> {{ session.vin|default:"—" }}</p>
+      <p><strong>Модель:</strong> {{ session.vehicle_model|default:"—" }}</p>
       <p><strong>Дата:</strong> {{ session.created_at|date:"d.m.Y H:i" }}</p>
-      <p><strong>Статус:</strong> {{ session.status }}</p>
+      <p><strong>Статус:</strong> {{ session.get_status_display|default:session.status }}</p>
     </div>
 
     <div class="mb-4">
@@ -47,7 +47,19 @@
 
     <div class="mb-4">
       <h4>Рекомендации</h4>
+
       {% if session.recommendation %}
+        <div class="alert alert-info">
+          <div class="d-flex justify-content-between align-items-center">
+            <strong>Системные подсказки</strong>
+            {% if session.ai_generated_at %}
+              <span class="small text-muted">Сгенерировано: {{ session.ai_generated_at|date:"d.m.Y H:i" }}</span>
+            {% endif %}
+          </div>
+          <div class="small text-muted mt-1">
+            Это предварительный анализ. Финальные решения фиксируются в осмотрах мастера и/или заключении специалиста.
+          </div>
+        </div>
         <pre class="bg-light p-3">{{ session.recommendation }}</pre>
       {% else %}
         <p>Рекомендации пока не сформированы.</p>
@@ -55,63 +67,115 @@
     </div>
 
     {# --- Блок подвески --- #}
-    {% if session.status == 'suspension_pending' %}
-      <div class="mb-4">
-        <h4>Ходовая часть</h4>
-        <p>⚠️ Ожидается осмотр подвески</p>
-        <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-warning">Провести осмотр подвески</a>
-      </div>
+    <div class="mb-4">
+      <h4>Ходовая часть</h4>
 
-    {% elif session.status == 'suspension_done' %}
-      {% with inspection=session.suspension_inspection %}
-        {% if inspection %}
-          <div class="mb-4">
-            <h4>Ходовая часть</h4>
-            <p><strong>Мастер:</strong> {{ inspection.inspector|default:"—" }}</p>
-            <p><strong>Комментарий:</strong> {{ inspection.comment|default:"—" }}</p>
+      {% if session.status == 'suspension_pending' %}
+        <p class="mb-2">⚠️ Ожидается осмотр подвески</p>
+        <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-warning">
+          Провести осмотр подвески
+        </a>
 
+      {% elif session.status == 'suspension_done' %}
+        {% with inspection=session.suspension_inspection %}
+          {% if inspection %}
+            {# статус/подпись #}
+            {% if inspection.status == 'signed' %}
+              <div class="alert alert-success">
+                <strong>Осмотр подписан мастером.</strong>
+                {% if inspection.inspector %} Мастер: {{ inspection.inspector }}.{% endif %}
+                {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+                <div class="small text-muted mt-1">
+                  Этот блок — фактология (human evidence). ИИ здесь не принимает решений.
+                </div>
+              </div>
+            {% else %}
+              <div class="alert alert-warning">
+                <strong>Осмотр в черновике.</strong>
+                <div class="small text-muted mt-1">
+                  Можно редактировать до подписи. Финальным считается только подписанный осмотр.
+                </div>
+              </div>
+            {% endif %}
+
+            <p class="mb-1"><strong>Мастер:</strong> {{ inspection.inspector|default:"—" }}</p>
+            <p class="mb-3"><strong>Комментарий:</strong> {{ inspection.comment|default:"—" }}</p>
+
+            {# доп. поля осмотра #}
+            <div class="row mb-3">
+              <div class="col-md-3"><strong>Пробег:</strong> {{ inspection.mileage_km|default:"—" }}</div>
+              <div class="col-md-3"><strong>Подъёмник:</strong> {% if inspection.lift_used %}Да{% else %}Нет{% endif %}</div>
+              <div class="col-md-3"><strong>Тест-драйв:</strong> {% if inspection.test_drive %}Да{% else %}Нет{% endif %}</div>
+              <div class="col-md-3"><strong>Общий риск:</strong> {{ inspection.get_overall_risk_display|default:"—" }}</div>
+            </div>
+
+            {# таблица деталей #}
             {% with parts=inspection.parts.all %}
               {% if parts|length %}
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Деталь</th>
-                      <th>Износ</th>
-                      <th>Каталожный номер</th>
-                      <th>Замена</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for part in parts %}
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
                       <tr>
-                        {# если part_type — FK/choices, это поле обычно печатается корректно через __str__ #}
-                        <td>
-                          {{ part.part_type }}
-                          {# если нужно принудительно для choices: {{ part.get_part_type_display }} #}
-                        </td>
-                        <td>{{ part.wear_percent }}%</td>
-                        <td>{{ part.part_number|default:"—" }}</td>
-                        <td>{% if part.needs_replacement %}<span class="text-danger">Да</span>{% else %}Нет{% endif %}</td>
+                        <th>Деталь</th>
+                        <th>Износ</th>
+                        <th>Критичность</th>
+                        <th>Причина</th>
+                        <th>Признаки / замеры</th>
+                        <th>Каталожный номер</th>
+                        <th>Замена</th>
                       </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {% for part in parts %}
+                        <tr>
+                          <td>{{ part.part_type|default:"—" }}</td>
+                          <td>{{ part.wear_percent }}%</td>
+                          <td>{{ part.get_severity_display|default:"—" }}</td>
+                          <td>{{ part.reason|default:"—" }}</td>
+                          <td style="white-space: pre-wrap;">{{ part.evidence|default:"—" }}</td>
+                          <td>{{ part.part_number|default:"—" }}</td>
+                          <td>
+                            {% if part.needs_replacement %}
+                              <span class="text-danger">Да</span>
+                            {% else %}
+                              Нет
+                            {% endif %}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
               {% else %}
                 <p>Нет добавленных деталей.</p>
               {% endif %}
             {% endwith %}
-          </div>
-        {% else %}
-          <div class="mb-4">
-            <h4>Ходовая часть</h4>
+
+            {# CTA по осмотру #}
+            <div class="mt-3">
+              <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">
+                {% if inspection.status == 'signed' %}
+                  Открыть осмотр (просмотр)
+                {% else %}
+                  Продолжить осмотр (редактирование)
+                {% endif %}
+              </a>
+            </div>
+
+          {% else %}
             <p>Данные осмотра не найдены.</p>
-            <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">Заполнить осмотр</a>
-          </div>
-        {% endif %}
-      {% endwith %}
-    {% endif %}
+            <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">
+              Заполнить осмотр
+            </a>
+          {% endif %}
+        {% endwith %}
+      {% else %}
+        <p class="text-muted">Подвеска пока не в пайплайне этой сессии.</p>
+      {% endif %}
+    </div>
 
     <a href="{% url 'diagnostic_upload' %}" class="btn btn-outline-primary">Загрузить новый отчёт</a>
+
   </div>
 </section>
 {% endblock %}
