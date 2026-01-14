@@ -6,6 +6,8 @@
   <head>
     <title>{% block title %}{% endblock %} - Автозвук Владикавказ</title>
     <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="{% static 'images/logo_autozvuk.webp' %}" type="image/webp">
