@@ -1,17 +1,15 @@
-<!-- PROD TEMPLATE MARKER: base 2026-01-16 -->
+{% load static i18n %}
 
-{% load static %}
-{% load i18n %}
-{% include 'includes/cookie_notice.html' %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
   <head>
     <title>{% block title %}AI-Diagnostics{% endblock %} - AI-Diagnostics</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <meta name="description" content="{% block description %}AI-Diagnostics — automotive diagnostics, inspection and technical consulting.{% endblock %}">
+    <meta name="description" content="{% block description %}{% trans "AI-Diagnostics — automotive diagnostics, inspection and technical consulting." %}{% endblock %}">
     <meta name="robots" content="index,follow">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
@@ -28,15 +26,36 @@
 
     <!-- Theme Style -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+      /* Language switcher: fix clipping + keep navbar look */
+      .lang-switcher-form { margin: 0; padding: 0; }
+      .lang-select {
+        background: transparent;
+        color: inherit;
+        border: 1px solid rgba(255,255,255,.25);
+        border-radius: .2rem;
+        padding: .25rem .55rem;
+        line-height: 1.2;
+        min-width: 64px;
+        cursor: pointer;
+      }
+      .lang-select:focus { outline: none; box-shadow: none; }
+      @media (max-width: 991.98px) {
+        .lang-select { margin-top: .5rem; }
+      }
+    </style>
   </head>
 
   <body>
+    {% include 'includes/cookie_notice.html' %}
+
     <header role="banner">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
 
           <a class="navbar-brand" href="{% url 'index' %}">
-            <img width="100" src="{% static 'images/logo_ai.png' %}" alt="AI-Diagnostics logo">
+            <img width="100" src="{% static 'images/logo_ai.png' %}" alt="{% trans 'AI-Diagnostics logo' %}">
           </a>
 
           <button class="navbar-toggler" type="button"
@@ -44,62 +63,96 @@
                   data-target="#navbarsExample05"
                   aria-controls="navbarsExample05"
                   aria-expanded="false"
-                  aria-label="Toggle navigation">
+                  aria-label="{% trans 'Toggle navigation' %}">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <div class="collapse navbar-collapse" id="navbarsExample05">
             <ul class="navbar-nav pl-md-5 ml-auto">
               <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">Home</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                   href="{% url 'index' %}">{% trans "Home" %}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
+                   href="{% url 'about' %}">{% trans "About" %}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}" href="{% url 'projects' %}">Projects</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}"
+                   href="{% url 'projects' %}">{% trans "Projects" %}</a>
               </li>
 
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Services
+                  {% trans "Services" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
-                  <a class="dropdown-item" href="#">Auto diagnostics</a>
+                  <a class="dropdown-item" href="#">{% trans "Auto diagnostics" %}</a>
                 </div>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="{% url 'blog' %}">Blog</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}"
+                   href="{% url 'blog' %}">{% trans "Blog" %}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Contacts</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}"
+                   href="{% url 'contacts' %}">{% trans "Contacts" %}</a>
               </li>
 
-              {# Language switcher (styled like menu) #}
-              <li class="nav-item">
-                <form action="{% url 'set_language' %}" method="post" class="m-0 p-0">
-                  {% csrf_token %}
-                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                  {% get_current_language as CURRENT_LANG %}
-                  <select name="language"
-                          class="nav-link bg-dark text-white border-0 p-0"
-                          style="appearance:none; -webkit-appearance:none; -moz-appearance:none; cursor:pointer;"
-                          aria-label="Language"
-                          onchange="this.form.submit()">
-                    <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
-                    <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
-                    <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
-                  </select>
-                </form>
-              </li>
+              <!-- Language switcher -->
+		<li class="nav-item d-flex align-items-center">
+  <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form" id="langForm">
+    {% csrf_token %}
+    <input type="hidden" name="next" id="langNext" value="{{ request.get_full_path }}">
+    {% get_current_language as CURRENT_LANG %}
+
+    <select name="language"
+            class="lang-select"
+            aria-label="{% trans 'Language' %}"
+            onchange="setLangNextAndSubmit(this)">
+      <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
+      <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
+      <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
+    </select>
+  </form>
+</li>
+
+<script>
+  function setLangNextAndSubmit(sel) {
+    const lang = sel.value;
+    const nextInput = document.getElementById('langNext');
+    const form = document.getElementById('langForm');
+
+    // current path + query
+    const current = nextInput.value || window.location.pathname + window.location.search;
+
+    // split query
+    const [pathPart, queryPart] = current.split('?', 2);
+    let path = pathPart || '/';
+    const query = queryPart ? ('?' + queryPart) : '';
+
+    // strip known prefixes first
+    path = path.replace(/^\/(nl|fr)(?=\/|$)/, '') || '/';
+
+    // add prefix back for nl/fr; EN has no prefix (because prefix_default_language=False)
+    if (lang === 'nl' || lang === 'fr') {
+      if (path === '/') path = '';
+      path = '/' + lang + path;
+    }
+
+    nextInput.value = path + query;
+    form.submit();
+  }
+</script>
+
             </ul>
 
             <div class="navbar-nav ml-auto">
               <form method="get" action="{% url 'blog' %}" class="search-form">
                 <span class="icon ion ion-search"></span>
-                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <input type="text" name="q" class="form-control" placeholder="{% trans 'Search...' %}">
               </form>
             </div>
 
@@ -123,14 +176,14 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-8">
-            <h2 class="text-white mb-0">Subscribe to our updates</h2>
-            <p class="text-white lead">Stay informed about our latest news, updates, and developments.</p>
+            <h2 class="text-white mb-0">{% trans "Subscribe to our updates" %}</h2>
+            <p class="text-white lead">{% trans "Stay informed about our latest news, updates, and developments." %}</p>
           </div>
           <div class="col-lg-4 text-lg-right">
             <form method="post" action="{% url 'subscribe' %}" class="newsletter_form">
               {% csrf_token %}
               {{ subscriber_form.email }}
-              <button type="submit" class="btn btn-outline-white px-4 py-3">Subscribe</button>
+              <button type="submit" class="btn btn-outline-white px-4 py-3">{% trans "Subscribe" %}</button>
             </form>
           </div>
         </div>
@@ -143,7 +196,7 @@
           <div class="col-md-4 mb-5">
             <h3>AI-Diagnostics</h3>
             <p class="mb-5">
-              We help automotive service centers make confident, data-driven diagnostic decisions.
+              {% trans "We help automotive service centers make confident, data-driven diagnostic decisions." %}
             </p>
 
             <ul class="list-unstyled footer-link d-flex footer-social">
@@ -155,30 +208,30 @@
           </div>
 
           <div class="col-md-5 mb-5 pl-md-5">
-            <h3>Contact</h3>
+            <h3>{% trans "Contact" %}</h3>
             <ul class="list-unstyled footer-link">
               <li class="d-block">
-                <span class="d-block">Contact information:</span>
+                <span class="d-block">{% trans "Contact information:" %}</span>
                 <span></span>
               </li>
               <li class="d-block">
-                <span class="d-block">Phone:</span>
+                <span class="d-block">{% trans "Phone:" %}</span>
                 <span>+32465000000</span>
               </li>
               <li class="d-block">
-                <span class="d-block">Email:</span>
+                <span class="d-block">{% trans "Email:" %}</span>
                 <span>jvov2038@gmail.com</span>
               </li>
             </ul>
           </div>
 
           <div class="col-md-3 mb-5">
-            <h3>Links</h3>
+            <h3>{% trans "Links" %}</h3>
             <ul class="list-unstyled footer-link">
-              <li><a href="{% url 'about' %}">About</a></li>
-              <li><a href="{% url 'projects' %}">Projects</a></li>
-              <li><a href="{% url 'blog' %}">Blog</a></li>
-              <li><a href="{% url 'contacts' %}">Contacts</a></li>
+              <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+              <li><a href="{% url 'projects' %}">{% trans "Projects" %}</a></li>
+              <li><a href="{% url 'blog' %}">{% trans "Blog" %}</a></li>
+              <li><a href="{% url 'contacts' %}">{% trans "Contacts" %}</a></li>
             </ul>
           </div>
         </div>
@@ -186,9 +239,10 @@
         <div class="row">
           <div class="col-12 text-md-center text-left">
             <p class="copyright">
-              Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-              All rights reserved | Template made with <i class="fa fa-heart text-danger" aria-hidden="true"></i>
-              by <a href="#" target="_blank">White_cat</a>
+              {% trans "Copyright" %} &copy;<script>document.write(new Date().getFullYear());</script>
+              {% trans "All rights reserved" %} | {% trans "Template made with" %}
+              <i class="fa fa-heart text-danger" aria-hidden="true"></i>
+              {% trans "by" %} <a href="#" target="_blank">White_cat</a>
             </p>
           </div>
         </div>
