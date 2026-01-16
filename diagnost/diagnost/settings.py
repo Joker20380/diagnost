@@ -5,6 +5,7 @@ Docker-ready config: Postgres + Redis, sane defaults, no host-specific paths.
 
 from pathlib import Path
 from decouple import Csv, config
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -60,9 +61,13 @@ INSTALLED_APPS = [
     "diagnostics",
 ]
 
+# ------------------------------------------------------------------------------
+# Middleware
+# ------------------------------------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -73,6 +78,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "diagnost.urls"
 
+# ------------------------------------------------------------------------------
+# Templates
+# ------------------------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -109,28 +117,47 @@ DATABASES = {
 # Auth / allauth
 # ------------------------------------------------------------------------------
 SITE_ID = config("SITE_ID", default=1, cast=int)
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# django-allauth (new settings; replaces deprecated ACCOUNT_*)
-
 _login_methods = config("ACCOUNT_LOGIN_METHODS", default="username,email")
 ACCOUNT_LOGIN_METHODS = {m.strip() for m in _login_methods.split(",") if m.strip()}
-_signup_fields = config("ACCOUNT_SIGNUP_FIELDS", default="email*,username*,password1*,password2*")
+
+_signup_fields = config(
+    "ACCOUNT_SIGNUP_FIELDS",
+    default="email*,username*,password1*,password2*",
+)
 ACCOUNT_SIGNUP_FIELDS = [f.strip() for f in _signup_fields.split(",") if f.strip()]
+
 ACCOUNT_EMAIL_VERIFICATION = config("ACCOUNT_EMAIL_VERIFICATION", default="none")
+
 LOGIN_REDIRECT_URL = config("LOGIN_REDIRECT_URL", default="/")
 LOGOUT_REDIRECT_URL = config("LOGOUT_REDIRECT_URL", default="/")
 
 # ------------------------------------------------------------------------------
 # I18N / TZ
 # ------------------------------------------------------------------------------
-LANGUAGE_CODE = config("LANGUAGE_CODE", default="ru")
-TIME_ZONE = config("TIME_ZONE", default="Europe/Brussels")
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+
+# Default language for BE-prod (override via env if needed)
+LANGUAGE_CODE = config("LANGUAGE_CODE", default="en")
+
+TIME_ZONE = config("TIME_ZONE", default="Europe/Brussels")
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("nl", _("Nederlands")),
+    ("fr", _("Français")),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 # ------------------------------------------------------------------------------
 # Static / Media
@@ -142,9 +169,12 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # ------------------------------------------------------------------------------
-# Email (safe defaults)
+# Email
 # ------------------------------------------------------------------------------
-EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
 EMAIL_HOST = config("EMAIL_HOST", default="")
 EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")

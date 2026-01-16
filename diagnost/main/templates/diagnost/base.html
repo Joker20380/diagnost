@@ -1,9 +1,10 @@
 <!-- PROD TEMPLATE MARKER: base 2026-01-16 -->
 
 {% load static %}
+{% load i18n %}
 {% include 'includes/cookie_notice.html' %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
   <head>
     <title>{% block title %}AI-Diagnostics{% endblock %} - AI-Diagnostics</title>
 
@@ -74,6 +75,24 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}" href="{% url 'contacts' %}">Contacts</a>
+              </li>
+
+              {# Language switcher (styled like menu) #}
+              <li class="nav-item">
+                <form action="{% url 'set_language' %}" method="post" class="m-0 p-0">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  {% get_current_language as CURRENT_LANG %}
+                  <select name="language"
+                          class="nav-link bg-dark text-white border-0 p-0"
+                          style="appearance:none; -webkit-appearance:none; -moz-appearance:none; cursor:pointer;"
+                          aria-label="Language"
+                          onchange="this.form.submit()">
+                    <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
+                    <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
+                    <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
+                  </select>
+                </form>
               </li>
             </ul>
 
