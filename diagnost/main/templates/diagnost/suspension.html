@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
 
-{% block title %}Осмотр подвески{% endblock %}
-{% block description %}Форма мастера для оценки состояния подвески автомобиля{% endblock %}
+{% block title %}Suspension Inspection{% endblock %}
+{% block description %}Technician form to assess the vehicle suspension condition{% endblock %}
 
 {% block content %}
 <div class="top-shadow"></div>
@@ -11,8 +11,8 @@
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Осмотр подвески</span></h1>
-          <p class="mb-5 w-75">Заполните форму оценки состояния подвески</p>
+          <h1 class="pt-5"><span>Suspension Inspection</span></h1>
+          <p class="mb-5 w-75">Fill out the suspension condition assessment form</p>
         </div>
       </div>
     </div>
@@ -24,21 +24,21 @@
 
     {% if inspection.status == 'signed' %}
       <div class="alert alert-success">
-        <strong>Осмотр подписан.</strong>
-        {% if inspection.inspector %} Мастер: {{ inspection.inspector }}.{% endif %}
-        {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
-        <div class="small text-muted mt-1">Редактирование заблокировано.</div>
+        <strong>Inspection signed.</strong>
+        {% if inspection.inspector %} Technician: {{ inspection.inspector }}.{% endif %}
+        {% if inspection.signed_at %} Date: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+        <div class="small text-muted mt-1">Editing is locked.</div>
       </div>
     {% else %}
       <div class="alert alert-warning">
-        <strong>Черновик.</strong> Можно править до подписи.
+        <strong>Draft.</strong> You can edit it until it is signed.
       </div>
     {% endif %}
 
     <form method="post">
       {% csrf_token %}
 
-      <h4>Общие данные</h4>
+      <h4>General information</h4>
 
       {{ form.non_field_errors }}
 
@@ -91,7 +91,7 @@
       </div>
 
       <hr>
-      <h4>Детали подвески</h4>
+      <h4>Suspension parts</h4>
 
       {{ formset.non_form_errors }}
       {{ formset.management_form }}
@@ -99,14 +99,14 @@
       <table class="table table-bordered align-middle" id="parts-table">
         <thead>
           <tr>
-            <th>Деталь</th>
-            <th style="width:320px;">Износ (%)</th>
-            <th style="width:160px;">Критичность</th>
-            <th style="min-width:200px;">Причина</th>
-            <th style="min-width:260px;">Признаки / замеры</th>
-            <th style="min-width:170px;">Каталожный номер</th>
-            <th style="width:220px;">Нужна замена?</th>
-            <th style="width:140px;">Удалить</th>
+            <th>Part</th>
+            <th style="width:320px;">Wear (%)</th>
+            <th style="width:160px;">Severity</th>
+            <th style="min-width:200px;">Cause</th>
+            <th style="min-width:260px;">Signs / measurements</th>
+            <th style="min-width:170px;">Part number</th>
+            <th style="width:220px;">Replacement needed?</th>
+            <th style="width:140px;">Delete</th>
           </tr>
         </thead>
 
@@ -128,7 +128,7 @@
                   min="0" max="100"
                   class="form-range wear-slider"
                   oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                  aria-label="Износ, проценты">
+                  aria-label="Wear percentage">
                 <span class="wear-value ms-2">{{ subform.wear_percent.value|default_if_none:0 }}%</span>
               </td>
 
@@ -157,7 +157,7 @@
                 <div class="d-flex flex-column align-items-center gap-1">
                   {{ subform.needs_replacement }}
 
-                  {# ✅ Backend single source of truth: показываем рекомендацию с сервера #}
+                  {# ✅ Backend single source of truth: display server recommendation #}
                   {% if subform.repl_hint_text %}
                     <small class="replacement-hint {{ subform.repl_hint_class }}">
                       {{ subform.repl_hint_text }}
@@ -171,7 +171,7 @@
               <td>
                 {% if subform.can_delete %}{{ subform.DELETE }}{% endif %}
                 {% if subform.can_delete %}
-                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Удалить</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
                 {% endif %}
               </td>
 
@@ -185,21 +185,21 @@
 
       <div class="d-flex flex-wrap gap-2 mb-3">
         {% if inspection.status != 'signed' %}
-          <button type="button" class="btn btn-outline-primary" onclick="addForm()">Добавить деталь</button>
+          <button type="button" class="btn btn-outline-primary" onclick="addForm()">Add part</button>
 
           <button type="submit" name="action" value="save" class="btn btn-success">
-            Сохранить (черновик)
+            Save (draft)
           </button>
 
           <button type="submit" name="action" value="sign" class="btn btn-primary">
-            Подписать осмотр
+            Sign inspection
           </button>
         {% endif %}
 
-        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Назад</a>
+        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Back</a>
       </div>
 
-      <!-- Шаблон пустой строки (на основе empty_form) -->
+      <!-- Empty row template (based on empty_form) -->
       <table style="display:none;">
         <tbody id="empty-form-template" data-prefix="{{ formset.prefix }}">
           <tr class="part-form">
@@ -218,7 +218,7 @@
                 min="0" max="100"
                 class="form-range wear-slider"
                 oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                aria-label="Износ, проценты">
+                aria-label="Wear percentage">
               <span class="wear-value ms-2">0%</span>
             </td>
 
@@ -246,7 +246,7 @@
               {{ formset.empty_form.needs_replacement.errors }}
               <div class="d-flex flex-column align-items-center gap-1">
                 {{ formset.empty_form.needs_replacement }}
-                {# empty_form не аннотируется сервером — стартуем с нейтрального, JS обновит #}
+                {# empty_form is not annotated on the server — start neutral, JS will update #}
                 <small class="replacement-hint text-muted"></small>
               </div>
             </td>
@@ -254,7 +254,7 @@
             <td>
               {% if formset.can_delete %}{{ formset.empty_form.DELETE }}{% endif %}
               {% if formset.can_delete %}
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Удалить</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
               {% endif %}
             </td>
 
@@ -305,8 +305,8 @@
     }
   }
 
-  // ✅ JS теперь только “live update” UI (сервер уже отдает рекомендацию на GET/POST),
-  // но при движении слайдера мы хотим обновлять бейдж сразу.
+  // ✅ JS is now only for live UI updates (server already provides recommendations on GET/POST).
+  // While sliding, we still want to update the badge instantly.
   function updateReplacementHint(slider) {
     const row = slider.closest('tr');
     if (!row) return;
@@ -317,7 +317,7 @@
     const hint = row.querySelector('.replacement-hint');
     if (!hint) return;
 
-    // если мастер уже трогал чекбокс — не спорим
+    // If the technician has already touched the checkbox — do not override.
     if (checkbox && checkbox.dataset.touched === "1") {
       hint.textContent = "";
       hint.className = "replacement-hint text-muted";
@@ -325,13 +325,13 @@
     }
 
     if (value >= 70) {
-      hint.textContent = "Рекомендация: заменить";
+      hint.textContent = "Recommendation: replace";
       hint.className = "replacement-hint badge bg-danger";
     } else if (value >= 40) {
-      hint.textContent = "Рекомендация: наблюдать / перепроверить";
+      hint.textContent = "Recommendation: monitor / re-check";
       hint.className = "replacement-hint badge bg-warning text-dark";
     } else {
-      hint.textContent = "Рекомендация: замена не требуется";
+      hint.textContent = "Recommendation: no replacement needed";
       hint.className = "replacement-hint badge bg-success";
     }
   }
@@ -404,7 +404,7 @@
     if (slider) {
       updateColor(slider);
       syncSeverityByWear(slider);
-      // сервер уже отдал подсказку, но на всякий случай синхронизируем при наличии пустого hint
+      // Server may already provide hint. If empty, populate from slider.
       const hint = row.querySelector('.replacement-hint');
       if (hint && hint.textContent.trim() === "") {
         updateReplacementHint(slider);

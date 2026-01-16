@@ -1,339 +1,386 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
 
-
-{% block description %}Домашняя страница Диагностика авто Владикавказ{% endblock %}
-
-{% block title %}Домой{% endblock %}
+{% block description %}Home page — AI-assisted automotive diagnostics and repair services.{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 
-    <div class="top-shadow"></div>
+  <div class="top-shadow"></div>
 
-    <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_1.webp' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-lg-7 text-center col-sm-12 element-animate">
-              <h1 class="mb-4"><span>Авто диагностика</span></h1>
-              <p class="mb-5 w-75">Мы используем искусственный интеллект для точного определения неисправности Вашего авто</p>
-            </div>
+  <section class="home-slider owl-carousel">
+    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_1.webp' %}');">
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-lg-7 text-center col-sm-12 element-animate">
+            <h1 class="mb-4"><span>Automotive diagnostics</span></h1>
+            <p class="mb-5 w-75">
+              We use AI-assisted analysis to help identify your vehicle’s issues more accurately.
+            </p>
           </div>
         </div>
       </div>
-
-      <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_2.webp' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-lg-7 text-center col-sm-12 element-animate">
-              <h1><span>Ремонт ходовой части</span></h1>
-              <p class="mb-5 w-75">Наши мастера с пониманием отнесутся к Вашим проблемам и устранят их</p>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_4.webp' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-lg-7 text-center col-sm-12 element-animate">
-              <h1><span>Развал - схождение</span></h1>
-              <p class="mb-5 w-75">Отрегулируем колесную базу Вашего авто по высшему разряду</p>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_7.webp' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-lg-7 text-center col-sm-12 element-animate">
-              <h1><span>Шумоизоляция</span></h1>
-              <p class="mb-5 w-75">Наши специалисты обесшумят и уплотнят Ваш автомобиль </p>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      
-      <div class="slider-item" style="background-image: url('{% static 'images/audio.webp' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-lg-7 text-center col-sm-12 element-animate">
-              <h1><span>Аудио подготовка</span></h1>
-              <p class="mb-5 w-75">Прокачаем звук в Вашем авто на максимум</p>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-    </section>
-    <!-- END slider -->
     </div>
-        {% if messages %}
-        <div class="alert alert-success">
-        	{% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
 
-    <section class="section">
+    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_2.webp' %}');">
       <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center">
-            <h2>Мы решим любую проблему</h2>
-          </div>
-        </div>
-        <div class="row align-items-stretch">
-          <div class="col-lg-4 order-lg-2">
-            <div class="scaling-image h-100"><div class="frame h-100"><div class="feature-img-bg h-100" style="background-image: url('{% static 'images/industrial_feature_1.webp' %}');"></div></div></div>
-          </div>
-
-          <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1" >
-
-            <div class="feature-1 d-md-flex">
-              <div class="align-self-center">
-                <span class="ion ion-easel display-4 text-primary"></span>
-                <h3>Диагностика</h3>
-                <p>Совеременное диагностическое оборудование и использование передовых технологий в области компьютерной диагностики.</p>
-              </div>
-            </div>
-
-            <div class="feature-1 d-md-flex">
-              <div class="align-self-center">
-                <span class="ion ion-hammer display-4 text-primary"></span>
-                <h3>Ремонт ходовой</h3>
-                <p>Решение большинства проблем ходовой части Вашего авто.</p>
-              </div>
-            </div>
-
-          </div>
-          
-          <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3" >
-
-            <div class="feature-1 d-md-flex">
-              <div class="align-self-center">
-                <span class="ion ion-cube display-4 text-primary"></span>
-                <h3>Аудио подготовка</h3>
-                <p>Модернизация аудиосистемы автомобиля. Передовое оборудование.</p>
-              </div>
-            </div>
-
-            <div class="feature-1 d-md-flex">
-              <div class="align-self-center">
-                <span class="ion ion-clipboard display-4 text-primary"></span>
-                <h3>Шумоизоляция</h3>
-                <p>Обесшумим любой авто топовыми материалами.</p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="section bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-lg-4 element-animate ">
-            <div class="media block-6 d-block text-center">
-              <div class="icon mb-3"><span class="ion-android-notifications text-primary"></span></div>
-              <div class="media-body">
-                <h3 class="heading">Быстрое принятие правильных решений</h3>
-                <p>Наши специалисты с большим стажем работы оценивают ситуацию на месте и предлагают решение проблемы в кратчайшие сроки</p>
-              </div>
-            </div>  
-
-          </div>
-          <div class="col-md-6 col-lg-4 element-animate ">
-            <div class="media block-6 d-block text-center">
-              <div class="icon mb-3"><span class="ion-heart text-primary"></span></div>
-              <div class="media-body">
-                <h3 class="heading">С заботой о клиентах</h3>
-                <p>В нашем автосервисе имеются удобные места для ожидания, если клиент решит остаться и подождать окончание ремонта</p>
-              </div>
-            </div> 
-
-          </div>
-          <div class="col-md-6 col-lg-4 element-animate ">
-            <div class="media block-6 d-block text-center">
-              <div class="icon mb-3"><span class="ion-flash text-primary"></span></div>
-              <div class="media-body">
-                <h3 class="heading">Оперативный заказ запчастей</h3>
-                <p>Мы готовы заказать и привезти запчасти для Вашего авто, если у нас их нет в наличии</p>
-              </div>
-            </div> 
-
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-lg-7 text-center col-sm-12 element-animate">
+            <h1><span>Suspension repair</span></h1>
+            <p class="mb-5 w-75">
+              Our technicians take your concerns seriously and help resolve them efficiently.
+            </p>
           </div>
         </div>
       </div>
-    </section>
-    <!-- END section -->
-    {% for n in view.one_news %}
+    </div>
+
+    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_4.webp' %}');">
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-lg-7 text-center col-sm-12 element-animate">
+            <h1><span>Wheel alignment</span></h1>
+            <p class="mb-5 w-75">
+              We fine-tune wheel alignment with precision.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_7.webp' %}');">
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-lg-7 text-center col-sm-12 element-animate">
+            <h1><span>Soundproofing</span></h1>
+            <p class="mb-5 w-75">
+              We reduce noise and improve cabin comfort.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slider-item" style="background-image: url('{% static 'images/audio.webp' %}');">
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-lg-7 text-center col-sm-12 element-animate">
+            <h1><span>Audio upgrade</span></h1>
+            <p class="mb-5 w-75">
+              We take your in-car sound to the next level.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- END slider -->
+
+  {% if messages %}
+    <div class="alert alert-success">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <h2>We can handle any issue</h2>
+        </div>
+      </div>
+
+      <div class="row align-items-stretch">
+        <div class="col-lg-4 order-lg-2">
+          <div class="scaling-image h-100">
+            <div class="frame h-100">
+              <div class="feature-img-bg h-100" style="background-image: url('{% static 'images/industrial_feature_1.webp' %}');"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+
+          <div class="feature-1 d-md-flex">
+            <div class="align-self-center">
+              <span class="ion ion-easel display-4 text-primary"></span>
+              <h3>Diagnostics</h3>
+              <p>
+                Modern diagnostic equipment and advanced computer diagnostics workflows.
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-1 d-md-flex">
+            <div class="align-self-center">
+              <span class="ion ion-hammer display-4 text-primary"></span>
+              <h3>Suspension repair</h3>
+              <p>
+                Resolving most suspension-related issues for your vehicle.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
+
+          <div class="feature-1 d-md-flex">
+            <div class="align-self-center">
+              <span class="ion ion-cube display-4 text-primary"></span>
+              <h3>Audio upgrade</h3>
+              <p>
+                Upgrading your car audio system with professional equipment.
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-1 d-md-flex">
+            <div class="align-self-center">
+              <span class="ion ion-clipboard display-4 text-primary"></span>
+              <h3>Soundproofing</h3>
+              <p>
+                Premium sound-deadening materials for better comfort.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-light">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-6 col-lg-4 element-animate">
+          <div class="media block-6 d-block text-center">
+            <div class="icon mb-3"><span class="ion-android-notifications text-primary"></span></div>
+            <div class="media-body">
+              <h3 class="heading">Fast, correct decision-making</h3>
+              <p>
+                Our experienced specialists assess the situation on-site and propose a solution quickly.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 element-animate">
+          <div class="media block-6 d-block text-center">
+            <div class="icon mb-3"><span class="ion-heart text-primary"></span></div>
+            <div class="media-body">
+              <h3 class="heading">Customer-first approach</h3>
+              <p>
+                Comfortable waiting areas are available if you choose to stay while work is being completed.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 element-animate">
+          <div class="media block-6 d-block text-center">
+            <div class="icon mb-3"><span class="ion-flash text-primary"></span></div>
+            <div class="media-body">
+              <h3 class="heading">Fast parts sourcing</h3>
+              <p>
+                If a required part is not in stock, we can order and deliver it for your vehicle.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- END section -->
+
+  {% for n in view.one_news %}
     <section class="section element-animate">
       <div class="container">
         <div class="row align-items-center mb-5">
           <div class="col-lg-7 order-md-2">
-          	{% if n.photo %}
-            <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
+            {% if n.photo %}
+              <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
             {% else %}
-            <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="нет фото" class="img-fluid"></div></div>
+              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
             {% endif %}
           </div>
+
           <div class="col-md-5 pr-md-5 mb-5">
             <div class="block-41">
               <h2 class="block-41-heading mb-5">{{ n.title }}</h2>
               <div class="block-41-text">
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p><a href="{{ n.get_absolute_url }}" class="readmore">Читать дальше <span class="ion-android-arrow-dropright-circle"></span></a></p>
+                <p>
+                  <a href="{{ n.get_absolute_url }}" class="readmore">
+                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                  </a>
+                </p>
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
-    {% endfor %}
+  {% endfor %}
 
-    {% for n in view.one_second_news %}
+  {% for n in view.one_second_news %}
     <section class="section element-animate bg-light">
       <div class="container">
         <div class="row align-items-center mb-5">
           <div class="col-lg-7 order-mb-1">
-          	{% if n.photo %}
-            <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
+            {% if n.photo %}
+              <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
             {% else %}
-            <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="нет фото" class="img-fluid"></div></div>
+              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
             {% endif %}
           </div>
+
           <div class="col-md-5 pr-md-5 mb-5">
             <div class="block-41">
               <h2 class="block-41-heading mb-5">{{ n.title }}</h2>
               <div class="block-41-text">
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p><a href="{{ n.get_absolute_url }}" class="readmore">Читать дальше <span class="ion-android-arrow-dropright-circle"></span></a></p>
+                <p>
+                  <a href="{{ n.get_absolute_url }}" class="readmore">
+                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                  </a>
+                </p>
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
-    {% endfor %}
+  {% endfor %}
 
-    
-	    <section class="section border-t pb-0">
-      <div class="container">
-        <div class="row justify-content-center mb-5 element-animate">
-          <div class="col-md-8 text-center">
-            <h2 class=" heading mb-4">Проекты</h2>
-            <p class="mb-5 lead">Ознакомьтесь с нашими успешными проектами</p>
-          </div>
+  <section class="section border-t pb-0">
+    <div class="container">
+      <div class="row justify-content-center mb-5 element-animate">
+        <div class="col-md-8 text-center">
+          <h2 class="heading mb-4">Projects</h2>
+          <p class="mb-5 lead">Explore some of our successful projects</p>
         </div>
       </div>
-      <div class="container-fluid">
-        <div class="row no-gutters">
-        	{% for p in view.all_projects %}
+    </div>
+
+    <div class="container-fluid">
+      <div class="row no-gutters">
+        {% for p in view.all_projects %}
           <div class="col-md-4 element-animate">
             <a href="{{ p.get_absolute_url }}" class="link-thumbnail">
               <h3>{{ p.title }}</h3>
               <span class="ion-plus icon"></span>
-        		{% if p.photo %}
-              <img src="{{ p.photo.url }}" alt="{{ p.title }}" class="img-fluid">
-            	{% else %}
-            	<img src="{% static 'images/no_photo.webp' %}" alt="{{ p.title }}" class="img-fluid">
-            	{% endif %}
+              {% if p.photo %}
+                <img src="{{ p.photo.url }}" alt="{{ p.title }}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'images/no_photo.webp' %}" alt="{{ p.title }}" class="img-fluid">
+              {% endif %}
             </a>
           </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- END section -->
+
+  <section class="section bg-light block-11">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-8 text-center">
+          <h2 class="heading mb-4">Reviews</h2>
+        </div>
+      </div>
+
+      <div class="nonloop-block-11 owl-carousel">
+        {% for r in view.all_reviews %}
+          <div class="item">
+            <div class="block-33 h-100">
+              <div class="vcard d-flex mb-3">
+                <div class="image align-self-center"><img src="{{ r.photo.url }}" alt="{{ r.name }}"></div>
+                <div class="name-text align-self-center">
+                  <h2 class="heading">{{ r.name }}</h2>
+                  <span class="meta">{{ r.email }}</span>
+                </div>
+              </div>
+              <div class="text">
+                <blockquote>
+                  <p>{{ r.body }}</p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section blog">
+    <div class="container">
+      <div class="row justify-content-center mb-5 element-animate">
+        <div class="col-md-8 text-center">
+          <h2 class="heading mb-4">Our News</h2>
+          <p class="mb-5 lead">
+            In our news section, we highlight updates and events related to automotive diagnostics and repair.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          {% for n in view.first_news %}
+            <div class="media mb-4 d-md-flex d-block element-animate">
+              {% if n.photo %}
+                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
+              {% else %}
+                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
+              {% endif %}
+
+              <div class="media-body">
+                <span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
+                <h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
+                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
+                <p>
+                  <a href="{{ n.get_absolute_url }}" class="readmore">
+                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                  </a>
+                </p>
+              </div>
+            </div>
           {% endfor %}
         </div>
-        
-      </div>
-    </section>
-    <!-- END section -->
 
+        <div class="col-md-6">
+          {% for n in view.second_news %}
+            <div class="media mb-4 d-md-flex d-block element-animate">
+              {% if n.photo %}
+                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
+              {% else %}
+                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
+              {% endif %}
 
-    <section class="section bg-light block-11">
-      <div class="container"> 
-        <div class="row justify-content-center mb-5">
-          <div class="col-md-8 text-center">
-            <h2 class=" heading mb-4">Отзывы</h2>
-          </div>
-        </div>
-        <div class="nonloop-block-11 owl-carousel">
-			
-        	{% for r in view.all_reviews %}
-        	<div class="item">
-            	<div class="block-33 h-100">
-                	<div class="vcard d-flex mb-3">
-                		<div class="image align-self-center"><img src="{{ r.photo.url }}" alt="{{ r.name }}"></div>
-                		<div class="name-text align-self-center">
-                    		<h2 class="heading">{{ r.name }}</h2>
-                    		<span class="meta">{{ r.email }}</span>
-                		</div>
-                	</div>
-                	<div class="text">
-                		<blockquote>
-                    		<p>{{ r.body }}</p>
-                		</blockquote>
-                	</div>
-            	</div>
-        	</div>
-        	{% endfor %}
+              <div class="media-body">
+                <span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
+                <h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
+                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
+                <p>
+                  <a href="{{ n.get_absolute_url }}" class="readmore">
+                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                  </a>
+                </p>
+              </div>
+            </div>
+          {% endfor %}
         </div>
       </div>
     </div>
-    <!-- END .block-4 -->
-    </section>
+  </section>
 
-    <section class="section blog">
-    	<div class="container">
-    		<div class="row justify-content-center mb-5 element-animate">
-        		<div class="col-md-8 text-center">
-            		<h2 class=" heading mb-4">Наши новости</h2>
-            		<p class="mb-5 lead">В новостях мы стараемся показать все события, связанные с авто ремонтом</p>
-        		</div>
-        	</div>
-        	<div class="row">
-        		<div class="col-md-6">
-					{% for n in view.first_news %}
-            		<div class="media mb-4 d-md-flex d-block element-animate">
-            			{% if n.photo %}
-            			<a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
-            			{% else %}
-            			<a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
-            			{% endif %}
-            			<div class="media-body">
-                			<span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
-                			<h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
-                			<p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                			<p><a href="{{ n.get_absolute_url }}" class="readmore">Читать дальше <span class="ion-android-arrow-dropright-circle"></span></a></p>
-            			</div>
-            		</div>
-            		{% endfor %}
-        		</div>
-        		<div class="col-md-6">
-					{% for n in view.second_news %}
-            		<div class="media mb-4 d-md-flex d-block element-animate">
-            			{% if n.photo %}
-            			<a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
-            			{% else %}
-            			<a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
-            			{% endif %}
-            			<div class="media-body">
-                			<span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
-                			<h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
-                			<p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                			<p><a href="{{ n.get_absolute_url }}" class="readmore">Читать дальше <span class="ion-android-arrow-dropright-circle"></span></a></p>
-            			</div>
-            		</div>
-            		{% endfor %}
-        		</div>
-        	</div>
-        </div>
-    </section>
-    
 {% endblock %}
