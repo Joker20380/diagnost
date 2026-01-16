@@ -114,13 +114,11 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# django-allauth (new settings; replaces deprecated ACCOUNT_*)
-
-_login_methods = config("ACCOUNT_LOGIN_METHODS", default="username,email")
-ACCOUNT_LOGIN_METHODS = {m.strip() for m in _login_methods.split(",") if m.strip()}
-_signup_fields = config("ACCOUNT_SIGNUP_FIELDS", default="email*,username*,password1*,password2*")
-ACCOUNT_SIGNUP_FIELDS = [f.strip() for f in _signup_fields.split(",") if f.strip()]
+ACCOUNT_EMAIL_REQUIRED = config("ACCOUNT_EMAIL_REQUIRED", default=False, cast=bool)
+ACCOUNT_USERNAME_REQUIRED = config("ACCOUNT_USERNAME_REQUIRED", default=True, cast=bool)
+ACCOUNT_AUTHENTICATION_METHOD = config("ACCOUNT_AUTHENTICATION_METHOD", default="username_email")
 ACCOUNT_EMAIL_VERIFICATION = config("ACCOUNT_EMAIL_VERIFICATION", default="none")
+
 LOGIN_REDIRECT_URL = config("LOGIN_REDIRECT_URL", default="/")
 LOGOUT_REDIRECT_URL = config("LOGOUT_REDIRECT_URL", default="/")
 

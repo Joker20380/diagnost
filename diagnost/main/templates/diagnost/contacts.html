@@ -1,214 +1,187 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
-{% load webp %}
+
+{% block description %}
+Contact AI-Diagnostics — automotive diagnostics, inspection and consultation. Get in touch with our team.
+{% endblock %}
 
 
-{% block description %}Страница контактной информации Диагностика авто Владикавказ{% endblock %}
-
-{% block title %}Контакты{% endblock %}
+{% block title %}Contacts{% endblock %}
 
 {% block content %}
-    <div class="top-shadow"></div>
-    <div class="inner-page">
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-        
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>Контакты</span></h1>
-              <p class="mb-5 w-75">Пожалуйста свяжитесь с нами</p>
-            </div>
-          </div>
-        </div>
+<div class="top-shadow"></div>
 
+<div class="inner-page">
+  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+    <div class="container">
+      <div class="row slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+          <h1 class="pt-5"><span>Contacts</span></h1>
+          <p class="mb-5 w-75">Feel free to get in touch with us</p>
+        </div>
       </div>
     </div>
-
-
-<!-- Contact Form -->
-    <section class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 mb-5 order-2">
-                <form method="post" id="contact_form">
-                {% csrf_token %}
-              <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="name">Имя</label>
-                        <input type="text" id="contact_form_name" name="name" class="form-control" 
-                            placeholder="Ваше имя" required>
-                </div>
-                <div class="col-md-6 form-group">
-                	<label for="phone">Телефон</label>
-                	<input type="tel" id="contact_form_phone" name="phone" class="form-control" 
-                        placeholder="Ваш телефон">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <label for="email">Email</label>
-                  <input type="email" id="contact_form_email" name="email" class="form-control" 
-                        placeholder="Ваш email" required>
-                </div>
-              </div>
-            <div class="contact_form_text mt-3">
-                <select id="contact_form_contact" name="contact" class="form-control" style="width: 100%;">
-                    <option value="">Выберите получателя (необязательно)</option>
-                    {% if main_contact %}
-                    <option value="{{ main_contact.id }}">Основные контакты ({{ main_contact.name }})</option>
-                    {% endif %}
-                    {% for group in contact_groups %}
-                    {% for contact in group.contacts.all %}
-                    <option value="{{ contact.id }}">{{ group.name }}: {{ contact.name }}</option>
-                    {% endfor %}
-                    {% endfor %}
-                </select>
-            </div>
-              <div class="row">
-                <div class="col-md-12 form-group">
-                	<label for="message">Написать сообщение</label>
-                	<textarea id="contact_form_message" name="message" class="form-control" 
-                        rows="4" placeholder="Сообщение" required></textarea>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="submit" value="Отправить сообщение" class="btn btn-primary px-3 py-3">
-                </div>
-              </div>
-            </form>
-          </div>
-        {% if main_contact %}
-        	<div class="col-md-6 order-2 mb-5">
-            	<div class="row justify-content-right">
-            		<div class="col-md-8 mx-auto contact-form-contact-info">
-            			{% if main_contact.address %}
-                		<p class="d-flex">
-                			<span class="ion-ios-location icon mr-5"></span>
-                			<span>{{ main_contact.address }}</span>
-                		</p>
-                		{% endif %}
-						{% if main_contact.phone %}
-                		<p class="d-flex">
-                			<span class="ion-ios-telephone icon mr-5"></span>
-                			<span>{{ main_contact.phone }}</span>
-                		</p>
-						{% endif %}
-						{% if main_contact.email %}
-                		<p class="d-flex">
-                			<span class="ion-android-mail icon mr-5"></span>
-                			<span>{{ main_contact.email }}</span>
-                		</p>
-                		{% endif %}
-            		</div>
-            	</div>
-        	</div>
-        {% endif %}
-          
-        </div>
-      </div>
-    </section>
-
-
-
-
-<!-- Map -->
-<div class="contact_map">
-  <div class="map_container">
-    <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=107260779606" width="100%" height="500" frameborder="0"></iframe>
   </div>
 </div>
 
-{% if location_lat and location_lon %}
-<script>
-    const map = L.map('geomap').setView([{{ location_lat }}, {{ location_lon }}], 18);
+<!-- Contact Form -->
+<section class="section">
+  <div class="container">
+    <div class="row">
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+      <!-- Form -->
+      <div class="col-md-6 mb-5 order-2">
+        <form method="post" id="contact_form">
+          {% csrf_token %}
 
-    // Анимированная иконка (GIF)
-    const gifIcon = L.icon({
-        iconUrl: "{% static 'onetech/images/logo_map.gif' %}",  // путь к твоему gif
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
-    });
-        
-    L.marker([{{ location_lat }}, {{ location_lon }}], { icon: gifIcon })
-    .addTo(map)
-    .bindPopup(`
-        <div style="
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 12px;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-width: 260px;
-            font-family: sans-serif;
-        ">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="{% static 'images/logo_autozvuk.webp' %}" alt="Контакт" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
-                <div>
-                    <strong style="font-size: 1.1em;">{{ location_name|escapejs }}</strong><br>
-                    <span style="font-size: 0.9em; color: #555;">Автосервис</span>
-                </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="contact_form_name">Name</label>
+              <input
+                type="text"
+                id="contact_form_name"
+                name="name"
+                class="form-control"
+                placeholder="Your name"
+                required>
             </div>
-            <div style="margin-top: 10px; font-size: 0.9em; color: #333;">
-                Добро пожаловать! Мы на связи.
+
+            <div class="col-md-6 form-group">
+              <label for="contact_form_phone">Phone</label>
+              <input
+                type="tel"
+                id="contact_form_phone"
+                name="phone"
+                class="form-control"
+                placeholder="Your phone number">
             </div>
-            <a href="{% url 'index' %}" style="
-                display: inline-block;
-                margin-top: 10px;
-                padding: 6px 12px;
-                background: #007bff;
-                color: #fff;
-                border-radius: 6px;
-                text-decoration: none;
-                font-size: 0.9em;
-            ">Подробнее</a>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 form-group">
+              <label for="contact_form_email">Email</label>
+              <input
+                type="email"
+                id="contact_form_email"
+                name="email"
+                class="form-control"
+                placeholder="Your email address"
+                required>
+            </div>
+          </div>
+
+          <div class="contact_form_text mt-3">
+            <select
+              id="contact_form_contact"
+              name="contact"
+              class="form-control"
+              style="width: 100%;">
+              <option value="">Select recipient (optional)</option>
+
+              {% if main_contact %}
+                <option value="{{ main_contact.id }}">
+                  Main contact ({{ main_contact.name }})
+                </option>
+              {% endif %}
+
+              {% for group in contact_groups %}
+                {% for contact in group.contacts.all %}
+                  <option value="{{ contact.id }}">
+                    {{ group.name }}: {{ contact.name }}
+                  </option>
+                {% endfor %}
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-12 form-group">
+              <label for="contact_form_message">Message</label>
+              <textarea
+                id="contact_form_message"
+                name="message"
+                class="form-control"
+                rows="4"
+                placeholder="Write your message here"
+                required></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <input
+                type="submit"
+                value="Send message"
+                class="btn btn-primary px-3 py-3">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact info -->
+      {% if main_contact %}
+      <div class="col-md-6 order-2 mb-5">
+        <div class="row justify-content-right">
+          <div class="col-md-8 mx-auto contact-form-contact-info">
+
+            {% if main_contact.address %}
+            <p class="d-flex">
+              <span class="ion-ios-location icon mr-5"></span>
+              <span>{{ main_contact.address }}</span>
+            </p>
+            {% endif %}
+
+            {% if main_contact.phone %}
+            <p class="d-flex">
+              <span class="ion-ios-telephone icon mr-5"></span>
+              <span>{{ main_contact.phone }}</span>
+            </p>
+            {% endif %}
+
+            {% if main_contact.email %}
+            <p class="d-flex">
+              <span class="ion-android-mail icon mr-5"></span>
+              <span>{{ main_contact.email }}</span>
+            </p>
+            {% endif %}
+
+          </div>
         </div>
-    `)
-    .openPopup();
+      </div>
+      {% endif %}
 
-    
-</script>
-{% else %}
+    </div>
+  </div>
+</section>
+
+<!-- Map (optional, disabled safely if no coords) -->
+{% if location_lat and location_lon %}
+<div id="geomap" style="height: 420px; margin-top: 40px;"></div>
+
 <script>
-    document.getElementById('geomap').innerHTML = '<p style="padding: 2em; text-align: center;">Местоположение пока не задано</p>';
+  const map = L.map('geomap').setView(
+    [{{ location_lat }}, {{ location_lon }}],
+    16
+  );
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const markerIcon = L.icon({
+    iconUrl: "{% static 'images/logo_autozvuk.webp' %}",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+  });
+
+  L.marker(
+    [{{ location_lat }}, {{ location_lon }}],
+    { icon: markerIcon }
+  )
+  .addTo(map)
+  .bindPopup(
+    "<strong>{{ location_name|escapejs }}</strong><br>Service location"
+  );
 </script>
 {% endif %}
 
-    
-
-<script>
-document.getElementById('contact_form').addEventListener('submit', function(e) {
-    const form = e.target;
-    const requiredFields = form.querySelectorAll('[required]');
-    let isValid = true;
-    
-    // Проверка обязательных полей
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            field.classList.remove('is-invalid');
-        }
-    });
-    
-    if (!isValid) {
-        e.preventDefault();
-        e.stopPropagation();
-        alert('Пожалуйста, заполните все обязательные поля');
-    }
-    
-    form.classList.add('was-validated');
-});
-</script>
-
-{% endblock content %}	
+{% endblock %}
