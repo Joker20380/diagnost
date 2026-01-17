@@ -153,6 +153,7 @@ LANGUAGES = [
     ("en", _("English")),
     ("nl", _("Nederlands")),
     ("fr", _("Français")),
+    ('de', 'Deutsch'),
 ]
 
 LOCALE_PATHS = [
