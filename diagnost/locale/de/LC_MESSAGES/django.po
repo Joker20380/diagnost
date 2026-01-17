@@ -866,7 +866,7 @@ msgstr ""
 msgid ""
 "There is %(unused_count)s out of %(total_count)s recovery codes available."
 msgid_plural ""
-There are %(unused_count)s out of %(total_count)s recovery codes available."
+"There are %(unused_count)s out of %(total_count)s recovery codes available."
 msgstr[0] ""
 msgstr[1] ""
 
