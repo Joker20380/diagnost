@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-17 00:43+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2026-01-17 00:00+0100\n"
+"Last-Translator: AI-Diagnostics Team <info@ai-diagnostics.be>\n"
+"Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,15 +20,15 @@ msgstr ""
 
 #: diagnost/diagnost/settings.py:153
 msgid "English"
-msgstr ""
+msgstr "Anglais"
 
 #: diagnost/diagnost/settings.py:154
 msgid "Nederlands"
-msgstr ""
+msgstr "Néerlandais"
 
 #: diagnost/diagnost/settings.py:155
 msgid "Français"
-msgstr ""
+msgstr "Français"
 
 #: diagnost/main/templates/account/account_inactive.html:5
 #: diagnost/main/templates/account/account_inactive.html:9
@@ -641,109 +641,109 @@ msgstr ""
 #: diagnost/main/templates/diagnost/base.html:12
 msgid ""
 "AI-Diagnostics — automotive diagnostics, inspection and technical consulting."
-msgstr ""
+msgstr "AI-Diagnostics — diagnostic automobile, inspection et conseil technique."
 
 #: diagnost/main/templates/diagnost/base.html:58
 msgid "AI-Diagnostics logo"
-msgstr ""
+msgstr "Logo AI-Diagnostics"
 
 #: diagnost/main/templates/diagnost/base.html:66
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Ouvrir la navigation"
 
 #: diagnost/main/templates/diagnost/base.html:74
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: diagnost/main/templates/diagnost/base.html:78
 #: diagnost/main/templates/diagnost/base.html:201
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: diagnost/main/templates/diagnost/base.html:82
 #: diagnost/main/templates/diagnost/base.html:202
 msgid "Projects"
-msgstr ""
+msgstr "Projets"
 
 #: diagnost/main/templates/diagnost/base.html:88
 msgid "Services"
-msgstr ""
+msgstr "Services"
 
 #: diagnost/main/templates/diagnost/base.html:91
 msgid "Auto diagnostics"
-msgstr ""
+msgstr "Diagnostic automobile"
 
 #: diagnost/main/templates/diagnost/base.html:97
 #: diagnost/main/templates/diagnost/base.html:203
 msgid "Blog"
-msgstr ""
+msgstr "Actualités"
 
 #: diagnost/main/templates/diagnost/base.html:101
 #: diagnost/main/templates/diagnost/base.html:204
 msgid "Contacts"
-msgstr ""
+msgstr "Contact"
 
 #: diagnost/main/templates/diagnost/base.html:112
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: diagnost/main/templates/diagnost/base.html:125
 msgid "Search..."
-msgstr ""
+msgstr "Rechercher..."
 
 #: diagnost/main/templates/diagnost/base.html:149
 msgid "Subscribe to our updates"
-msgstr ""
+msgstr "S’abonner à nos mises à jour"
 
 #: diagnost/main/templates/diagnost/base.html:150
 msgid "Stay informed about our latest news, updates, and developments."
-msgstr ""
+msgstr "Restez informé(e) de nos actualités, mises à jour et évolutions."
 
 #: diagnost/main/templates/diagnost/base.html:156
 msgid "Subscribe"
-msgstr ""
+msgstr "S’abonner"
 
 #: diagnost/main/templates/diagnost/base.html:169
 msgid ""
 "We help automotive service centers make confident, data-driven diagnostic "
 "decisions."
-msgstr ""
+msgstr "Nous aidons les ateliers et centres de service automobile à prendre des décisions de diagnostic fiables, fondées sur les données."
 
 #: diagnost/main/templates/diagnost/base.html:181
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #: diagnost/main/templates/diagnost/base.html:184
 msgid "Contact information:"
-msgstr ""
+msgstr "Coordonnées :"
 
 #: diagnost/main/templates/diagnost/base.html:188
 msgid "Phone:"
-msgstr ""
+msgstr "Téléphone :"
 
 #: diagnost/main/templates/diagnost/base.html:192
 msgid "Email:"
-msgstr ""
+msgstr "E-mail :"
 
 #: diagnost/main/templates/diagnost/base.html:199
 msgid "Links"
-msgstr ""
+msgstr "Liens"
 
 #: diagnost/main/templates/diagnost/base.html:212
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: diagnost/main/templates/diagnost/base.html:213
 msgid "All rights reserved"
-msgstr ""
+msgstr "Tous droits réservés"
 
 #: diagnost/main/templates/diagnost/base.html:213
 msgid "Template made with"
-msgstr ""
+msgstr "Modèle réalisé avec"
 
 #: diagnost/main/templates/diagnost/base.html:215
 msgid "by"
-msgstr ""
+msgstr "par"
 
 #: diagnost/main/templates/mfa/authenticate.html:13
 msgid ""

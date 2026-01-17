@@ -20,15 +20,15 @@ msgstr ""
 
 #: diagnost/diagnost/settings.py:153
 msgid "English"
-msgstr ""
+msgstr "Engels"
 
 #: diagnost/diagnost/settings.py:154
 msgid "Nederlands"
-msgstr ""
+msgstr "Nederlands"
 
 #: diagnost/diagnost/settings.py:155
 msgid "Français"
-msgstr ""
+msgstr "Frans"
 
 #: diagnost/main/templates/account/account_inactive.html:5
 #: diagnost/main/templates/account/account_inactive.html:9
@@ -642,108 +642,112 @@ msgstr ""
 msgid ""
 "AI-Diagnostics — automotive diagnostics, inspection and technical consulting."
 msgstr ""
+"AI-Diagnostics — voertuigdiagnose, technische inspectie en professioneel "
+"advies."
 
 #: diagnost/main/templates/diagnost/base.html:58
 msgid "AI-Diagnostics logo"
-msgstr ""
+msgstr "AI-Diagnostics logo"
 
 #: diagnost/main/templates/diagnost/base.html:66
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Navigatie openen"
 
 #: diagnost/main/templates/diagnost/base.html:74
 msgid "Home"
-msgstr ""
+msgstr "Start"
 
 #: diagnost/main/templates/diagnost/base.html:78
 #: diagnost/main/templates/diagnost/base.html:201
 msgid "About"
-msgstr ""
+msgstr "Over ons"
 
 #: diagnost/main/templates/diagnost/base.html:82
 #: diagnost/main/templates/diagnost/base.html:202
 msgid "Projects"
-msgstr ""
+msgstr "Projecten"
 
 #: diagnost/main/templates/diagnost/base.html:88
 msgid "Services"
-msgstr ""
+msgstr "Diensten"
 
 #: diagnost/main/templates/diagnost/base.html:91
 msgid "Auto diagnostics"
-msgstr ""
+msgstr "Voertuigdiagnose"
 
 #: diagnost/main/templates/diagnost/base.html:97
 #: diagnost/main/templates/diagnost/base.html:203
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: diagnost/main/templates/diagnost/base.html:101
 #: diagnost/main/templates/diagnost/base.html:204
 msgid "Contacts"
-msgstr ""
+msgstr "Contacten"
 
 #: diagnost/main/templates/diagnost/base.html:112
 msgid "Language"
-msgstr ""
+msgstr "Taal"
 
 #: diagnost/main/templates/diagnost/base.html:125
 msgid "Search..."
-msgstr ""
+msgstr "Zoeken..."
 
 #: diagnost/main/templates/diagnost/base.html:149
 msgid "Subscribe to our updates"
-msgstr ""
+msgstr "Abonneer u op onze updates"
 
 #: diagnost/main/templates/diagnost/base.html:150
 msgid "Stay informed about our latest news, updates, and developments."
-msgstr ""
+msgstr "Blijf op de hoogte van ons laatste nieuws, updates en ontwikkelingen."
 
 #: diagnost/main/templates/diagnost/base.html:156
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonneren"
 
 #: diagnost/main/templates/diagnost/base.html:169
 msgid ""
 "We help automotive service centers make confident, data-driven diagnostic "
 "decisions."
 msgstr ""
+"Wij helpen autoservicebedrijven om weloverwogen, datagedreven diagnostische "
+"beslissingen te nemen."
 
 #: diagnost/main/templates/diagnost/base.html:181
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #: diagnost/main/templates/diagnost/base.html:184
 msgid "Contact information:"
-msgstr ""
+msgstr "Contactgegevens:"
 
 #: diagnost/main/templates/diagnost/base.html:188
 msgid "Phone:"
-msgstr ""
+msgstr "Telefoon:"
 
 #: diagnost/main/templates/diagnost/base.html:192
 msgid "Email:"
-msgstr ""
+msgstr "E-mail:"
 
 #: diagnost/main/templates/diagnost/base.html:199
 msgid "Links"
-msgstr ""
+msgstr "Links"
 
 #: diagnost/main/templates/diagnost/base.html:212
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: diagnost/main/templates/diagnost/base.html:213
 msgid "All rights reserved"
-msgstr ""
+msgstr "Alle rechten voorbehouden"
 
 #: diagnost/main/templates/diagnost/base.html:213
 msgid "Template made with"
-msgstr ""
+msgstr "Sjabloon gemaakt met"
 
 #: diagnost/main/templates/diagnost/base.html:215
 msgid "by"
-msgstr ""
+msgstr "door"
 
 #: diagnost/main/templates/mfa/authenticate.html:13
 msgid ""
