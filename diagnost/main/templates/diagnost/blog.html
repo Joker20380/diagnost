@@ -1,94 +1,89 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
-{% load webp %}
 
-
-{% block description %}Страница о новостях организации Автозвук Владикавказ{% endblock %}
-
-{% block title %}Новости{% endblock %}
+{% block description %}Company news and updates from AI-Diagnostics (Ghent, Belgium){% endblock %}
+{% block title %}News{% endblock %}
 
 {% block content %}
 
-    <div class="top-shadow"></div>
-    
-    <div class="inner-page">
+  <div class="top-shadow"></div>
+
+  <div class="inner-page">
     <div class="slider-item" style="background-image: url('{% static 'images/projects.webp' %}');">
-        
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>Наши новости</span></h1>
-              <p class="mb-5 w-75">Мы с гордостью представляем Вам наши новости</p>
-            </div>
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+            <h1 class="pt-5"><span>Our News</span></h1>
+            <p class="mb-5 w-75">Updates, releases, and insights from our team</p>
           </div>
         </div>
-
       </div>
     </div>
-    
+  </div>
 
-    <section class="section border-t">
-      <div class="container">
-        <div class="row justify-content-center mb-5 element-animate">
-          <div class="col-md-8 text-center">
-            <h2 class=" heading mb-4">Новости</h2>
-            <p class="mb-5 lead">Ознакомьтесь с нашими новостями</p>
-          </div>
+  <section class="section border-t">
+    <div class="container">
+      <div class="row justify-content-center mb-5 element-animate">
+        <div class="col-md-8 text-center">
+          <h2 class="heading mb-4">News</h2>
+          <p class="mb-5 lead">Explore our latest updates</p>
         </div>
       </div>
-      <div class="container">
-      	
-        <div class="row no-gutters">
-        	{% for n in view.news_all_news %}
+    </div>
+
+    <div class="container">
+      <div class="row no-gutters">
+        {% for n in view.news_all_news %}
           <div class="col-md-4 element-animate">
             <a href="{{ n.get_absolute_url }}" class="link-thumbnail">
               <h3>{{ n.title }}</h3>
               <span class="ion-plus icon"></span>
-        		{% if n.photo %}
-              <img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid">
-            	{% else %}
-            	<img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid">
-            	{% endif %}
+
+              {% if n.photo %}
+                <img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid">
+              {% endif %}
             </a>
           </div>
-          {% endfor %}
-        </div>
-        
-      </div>
-    </section>
-    <!-- END section -->
-
-    <section class="section bg-light block-11">
-      <div class="container"> 
-        <div class="row justify-content-center mb-5">
-          <div class="col-md-8 text-center">
-            <h2 class=" heading mb-4">Отзывы</h2>
-          </div>
-        </div>
-        <div class="nonloop-block-11 owl-carousel">
-        	{% for r in view.all_reviews %}
-        	<div class="item">
-            	<div class="block-33 h-100">
-                	<div class="vcard d-flex mb-3">
-                		<div class="image align-self-center"><img src="{{ r.photo.url }}" alt="{{ r.name }}"></div>
-                		<div class="name-text align-self-center">
-                    		<h2 class="heading">{{ r.name }}</h2>
-                    		<span class="meta">XYZ Inc</span>
-                		</div>
-                	</div>
-                	<div class="text">
-                		<blockquote>
-                    		<p>{{ r.body }}</p>
-                		</blockquote>
-                	</div>
-            	</div>
-        	</div>
-        	{% endfor %}
-        </div>
+        {% endfor %}
       </div>
     </div>
-    <!-- END .block-4 -->
-    </section>
+  </section>
+  <!-- END section -->
 
-    
-{% endblock %}    
+  <section class="section bg-light block-11">
+    <div class="container">
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-8 text-center">
+          <h2 class="heading mb-4">Reviews</h2>
+        </div>
+      </div>
+
+      <div class="nonloop-block-11 owl-carousel">
+        {% for r in view.all_reviews %}
+          <div class="item">
+            <div class="block-33 h-100">
+              <div class="vcard d-flex mb-3">
+                <div class="image align-self-center">
+                  <img src="{{ r.photo.url }}" alt="{{ r.name }}">
+                </div>
+                <div class="name-text align-self-center">
+                  <h2 class="heading">{{ r.name }}</h2>
+                  <span class="meta">Client</span>
+                </div>
+              </div>
+
+              <div class="text">
+                <blockquote>
+                  <p>{{ r.body }}</p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

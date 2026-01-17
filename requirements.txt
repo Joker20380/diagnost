@@ -29,3 +29,4 @@ typing_extensions==4.14.0
 urllib3==2.4.0
 utils==1.0.2
 whitenoise==6.9.0
+gunicorn==22.0.0

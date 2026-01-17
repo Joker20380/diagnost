@@ -1,19 +1,24 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
-{% load webp %}
 
-{% block description %}Загрузка отчёта с диагностикой авто{% endblock %}
-{% block title %}Загрузить диагностику{% endblock %}
+{% block description %}
+Upload a vehicle diagnostic report for structured analysis and recommendations.
+{% endblock %}
+{% block title %}Upload diagnostics{% endblock %}
 
 {% block content %}
 <div class="top-shadow"></div>
+
 <div class="inner-page">
   <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Загрузка диагностики</span></h1>
-          <p class="mb-5 w-75">Передайте файл с Launch X431, чтобы мы проанализировали результаты</p>
+          <h1 class="pt-5"><span>Upload diagnostics</span></h1>
+          <p class="mb-5 w-75">
+            Upload a diagnostic report to generate a structured analysis and
+            preliminary recommendations.
+          </p>
         </div>
       </div>
     </div>
@@ -22,25 +27,71 @@
 
 <section class="section">
   <div class="container">
-    <div class="row">
-      <div class="col-md-8 mx-auto">
-        <form method="post" enctype="multipart/form-data" id="diagnostic_upload_form">
+    <div class="row justify-content-center">
+
+      <div class="col-md-8">
+
+        <p class="text-muted mb-4">
+          The uploaded file will be processed automatically.
+          Diagnostic data is used exclusively for analysis and is not shared
+          with third parties.
+        </p>
+
+        <form method="post"
+              enctype="multipart/form-data"
+              id="diagnostic_upload_form">
+
           {% csrf_token %}
+
           <div class="form-group mb-3">
-            <label for="{{ form.vin.id_for_label }}">VIN автомобиля</label>
+            <label for="{{ form.vin.id_for_label }}">
+              Vehicle VIN
+            </label>
             {{ form.vin }}
+            {% if form.vin.errors %}
+              <div class="text-danger small">{{ form.vin.errors }}</div>
+            {% endif %}
           </div>
+
           <div class="form-group mb-3">
-            <label for="{{ form.vehicle_model.id_for_label }}">Модель автомобиля</label>
+            <label for="{{ form.vehicle_model.id_for_label }}">
+              Vehicle model
+            </label>
             {{ form.vehicle_model }}
+            {% if form.vehicle_model.errors %}
+              <div class="text-danger small">{{ form.vehicle_model.errors }}</div>
+            {% endif %}
           </div>
+
           <div class="form-group mb-4">
-            <label for="{{ form.raw_file.id_for_label }}">Файл отчёта</label>
+            <label for="{{ form.raw_file.id_for_label }}">
+              Diagnostic report file
+            </label>
             {{ form.raw_file }}
+            {% if form.raw_file.errors %}
+              <div class="text-danger small">{{ form.raw_file.errors }}</div>
+            {% endif %}
+
+            <small class="form-text text-muted">
+              Supported formats: Launch X431 diagnostic reports.
+              Maximum file size depends on system limits.
+            </small>
           </div>
-          <button type="submit" class="btn btn-primary px-4 py-2">Загрузить</button>
+
+          <button type="submit"
+                  class="btn btn-primary px-4 py-2">
+            Upload and analyze
+          </button>
+
         </form>
+
+        <p class="mt-4 small text-muted">
+          The analysis result will be available after processing.
+          Final conclusions are confirmed during technician inspection.
+        </p>
+
       </div>
+
     </div>
   </div>
 </section>

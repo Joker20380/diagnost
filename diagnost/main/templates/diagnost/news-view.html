@@ -1,61 +1,60 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
-{% load webp %}
-
 
 {% block description %}{{ news.content|striptags|truncatechars:160 }}{% endblock %}
-
 {% block title %}{{ news.title }}{% endblock %}
 
-{% block content %} 
-   
-    <div class="top-shadow"></div>
-    
-    <div class="inner-page">
+{% block content %}
+
+  <div class="top-shadow"></div>
+
+  <div class="inner-page">
     <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-        
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>{{ news.title }}</span></h1>
-              <p class="mb-5 w-75"></p>
-            </div>
+
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+            <h1 class="pt-5"><span>{{ news.title }}</span></h1>
+            <p class="mb-5 w-75"></p>
           </div>
         </div>
+      </div>
 
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12" style="margin-top: -150px;">
+          {% if news.photo %}
+            <p><img src="{{ news.photo.url }}" alt="{{ news.title }}" class="img-fluid"></p>
+          {% else %}
+            <p><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8 mb-5"></div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8 mb-5">
+          <h2></h2>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="news-content">
+            {% autoescape off %}{{ news.content }}{% endautoescape %}
+          </div>
+
+          <p><a href="#" class="btn btn-primary py-3 px-3">Subscribe</a></p>
+        </div>
       </div>
     </div>
-    
+  </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-12" style="margin-top: -150px;">
-          	{% if news.photo %}
-          	<p><img src="{{ news.photo.url }}" alt="{{ news.title }}" class="img-fluid"></p>
-          	{% else %}
-            <p><img src="{% static 'images/no_photo.webp' %}" alt="нет фото" class="img-fluid"></p>
-            {% endif %}
-          </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-md-8 mb-5">
-          </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-md-8 mb-5">
-            <h2></h2>
-          </div>
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <p>{% autoescape off %}{{ news.content }}{% endautoescape %}</p>
-            
-            <p><a href="#" class="btn btn-primary py-3 px-3">Подписаться</a></p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    {% endblock %}
+{% endblock %}

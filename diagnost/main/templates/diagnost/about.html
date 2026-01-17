@@ -1,82 +1,104 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
-{% load webp %}
 
-
-{% block description %}Страница об организации Диагностика авто Владикавказ{% endblock %}
-
-{% block title %}О нас{% endblock %}
+{% block description %}About AI-Diagnostics – an AI-powered automotive diagnostics company based in Ghent, Belgium{% endblock %}
+{% block title %}About Us{% endblock %}
 
 {% block content %}
-    <div class="top-shadow"></div>
-    
-    <div class="inner-page">
+  <div class="top-shadow"></div>
+
+  <div class="inner-page">
     <div class="slider-item" style="background-image: url('{% static 'images/about.webp' %}');">
-        
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>О нас</span></h1>
-              <p class="mb-5 w-75">Познакомьтесь с нашей командой единомышленников, мы знаем толк в диагностике и ремонте авто</p>
-            </div>
+      <div class="container">
+        <div class="row slider-text align-items-center justify-content-center">
+          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
+            <h1 class="pt-5"><span>About Us</span></h1>
+            <p class="mb-5 w-75">
+              Get to know our team of engineers and diagnosticians who believe in clarity,
+              technology, and responsible automotive service.
+            </p>
           </div>
         </div>
-
       </div>
     </div>
-    
-    
+  </div>
 
-    <section>
-      <div class="half d-lg-flex d-block">
-        <div class="image element-animate" data-animate-effect="fadeIn" style="background-image: url('{% static 'images/industrial_hero2.webp' %}')"></div>
-        <div class="text text-center element-animate">
-          <h3 class="mb-4">Наши цели</h3>
-          <p class="mb-5">Профессиональный ремонт ходовой части, особенно внедорожников.
-
-Компьютерная диагностика с применением искусственного интеллекта.
-
-Установка и ремонт аудиосистем, настройка автозвука под индивидуальные предпочтения.
-
-Современное оборудование и автоматизированные системы анализа.
-
-Обученный персонал и гарантия качества работ.
-
-Прозрачный и удобный сервис для клиентов.
-
-Укрепление репутации как техцентра нового поколения во Владикавказе.</p>
-          <p><a href="#" class="btn btn-primary btn-sm px-3 py-2">Читать далее</a></p>
-        </div>
+  <section>
+    <!-- Mission / Goals -->
+    <div class="half d-lg-flex d-block">
+      <div class="image element-animate"
+           data-animate-effect="fadeIn"
+           style="background-image: url('{% static 'images/industrial_hero2.webp' %}')">
       </div>
 
-      <div class="half d-lg-flex d-block">
-        <div class="image order-2 element-animate" data-animate-effect="fadeIn" style="background-image: url('{% static 'images/industrial_hero2.webp' %}')"></div>
-        <div class="text text-center element-animate">
-          <h3 class="mb-4">История компании</h3>
-          <p class="mb-5">Компания «Автозвук» начала свою историю в 1999 году во дворе гостиницы «Кадгарон» в Республике Северная Осетия — Алания. Всё начиналось в небольшом одиночном боксе, где команда энтузиастов, увлечённых автозвуком и автомобильной электроникой, воплощала своё видение идеального звука в автомобиле.
+      <div class="text text-center element-animate">
+        <h3 class="mb-4">Our Mission</h3>
+        <p class="mb-5">
+          AI-Diagnostics was created to reduce uncertainty in complex automotive situations.
+          Our goal is not just to identify faults, but to explain them clearly and support
+          informed decisions.
 
-Их подход сразу выделялся: не просто установка, а точная настройка, внимание к деталям и индивидуальный подход. Клиенты приходили по сарафанному радио — за качеством, которое чувствуется.
+          <br><br>
+          We focus on:
+          <br><br>
+          • Advanced computer diagnostics enhanced by artificial intelligence.<br>
+          • Suspension, drivetrain, and electronics diagnostics with special attention to modern vehicles and SUVs.<br>
+          • Data-driven analysis instead of guesswork or part replacement “by intuition”.<br>
+          • Transparent diagnostic reports understandable to both professionals and car owners.<br>
+          • Continuous improvement through modern tools, software, and evidence-based methods.<br>
+          • A client-centric service model aligned with European quality and compliance standards.
+        </p>
 
-Со временем спрос на услуги стремительно рос. Компания расширила спектр работ: появилась электронная диагностика, установка охранных систем, ремонт автоэлектрики, а затем — и ремонт ходовой части. Пришло новое оборудование, увеличился штат, стандарты качества выросли.
+        <p>
+          <a href="#" class="btn btn-primary btn-sm px-3 py-2">Learn more</a>
+        </p>
+      </div>
+    </div>
 
-Когда одного бокса стало недостаточно, было принято стратегическое решение — переехать и расшириться. Так «Автозвук» обрел новый дом по адресу Архонское шоссе, 11 — в просторном и современно оборудованном сервисе, где всё создано для комфорта клиентов и высокой эффективности работы.
-
-Сегодня «Автозвук» — это надёжный автосервис во Владикавказе, предлагающий:
-
-    компьютерную диагностику нового поколения,
-
-    ремонт подвески и автоэлектрики,
-
-    установку премиальных аудиосистем и сигнализаций.
-
-Но главное осталось прежним — страсть к своему делу, техническое мастерство и уважение к каждому автомобилю.</div>
+    <!-- Company Story -->
+    <div class="half d-lg-flex d-block">
+      <div class="image order-2 element-animate"
+           data-animate-effect="fadeIn"
+           style="background-image: url('{% static 'images/industrial_hero2.webp' %}')">
       </div>
 
-    </section>
+      <div class="text text-center element-animate">
+        <h3 class="mb-4">Our Story</h3>
+        <p class="mb-5">
+          AI-Diagnostics was founded in Ghent, Belgium, by professionals with hands-on
+          experience at the very bottom of the automotive service chain — where uncertainty,
+          misdiagnosis, and lack of transparency are most visible.
 
+          <br><br>
+          Years of practical work in vehicle diagnostics revealed a systemic problem:
+          modern cars generate vast amounts of data, yet many service decisions are still
+          made without structured analysis or clear reasoning.
 
+          <br><br>
+          The company was built to change this paradigm. Instead of selling “diagnostics”
+          as a procedure, we focus on reducing uncertainty — for technicians, service
+          managers, and vehicle owners alike.
 
+          <br><br>
+          Based in Ghent, at the heart of Europe’s technological and automotive ecosystem,
+          AI-Diagnostics combines real diagnostic experience with software engineering,
+          artificial intelligence, and strict European standards for quality, safety,
+          and accountability.
+
+          <br><br>
+          Today, AI-Diagnostics is an evolving platform and service focused on:
+          <br><br>
+          • Intelligent fault interpretation.<br>
+          • Risk-aware diagnostic decision support.<br>
+          • High-quality diagnostic documentation.<br>
+          • Responsible use of AI in technical systems.
+
+          <br><br>
+          The core principle remains unchanged: respect for engineering, respect for data,
+          and respect for every vehicle and client.
+        </p>
+      </div>
+    </div>
+  </section>
 
 {% endblock %}
-
-

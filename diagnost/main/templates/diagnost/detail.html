@@ -1,18 +1,19 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
 
-{% block title %}Результат диагностики{% endblock %}
-{% block description %}Детали сессии диагностики{% endblock %}
+{% block title %}Diagnostics Result{% endblock %}
+{% block description %}Diagnostic session details{% endblock %}
 
 {% block content %}
 <div class="top-shadow"></div>
+
 <div class="inner-page">
   <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Результат диагностики</span></h1>
-          <p class="mb-5 w-75 mx-auto">Анализ сессии и рекомендации</p>
+          <h1 class="pt-5"><span>Diagnostics Result</span></h1>
+          <p class="mb-5 w-75 mx-auto">Session analysis and recommendations</p>
         </div>
       </div>
     </div>
@@ -22,107 +23,132 @@
 <section class="section">
   <div class="container">
 
+    <!-- General info -->
     <div class="mb-4">
-      <h4>Общая информация</h4>
+      <h4>General information</h4>
       <p><strong>VIN:</strong> {{ session.vin|default:"—" }}</p>
-      <p><strong>Модель:</strong> {{ session.vehicle_model|default:"—" }}</p>
-      <p><strong>Дата:</strong> {{ session.created_at|date:"d.m.Y H:i" }}</p>
-      <p><strong>Статус:</strong> {{ session.get_status_display|default:session.status }}</p>
+      <p><strong>Model:</strong> {{ session.vehicle_model|default:"—" }}</p>
+      <p><strong>Date:</strong> {{ session.created_at|date:"d.m.Y H:i" }}</p>
+      <p><strong>Status:</strong> {{ session.get_status_display|default:session.status }}</p>
     </div>
 
+    <!-- Fault codes -->
     <div class="mb-4">
-      <h4>Найденные коды ошибок</h4>
+      <h4>Detected fault codes</h4>
       {% if codes %}
         <ul class="list-group">
           {% for code in codes %}
             <li class="list-group-item">
-              <strong>{{ code.code }}</strong> — {{ code.description|default:"Описание отсутствует" }}
+              <strong>{{ code.code }}</strong> — {{ code.description|default:"No description available" }}
             </li>
           {% endfor %}
         </ul>
       {% else %}
-        <p>Нет найденных кодов ошибок.</p>
+        <p>No fault codes were found.</p>
       {% endif %}
     </div>
 
+    <!-- Recommendations -->
     <div class="mb-4">
-      <h4>Рекомендации</h4>
+      <h4>Recommendations</h4>
 
       {% if session.recommendation %}
         <div class="alert alert-info">
           <div class="d-flex justify-content-between align-items-center">
-            <strong>Системные подсказки</strong>
+            <strong>System notes</strong>
             {% if session.ai_generated_at %}
-              <span class="small text-muted">Сгенерировано: {{ session.ai_generated_at|date:"d.m.Y H:i" }}</span>
+              <span class="small text-muted">
+                Generated: {{ session.ai_generated_at|date:"d.m.Y H:i" }}
+              </span>
             {% endif %}
           </div>
           <div class="small text-muted mt-1">
-            Это предварительный анализ. Финальные решения фиксируются в осмотрах мастера и/или заключении специалиста.
+            This is a preliminary analysis. Final decisions must be confirmed
+            in the technician inspection and/or the specialist report.
           </div>
         </div>
+
         <pre class="bg-light p-3">{{ session.recommendation }}</pre>
       {% else %}
-        <p>Рекомендации пока не сформированы.</p>
+        <p>Recommendations are not available yet.</p>
       {% endif %}
     </div>
 
-    {# --- Блок подвески --- #}
+    <!-- Suspension -->
     <div class="mb-4">
-      <h4>Ходовая часть</h4>
+      <h4>Suspension</h4>
 
       {% if session.status == 'suspension_pending' %}
-        <p class="mb-2">⚠️ Ожидается осмотр подвески</p>
+        <p class="mb-2">⚠️ Suspension inspection is pending</p>
         <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-warning">
-          Провести осмотр подвески
+          Perform suspension inspection
         </a>
 
       {% elif session.status == 'suspension_done' %}
         {% with inspection=session.suspension_inspection %}
           {% if inspection %}
-            {# статус/подпись #}
+
             {% if inspection.status == 'signed' %}
               <div class="alert alert-success">
-                <strong>Осмотр подписан мастером.</strong>
-                {% if inspection.inspector %} Мастер: {{ inspection.inspector }}.{% endif %}
-                {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+                <strong>Inspection signed by technician.</strong>
+                {% if inspection.inspector %}
+                  Technician: {{ inspection.inspector }}.
+                {% endif %}
+                {% if inspection.signed_at %}
+                  Date: {{ inspection.signed_at|date:"d.m.Y H:i" }}.
+                {% endif %}
                 <div class="small text-muted mt-1">
-                  Этот блок — фактология (human evidence). ИИ здесь не принимает решений.
+                  This section is factual (human evidence). AI does not make decisions here.
                 </div>
               </div>
             {% else %}
               <div class="alert alert-warning">
-                <strong>Осмотр в черновике.</strong>
+                <strong>Inspection is in draft.</strong>
                 <div class="small text-muted mt-1">
-                  Можно редактировать до подписи. Финальным считается только подписанный осмотр.
+                  You can edit it until it is signed.
+                  Only a signed inspection is considered final.
                 </div>
               </div>
             {% endif %}
 
-            <p class="mb-1"><strong>Мастер:</strong> {{ inspection.inspector|default:"—" }}</p>
-            <p class="mb-3"><strong>Комментарий:</strong> {{ inspection.comment|default:"—" }}</p>
+            <p class="mb-1">
+              <strong>Technician:</strong> {{ inspection.inspector|default:"—" }}
+            </p>
+            <p class="mb-3">
+              <strong>Comment:</strong> {{ inspection.comment|default:"—" }}
+            </p>
 
-            {# доп. поля осмотра #}
             <div class="row mb-3">
-              <div class="col-md-3"><strong>Пробег:</strong> {{ inspection.mileage_km|default:"—" }}</div>
-              <div class="col-md-3"><strong>Подъёмник:</strong> {% if inspection.lift_used %}Да{% else %}Нет{% endif %}</div>
-              <div class="col-md-3"><strong>Тест-драйв:</strong> {% if inspection.test_drive %}Да{% else %}Нет{% endif %}</div>
-              <div class="col-md-3"><strong>Общий риск:</strong> {{ inspection.get_overall_risk_display|default:"—" }}</div>
+              <div class="col-md-3">
+                <strong>Mileage:</strong> {{ inspection.mileage_km|default:"—" }}
+              </div>
+              <div class="col-md-3">
+                <strong>Lift used:</strong>
+                {% if inspection.lift_used %}Yes{% else %}No{% endif %}
+              </div>
+              <div class="col-md-3">
+                <strong>Test drive:</strong>
+                {% if inspection.test_drive %}Yes{% else %}No{% endif %}
+              </div>
+              <div class="col-md-3">
+                <strong>Overall risk:</strong>
+                {{ inspection.get_overall_risk_display|default:"—" }}
+              </div>
             </div>
 
-            {# таблица деталей #}
             {% with parts=inspection.parts.all %}
               {% if parts|length %}
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>Деталь</th>
-                        <th>Износ</th>
-                        <th>Критичность</th>
-                        <th>Причина</th>
-                        <th>Признаки / замеры</th>
-                        <th>Каталожный номер</th>
-                        <th>Замена</th>
+                        <th>Part</th>
+                        <th>Wear</th>
+                        <th>Severity</th>
+                        <th>Cause</th>
+                        <th>Signs / measurements</th>
+                        <th>Part number</th>
+                        <th>Replacement</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -132,13 +158,15 @@
                           <td>{{ part.wear_percent }}%</td>
                           <td>{{ part.get_severity_display|default:"—" }}</td>
                           <td>{{ part.reason|default:"—" }}</td>
-                          <td style="white-space: pre-wrap;">{{ part.evidence|default:"—" }}</td>
+                          <td style="white-space: pre-wrap;">
+                            {{ part.evidence|default:"—" }}
+                          </td>
                           <td>{{ part.part_number|default:"—" }}</td>
                           <td>
                             {% if part.needs_replacement %}
-                              <span class="text-danger">Да</span>
+                              <span class="text-danger">Yes</span>
                             {% else %}
-                              Нет
+                              No
                             {% endif %}
                           </td>
                         </tr>
@@ -147,34 +175,40 @@
                   </table>
                 </div>
               {% else %}
-                <p>Нет добавленных деталей.</p>
+                <p>No parts were added.</p>
               {% endif %}
             {% endwith %}
 
-            {# CTA по осмотру #}
             <div class="mt-3">
-              <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">
+              <a href="{% url 'suspension_inspection' session.id %}"
+                 class="btn btn-outline-secondary">
                 {% if inspection.status == 'signed' %}
-                  Открыть осмотр (просмотр)
+                  Open inspection (view)
                 {% else %}
-                  Продолжить осмотр (редактирование)
+                  Continue inspection (edit)
                 {% endif %}
               </a>
             </div>
 
           {% else %}
-            <p>Данные осмотра не найдены.</p>
-            <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-outline-secondary">
-              Заполнить осмотр
+            <p>Inspection data was not found.</p>
+            <a href="{% url 'suspension_inspection' session.id %}"
+               class="btn btn-outline-secondary">
+              Fill in inspection
             </a>
           {% endif %}
         {% endwith %}
       {% else %}
-        <p class="text-muted">Подвеска пока не в пайплайне этой сессии.</p>
+        <p class="text-muted">
+          Suspension is not in this session’s pipeline yet.
+        </p>
       {% endif %}
     </div>
 
-    <a href="{% url 'diagnostic_upload' %}" class="btn btn-outline-primary">Загрузить новый отчёт</a>
+    <a href="{% url 'diagnostic_upload' %}"
+       class="btn btn-outline-primary">
+      Upload a new report
+    </a>
 
   </div>
 </section>
