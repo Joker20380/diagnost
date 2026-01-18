@@ -232,6 +232,33 @@
       </svg>
     </div>
 
+<script>
+  function setLangNextAndSubmit(sel) {
+    const lang = sel.value;
+    const nextInput = document.getElementById('langNext');
+    const form = document.getElementById('langForm');
+
+    const current = nextInput.value || window.location.pathname + window.location.search;
+
+    const [pathPart, queryPart] = current.split('?', 2);
+    let path = pathPart || '/';
+    const query = queryPart ? ('?' + queryPart) : '';
+
+    // strip any known language prefix first
+    path = path.replace(/^\/(en|nl|fr|de)(?=\/|$)/, '') || '/';
+
+    // prefix all non-default languages; EN has no prefix
+    if (lang !== 'en') {
+      if (path === '/') path = '';
+      path = '/' + lang + path;
+    }
+
+    nextInput.value = path + query;
+    form.submit();
+  }
+</script>
+
+
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
