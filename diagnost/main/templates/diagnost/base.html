@@ -103,9 +103,10 @@
 
               <!-- Language switcher -->
 <li class="nav-item d-flex align-items-center">
-  <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form" id="langForm">
+  <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form">
     {% csrf_token %}
-    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <input type="hidden" name="next"
+           value="{{ request.path }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}">
     {% get_current_language as CURRENT_LANG %}
 
     <select name="language"
@@ -231,32 +232,6 @@
         <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214"/>
       </svg>
     </div>
-
-<script>
-  function setLangNextAndSubmit(sel) {
-    const lang = sel.value;
-    const nextInput = document.getElementById('langNext');
-    const form = document.getElementById('langForm');
-
-    const current = nextInput.value || window.location.pathname + window.location.search;
-
-    const [pathPart, queryPart] = current.split('?', 2);
-    let path = pathPart || '/';
-    const query = queryPart ? ('?' + queryPart) : '';
-
-    // strip any known language prefix first
-    path = path.replace(/^\/(en|nl|fr|de)(?=\/|$)/, '') || '/';
-
-    // prefix all non-default languages; EN has no prefix
-    if (lang !== 'en') {
-      if (path === '/') path = '';
-      path = '/' + lang + path;
-    }
-
-    nextInput.value = path + query;
-    form.submit();
-  }
-</script>
 
 
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
