@@ -102,16 +102,16 @@
               </li>
 
               <!-- Language switcher -->
-		<li class="nav-item d-flex align-items-center">
+<li class="nav-item d-flex align-items-center">
   <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form" id="langForm">
     {% csrf_token %}
-    <input type="hidden" name="next" id="langNext" value="{{ request.get_full_path }}">
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
     {% get_current_language as CURRENT_LANG %}
 
     <select name="language"
             class="lang-select"
             aria-label="{% trans 'Language' %}"
-            onchange="setLangNextAndSubmit(this)">
+            onchange="this.form.submit()">
       <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
       <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
       <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
@@ -120,33 +120,6 @@
   </form>
 </li>
 
-<script>
-  function setLangNextAndSubmit(sel) {
-    const lang = sel.value;
-    const nextInput = document.getElementById('langNext');
-    const form = document.getElementById('langForm');
-
-    // current path + query
-    const current = nextInput.value || window.location.pathname + window.location.search;
-
-    // split query
-    const [pathPart, queryPart] = current.split('?', 2);
-    let path = pathPart || '/';
-    const query = queryPart ? ('?' + queryPart) : '';
-
-    // strip known prefixes first
-    path = path.replace(/^\/(nl|fr)(?=\/|$)/, '') || '/';
-
-    // add prefix back for nl/fr; EN has no prefix (because prefix_default_language=False)
-    if (lang === 'nl' || lang === 'fr') {
-      if (path === '/') path = '';
-      path = '/' + lang + path;
-    }
-
-    nextInput.value = path + query;
-    form.submit();
-  }
-</script>
 
             </ul>
 
