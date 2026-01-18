@@ -102,13 +102,11 @@
               </li>
 
               <!-- Language switcher -->
+
 <li class="nav-item d-flex align-items-center">
   <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form">
     {% csrf_token %}
-    <input type="hidden" name="next"
-           value="{{ request.path }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}">
-    {% get_current_language as CURRENT_LANG %}
-
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
     <select name="language"
             class="lang-select"
             aria-label="{% trans 'Language' %}"
@@ -120,7 +118,6 @@
     </select>
   </form>
 </li>
-
 
             </ul>
 
