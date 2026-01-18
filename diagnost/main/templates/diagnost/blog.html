@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}Company news and updates from AI-Diagnostics (Ghent, Belgium){% endblock %}
-{% block title %}News{% endblock %}
+{% block description %}{% trans "Company news and updates from AI-Diagnostics (Ghent, Belgium)" %}{% endblock %}
+{% block title %}{% trans "News" %}{% endblock %}
 
 {% block content %}
 
@@ -13,8 +13,8 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>Our News</span></h1>
-            <p class="mb-5 w-75">Updates, releases, and insights from our team</p>
+            <h1 class="pt-5"><span>{% trans "Our News" %}</span></h1>
+            <p class="mb-5 w-75">{% trans "Updates, releases, and insights from our team" %}</p>
           </div>
         </div>
       </div>
@@ -25,8 +25,8 @@
     <div class="container">
       <div class="row justify-content-center mb-5 element-animate">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">News</h2>
-          <p class="mb-5 lead">Explore our latest updates</p>
+          <h2 class="heading mb-4">{% trans "News" %}</h2>
+          <p class="mb-5 lead">{% trans "Explore our latest updates" %}</p>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
               {% if n.photo %}
                 <img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid">
               {% else %}
-                <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid">
+                <img src="{% static 'images/no_photo.webp' %}" alt="{% trans 'No image' %}" class="img-fluid">
               {% endif %}
             </a>
           </div>
@@ -56,7 +56,7 @@
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Reviews</h2>
+          <h2 class="heading mb-4">{% trans "Reviews" %}</h2>
         </div>
       </div>
 
@@ -70,7 +70,7 @@
                 </div>
                 <div class="name-text align-self-center">
                   <h2 class="heading">{{ r.name }}</h2>
-                  <span class="meta">Client</span>
+                  <span class="meta">{% trans "Client" %}</span>
                 </div>
               </div>
 

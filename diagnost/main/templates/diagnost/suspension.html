@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Suspension Inspection{% endblock %}
-{% block description %}Technician form to assess the vehicle suspension condition{% endblock %}
+{% block title %}{% trans "Suspension Inspection" %}{% endblock %}
+{% block description %}{% trans "Technician form to assess the vehicle suspension condition" %}{% endblock %}
 
 {% block content %}
 <div class="top-shadow"></div>
@@ -11,8 +11,8 @@
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Suspension Inspection</span></h1>
-          <p class="mb-5 w-75">Fill out the suspension condition assessment form</p>
+          <h1 class="pt-5"><span>{% trans "Suspension Inspection" %}</span></h1>
+          <p class="mb-5 w-75">{% trans "Fill out the suspension condition assessment form" %}</p>
         </div>
       </div>
     </div>
@@ -24,21 +24,25 @@
 
     {% if inspection.status == 'signed' %}
       <div class="alert alert-success">
-        <strong>Inspection signed.</strong>
-        {% if inspection.inspector %} Technician: {{ inspection.inspector }}.{% endif %}
-        {% if inspection.signed_at %} Date: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
-        <div class="small text-muted mt-1">Editing is locked.</div>
+        <strong>{% trans "Inspection signed." %}</strong>
+        {% if inspection.inspector %}
+          {% blocktrans with inspector=inspection.inspector %}Technician: {{ inspector }}.{% endblocktrans %}
+        {% endif %}
+        {% if inspection.signed_at %}
+          {% blocktrans with dt=inspection.signed_at|date:"d.m.Y H:i" %}Date: {{ dt }}.{% endblocktrans %}
+        {% endif %}
+        <div class="small text-muted mt-1">{% trans "Editing is locked." %}</div>
       </div>
     {% else %}
       <div class="alert alert-warning">
-        <strong>Draft.</strong> You can edit it until it is signed.
+        <strong>{% trans "Draft." %}</strong> {% trans "You can edit it until it is signed." %}
       </div>
     {% endif %}
 
     <form method="post">
       {% csrf_token %}
 
-      <h4>General information</h4>
+      <h4>{% trans "General information" %}</h4>
 
       {{ form.non_field_errors }}
 
@@ -91,7 +95,7 @@
       </div>
 
       <hr>
-      <h4>Suspension parts</h4>
+      <h4>{% trans "Suspension parts" %}</h4>
 
       {{ formset.non_form_errors }}
       {{ formset.management_form }}
@@ -99,14 +103,14 @@
       <table class="table table-bordered align-middle" id="parts-table">
         <thead>
           <tr>
-            <th>Part</th>
-            <th style="width:320px;">Wear (%)</th>
-            <th style="width:160px;">Severity</th>
-            <th style="min-width:200px;">Cause</th>
-            <th style="min-width:260px;">Signs / measurements</th>
-            <th style="min-width:170px;">Part number</th>
-            <th style="width:220px;">Replacement needed?</th>
-            <th style="width:140px;">Delete</th>
+            <th>{% trans "Part" %}</th>
+            <th style="width:320px;">{% trans "Wear (%)" %}</th>
+            <th style="width:160px;">{% trans "Severity" %}</th>
+            <th style="min-width:200px;">{% trans "Cause" %}</th>
+            <th style="min-width:260px;">{% trans "Signs / measurements" %}</th>
+            <th style="min-width:170px;">{% trans "Part number" %}</th>
+            <th style="width:220px;">{% trans "Replacement needed?" %}</th>
+            <th style="width:140px;">{% trans "Delete" %}</th>
           </tr>
         </thead>
 
@@ -128,7 +132,7 @@
                   min="0" max="100"
                   class="form-range wear-slider"
                   oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                  aria-label="Wear percentage">
+                  aria-label="{% trans 'Wear percentage' %}">
                 <span class="wear-value ms-2">{{ subform.wear_percent.value|default_if_none:0 }}%</span>
               </td>
 
@@ -171,7 +175,7 @@
               <td>
                 {% if subform.can_delete %}{{ subform.DELETE }}{% endif %}
                 {% if subform.can_delete %}
-                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">{% trans "Delete" %}</button>
                 {% endif %}
               </td>
 
@@ -185,18 +189,18 @@
 
       <div class="d-flex flex-wrap gap-2 mb-3">
         {% if inspection.status != 'signed' %}
-          <button type="button" class="btn btn-outline-primary" onclick="addForm()">Add part</button>
+          <button type="button" class="btn btn-outline-primary" onclick="addForm()">{% trans "Add part" %}</button>
 
           <button type="submit" name="action" value="save" class="btn btn-success">
-            Save (draft)
+            {% trans "Save (draft)" %}
           </button>
 
           <button type="submit" name="action" value="sign" class="btn btn-primary">
-            Sign inspection
+            {% trans "Sign inspection" %}
           </button>
         {% endif %}
 
-        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Back</a>
+        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">{% trans "Back" %}</a>
       </div>
 
       <!-- Empty row template (based on empty_form) -->
@@ -218,7 +222,7 @@
                 min="0" max="100"
                 class="form-range wear-slider"
                 oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                aria-label="Wear percentage">
+                aria-label="{% trans 'Wear percentage' %}">
               <span class="wear-value ms-2">0%</span>
             </td>
 
@@ -254,7 +258,7 @@
             <td>
               {% if formset.can_delete %}{{ formset.empty_form.DELETE }}{% endif %}
               {% if formset.can_delete %}
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">{% trans "Delete" %}</button>
               {% endif %}
             </td>
 
@@ -325,13 +329,13 @@
     }
 
     if (value >= 70) {
-      hint.textContent = "Recommendation: replace";
+      hint.textContent = "{% trans 'Recommendation: replace' %}";
       hint.className = "replacement-hint badge bg-danger";
     } else if (value >= 40) {
-      hint.textContent = "Recommendation: monitor / re-check";
+      hint.textContent = "{% trans 'Recommendation: monitor / re-check' %}";
       hint.className = "replacement-hint badge bg-warning text-dark";
     } else {
-      hint.textContent = "Recommendation: no replacement needed";
+      hint.textContent = "{% trans 'Recommendation: no replacement needed' %}";
       hint.className = "replacement-hint badge bg-success";
     }
   }

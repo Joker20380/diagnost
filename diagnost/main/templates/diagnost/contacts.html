@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}Contact information page – AI-powered car diagnostics{% endblock %}
-{% block title %}Contacts{% endblock %}
+{% block description %}{% trans "Contact information page – AI-powered car diagnostics" %}{% endblock %}
+{% block title %}{% trans "Contacts" %}{% endblock %}
 
 {% block content %}
     <div class="top-shadow"></div>
@@ -11,8 +11,8 @@
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center">
             <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>Contacts</span></h1>
-              <p class="mb-5 w-75">Please feel free to contact us</p>
+              <h1 class="pt-5"><span>{% trans "Contacts" %}</span></h1>
+              <p class="mb-5 w-75">{% trans "Please feel free to contact us" %}</p>
             </div>
           </div>
         </div>
@@ -29,21 +29,21 @@
 
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <label for="name">Name</label>
+                  <label for="name">{% trans "Name" %}</label>
                   <input type="text"
                          id="contact_form_name"
                          name="name"
                          class="form-control"
-                         placeholder="Your name"
+                         placeholder="{% trans 'Your name' %}"
                          required>
                 </div>
                 <div class="col-md-6 form-group">
-                  <label for="phone">Phone</label>
+                  <label for="phone">{% trans "Phone" %}</label>
                   <input type="tel"
                          id="contact_form_phone"
                          name="phone"
                          class="form-control"
-                         placeholder="Your phone number">
+                         placeholder="{% trans 'Your phone number' %}">
                 </div>
               </div>
 
@@ -53,12 +53,12 @@
 
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <label for="email">Email</label>
+                  <label for="email">{% trans "Email" %}</label>
                   <input type="email"
                          id="contact_form_email"
                          name="email"
                          class="form-control"
-                         placeholder="Your email"
+                         placeholder="{% trans 'Your email' %}"
                          required>
                 </div>
               </div>
@@ -68,11 +68,11 @@
                         name="contact"
                         class="form-control"
                         style="width: 100%;">
-                  <option value="">Select recipient (optional)</option>
+                  <option value="">{% trans "Select recipient (optional)" %}</option>
 
                   {% if main_contact %}
                     <option value="{{ main_contact.id }}">
-                      Main contact ({{ main_contact.name }})
+                      {% trans "Main contact" %} ({{ main_contact.name }})
                     </option>
                   {% endif %}
 
@@ -88,12 +88,12 @@
 
               <div class="row">
                 <div class="col-md-12 form-group">
-                  <label for="message">Message</label>
+                  <label for="message">{% trans "Message" %}</label>
                   <textarea id="contact_form_message"
                             name="message"
                             class="form-control"
                             rows="4"
-                            placeholder="Your message"
+                            placeholder="{% trans 'Your message' %}"
                             required></textarea>
                 </div>
               </div>
@@ -101,7 +101,7 @@
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="submit"
-                         value="Send message"
+                         value="{% trans 'Send message' %}"
                          class="btn btn-primary px-3 py-3">
                 </div>
               </div>
@@ -177,15 +177,15 @@
             ">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <img src="{% static 'images/logo_autozvuk.webp' %}"
-                     alt="Contact"
+                     alt="{% trans 'Contact' %}"
                      style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                 <div>
                   <strong style="font-size: 1.1em;">{{ location_name|escapejs }}</strong><br>
-                  <span style="font-size: 0.9em; color: #555;">Car service</span>
+                  <span style="font-size: 0.9em; color: #555;">{% trans "Car service" %}</span>
                 </div>
               </div>
               <div style="margin-top: 10px; font-size: 0.9em; color: #333;">
-                Welcome! We are here to help.
+                {% trans "Welcome! We are here to help." %}
               </div>
               <a href="{% url 'index' %}"
                  style="
@@ -198,7 +198,7 @@
                    text-decoration: none;
                    font-size: 0.9em;
                  ">
-                Learn more
+                {% trans "Learn more" %}
               </a>
             </div>
           `)
@@ -207,7 +207,7 @@
     {% else %}
       <script>
         document.getElementById('geomap').innerHTML =
-          '<p style="padding: 2em; text-align: center;">Location is not configured yet</p>';
+          '<p style="padding: 2em; text-align: center;">{% trans "Location is not configured yet" %}</p>';
       </script>
     {% endif %}
 
@@ -229,7 +229,7 @@
         if (!isValid) {
           e.preventDefault();
           e.stopPropagation();
-          alert('Please fill in all required fields');
+          alert("{% trans 'Please fill in all required fields' %}");
         }
 
         form.classList.add('was-validated');
@@ -237,4 +237,3 @@
     </script>
 
 {% endblock content %}
-

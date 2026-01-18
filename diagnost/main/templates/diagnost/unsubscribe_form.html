@@ -1,61 +1,89 @@
-{% extends 'diagnost/base_one.html' %}
-{% load static %}
-{% load i18n %}
+{% extends 'diagnost/base.html' %}
+{% load static i18n %}
 
-{% block title %}Unsubscribe{% endblock %}
-{% block description %}Unsubscribe from email notifications{% endblock %}
+{% block title %}{% trans "Unsubscribe" %}{% endblock %}
+{% block description %}{% trans "Unsubscribe from email notifications" %}{% endblock %}
 
 {% block content %}
 
 <div class="top-shadow"></div>
 
 <div class="inner-page">
-  <div class="slider-item"
-       style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-
+  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5">
-            <span>Unsubscribe</span>
-          </h1>
-          <p class="mb-5 w-75">
-            Manage your email notification preferences
+          <h1 class="pt-5"><span>{% trans "Unsubscribe" %}</span></h1>
+          <p class="mb-5 w-75 mx-auto">
+            {% trans "Manage your email notification preferences" %}
           </p>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <section class="section">
   <div class="container">
+
     <div class="row justify-content-center">
+      <div class="col-lg-7 col-md-9 element-animate">
 
-      <div class="col-md-6">
+        <div class="p-4 p-md-5 bg-white border rounded" style="box-shadow: 0 8px 24px rgba(0,0,0,.06);">
+          <div class="mb-4 text-center">
+            <h2 class="h4 mb-2">{% trans "Confirm unsubscription" %}</h2>
+            <p class="text-muted mb-0">
+              {% trans "You will stop receiving informational and service emails. This will not affect your account or access to the platform." %}
+            </p>
+          </div>
 
-        <p class="text-muted mb-4 text-center">
-          You will stop receiving informational and service emails from us.
-          This action does not affect your account or access to the platform.
-        </p>
+          <form method="post" class="mt-4">
+            {% csrf_token %}
 
-        <form method="post" class="text-center">
-          {% csrf_token %}
-          {{ form.as_p }}
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
 
-          <button type="submit" class="btn btn-danger mt-3">
-            Unsubscribe
-          </button>
-        </form>
+            {# Рендерим поля аккуратно: label + field + errors #}
+            {% for field in form %}
+              <div class="form-group mb-3">
+                {% if field.label %}
+                  <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% endif %}
+                {{ field }}
+                {% if field.help_text %}
+                  <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                  <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endfor %}
 
-        <p class="mt-4 small text-muted text-center">
-          You can resubscribe at any time.
-        </p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+              <button type="submit" class="btn btn-danger px-4 py-2">
+                {% trans "Unsubscribe" %}
+              </button>
+
+              <a href="{% url 'index' %}" class="btn btn-outline-secondary px-4 py-2">
+                {% trans "Back to home" %}
+              </a>
+            </div>
+          </form>
+
+          <div class="mt-4 text-center">
+            <small class="text-muted">
+              {% trans "You can resubscribe at any time by subscribing again on the website." %}
+            </small>
+          </div>
+
+        </div>
 
       </div>
-
     </div>
+
   </div>
 </section>
 
