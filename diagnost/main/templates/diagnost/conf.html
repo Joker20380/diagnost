@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}Privacy Policy of AI-Diagnostics (Ghent, Belgium). Learn how we collect, use, and protect personal data.{% endblock %}
-{% block title %}Privacy Policy{% endblock %}
+{% block description %}{% trans "Privacy Policy of AI-Diagnostics (Ghent, Belgium). Learn how we collect, use, and protect personal data." %}{% endblock %}
+{% block title %}{% trans "Privacy Policy" %}{% endblock %}
 
 {% block content %}
 
@@ -13,7 +13,7 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>Privacy Policy</span></h1>
+            <h1 class="pt-5"><span>{% trans "Privacy Policy" %}</span></h1>
             <p class="mb-5 w-75"></p>
           </div>
         </div>
@@ -29,7 +29,7 @@
             {% if n.photo %}
               <p><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></p>
             {% else %}
-              <p><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></p>
+              <p><img src="{% static 'images/no_photo.webp' %}" alt="{% trans 'No image' %}" class="img-fluid"></p>
             {% endif %}
           </div>
         </div>
@@ -48,7 +48,7 @@
           <div class="col-md-8">
             <p>{% autoescape off %}{{ n.content }}{% endautoescape %}</p>
 
-            <p><a href="#" class="btn btn-primary py-3 px-3">Subscribe</a></p>
+            <p><a href="#" class="btn btn-primary py-3 px-3">{% trans "Subscribe" %}</a></p>
           </div>
         </div>
       </div>

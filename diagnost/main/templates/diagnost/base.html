@@ -102,7 +102,7 @@
               </li>
 
               <!-- Language switcher -->
-		<li class="nav-item d-flex align-items-center">
+<li class="nav-item d-flex align-items-center">
   <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form" id="langForm">
     {% csrf_token %}
     <input type="hidden" name="next" id="langNext" value="{{ request.get_full_path }}">
@@ -115,6 +115,7 @@
       <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
       <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
       <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
+      <option value="de" {% if CURRENT_LANG == "de" %}selected{% endif %}>DE</option>
     </select>
   </form>
 </li>
@@ -125,19 +126,19 @@
     const nextInput = document.getElementById('langNext');
     const form = document.getElementById('langForm');
 
-    // current path + query
-    const current = nextInput.value || window.location.pathname + window.location.search;
-
-    // split query
+    const current = nextInput.value || (window.location.pathname + window.location.search);
     const [pathPart, queryPart] = current.split('?', 2);
     let path = pathPart || '/';
     const query = queryPart ? ('?' + queryPart) : '';
 
-    // strip known prefixes first
-    path = path.replace(/^\/(nl|fr)(?=\/|$)/, '') || '/';
+    // remove current lang prefix if present
+    path = path.replace(/^\/(nl|fr|de)(?=\/|$)/, '');
+    if (!path) path = '/';
 
-    // add prefix back for nl/fr; EN has no prefix (because prefix_default_language=False)
-    if (lang === 'nl' || lang === 'fr') {
+    // add target prefix (en has no prefix when prefix_default_language=False)
+    if (lang === 'en') {
+      // keep path as-is
+    } else {
       if (path === '/') path = '';
       path = '/' + lang + path;
     }
@@ -257,6 +258,7 @@
         <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214"/>
       </svg>
     </div>
+
 
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>

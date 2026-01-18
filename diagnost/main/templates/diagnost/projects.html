@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}Projects page — selected cases and work examples.{% endblock %}
-{% block title %}Projects{% endblock %}
+{% block description %}{% trans "Projects page — selected cases and work examples." %}{% endblock %}
+{% block title %}{% trans "Projects" %}{% endblock %}
 
 {% block content %}
 
@@ -14,8 +14,8 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>Our projects</span></h1>
-            <p class="mb-5 w-75">We’re proud to share some of our best work.</p>
+            <h1 class="pt-5"><span>{% trans "Our projects" %}</span></h1>
+            <p class="mb-5 w-75">{% trans "We’re proud to share some of our best work." %}</p>
           </div>
         </div>
       </div>
@@ -27,8 +27,8 @@
     <div class="container">
       <div class="row justify-content-center mb-5 element-animate">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Projects</h2>
-          <p class="mb-5 lead">Explore our recent projects</p>
+          <h2 class="heading mb-4">{% trans "Projects" %}</h2>
+          <p class="mb-5 lead">{% trans "Explore our recent projects" %}</p>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
               {% if p.photo %}
                 <img src="{{ p.photo.url }}" alt="{{ p.title }}" class="img-fluid">
               {% else %}
-                <img src="{% static 'images/no_photo.webp' %}" alt="{{ p.title }}" class="img-fluid">
+                <img src="{% static 'images/no_photo.webp' %}" alt="{% trans 'No image' %}" class="img-fluid">
               {% endif %}
             </a>
           </div>
@@ -57,7 +57,7 @@
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Reviews</h2>
+          <h2 class="heading mb-4">{% trans "Reviews" %}</h2>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
                 </div>
                 <div class="name-text align-self-center">
                   <h2 class="heading">{{ r.name }}</h2>
-                  <span class="meta">XYZ Inc</span>
+                  <span class="meta">{% trans "Client" %}</span>
                 </div>
               </div>
 
@@ -88,4 +88,3 @@
   </section>
 
 {% endblock %}
-

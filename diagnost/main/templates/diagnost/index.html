@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}Home page — AI-assisted automotive diagnostics and repair services.{% endblock %}
-{% block title %}Home{% endblock %}
+{% block description %}{% trans "Home page — AI-assisted automotive diagnostics and repair services." %}{% endblock %}
+{% block title %}{% trans "Home" %}{% endblock %}
 
 {% block content %}
 
@@ -13,9 +13,9 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1 class="mb-4"><span>Automotive diagnostics</span></h1>
+            <h1 class="mb-4"><span>{% trans "Automotive diagnostics" %}</span></h1>
             <p class="mb-5 w-75">
-              We use AI-assisted analysis to help identify your vehicle’s issues more accurately.
+              {% trans "We use AI-assisted analysis to help identify your vehicle’s issues more accurately." %}
             </p>
           </div>
         </div>
@@ -26,9 +26,9 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Suspension repair</span></h1>
+            <h1><span>{% trans "Suspension repair" %}</span></h1>
             <p class="mb-5 w-75">
-              Our technicians take your concerns seriously and help resolve them efficiently.
+              {% trans "Our technicians take your concerns seriously and help resolve them efficiently." %}
             </p>
           </div>
         </div>
@@ -39,9 +39,9 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Wheel alignment</span></h1>
+            <h1><span>{% trans "Wheel alignment" %}</span></h1>
             <p class="mb-5 w-75">
-              We fine-tune wheel alignment with precision.
+              {% trans "We fine-tune wheel alignment with precision." %}
             </p>
           </div>
         </div>
@@ -52,9 +52,9 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Soundproofing</span></h1>
+            <h1><span>{% trans "Soundproofing" %}</span></h1>
             <p class="mb-5 w-75">
-              We reduce noise and improve cabin comfort.
+              {% trans "We reduce noise and improve cabin comfort." %}
             </p>
           </div>
         </div>
@@ -65,9 +65,9 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Audio upgrade</span></h1>
+            <h1><span>{% trans "Audio upgrade" %}</span></h1>
             <p class="mb-5 w-75">
-              We take your in-car sound to the next level.
+              {% trans "We take your in-car sound to the next level." %}
             </p>
           </div>
         </div>
@@ -89,7 +89,7 @@
     <div class="container">
       <div class="row mb-5">
         <div class="col-12 text-center">
-          <h2>We can handle any issue</h2>
+          <h2>{% trans "We can handle any issue" %}</h2>
         </div>
       </div>
 
@@ -107,9 +107,9 @@
           <div class="feature-1 d-md-flex">
             <div class="align-self-center">
               <span class="ion ion-easel display-4 text-primary"></span>
-              <h3>Diagnostics</h3>
+              <h3>{% trans "Diagnostics" %}</h3>
               <p>
-                Modern diagnostic equipment and advanced computer diagnostics workflows.
+                {% trans "Modern diagnostic equipment and advanced computer diagnostics workflows." %}
               </p>
             </div>
           </div>
@@ -117,9 +117,9 @@
           <div class="feature-1 d-md-flex">
             <div class="align-self-center">
               <span class="ion ion-hammer display-4 text-primary"></span>
-              <h3>Suspension repair</h3>
+              <h3>{% trans "Suspension repair" %}</h3>
               <p>
-                Resolving most suspension-related issues for your vehicle.
+                {% trans "Resolving most suspension-related issues for your vehicle." %}
               </p>
             </div>
           </div>
@@ -131,9 +131,9 @@
           <div class="feature-1 d-md-flex">
             <div class="align-self-center">
               <span class="ion ion-cube display-4 text-primary"></span>
-              <h3>Audio upgrade</h3>
+              <h3>{% trans "Audio upgrade" %}</h3>
               <p>
-                Upgrading your car audio system with professional equipment.
+                {% trans "Upgrading your car audio system with professional equipment." %}
               </p>
             </div>
           </div>
@@ -141,9 +141,9 @@
           <div class="feature-1 d-md-flex">
             <div class="align-self-center">
               <span class="ion ion-clipboard display-4 text-primary"></span>
-              <h3>Soundproofing</h3>
+              <h3>{% trans "Soundproofing" %}</h3>
               <p>
-                Premium sound-deadening materials for better comfort.
+                {% trans "Premium sound-deadening materials for better comfort." %}
               </p>
             </div>
           </div>
@@ -162,9 +162,9 @@
           <div class="media block-6 d-block text-center">
             <div class="icon mb-3"><span class="ion-android-notifications text-primary"></span></div>
             <div class="media-body">
-              <h3 class="heading">Fast, correct decision-making</h3>
+              <h3 class="heading">{% trans "Fast, correct decision-making" %}</h3>
               <p>
-                Our experienced specialists assess the situation on-site and propose a solution quickly.
+                {% trans "Our experienced specialists assess the situation on-site and propose a solution quickly." %}
               </p>
             </div>
           </div>
@@ -174,9 +174,9 @@
           <div class="media block-6 d-block text-center">
             <div class="icon mb-3"><span class="ion-heart text-primary"></span></div>
             <div class="media-body">
-              <h3 class="heading">Customer-first approach</h3>
+              <h3 class="heading">{% trans "Customer-first approach" %}</h3>
               <p>
-                Comfortable waiting areas are available if you choose to stay while work is being completed.
+                {% trans "Comfortable waiting areas are available if you choose to stay while work is being completed." %}
               </p>
             </div>
           </div>
@@ -186,9 +186,9 @@
           <div class="media block-6 d-block text-center">
             <div class="icon mb-3"><span class="ion-flash text-primary"></span></div>
             <div class="media-body">
-              <h3 class="heading">Fast parts sourcing</h3>
+              <h3 class="heading">{% trans "Fast parts sourcing" %}</h3>
               <p>
-                If a required part is not in stock, we can order and deliver it for your vehicle.
+                {% trans "If a required part is not in stock, we can order and deliver it for your vehicle." %}
               </p>
             </div>
           </div>
@@ -207,7 +207,7 @@
             {% if n.photo %}
               <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
             {% else %}
-              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
+              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="{% trans 'No image' %}" class="img-fluid"></div></div>
             {% endif %}
           </div>
 
@@ -218,7 +218,7 @@
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
                 <p>
                   <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                    {% trans "Read more" %} <span class="ion-android-arrow-dropright-circle"></span>
                   </a>
                 </p>
               </div>
@@ -238,7 +238,7 @@
             {% if n.photo %}
               <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
             {% else %}
-              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
+              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="{% trans 'No image' %}" class="img-fluid"></div></div>
             {% endif %}
           </div>
 
@@ -249,7 +249,7 @@
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
                 <p>
                   <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                    {% trans "Read more" %} <span class="ion-android-arrow-dropright-circle"></span>
                   </a>
                 </p>
               </div>
@@ -265,8 +265,8 @@
     <div class="container">
       <div class="row justify-content-center mb-5 element-animate">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Projects</h2>
-          <p class="mb-5 lead">Explore some of our successful projects</p>
+          <h2 class="heading mb-4">{% trans "Projects" %}</h2>
+          <p class="mb-5 lead">{% trans "Explore some of our successful projects" %}</p>
         </div>
       </div>
     </div>
@@ -295,7 +295,7 @@
     <div class="container">
       <div class="row justify-content-center mb-5">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Reviews</h2>
+          <h2 class="heading mb-4">{% trans "Reviews" %}</h2>
         </div>
       </div>
 
@@ -326,9 +326,9 @@
     <div class="container">
       <div class="row justify-content-center mb-5 element-animate">
         <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Our News</h2>
+          <h2 class="heading mb-4">{% trans "Our News" %}</h2>
           <p class="mb-5 lead">
-            In our news section, we highlight updates and events related to automotive diagnostics and repair.
+            {% trans "In our news section, we highlight updates and events related to automotive diagnostics and repair." %}
           </p>
         </div>
       </div>
@@ -349,7 +349,7 @@
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
                 <p>
                   <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                    {% trans "Read more" %} <span class="ion-android-arrow-dropright-circle"></span>
                   </a>
                 </p>
               </div>
@@ -372,7 +372,7 @@
                 <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
                 <p>
                   <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
+                    {% trans "Read more" %} <span class="ion-android-arrow-dropright-circle"></span>
                   </a>
                 </p>
               </div>

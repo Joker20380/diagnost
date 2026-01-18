@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block description %}About AI-Diagnostics – an AI-powered automotive diagnostics company based in Ghent, Belgium{% endblock %}
-{% block title %}About Us{% endblock %}
+{% block description %}{% trans "About AI-Diagnostics – an AI-powered automotive diagnostics company based in Ghent, Belgium" %}{% endblock %}
+{% block title %}{% trans "About Us" %}{% endblock %}
 
 {% block content %}
   <div class="top-shadow"></div>
@@ -12,10 +12,12 @@
       <div class="container">
         <div class="row slider-text align-items-center justify-content-center">
           <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>About Us</span></h1>
+            <h1 class="pt-5"><span>{% trans "About Us" %}</span></h1>
             <p class="mb-5 w-75">
-              Get to know our team of engineers and diagnosticians who believe in clarity,
-              technology, and responsible automotive service.
+              {% blocktrans %}
+                Get to know our team of engineers and diagnosticians who believe in clarity,
+                technology, and responsible automotive service.
+              {% endblocktrans %}
             </p>
           </div>
         </div>
@@ -32,25 +34,30 @@
       </div>
 
       <div class="text text-center element-animate">
-        <h3 class="mb-4">Our Mission</h3>
+        <h3 class="mb-4">{% trans "Our Mission" %}</h3>
+
         <p class="mb-5">
-          AI-Diagnostics was created to reduce uncertainty in complex automotive situations.
-          Our goal is not just to identify faults, but to explain them clearly and support
-          informed decisions.
+          {% blocktrans %}
+            AI-Diagnostics was created to reduce uncertainty in complex automotive situations.
+            Our goal is not just to identify faults, but to explain them clearly and support
+            informed decisions.
+          {% endblocktrans %}
 
           <br><br>
-          We focus on:
+          {% trans "We focus on:" %}
           <br><br>
-          • Advanced computer diagnostics enhanced by artificial intelligence.<br>
-          • Suspension, drivetrain, and electronics diagnostics with special attention to modern vehicles and SUVs.<br>
-          • Data-driven analysis instead of guesswork or part replacement “by intuition”.<br>
-          • Transparent diagnostic reports understandable to both professionals and car owners.<br>
-          • Continuous improvement through modern tools, software, and evidence-based methods.<br>
-          • A client-centric service model aligned with European quality and compliance standards.
+          {% blocktrans %}
+            • Advanced computer diagnostics enhanced by artificial intelligence.<br>
+            • Suspension, drivetrain, and electronics diagnostics with special attention to modern vehicles and SUVs.<br>
+            • Data-driven analysis instead of guesswork or part replacement “by intuition”.<br>
+            • Transparent diagnostic reports understandable to both professionals and car owners.<br>
+            • Continuous improvement through modern tools, software, and evidence-based methods.<br>
+            • A client-centric service model aligned with European quality and compliance standards.
+          {% endblocktrans %}
         </p>
 
         <p>
-          <a href="#" class="btn btn-primary btn-sm px-3 py-2">Learn more</a>
+          <a href="#" class="btn btn-primary btn-sm px-3 py-2">{% trans "Learn more" %}</a>
         </p>
       </div>
     </div>
@@ -63,39 +70,55 @@
       </div>
 
       <div class="text text-center element-animate">
-        <h3 class="mb-4">Our Story</h3>
+        <h3 class="mb-4">{% trans "Our Story" %}</h3>
+
         <p class="mb-5">
-          AI-Diagnostics was founded in Ghent, Belgium, by professionals with hands-on
-          experience at the very bottom of the automotive service chain — where uncertainty,
-          misdiagnosis, and lack of transparency are most visible.
+          {% blocktrans %}
+            AI-Diagnostics was founded in Ghent, Belgium, by professionals with hands-on
+            experience at the very bottom of the automotive service chain — where uncertainty,
+            misdiagnosis, and lack of transparency are most visible.
+          {% endblocktrans %}
 
           <br><br>
-          Years of practical work in vehicle diagnostics revealed a systemic problem:
-          modern cars generate vast amounts of data, yet many service decisions are still
-          made without structured analysis or clear reasoning.
+          {% blocktrans %}
+            Years of practical work in vehicle diagnostics revealed a systemic problem:
+            modern cars generate vast amounts of data, yet many service decisions are still
+            made without structured analysis or clear reasoning.
+          {% endblocktrans %}
 
           <br><br>
-          The company was built to change this paradigm. Instead of selling “diagnostics”
-          as a procedure, we focus on reducing uncertainty — for technicians, service
-          managers, and vehicle owners alike.
+          {% blocktrans %}
+            The company was built to change this paradigm. Instead of selling “diagnostics”
+            as a procedure, we focus on reducing uncertainty — for technicians, service
+            managers, and vehicle owners alike.
+          {% endblocktrans %}
 
           <br><br>
-          Based in Ghent, at the heart of Europe’s technological and automotive ecosystem,
-          AI-Diagnostics combines real diagnostic experience with software engineering,
-          artificial intelligence, and strict European standards for quality, safety,
-          and accountability.
+          {% blocktrans %}
+            Based in Ghent, at the heart of Europe’s technological and automotive ecosystem,
+            AI-Diagnostics combines real diagnostic experience with software engineering,
+            artificial intelligence, and strict European standards for quality, safety,
+            and accountability.
+          {% endblocktrans %}
 
           <br><br>
-          Today, AI-Diagnostics is an evolving platform and service focused on:
+          {% blocktrans %}
+            Today, AI-Diagnostics is an evolving platform and service focused on:
+          {% endblocktrans %}
           <br><br>
-          • Intelligent fault interpretation.<br>
-          • Risk-aware diagnostic decision support.<br>
-          • High-quality diagnostic documentation.<br>
-          • Responsible use of AI in technical systems.
+
+          {% blocktrans %}
+            • Intelligent fault interpretation.<br>
+            • Risk-aware diagnostic decision support.<br>
+            • High-quality diagnostic documentation.<br>
+            • Responsible use of AI in technical systems.
+          {% endblocktrans %}
 
           <br><br>
-          The core principle remains unchanged: respect for engineering, respect for data,
-          and respect for every vehicle and client.
+          {% blocktrans %}
+            The core principle remains unchanged: respect for engineering, respect for data,
+            and respect for every vehicle and client.
+          {% endblocktrans %}
         </p>
       </div>
     </div>
