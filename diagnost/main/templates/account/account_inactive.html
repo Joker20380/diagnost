@@ -1,14 +1,62 @@
-{% extends "allauth/layouts/entrance.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth %}
-{% block head_title %}
-    {% translate "Account Inactive" %}
-{% endblock head_title %}
+
+{% block title %}Аккаунт неактивен{% endblock %}
+{% block description %}Аккаунт пользователя временно неактивен{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% translate "Account Inactive" %}
-    {% endelement %}
-    {% element p %}
-        {% translate "This account is inactive." %}
-    {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Личный кабинет</span>
+      <h1>Аккаунт неактивен</h1>
+      <p>
+        Этот аккаунт сейчас отключён или ожидает дополнительного действия со стороны администратора.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-single">
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Доступ ограничен</span>
+
+        <h2>Вход невозможен</h2>
+
+        <p class="az-auth-card-text">
+          Аккаунт найден, но он находится в неактивном состоянии. Обычно это значит,
+          что доступ был временно отключён, аккаунт ещё не подтверждён или требуется проверка администратором.
+        </p>
+
+        <div class="az-auth-info-box">
+          <strong>Что можно сделать?</strong>
+          <p>
+            Свяжитесь с сервисом, если считаете, что аккаунт должен быть активен.
+            Мы проверим данные и подскажем следующий шаг.
+          </p>
+        </div>
+
+        <div class="az-auth-actions-row">
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Связаться с нами
+          </a>
+
+          <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
+            Вернуться ко входу
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

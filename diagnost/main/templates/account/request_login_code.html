@@ -1,32 +1,140 @@
-{% extends "account/base_entrance.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth account %}
-{% block head_title %}
-    {% translate "Sign In" %}
-{% endblock head_title %}
+{% load account %}
+
+{% block head_title %}Вход по коду{% endblock head_title %}
+{% block title %}Вход по коду{% endblock %}
+{% block description %}Запрос одноразового кода для входа в личный кабинет Автозвук Владикавказ{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% translate "Mail me a sign-in code" %}
-    {% endelement %}
-    {% element p %}
-        {% blocktranslate %}You will receive an email containing a special code for a password-free sign-in.{% endblocktranslate %}
-    {% endelement %}
-    {% url 'account_request_login_code' as login_url %}
-    {% element form form=form method="post" action=login_url tags="entrance,login" %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" tags="prominent,login" %}
-                {% translate "Request Code" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% url 'account_login' as login_url %}
-    {% element button href=login_url tags="link" %}
-        {% translate "Other sign-in options" %}
-    {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Безопасный вход</span>
+      <h1>Вход по одноразовому коду</h1>
+      <p>
+        Получите код на email и войдите в личный кабинет без ввода пароля.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Sign-in code</span>
+
+        <h2>Получить код для входа</h2>
+
+        <p class="az-auth-card-text">
+          Укажите email, связанный с аккаунтом. Мы отправим на него одноразовый код
+          для входа без пароля.
+        </p>
+
+        <div class="az-auth-info-box">
+          <strong>Как это работает?</strong>
+          <p>
+            Код действует ограниченное время. После получения письма введите код
+            на следующей странице, чтобы завершить вход.
+          </p>
+        </div>
+
+        {% url 'account_request_login_code' as request_code_url %}
+
+        <form method="post"
+              action="{{ request_code_url }}"
+              class="az-auth-form"
+              novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="az-auth-errors">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            {% if field.is_hidden %}
+              {{ field }}
+            {% else %}
+              <div class="az-auth-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                  <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="az-auth-field-errors">
+                    {{ field.errors }}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          {{ redirect_field }}
+
+          <div class="az-auth-actions-row">
+            <button type="submit" class="az-btn az-btn-primary">
+              Получить код
+            </button>
+
+            <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
+              Другие способы входа
+            </a>
+          </div>
+        </form>
+
+        <div class="az-auth-links">
+          <a href="{% url 'account_login' %}">Войти с паролем</a>
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Без пароля</span>
+
+          <h3>Когда удобно</h3>
+
+          <ul>
+            <li>Если вы не хотите вводить пароль на текущем устройстве.</li>
+            <li>Если временно не помните пароль.</li>
+            <li>Если нужен быстрый вход через подтверждённый email.</li>
+            <li>Если аккаунт поддерживает вход по одноразовому коду.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Код не приходит?</h3>
+
+          <p>
+            Проверьте правильность email и папку «Спам». Если письмо не приходит,
+            попробуйте войти обычным способом или свяжитесь с сервисом.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Контакты
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

@@ -1,14 +1,98 @@
-{% extends "account/base_entrance.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth %}
-{% block head_title %}
-    {% trans "Sign Up Closed" %}
-{% endblock head_title %}
+
+{% block head_title %}Регистрация закрыта{% endblock head_title %}
+{% block title %}Регистрация закрыта{% endblock %}
+{% block description %}Регистрация новых аккаунтов временно закрыта{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign Up Closed" %}
-    {% endelement %}
-    {% element p %}
-        {% trans "We are sorry, but the sign up is currently closed." %}
-    {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Личный кабинет</span>
+      <h1>Регистрация закрыта</h1>
+      <p>
+        Сейчас создание новых аккаунтов временно недоступно.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Sign up closed</span>
+
+        <h2>Регистрация временно закрыта</h2>
+
+        <div class="az-auth-info-box az-auth-warning-box">
+          <strong>Новые аккаунты сейчас не создаются</strong>
+          <p>
+            Мы временно ограничили регистрацию. Если вам нужен доступ к личному кабинету,
+            свяжитесь с сервисом — мы подскажем возможный вариант.
+          </p>
+        </div>
+
+        <p class="az-auth-card-text">
+          Если у вас уже есть аккаунт, вы можете войти обычным способом.
+        </p>
+
+        <div class="az-auth-actions-row">
+          <a href="{% url 'account_login' %}" class="az-btn az-btn-primary">
+            Войти
+          </a>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-outline-dark">
+            Связаться с нами
+          </a>
+        </div>
+
+        <div class="az-auth-links">
+          <a href="{% url 'index' %}">На главную</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Доступ</span>
+
+          <h3>Что можно сделать</h3>
+
+          <ul>
+            <li>Войти, если аккаунт уже создан.</li>
+            <li>Связаться с сервисом для уточнения доступа.</li>
+            <li>Вернуться на главную страницу сайта.</li>
+            <li>Повторить попытку регистрации позже.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Нужен личный кабинет?</h3>
+
+          <p>
+            Напишите нам через форму контактов или позвоните — подскажем, как лучше оформить доступ.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Контакты
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

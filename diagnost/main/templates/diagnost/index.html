@@ -1,386 +1,529 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
-{% block description %}Home page — AI-assisted automotive diagnostics and repair services.{% endblock %}
-{% block title %}Home{% endblock %}
+{% block description %}
+Автозвук Владикавказ: компьютерная диагностика автомобиля, ремонт ходовой части, автоэлектрика, развал-схождение, шумоизоляция и аудиоподготовка.
+{% endblock %}
+
+{% block title %}Домой{% endblock %}
 
 {% block content %}
 
-  <div class="top-shadow"></div>
+<section class="home-slider owl-carousel az-hero-slider">
 
-  <section class="home-slider owl-carousel">
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_1.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1 class="mb-4"><span>Automotive diagnostics</span></h1>
-            <p class="mb-5 w-75">
-              We use AI-assisted analysis to help identify your vehicle’s issues more accurately.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_2.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Suspension repair</span></h1>
-            <p class="mb-5 w-75">
-              Our technicians take your concerns seriously and help resolve them efficiently.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_4.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Wheel alignment</span></h1>
-            <p class="mb-5 w-75">
-              We fine-tune wheel alignment with precision.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_7.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Soundproofing</span></h1>
-            <p class="mb-5 w-75">
-              We reduce noise and improve cabin comfort.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="slider-item" style="background-image: url('{% static 'images/audio.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-lg-7 text-center col-sm-12 element-animate">
-            <h1><span>Audio upgrade</span></h1>
-            <p class="mb-5 w-75">
-              We take your in-car sound to the next level.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-  <!-- END slider -->
-
-  {% if messages %}
-    <div class="alert alert-success">
-      {% for message in messages %}
-        {{ message }}
-      {% endfor %}
-    </div>
-  {% endif %}
-
-  <section class="section">
+  <div class="slider-item az-hero-slide" style="background-image: url('{% static 'images/industrial_hero_1.webp' %}');">
+    <div class="az-hero-overlay"></div>
     <div class="container">
-      <div class="row mb-5">
-        <div class="col-12 text-center">
-          <h2>We can handle any issue</h2>
-        </div>
-      </div>
+      <div class="az-hero-content">
+        <span class="az-hero-kicker">Диагностика · ремонт · тюнинг</span>
+        <h1>Компьютерная диагностика авто во Владикавказе</h1>
+        <p>
+          Используем современное оборудование и экспертный подход, чтобы быстрее найти причину неисправности и снизить неопределённость перед ремонтом.
+        </p>
 
-      <div class="row align-items-stretch">
-        <div class="col-lg-4 order-lg-2">
-          <div class="scaling-image h-100">
-            <div class="frame h-100">
-              <div class="feature-img-bg h-100" style="background-image: url('{% static 'images/industrial_feature_1.webp' %}');"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
-
-          <div class="feature-1 d-md-flex">
-            <div class="align-self-center">
-              <span class="ion ion-easel display-4 text-primary"></span>
-              <h3>Diagnostics</h3>
-              <p>
-                Modern diagnostic equipment and advanced computer diagnostics workflows.
-              </p>
-            </div>
-          </div>
-
-          <div class="feature-1 d-md-flex">
-            <div class="align-self-center">
-              <span class="ion ion-hammer display-4 text-primary"></span>
-              <h3>Suspension repair</h3>
-              <p>
-                Resolving most suspension-related issues for your vehicle.
-              </p>
-            </div>
-          </div>
-
+        <div class="az-hero-actions">
+          <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
+            Записаться на диагностику
+          </a>
+          <a href="tel:+79188266181" class="az-btn az-btn-outline">
+            Позвонить
+          </a>
         </div>
 
-        <div class="col-md-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
-
-          <div class="feature-1 d-md-flex">
-            <div class="align-self-center">
-              <span class="ion ion-cube display-4 text-primary"></span>
-              <h3>Audio upgrade</h3>
-              <p>
-                Upgrading your car audio system with professional equipment.
-              </p>
-            </div>
-          </div>
-
-          <div class="feature-1 d-md-flex">
-            <div class="align-self-center">
-              <span class="ion ion-clipboard display-4 text-primary"></span>
-              <h3>Soundproofing</h3>
-              <p>
-                Premium sound-deadening materials for better comfort.
-              </p>
-            </div>
-          </div>
-
+        <div class="az-hero-points">
+          <span>OBD-диагностика</span>
+          <span>Поиск неисправностей</span>
+          <span>Рекомендации по ремонту</span>
         </div>
-
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="section bg-light">
+  <div class="slider-item az-hero-slide" style="background-image: url('{% static 'images/industrial_hero_2.webp' %}');">
+    <div class="az-hero-overlay"></div>
     <div class="container">
-      <div class="row">
+      <div class="az-hero-content">
+        <span class="az-hero-kicker">Подвеска · ходовая · безопасность</span>
+        <h1>Ремонт ходовой части автомобиля</h1>
+        <p>
+          Проверим подвеску, рулевое управление, тормозную систему и поможем принять правильное решение по ремонту без лишней замены деталей.
+        </p>
 
-        <div class="col-md-6 col-lg-4 element-animate">
-          <div class="media block-6 d-block text-center">
-            <div class="icon mb-3"><span class="ion-android-notifications text-primary"></span></div>
-            <div class="media-body">
-              <h3 class="heading">Fast, correct decision-making</h3>
-              <p>
-                Our experienced specialists assess the situation on-site and propose a solution quickly.
-              </p>
-            </div>
-          </div>
+        <div class="az-hero-actions">
+          <a href="/service/remont-hodovoj-chasti-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
+            Посмотреть услугу
+          </a>
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+            Контакты
+          </a>
         </div>
 
-        <div class="col-md-6 col-lg-4 element-animate">
-          <div class="media block-6 d-block text-center">
-            <div class="icon mb-3"><span class="ion-heart text-primary"></span></div>
-            <div class="media-body">
-              <h3 class="heading">Customer-first approach</h3>
-              <p>
-                Comfortable waiting areas are available if you choose to stay while work is being completed.
-              </p>
-            </div>
-          </div>
+        <div class="az-hero-points">
+          <span>Диагностика подвески</span>
+          <span>Ремонт ходовой</span>
+          <span>Подбор запчастей</span>
         </div>
-
-        <div class="col-md-6 col-lg-4 element-animate">
-          <div class="media block-6 d-block text-center">
-            <div class="icon mb-3"><span class="ion-flash text-primary"></span></div>
-            <div class="media-body">
-              <h3 class="heading">Fast parts sourcing</h3>
-              <p>
-                If a required part is not in stock, we can order and deliver it for your vehicle.
-              </p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
-  </section>
-  <!-- END section -->
+  </div>
 
-  {% for n in view.one_news %}
-    <section class="section element-animate">
-      <div class="container">
-        <div class="row align-items-center mb-5">
-          <div class="col-lg-7 order-md-2">
-            {% if n.photo %}
-              <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
-            {% else %}
-              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
-            {% endif %}
-          </div>
+  <div class="slider-item az-hero-slide" style="background-image: url('{% static 'images/industrial_hero_4.webp' %}');">
+    <div class="az-hero-overlay"></div>
+    <div class="container">
+      <div class="az-hero-content">
+        <span class="az-hero-kicker">Геометрия · управляемость · ресурс шин</span>
+        <h1>Развал-схождение и настройка управляемости</h1>
+        <p>
+          Настроим колёсную базу, улучшим поведение автомобиля на дороге и поможем избежать ускоренного износа шин.
+        </p>
 
-          <div class="col-md-5 pr-md-5 mb-5">
-            <div class="block-41">
-              <h2 class="block-41-heading mb-5">{{ n.title }}</h2>
-              <div class="block-41-text">
-                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p>
-                  <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
-                  </a>
-                </p>
+        <div class="az-hero-actions">
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Записаться
+          </a>
+          <a href="tel:+79188266181" class="az-btn az-btn-outline">
+            Консультация
+          </a>
+        </div>
+
+        <div class="az-hero-points">
+          <span>Проверка углов</span>
+          <span>Настройка базы</span>
+          <span>Контроль результата</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-item az-hero-slide" style="background-image: url('{% static 'images/industrial_hero_7.webp' %}');">
+    <div class="az-hero-overlay"></div>
+    <div class="container">
+      <div class="az-hero-content">
+        <span class="az-hero-kicker">Комфорт · тишина · плотность салона</span>
+        <h1>Шумоизоляция автомобиля</h1>
+        <p>
+          Улучшим акустический комфорт, снизим лишние шумы и подготовим автомобиль под качественную аудиосистему.
+        </p>
+
+        <div class="az-hero-actions">
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Обсудить проект
+          </a>
+          <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
+            Наши проекты
+          </a>
+        </div>
+
+        <div class="az-hero-points">
+          <span>Двери</span>
+          <span>Пол</span>
+          <span>Багажник</span>
+          <span>Арки</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-item az-hero-slide" style="background-image: url('{% static 'images/audio.webp' %}');">
+    <div class="az-hero-overlay"></div>
+    <div class="container">
+      <div class="az-hero-content">
+        <span class="az-hero-kicker">Автозвук · установка · настройка</span>
+        <h1>Аудиоподготовка и улучшение звука</h1>
+        <p>
+          Подберём, установим и настроим компоненты так, чтобы система играла чисто, мощно и без лишних вибраций.
+        </p>
+
+        <div class="az-hero-actions">
+          <a href="{% url 'projects' %}" class="az-btn az-btn-primary">
+            Смотреть проекты
+          </a>
+          <a href="tel:+79188266181" class="az-btn az-btn-outline">
+            Позвонить
+          </a>
+        </div>
+
+        <div class="az-hero-points">
+          <span>Акустика</span>
+          <span>Усилители</span>
+          <span>Сабвуферы</span>
+          <span>Настройка</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="az-home-services">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Что делаем</span>
+      <h2>Решаем технические задачи автомобиля комплексно</h2>
+      <p>
+        Не просто меняем детали, а выстраиваем понятную схему: диагностика, причина, решение, результат.
+      </p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-service-card">
+          <span class="az-service-icon ion ion-easel"></span>
+          <h3>Диагностика</h3>
+          <p>Компьютерная диагностика, анализ ошибок, поиск причины неисправности.</p>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="/service/remont-hodovoj-chasti-avtomobilya-vo-vladikavkaze/" class="az-service-card">
+          <span class="az-service-icon ion ion-hammer"></span>
+          <h3>Ремонт ходовой</h3>
+          <p>Подвеска, рулевое управление, тормозная система и сопутствующие узлы.</p>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'contacts' %}" class="az-service-card">
+          <span class="az-service-icon ion ion-ios-settings-strong"></span>
+          <h3>Развал-схождение</h3>
+          <p>Настройка геометрии, стабильность на дороге и равномерный износ шин.</p>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'projects' %}" class="az-service-card">
+          <span class="az-service-icon ion ion-volume-high"></span>
+          <h3>Автозвук</h3>
+          <p>Аудиоподготовка, шумоизоляция, установка и настройка компонентов.</p>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="az-home-process">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="az-process-image">
+          <img src="{% static 'images/industrial_feature_1.webp' %}" alt="Диагностика автомобиля во Владикавказе">
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="az-process-content">
+          <span class="az-section-kicker">Подход</span>
+          <h2>Сначала причина, потом ремонт</h2>
+          <p>
+            Главная задача сервиса — не навязать замену деталей, а быстро сократить зону неопределённости.
+            Поэтому мы начинаем с диагностики, проверки симптомов и понятного объяснения клиенту.
+          </p>
+
+          <div class="az-process-steps">
+            <div class="az-process-step">
+              <span>01</span>
+              <div>
+                <h3>Фиксируем симптомы</h3>
+                <p>Слушаем клиента, проверяем поведение автомобиля и первичные признаки неисправности.</p>
+              </div>
+            </div>
+
+            <div class="az-process-step">
+              <span>02</span>
+              <div>
+                <h3>Проводим диагностику</h3>
+                <p>Используем оборудование, опыт мастера и техническую логику поиска причины.</p>
+              </div>
+            </div>
+
+            <div class="az-process-step">
+              <span>03</span>
+              <div>
+                <h3>Даём решение</h3>
+                <p>Объясняем, что нужно делать сейчас, что можно отложить и какие риски есть дальше.</p>
               </div>
             </div>
           </div>
 
+          <a href="{% url 'contacts' %}" class="az-link-more">
+            Получить консультацию
+            <span class="ion-android-arrow-dropright-circle"></span>
+          </a>
         </div>
       </div>
-    </section>
-  {% endfor %}
 
-  {% for n in view.one_second_news %}
-    <section class="section element-animate bg-light">
-      <div class="container">
-        <div class="row align-items-center mb-5">
-          <div class="col-lg-7 order-mb-1">
-            {% if n.photo %}
-              <div class="scaling-image"><div class="frame"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></div></div>
-            {% else %}
-              <div class="scaling-image"><div class="frame"><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></div></div>
-            {% endif %}
-          </div>
-
-          <div class="col-md-5 pr-md-5 mb-5">
-            <div class="block-41">
-              <h2 class="block-41-heading mb-5">{{ n.title }}</h2>
-              <div class="block-41-text">
-                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p>
-                  <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-  {% endfor %}
-
-  <section class="section border-t pb-0">
-    <div class="container">
-      <div class="row justify-content-center mb-5 element-animate">
-        <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Projects</h2>
-          <p class="mb-5 lead">Explore some of our successful projects</p>
-        </div>
-      </div>
     </div>
+  </div>
+</section>
 
-    <div class="container-fluid">
-      <div class="row no-gutters">
-        {% for p in view.all_projects %}
-          <div class="col-md-4 element-animate">
-            <a href="{{ p.get_absolute_url }}" class="link-thumbnail">
-              <h3>{{ p.title }}</h3>
-              <span class="ion-plus icon"></span>
-              {% if p.photo %}
-                <img src="{{ p.photo.url }}" alt="{{ p.title }}" class="img-fluid">
-              {% else %}
-                <img src="{% static 'images/no_photo.webp' %}" alt="{{ p.title }}" class="img-fluid">
-              {% endif %}
-            </a>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-  <!-- END section -->
 
-  <section class="section bg-light block-11">
-    <div class="container">
-      <div class="row justify-content-center mb-5">
-        <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Reviews</h2>
-        </div>
-      </div>
+<section class="az-benefits">
+  <div class="container">
+    <div class="row">
 
-      <div class="nonloop-block-11 owl-carousel">
-        {% for r in view.all_reviews %}
-          <div class="item">
-            <div class="block-33 h-100">
-              <div class="vcard d-flex mb-3">
-                <div class="image align-self-center"><img src="{{ r.photo.url }}" alt="{{ r.name }}"></div>
-                <div class="name-text align-self-center">
-                  <h2 class="heading">{{ r.name }}</h2>
-                  <span class="meta">{{ r.email }}</span>
-                </div>
-              </div>
-              <div class="text">
-                <blockquote>
-                  <p>{{ r.body }}</p>
-                </blockquote>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  <section class="section blog">
-    <div class="container">
-      <div class="row justify-content-center mb-5 element-animate">
-        <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Our News</h2>
-          <p class="mb-5 lead">
-            In our news section, we highlight updates and events related to automotive diagnostics and repair.
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-benefit-card">
+          <span class="ion-android-notifications"></span>
+          <h3>Быстрое решение</h3>
+          <p>
+            Оцениваем ситуацию на месте и предлагаем понятный план действий без лишнего затягивания.
           </p>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          {% for n in view.first_news %}
-            <div class="media mb-4 d-md-flex d-block element-animate">
-              {% if n.photo %}
-                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
-              {% else %}
-                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
-              {% endif %}
-
-              <div class="media-body">
-                <span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
-                <h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
-                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p>
-                  <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
-                  </a>
-                </p>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
-        <div class="col-md-6">
-          {% for n in view.second_news %}
-            <div class="media mb-4 d-md-flex d-block element-animate">
-              {% if n.photo %}
-                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></a>
-              {% else %}
-                <a href="{{ n.get_absolute_url }}" class="mr-5"><img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid"></a>
-              {% endif %}
-
-              <div class="media-body">
-                <span class="post-meta">{{ n.time_update|date:"d.m.Y" }}</span>
-                <h3 class="mt-2 text-black"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h3>
-                <p>{% autoescape off %}{{ n.content|truncatewords:10 }}{% endautoescape %}</p>
-                <p>
-                  <a href="{{ n.get_absolute_url }}" class="readmore">
-                    Read more <span class="ion-android-arrow-dropright-circle"></span>
-                  </a>
-                </p>
-              </div>
-            </div>
-          {% endfor %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-benefit-card">
+          <span class="ion-heart"></span>
+          <h3>Комфорт для клиента</h3>
+          <p>
+            Можно остаться и подождать окончание работ в удобной клиентской зоне.
+          </p>
         </div>
       </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-benefit-card">
+          <span class="ion-flash"></span>
+          <h3>Заказ запчастей</h3>
+          <p>
+            Если детали нет в наличии, поможем подобрать и заказать подходящий вариант.
+          </p>
+        </div>
+      </div>
+
     </div>
-  </section>
+  </div>
+</section>
+
+
+{% for n in view.one_news %}
+<section class="az-feature-news">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-7 order-lg-2 mb-4 mb-lg-0">
+        <a href="{{ n.get_absolute_url }}" class="az-feature-news-image">
+          {% if n.photo %}
+            <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" loading="lazy">
+          {% endif %}
+        </a>
+      </div>
+
+      <div class="col-lg-5 pr-lg-5">
+        <div class="az-feature-news-content">
+          <span class="az-section-kicker">Материал</span>
+          <h2>{{ n.title }}</h2>
+          <p>{{ n.content|striptags|truncatewords:26 }}</p>
+          <a href="{{ n.get_absolute_url }}" class="az-link-more">
+            Читать дальше
+            <span class="ion-android-arrow-dropright-circle"></span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+
+{% for n in view.one_second_news %}
+<section class="az-feature-news az-feature-news-alt">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-7 mb-4 mb-lg-0">
+        <a href="{{ n.get_absolute_url }}" class="az-feature-news-image">
+          {% if n.photo %}
+            <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" loading="lazy">
+          {% endif %}
+        </a>
+      </div>
+
+      <div class="col-lg-5 pl-lg-5">
+        <div class="az-feature-news-content">
+          <span class="az-section-kicker">Полезно знать</span>
+          <h2>{{ n.title }}</h2>
+          <p>{{ n.content|striptags|truncatewords:26 }}</p>
+          <a href="{{ n.get_absolute_url }}" class="az-link-more">
+            Читать дальше
+            <span class="ion-android-arrow-dropright-circle"></span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+
+{% if view.all_projects %}
+<section class="az-projects-section">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Портфолио</span>
+      <h2>Проекты</h2>
+      <p>Посмотрите примеры наших работ по автозвуку, шумоизоляции и технической доработке автомобилей.</p>
+    </div>
+
+    <div class="row">
+      {% for p in view.all_projects %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <a href="{{ p.get_absolute_url }}" class="az-project-card">
+          <span class="az-project-card-image">
+            {% if p.photo %}
+              <img src="{{ p.photo.url }}" alt="{{ p.title }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'images/no_photo.webp' %}" alt="{{ p.title }}" loading="lazy">
+            {% endif %}
+          </span>
+
+          <span class="az-project-card-body">
+            <span class="az-project-label">Проект</span>
+            <strong>{{ p.title }}</strong>
+          </span>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+{% if view.all_reviews %}
+<section class="az-reviews-section">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Отзывы</span>
+      <h2>Что говорят клиенты</h2>
+    </div>
+
+    <div class="nonloop-block-11 owl-carousel az-reviews-carousel">
+      {% for r in view.all_reviews %}
+      <div class="item">
+        <div class="az-review-card">
+
+          <div class="az-review-head">
+            <div class="az-review-avatar">
+              {% if r.photo %}
+                <img src="{{ r.photo.url }}" alt="{{ r.name }}" loading="lazy">
+              {% else %}
+                <img src="{% static 'images/no_photo.webp' %}" alt="{{ r.name }}" loading="lazy">
+              {% endif %}
+            </div>
+
+            <div>
+              <h3>{{ r.name }}</h3>
+              {% if r.email %}
+                <span>{{ r.email }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <blockquote>
+            {{ r.body }}
+          </blockquote>
+
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+<section class="az-blog-section">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">База знаний</span>
+      <h2>Наши новости</h2>
+      <p>
+        Пишем о диагностике, ремонте, обслуживании и типичных проблемах автомобилей.
+      </p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-lg-6">
+        {% for n in view.first_news %}
+        <article class="az-blog-card">
+          <a href="{{ n.get_absolute_url }}" class="az-blog-card-image">
+            {% if n.photo %}
+              <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" loading="lazy">
+            {% endif %}
+          </a>
+
+          <div class="az-blog-card-body">
+            <span class="az-blog-date">{{ n.time_update|date:"d.m.Y" }}</span>
+            <h3>
+              <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
+            </h3>
+            <p>{{ n.content|striptags|truncatewords:18 }}</p>
+            <a href="{{ n.get_absolute_url }}" class="az-link-more">
+              Читать дальше
+              <span class="ion-android-arrow-dropright-circle"></span>
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <div class="col-lg-6">
+        {% for n in view.second_news %}
+        <article class="az-blog-card">
+          <a href="{{ n.get_absolute_url }}" class="az-blog-card-image">
+            {% if n.photo %}
+              <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" loading="lazy">
+            {% endif %}
+          </a>
+
+          <div class="az-blog-card-body">
+            <span class="az-blog-date">{{ n.time_update|date:"d.m.Y" }}</span>
+            <h3>
+              <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
+            </h3>
+            <p>{{ n.content|striptags|truncatewords:18 }}</p>
+            <a href="{{ n.get_absolute_url }}" class="az-link-more">
+              Читать дальше
+              <span class="ion-android-arrow-dropright-circle"></span>
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'blog' %}" class="az-btn az-btn-dark">
+        Все новости
+      </a>
+    </div>
+
+  </div>
+</section>
 
 {% endblock %}

@@ -1,0 +1,261 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+{% load webp %}
+
+{% block description %}
+{{ service.content|striptags|truncatechars:160 }}
+{% endblock %}
+
+{% block title %}{{ service.title }}{% endblock %}
+
+{% block content %}
+
+<section class="az-service-detail-hero"
+         style="background-image: url('{% if service.photo %}{{ service.photo.url }}{% else %}{% static 'images/industrial_hero_3.jpg' %}{% endif %}');">
+  <div class="az-service-detail-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-service-detail-hero-content">
+      <span class="az-hero-kicker">Услуга Автозвук</span>
+
+      <h1>{{ service.title }}</h1>
+
+      <p>
+        Диагностика, ремонт и техническое обслуживание автомобиля с понятным объяснением причины,
+        этапов работ и ожидаемого результата.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          Записаться на услугу
+        </a>
+
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Контакты сервиса
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-service-detail-section">
+  <div class="container">
+
+    <div class="az-service-detail-layout">
+
+      <article class="az-service-detail-main">
+
+        <div class="az-service-detail-cover">
+          {% if service.photo %}
+            <img src="{{ service.photo.url }}" alt="{{ service.title }}" loading="eager">
+          {% else %}
+            <img src="{% static 'images/no_photo.webp' %}" alt="{{ service.title }}" loading="eager">
+          {% endif %}
+        </div>
+
+        <div class="az-service-detail-prose">
+          <span class="az-section-kicker">Описание услуги</span>
+
+          <h2>{{ service.title }}</h2>
+
+          <div class="az-service-detail-content">
+            {{ service.content|safe }}
+          </div>
+        </div>
+
+      </article>
+
+
+      <aside class="az-service-detail-sidebar">
+
+        <div class="az-service-booking-card">
+          <span class="az-section-kicker">Запись в сервис</span>
+
+          <h3>Нужно проверить автомобиль?</h3>
+
+          <p>
+            Позвоните нам, опишите симптомы и мы подскажем, с какого этапа лучше начать:
+            диагностика, осмотр, ремонт или консультация мастера.
+          </p>
+
+          <div class="az-service-booking-actions">
+            <a href="tel:+79188266181" class="az-btn az-btn-primary">
+              Позвонить
+            </a>
+
+            <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
+              Как проехать
+            </a>
+          </div>
+        </div>
+
+
+        <div class="az-service-info-card">
+          <h3>Что вы получаете</h3>
+
+          <ul>
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Понятную диагностику</strong>
+                <p>Проверяем симптомы и объясняем, где находится источник проблемы.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Честный сценарий работ</strong>
+                <p>Говорим, что нужно делать срочно, а что можно запланировать позже.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Подбор решения</strong>
+                <p>Помогаем выбрать оптимальный вариант по работам, деталям и бюджету.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Контроль результата</strong>
+                <p>После выполнения работ проверяем итог и даём рекомендации.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-service-process">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Процесс</span>
+      <h2>Как проходит работа</h2>
+      <p>
+        Мы не начинаем с хаотичной замены деталей. Сначала фиксируем симптомы,
+        потом проверяем причины и только после этого переходим к ремонту.
+      </p>
+    </div>
+
+    <div class="az-service-process-grid">
+
+      <div class="az-service-process-card">
+        <span>01</span>
+        <h3>Приём автомобиля</h3>
+        <p>
+          Вы рассказываете, что происходит с автомобилем: звуки, ошибки, вибрации,
+          поведение на дороге или другие симптомы.
+        </p>
+      </div>
+
+      <div class="az-service-process-card">
+        <span>02</span>
+        <h3>Проверка и диагностика</h3>
+        <p>
+          Мастер проводит осмотр, компьютерную диагностику или техническую проверку,
+          в зависимости от задачи.
+        </p>
+      </div>
+
+      <div class="az-service-process-card">
+        <span>03</span>
+        <h3>План работ</h3>
+        <p>
+          Объясняем причину, согласовываем объём работ и подбираем оптимальное решение.
+        </p>
+      </div>
+
+      <div class="az-service-process-card">
+        <span>04</span>
+        <h3>Выполнение и контроль</h3>
+        <p>
+          Выполняем работы, проверяем результат и даём рекомендации по дальнейшей эксплуатации.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-service-benefits">
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-service-benefit-card">
+          <span class="ion ion-easel"></span>
+          <h3>Современное оборудование</h3>
+          <p>
+            Используем диагностические инструменты и технический опыт мастеров.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-service-benefit-card">
+          <span class="ion ion-hammer"></span>
+          <h3>Практический подход</h3>
+          <p>
+            Смотрим не только на ошибку или симптом, а на реальное состояние автомобиля.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-service-benefit-card">
+          <span class="ion ion-chatboxes"></span>
+          <h3>Понятное объяснение</h3>
+          <p>
+            Клиент получает нормальную картину: причина, риски, варианты решения и следующий шаг.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-service-bottom-cta">
+  <div class="container">
+    <div class="az-service-bottom-card">
+
+      <div>
+        <span class="az-section-kicker">Готовы начать?</span>
+        <h2>Запишитесь на услугу или получите консультацию</h2>
+        <p>
+          Позвоните нам, расскажите симптомы автомобиля, и мы подскажем оптимальный формат проверки или ремонта.
+        </p>
+      </div>
+
+      <div class="az-service-bottom-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          +7 (918) 826-61-81
+        </a>
+
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Контакты
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

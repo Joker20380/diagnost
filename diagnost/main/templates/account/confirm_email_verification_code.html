@@ -1,48 +1,157 @@
-{% extends "account/base_entrance.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth account %}
-{% block head_title %}
-    {% translate "Email Verification" %}
-{% endblock head_title %}
+{% load account %}
+
+{% block head_title %}Подтверждение email{% endblock head_title %}
+{% block title %}Подтверждение email{% endblock %}
+{% block description %}Ввод кода подтверждения email для аккаунта Автозвук Владикавказ{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% translate "Enter Email Verification Code" %}
-    {% endelement %}
-    {% setvar email_link %}
-        <a href="mailto:{{ email }}">{{ email }}</a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}We’ve sent a code to {{ email_link }}. The code expires shortly, so please enter it soon.{% endblocktranslate %}
-    {% endelement %}
-    {% url 'account_email_verification_sent' as action_url %}
-    {% element form form=form method="post" action=action_url tags="entrance,email,verification" %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" tags="prominent,confirm" %}
-                {% translate "Confirm" %}
-            {% endelement %}
-            {% if cancel_url %}
-                {% element button href=cancel_url tags="link,cancel" %}
-                    {% translate "Cancel" %}
-                {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Подтверждение аккаунта</span>
+      <h1>Подтверждение email</h1>
+      <p>
+        Введите код, который был отправлен на ваш email. Это нужно для защиты аккаунта
+        и подтверждения контактных данных.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Email verification</span>
+
+        <h2>Введите код подтверждения</h2>
+
+        <p class="az-auth-card-text">
+          Мы отправили код на адрес:
+        </p>
+
+        <div class="az-auth-email-box">
+          <span class="ion ion-android-mail"></span>
+          <a href="mailto:{{ email }}">{{ email }}</a>
+        </div>
+
+        <div class="az-auth-info-box">
+          <strong>Код действует ограниченное время</strong>
+          <p>
+            Введите его как можно скорее. Если код устарел, запросите новый код или начните вход заново.
+          </p>
+        </div>
+
+        {% url 'account_email_verification_sent' as action_url %}
+
+        <form method="post"
+              action="{{ action_url }}"
+              class="az-auth-form"
+              novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="az-auth-errors">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            {% if field.is_hidden %}
+              {{ field }}
             {% else %}
-                {% element button type="submit" form="logout-from-stage" tags="link,cancel" %}
-                    {% translate "Cancel" %}
-                {% endelement %}
+              <div class="az-auth-field az-auth-code-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                  <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="az-auth-field-errors">{{ field.errors }}</div>
+                {% endif %}
+              </div>
             {% endif %}
-        {% endslot %}
-    {% endelement %}
-    {% if not cancel_url %}
-        <form id="logout-from-stage"
-              method="post"
-              action="{% url 'account_logout' %}">
-            <input type="hidden" name="next" value="{% url 'account_login' %}">
-            {% csrf_token %}
+          {% endfor %}
+
+          {{ redirect_field }}
+
+          <div class="az-auth-actions-row">
+            <button type="submit" class="az-btn az-btn-primary">
+              Подтвердить
+            </button>
+
+            {% if cancel_url %}
+              <a href="{{ cancel_url }}" class="az-btn az-btn-outline-dark">
+                Отмена
+              </a>
+            {% else %}
+              <button type="submit"
+                      form="logout-from-stage"
+                      class="az-btn az-btn-outline-dark">
+                Отмена
+              </button>
+            {% endif %}
+          </div>
         </form>
-    {% endif %}
+
+        <div class="az-auth-links">
+          <a href="{% url 'account_login' %}">Вернуться ко входу</a>
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Безопасность</span>
+
+          <h3>Зачем подтверждать email</h3>
+
+          <ul>
+            <li>Чтобы защитить аккаунт от ошибочной регистрации.</li>
+            <li>Чтобы восстановление пароля работало корректно.</li>
+            <li>Чтобы сервис мог связаться с владельцем аккаунта.</li>
+            <li>Чтобы данные диагностики были привязаны к правильному пользователю.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Не пришёл код?</h3>
+          <p>
+            Проверьте папку «Спам» или попробуйте повторить вход через несколько минут.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Связаться с нами
+          </a>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+
+{% if not cancel_url %}
+  <form id="logout-from-stage"
+        method="post"
+        action="{% url 'account_logout' %}"
+        style="display: none;">
+    <input type="hidden" name="next" value="{% url 'account_login' %}">
+    {% csrf_token %}
+  </form>
+{% endif %}
+
 {% endblock content %}

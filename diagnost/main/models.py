@@ -235,7 +235,7 @@ class Service(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('services', kwargs={'services_slug': self.slug})
+        return reverse('service', kwargs={'service_slug': self.slug})
         
     def save(self, *args, **kwargs):
         if not self.slug:

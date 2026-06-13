@@ -1,79 +1,205 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
 {% block description %}
-{{ program.title }} — project overview and description.
+{{ program.title }} — проект Автозвук Владикавказ: автозвук, шумоизоляция, диагностика, ремонт и доработка автомобиля.
 {% endblock %}
 
 {% block title %}{{ program.title }}{% endblock %}
 
 {% block content %}
 
-  <div class="top-shadow"></div>
+<section class="az-project-detail-hero"
+         style="background-image: url('{% if program.photo %}{{ program.photo.url }}{% else %}{% static 'images/industrial_hero_3.jpg' %}{% endif %}');">
+  <div class="az-project-detail-hero-overlay"></div>
 
-  <div class="inner-page">
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="container">
+    <div class="az-project-detail-hero-content">
+      <span class="az-hero-kicker">Проект Автозвук</span>
 
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>{{ program.title }}</span></h1>
-            <p class="mb-5 w-75"></p>
+      <h1>{{ program.title }}</h1>
+
+      <p>
+        Реализованная работа сервиса «Автозвук» во Владикавказе: технический подход,
+        аккуратное исполнение и понятный результат для владельца автомобиля.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          Обсудить похожий проект
+        </a>
+
+        <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
+          Все проекты
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-project-detail-section">
+  <div class="container">
+
+    <div class="az-project-detail-layout">
+
+      <article class="az-project-detail-main">
+
+        <div class="az-project-detail-cover">
+          {% if program.photo %}
+            <img src="{{ program.photo.url }}" alt="{{ program.title }}" loading="eager">
+          {% else %}
+            <img src="{% static 'images/no_photo.webp' %}" alt="{{ program.title }}" loading="eager">
+          {% endif %}
+        </div>
+
+        <div class="az-project-detail-prose">
+          <span class="az-section-kicker">Описание проекта</span>
+
+          <h2>{{ program.title }}</h2>
+
+          <div class="az-project-detail-content">
+            {{ program.content|safe }}
           </div>
+        </div>
+
+      </article>
+
+
+      <aside class="az-project-detail-sidebar">
+
+        <div class="az-project-info-card">
+          <h3>Что важно в таких проектах</h3>
+
+          <ul>
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Точная задача</strong>
+                <p>Сначала определяем, что нужно получить: звук, комфорт, ремонт или диагностику.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Подбор решения</strong>
+                <p>Смотрим автомобиль, бюджет, состояние узлов и реальные технические ограничения.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Аккуратное исполнение</strong>
+                <p>Работа должна быть не только заметной, но и надёжной в эксплуатации.</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <div>
+                <strong>Проверка результата</strong>
+                <p>После выполнения проверяем итог и объясняем клиенту, что было сделано.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="az-project-contact-card">
+          <span class="az-section-kicker">Нужна похожая работа?</span>
+
+          <h3>Расскажите, что хотите сделать с автомобилем</h3>
+
+          <p>
+            Мы подскажем, с чего начать: диагностика, подбор компонентов, ремонт,
+            шумоизоляция или комплексная доработка.
+          </p>
+
+          <div class="az-project-contact-actions">
+            <a href="tel:+79188266181" class="az-btn az-btn-primary">
+              Позвонить
+            </a>
+
+            <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
+              Контакты
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-project-detail-result">
+  <div class="container">
+    <div class="az-project-result-card">
+
+      <div>
+        <span class="az-section-kicker">Подход к работе</span>
+        <h2>Не просто сделать, а довести до результата</h2>
+        <p>
+          В проектах по автозвуку, шумоизоляции, диагностике и ремонту важна системность:
+          правильно понять задачу, выбрать технологию, выполнить работу и проверить итог.
+        </p>
+      </div>
+
+      <div class="az-project-result-grid">
+        <div>
+          <strong>01</strong>
+          <span>Задача</span>
+        </div>
+
+        <div>
+          <strong>02</strong>
+          <span>Решение</span>
+        </div>
+
+        <div>
+          <strong>03</strong>
+          <span>Работа</span>
+        </div>
+
+        <div>
+          <strong>04</strong>
+          <span>Результат</span>
         </div>
       </div>
 
     </div>
   </div>
+</section>
 
-  <section class="section">
-    <div class="container">
 
-      <div class="row">
-        <div class="col-12" style="margin-top: -150px;">
-          {% if program.photo %}
-            <p>
-              <img src="{{ program.photo.url }}"
-                   alt="{{ program.title }}"
-                   class="img-fluid">
-            </p>
-          {% else %}
-            <p>
-              <img src="{% static 'images/no_photo.webp' %}"
-                   alt="No image"
-                   class="img-fluid">
-            </p>
-          {% endif %}
-        </div>
+<section class="az-project-detail-bottom-cta">
+  <div class="container">
+    <div class="az-project-detail-bottom-card">
+
+      <div>
+        <h2>Хотите реализовать похожий проект?</h2>
+        <p>
+          Позвоните или приезжайте в сервис. Разберём задачу по автомобилю и предложим рабочий сценарий.
+        </p>
       </div>
 
-      <div class="row justify-content-center">
-        <div class="col-md-8 mb-5"></div>
-      </div>
+      <div class="az-project-detail-bottom-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          +7 (918) 826-61-81
+        </a>
 
-      <div class="row justify-content-center">
-        <div class="col-md-8 mb-5">
-          <h2></h2>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-
-          <div class="project-content">
-            {% autoescape off %}{{ program.content }}{% endautoescape %}
-          </div>
-
-          <p>
-            <a href="#" class="btn btn-primary py-3 px-3">
-              Subscribe
-            </a>
-          </p>
-
-        </div>
+        <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
+          Назад к проектам
+        </a>
       </div>
 
     </div>
-  </section>
+  </div>
+</section>
 
 {% endblock %}

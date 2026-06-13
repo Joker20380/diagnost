@@ -6,6 +6,7 @@ urlpatterns = [
                 path('', Index.as_view(), name='index'),
                 path('about/', About.as_view(), name='about'),
                 path('news/<slug:news_slug>/', ShowNews.as_view(), name='news'),
+                path('service/<slug:service_slug>/', ShowService.as_view(), name='service'),                
                 path('doc/<slug:doc_slug>/', ShowDoc.as_view(), name='doc'),
                 path('project/<slug:project_slug>/', ShowProject.as_view(), name='project'),
                 path('lecture/<slug:lecture_slug>/', ShowLecture.as_view(), name='lecture'),

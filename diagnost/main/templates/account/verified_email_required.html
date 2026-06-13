@@ -1,25 +1,111 @@
-{% extends "account/base_manage.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth %}
-{% block head_title %}
-    {% trans "Verify Your Email Address" %}
-{% endblock head_title %}
+
+{% block head_title %}Подтвердите email{% endblock head_title %}
+{% block title %}Подтвердите email{% endblock %}
+{% block description %}Для доступа к этому разделу необходимо подтвердить email-адрес{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Verify Your Email Address" %}
-    {% endelement %}
-    {% url 'account_email' as email_url %}
-    {% element p %}
-        {% blocktrans %}This part of the site requires us to verify that
-you are who you claim to be. For this purpose, we require that you
-verify ownership of your email address. {% endblocktrans %}
-    {% endelement %}
-    {% element p %}
-        {% blocktrans %}We have sent an email to you for
-verification. Please click on the link inside that email. If you do not see the verification email in your main inbox, check your spam folder. Otherwise
-contact us if you do not receive it within a few minutes.{% endblocktrans %}
-    {% endelement %}
-    {% element p %}
-        {% blocktrans %}<strong>Note:</strong> you can still <a href="{{ email_url }}">change your email address</a>.{% endblocktrans %}
-    {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Проверка аккаунта</span>
+      <h1>Подтвердите email</h1>
+      <p>
+        Для доступа к этому разделу нужно подтвердить, что email-адрес принадлежит вам.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Email verification required</span>
+
+        <h2>Требуется подтверждение email</h2>
+
+        <div class="az-auth-info-box">
+          <strong>Нужно подтвердить адрес электронной почты</strong>
+          <p>
+            Этот раздел сайта требует дополнительной проверки аккаунта. Для этого
+            необходимо подтвердить владение email-адресом, привязанным к вашему аккаунту.
+          </p>
+        </div>
+
+        <p class="az-auth-card-text">
+          Мы отправили вам письмо со ссылкой для подтверждения. Откройте письмо и перейдите
+          по ссылке внутри него. Если письма нет во входящих, проверьте папку «Спам»,
+          «Промоакции» или другие разделы почты.
+        </p>
+
+        {% url 'account_email' as email_url %}
+
+        <div class="az-auth-info-box">
+          <strong>Адрес можно изменить</strong>
+          <p>
+            Если email указан неверно или письмо не приходит, вы можете изменить email-адрес
+            в настройках аккаунта и запросить подтверждение повторно.
+          </p>
+        </div>
+
+        <div class="az-auth-actions-row">
+          <a href="{{ email_url }}" class="az-btn az-btn-primary">
+            Управление email
+          </a>
+
+          <a href="{% url 'index' %}" class="az-btn az-btn-outline-dark">
+            На главную
+          </a>
+        </div>
+
+        <div class="az-auth-links">
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Почему это важно</span>
+
+          <h3>Подтверждённый email</h3>
+
+          <ul>
+            <li>Защищает аккаунт от ошибочной регистрации.</li>
+            <li>Позволяет восстановить пароль.</li>
+            <li>Подтверждает владельца личного кабинета.</li>
+            <li>Открывает доступ к защищённым разделам сайта.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Письмо не пришло?</h3>
+
+          <p>
+            Проверьте папку «Спам» или перейдите в управление email и отправьте письмо
+            подтверждения повторно.
+          </p>
+
+          <a href="{{ email_url }}" class="az-btn az-btn-primary">
+            Проверить email
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

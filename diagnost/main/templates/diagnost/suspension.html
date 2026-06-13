@@ -1,423 +1,483 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
 
-{% block title %}Suspension Inspection{% endblock %}
-{% block description %}Technician form to assess the vehicle suspension condition{% endblock %}
+{% block title %}Осмотр подвески{% endblock %}
+{% block description %}Форма мастера для оценки состояния подвески автомобиля{% endblock %}
 
 {% block content %}
-<div class="top-shadow"></div>
-<div class="inner-page">
-  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_4.jpg' %}');">
-    <div class="container">
-      <div class="row slider-text align-items-center justify-content-center">
-        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Suspension Inspection</span></h1>
-          <p class="mb-5 w-75">Fill out the suspension condition assessment form</p>
-        </div>
+
+<section class="az-suspension-hero" style="background-image: url('{% static 'images/industrial_hero_4.jpg' %}');">
+  <div class="az-suspension-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-suspension-hero-content">
+      <span class="az-hero-kicker">Human evidence</span>
+      <h1>Осмотр подвески</h1>
+      <p>
+        Форма мастера для фиксации фактического состояния ходовой части:
+        износ, критичность, признаки, замеры и рекомендации по замене.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-primary">
+          Вернуться к диагностике
+        </a>
+
+        {% if inspection.status != 'signed' %}
+          <a href="#azSuspensionForm" class="az-btn az-btn-outline">
+            Заполнить осмотр
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<section class="section">
+
+<section class="az-suspension-page">
   <div class="container">
 
+    <div class="az-suspension-summary-grid">
+      <div class="az-suspension-summary-card">
+        <span>VIN</span>
+        <strong>{{ session.vin|default:"—" }}</strong>
+      </div>
+
+      <div class="az-suspension-summary-card">
+        <span>Модель</span>
+        <strong>{{ session.vehicle_model|default:"—" }}</strong>
+      </div>
+
+      <div class="az-suspension-summary-card">
+        <span>Сессия</span>
+        <strong>{{ session.created_at|date:"d.m.Y H:i" }}</strong>
+      </div>
+
+      <div class="az-suspension-summary-card">
+        <span>Статус</span>
+        <strong>
+          {% if inspection.status == 'signed' %}
+            Подписан
+          {% else %}
+            Черновик
+          {% endif %}
+        </strong>
+      </div>
+    </div>
+
+
     {% if inspection.status == 'signed' %}
-      <div class="alert alert-success">
-        <strong>Inspection signed.</strong>
-        {% if inspection.inspector %} Technician: {{ inspection.inspector }}.{% endif %}
-        {% if inspection.signed_at %} Date: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
-        <div class="small text-muted mt-1">Editing is locked.</div>
+      <div class="az-suspension-status az-suspension-status-signed">
+        <strong>Осмотр подписан</strong>
+        <p>
+          {% if inspection.inspector %}Мастер: {{ inspection.inspector }}.{% endif %}
+          {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+        </p>
+        <span>Редактирование заблокировано. Подписанный осмотр считается финальной фактологией.</span>
       </div>
     {% else %}
-      <div class="alert alert-warning">
-        <strong>Draft.</strong> You can edit it until it is signed.
+      <div class="az-suspension-status az-suspension-status-draft">
+        <strong>Черновик осмотра</strong>
+        <p>Можно редактировать данные, добавлять детали и подписать осмотр после проверки.</p>
       </div>
     {% endif %}
 
-    <form method="post">
+
+    <form method="post"
+          id="azSuspensionForm"
+          class="az-suspension-form"
+          data-prefix="{{ formset.prefix }}"
+          data-status="{{ inspection.status }}">
       {% csrf_token %}
 
-      <h4>General information</h4>
-
-      {{ form.non_field_errors }}
-
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label class="form-label">{{ form.inspector.label }}</label>
-          {{ form.inspector }}
-          {% if form.inspector.errors %}<div class="text-danger small">{{ form.inspector.errors }}</div>{% endif %}
+      {% if form.non_field_errors %}
+        <div class="az-form-errors">
+          {{ form.non_field_errors }}
         </div>
+      {% endif %}
 
-        <div class="col-md-4 mb-3">
-          <label class="form-label">{{ form.mileage_km.label }}</label>
-          {{ form.mileage_km }}
-          {% if form.mileage_km.errors %}<div class="text-danger small">{{ form.mileage_km.errors }}</div>{% endif %}
-        </div>
+      <div class="az-suspension-layout">
 
-        <div class="col-md-4 mb-3">
-          <label class="form-label">{{ form.overall_risk.label }}</label>
-          {{ form.overall_risk }}
-          {% if form.overall_risk.errors %}<div class="text-danger small">{{ form.overall_risk.errors }}</div>{% endif %}
-        </div>
-      </div>
+        <main class="az-suspension-main">
 
-      <div class="row align-items-center">
-        <div class="col-md-3 mb-2">
-          <div class="form-check">
-            {{ form.lift_used }}
-            <label class="form-check-label" for="{{ form.lift_used.id_for_label }}">
-              {{ form.lift_used.label }}
-            </label>
-          </div>
-          {% if form.lift_used.errors %}<div class="text-danger small">{{ form.lift_used.errors }}</div>{% endif %}
-        </div>
+          <section class="az-suspension-card">
+            <div class="az-suspension-card-head">
+              <div>
+                <span class="az-section-kicker">Общие данные</span>
+                <h2>Информация об осмотре</h2>
+              </div>
+            </div>
 
-        <div class="col-md-3 mb-2">
-          <div class="form-check">
-            {{ form.test_drive }}
-            <label class="form-check-label" for="{{ form.test_drive.id_for_label }}">
-              {{ form.test_drive.label }}
-            </label>
-          </div>
-          {% if form.test_drive.errors %}<div class="text-danger small">{{ form.test_drive.errors }}</div>{% endif %}
-        </div>
+            <div class="az-suspension-fields-grid">
+              <div class="az-suspension-field">
+                <label for="{{ form.inspector.id_for_label }}">{{ form.inspector.label }}</label>
+                {{ form.inspector }}
+                {% if form.inspector.errors %}
+                  <div class="az-field-errors">{{ form.inspector.errors }}</div>
+                {% endif %}
+              </div>
 
-        <div class="col-md-6 mb-2">
-          <label class="form-label">{{ form.comment.label }}</label>
-          {{ form.comment }}
-          {% if form.comment.errors %}<div class="text-danger small">{{ form.comment.errors }}</div>{% endif %}
-        </div>
-      </div>
+              <div class="az-suspension-field">
+                <label for="{{ form.mileage_km.id_for_label }}">{{ form.mileage_km.label }}</label>
+                {{ form.mileage_km }}
+                {% if form.mileage_km.errors %}
+                  <div class="az-field-errors">{{ form.mileage_km.errors }}</div>
+                {% endif %}
+              </div>
 
-      <hr>
-      <h4>Suspension parts</h4>
+              <div class="az-suspension-field">
+                <label for="{{ form.overall_risk.id_for_label }}">{{ form.overall_risk.label }}</label>
+                {{ form.overall_risk }}
+                {% if form.overall_risk.errors %}
+                  <div class="az-field-errors">{{ form.overall_risk.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
 
-      {{ formset.non_form_errors }}
-      {{ formset.management_form }}
+            <div class="az-suspension-checks">
+              <label class="az-suspension-check-card" for="{{ form.lift_used.id_for_label }}">
+                {{ form.lift_used }}
+                <span>
+                  <strong>{{ form.lift_used.label }}</strong>
+                  <small>Автомобиль проверялся на подъёмнике</small>
+                </span>
+              </label>
 
-      <table class="table table-bordered align-middle" id="parts-table">
-        <thead>
-          <tr>
-            <th>Part</th>
-            <th style="width:320px;">Wear (%)</th>
-            <th style="width:160px;">Severity</th>
-            <th style="min-width:200px;">Cause</th>
-            <th style="min-width:260px;">Signs / measurements</th>
-            <th style="min-width:170px;">Part number</th>
-            <th style="width:220px;">Replacement needed?</th>
-            <th style="width:140px;">Delete</th>
-          </tr>
-        </thead>
+              <label class="az-suspension-check-card" for="{{ form.test_drive.id_for_label }}">
+                {{ form.test_drive }}
+                <span>
+                  <strong>{{ form.test_drive.label }}</strong>
+                  <small>Проводилась проверка в движении</small>
+                </span>
+              </label>
+            </div>
 
-        <tbody id="formset-body">
-          {% for subform in formset %}
-            <tr class="part-form">
-              <td>
-                {{ subform.part_type.errors }}
-                {{ subform.part_type }}
-              </td>
+            <div class="az-suspension-field az-suspension-field-full">
+              <label for="{{ form.comment.id_for_label }}">{{ form.comment.label }}</label>
+              {{ form.comment }}
+              {% if form.comment.errors %}
+                <div class="az-field-errors">{{ form.comment.errors }}</div>
+              {% endif %}
+            </div>
+          </section>
 
-              <td>
-                {{ subform.wear_percent.errors }}
-                <input
-                  type="range"
-                  name="{{ subform.wear_percent.html_name }}"
-                  id="{{ subform.wear_percent.id_for_label }}"
-                  value="{{ subform.wear_percent.value|default_if_none:0 }}"
-                  min="0" max="100"
-                  class="form-range wear-slider"
-                  oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                  aria-label="Wear percentage">
-                <span class="wear-value ms-2">{{ subform.wear_percent.value|default_if_none:0 }}%</span>
-              </td>
 
-              <td>
-                {{ subform.severity.errors }}
-                {{ subform.severity }}
-              </td>
+          <section class="az-suspension-card">
+            <div class="az-suspension-card-head az-suspension-parts-head">
+              <div>
+                <span class="az-section-kicker">Детали подвески</span>
+                <h2>Оценка элементов ходовой</h2>
+              </div>
 
-              <td>
-                {{ subform.reason.errors }}
-                {{ subform.reason }}
-              </td>
+              {% if inspection.status != 'signed' %}
+                <button type="button" class="az-btn az-btn-dark az-add-part-row">
+                  Добавить деталь
+                </button>
+              {% endif %}
+            </div>
 
-              <td>
-                {{ subform.evidence.errors }}
-                {{ subform.evidence }}
-              </td>
+            {% if formset.non_form_errors %}
+              <div class="az-form-errors">
+                {{ formset.non_form_errors }}
+              </div>
+            {% endif %}
 
-              <td>
-                {{ subform.part_number.errors }}
-                {{ subform.part_number }}
-              </td>
+            {{ formset.management_form }}
 
-              <td class="text-center">
-                {{ subform.needs_replacement.errors }}
-                <div class="d-flex flex-column align-items-center gap-1">
-                  {{ subform.needs_replacement }}
+            <div class="az-parts-card-list" id="azFormsetBody">
+              {% for subform in formset %}
+                <div class="az-suspension-part-row az-part-card">
 
-                  {# ✅ Backend single source of truth: display server recommendation #}
-                  {% if subform.repl_hint_text %}
-                    <small class="replacement-hint {{ subform.repl_hint_class }}">
-                      {{ subform.repl_hint_text }}
-                    </small>
-                  {% else %}
-                    <small class="replacement-hint text-muted"></small>
+                  <div class="az-part-card-top">
+                    <div>
+                      <span class="az-part-index">Деталь #{{ forloop.counter }}</span>
+                      <h3>Элемент подвески</h3>
+                    </div>
+
+                    {% if formset.can_delete %}
+                      <div>
+                        <span class="az-delete-field">
+                          {{ subform.DELETE }}
+                        </span>
+
+                        {% if inspection.status != 'signed' %}
+                          <button type="button" class="az-row-delete-btn" data-remove-row>
+                            Удалить
+                          </button>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="az-part-grid">
+                    <div class="az-suspension-field">
+                      <label for="{{ subform.part_type.id_for_label }}">Деталь</label>
+                      {{ subform.part_type }}
+                      {% if subform.part_type.errors %}
+                        <div class="az-field-errors">{{ subform.part_type.errors }}</div>
+                      {% endif %}
+                    </div>
+
+                    <div class="az-suspension-field">
+                      <label for="{{ subform.severity.id_for_label }}">Критичность</label>
+                      {{ subform.severity }}
+                      {% if subform.severity.errors %}
+                        <div class="az-field-errors">{{ subform.severity.errors }}</div>
+                      {% endif %}
+                    </div>
+
+                    <div class="az-suspension-field">
+                      <label for="{{ subform.part_number.id_for_label }}">Каталожный номер</label>
+                      {{ subform.part_number }}
+                      {% if subform.part_number.errors %}
+                        <div class="az-field-errors">{{ subform.part_number.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="az-wear-panel">
+                    <div class="az-wear-panel-head">
+                      <label for="{{ subform.wear_percent.id_for_label }}">Износ детали</label>
+                      <span data-wear-value>{{ subform.wear_percent.value|default_if_none:0 }}%</span>
+                    </div>
+
+                    {% if subform.wear_percent.errors %}
+                      <div class="az-field-errors">{{ subform.wear_percent.errors }}</div>
+                    {% endif %}
+
+                    <input type="range"
+                           name="{{ subform.wear_percent.html_name }}"
+                           id="{{ subform.wear_percent.id_for_label }}"
+                           value="{{ subform.wear_percent.value|default_if_none:0 }}"
+                           min="0"
+                           max="100"
+                           class="az-wear-slider"
+                           aria-label="Износ, проценты">
+
+                    <div class="az-wear-scale-line">
+                      <small>0%</small>
+                      <small>40%</small>
+                      <small>70%</small>
+                      <small>100%</small>
+                    </div>
+                  </div>
+
+                  <div class="az-part-grid az-part-grid-text">
+                    <div class="az-suspension-field">
+                      <label for="{{ subform.reason.id_for_label }}">Причина</label>
+                      {{ subform.reason }}
+                      {% if subform.reason.errors %}
+                        <div class="az-field-errors">{{ subform.reason.errors }}</div>
+                      {% endif %}
+                    </div>
+
+                    <div class="az-suspension-field">
+                      <label for="{{ subform.evidence.id_for_label }}">Признаки / замеры</label>
+                      {{ subform.evidence }}
+                      {% if subform.evidence.errors %}
+                        <div class="az-field-errors">{{ subform.evidence.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="az-replacement-panel">
+                    <label class="az-replacement-check">
+                      {{ subform.needs_replacement }}
+                      <span>Нужна замена</span>
+                    </label>
+
+                    {% if subform.needs_replacement.errors %}
+                      <div class="az-field-errors">{{ subform.needs_replacement.errors }}</div>
+                    {% endif %}
+
+                    {% if subform.repl_hint_text %}
+                      <small class="replacement-hint {{ subform.repl_hint_class }}">
+                        {{ subform.repl_hint_text }}
+                      </small>
+                    {% else %}
+                      <small class="replacement-hint text-muted"></small>
+                    {% endif %}
+                  </div>
+
+                  {% for hidden in subform.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+
+
+            <template id="azEmptyPartTemplate">
+              <div class="az-suspension-part-row az-part-card">
+
+                <div class="az-part-card-top">
+                  <div>
+                    <span class="az-part-index">Новая деталь</span>
+                    <h3>Элемент подвески</h3>
+                  </div>
+
+                  {% if formset.can_delete %}
+                    <div>
+                      <span class="az-delete-field">
+                        {{ formset.empty_form.DELETE }}
+                      </span>
+
+                      <button type="button" class="az-row-delete-btn" data-remove-row>
+                        Удалить
+                      </button>
+                    </div>
                   {% endif %}
                 </div>
-              </td>
 
-              <td>
-                {% if subform.can_delete %}{{ subform.DELETE }}{% endif %}
-                {% if subform.can_delete %}
-                  <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
-                {% endif %}
-              </td>
+                <div class="az-part-grid">
+                  <div class="az-suspension-field">
+                    <label for="{{ formset.empty_form.part_type.id_for_label }}">Деталь</label>
+                    {{ formset.empty_form.part_type }}
+                  </div>
 
-              {% for hidden in subform.hidden_fields %}
-                {{ hidden }}
-              {% endfor %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                  <div class="az-suspension-field">
+                    <label for="{{ formset.empty_form.severity.id_for_label }}">Критичность</label>
+                    {{ formset.empty_form.severity }}
+                  </div>
 
-      <div class="d-flex flex-wrap gap-2 mb-3">
-        {% if inspection.status != 'signed' %}
-          <button type="button" class="btn btn-outline-primary" onclick="addForm()">Add part</button>
+                  <div class="az-suspension-field">
+                    <label for="{{ formset.empty_form.part_number.id_for_label }}">Каталожный номер</label>
+                    {{ formset.empty_form.part_number }}
+                  </div>
+                </div>
 
-          <button type="submit" name="action" value="save" class="btn btn-success">
-            Save (draft)
-          </button>
+                <div class="az-wear-panel">
+                  <div class="az-wear-panel-head">
+                    <label for="{{ formset.empty_form.wear_percent.id_for_label }}">Износ детали</label>
+                    <span data-wear-value>0%</span>
+                  </div>
 
-          <button type="submit" name="action" value="sign" class="btn btn-primary">
-            Sign inspection
-          </button>
-        {% endif %}
+                  <input type="range"
+                         name="{{ formset.empty_form.wear_percent.html_name }}"
+                         id="{{ formset.empty_form.wear_percent.id_for_label }}"
+                         value="0"
+                         min="0"
+                         max="100"
+                         class="az-wear-slider"
+                         aria-label="Износ, проценты">
 
-        <a href="{% url 'diagnostic_detail' session.id %}" class="btn btn-secondary">Back</a>
-      </div>
+                  <div class="az-wear-scale-line">
+                    <small>0%</small>
+                    <small>40%</small>
+                    <small>70%</small>
+                    <small>100%</small>
+                  </div>
+                </div>
 
-      <!-- Empty row template (based on empty_form) -->
-      <table style="display:none;">
-        <tbody id="empty-form-template" data-prefix="{{ formset.prefix }}">
-          <tr class="part-form">
-            <td>
-              {{ formset.empty_form.part_type.errors }}
-              {{ formset.empty_form.part_type }}
-            </td>
+                <div class="az-part-grid az-part-grid-text">
+                  <div class="az-suspension-field">
+                    <label for="{{ formset.empty_form.reason.id_for_label }}">Причина</label>
+                    {{ formset.empty_form.reason }}
+                  </div>
 
-            <td>
-              {{ formset.empty_form.wear_percent.errors }}
-              <input
-                type="range"
-                name="{{ formset.empty_form.wear_percent.html_name }}"
-                id="{{ formset.empty_form.wear_percent.id_for_label }}"
-                value="0"
-                min="0" max="100"
-                class="form-range wear-slider"
-                oninput="updateColor(this); syncSeverityByWear(this); updateReplacementHint(this)"
-                aria-label="Wear percentage">
-              <span class="wear-value ms-2">0%</span>
-            </td>
+                  <div class="az-suspension-field">
+                    <label for="{{ formset.empty_form.evidence.id_for_label }}">Признаки / замеры</label>
+                    {{ formset.empty_form.evidence }}
+                  </div>
+                </div>
 
-            <td>
-              {{ formset.empty_form.severity.errors }}
-              {{ formset.empty_form.severity }}
-            </td>
+                <div class="az-replacement-panel">
+                  <label class="az-replacement-check">
+                    {{ formset.empty_form.needs_replacement }}
+                    <span>Нужна замена</span>
+                  </label>
 
-            <td>
-              {{ formset.empty_form.reason.errors }}
-              {{ formset.empty_form.reason }}
-            </td>
+                  <small class="replacement-hint text-muted"></small>
+                </div>
 
-            <td>
-              {{ formset.empty_form.evidence.errors }}
-              {{ formset.empty_form.evidence }}
-            </td>
-
-            <td>
-              {{ formset.empty_form.part_number.errors }}
-              {{ formset.empty_form.part_number }}
-            </td>
-
-            <td class="text-center">
-              {{ formset.empty_form.needs_replacement.errors }}
-              <div class="d-flex flex-column align-items-center gap-1">
-                {{ formset.empty_form.needs_replacement }}
-                {# empty_form is not annotated on the server — start neutral, JS will update #}
-                <small class="replacement-hint text-muted"></small>
+                {% for hidden in formset.empty_form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
               </div>
-            </td>
+            </template>
 
-            <td>
-              {% if formset.can_delete %}{{ formset.empty_form.DELETE }}{% endif %}
-              {% if formset.can_delete %}
-                <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
-              {% endif %}
-            </td>
+          </section>
 
-            {% for hidden in formset.empty_form.hidden_fields %}
-              {{ hidden }}
-            {% endfor %}
-          </tr>
-        </tbody>
-      </table>
 
+          <div class="az-suspension-actions">
+            {% if inspection.status != 'signed' %}
+              <button type="submit" name="action" value="save" class="az-btn az-btn-dark">
+                Сохранить черновик
+              </button>
+
+              <button type="submit" name="action" value="sign" class="az-btn az-btn-primary">
+                Подписать осмотр
+              </button>
+            {% endif %}
+
+            <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-outline-dark">
+              Назад к диагностике
+            </a>
+          </div>
+
+        </main>
+
+
+        <aside class="az-suspension-sidebar">
+
+          <div class="az-suspension-side-card">
+            <span class="az-section-kicker">Правило работы</span>
+            <h3>Фактология важнее ИИ</h3>
+            <p>
+              Этот осмотр фиксирует реальные признаки: люфт, износ, стуки, замеры,
+              состояние деталей и комментарий мастера.
+            </p>
+
+            <ul>
+              <li>ИИ может подсказать направление.</li>
+              <li>Мастер фиксирует фактическое состояние.</li>
+              <li>Подписанный осмотр блокируется от редактирования.</li>
+            </ul>
+          </div>
+
+          <div class="az-suspension-hint-card">
+            <h3>Шкала износа</h3>
+
+            <div class="az-wear-scale">
+              <div>
+                <span class="az-scale-dot az-scale-ok"></span>
+                <strong>0–39%</strong>
+                <p>Рабочее состояние, замена обычно не требуется.</p>
+              </div>
+
+              <div>
+                <span class="az-scale-dot az-scale-warn"></span>
+                <strong>40–69%</strong>
+                <p>Наблюдать, перепроверить, готовить замену.</p>
+              </div>
+
+              <div>
+                <span class="az-scale-dot az-scale-danger"></span>
+                <strong>70–100%</strong>
+                <p>Высокий износ, рекомендуется замена.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="az-suspension-side-cta">
+            <span class="az-section-kicker">Навигация</span>
+            <h3>Вернуться к отчёту</h3>
+            <p>
+              После сохранения или подписи можно открыть общий диагностический отчёт
+              и увидеть осмотр в составе сессии.
+            </p>
+
+            <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-primary">
+              Открыть отчёт
+            </a>
+          </div>
+
+        </aside>
+
+      </div>
     </form>
+
   </div>
 </section>
 
-<script>
-  const prefix = "{{ formset.prefix }}";
-
-  function updateColor(slider) {
-    const value = parseInt(slider.value || 0, 10);
-    const label = slider.nextElementSibling;
-    if (label) label.textContent = value + '%';
-
-    if (value < 30) {
-      slider.style.background = '#198754';
-    } else if (value < 70) {
-      slider.style.background = '#ffc107';
-    } else {
-      slider.style.background = '#dc3545';
-    }
-  }
-
-  function syncSeverityByWear(slider) {
-    const row = slider.closest('tr');
-    if (!row) return;
-
-    const value = parseInt(slider.value || 0, 10);
-    const sev = row.querySelector('select[name$="-severity"]');
-    if (!sev) return;
-
-    if (sev.dataset.touched === "1") return;
-
-    if (value >= 70) {
-      sev.value = 'crit';
-    } else if (value >= 40) {
-      sev.value = 'warn';
-    } else {
-      sev.value = 'ok';
-    }
-  }
-
-  // ✅ JS is now only for live UI updates (server already provides recommendations on GET/POST).
-  // While sliding, we still want to update the badge instantly.
-  function updateReplacementHint(slider) {
-    const row = slider.closest('tr');
-    if (!row) return;
-
-    const value = parseInt(slider.value || 0, 10);
-
-    const checkbox = row.querySelector('input[type="checkbox"][name$="-needs_replacement"]');
-    const hint = row.querySelector('.replacement-hint');
-    if (!hint) return;
-
-    // If the technician has already touched the checkbox — do not override.
-    if (checkbox && checkbox.dataset.touched === "1") {
-      hint.textContent = "";
-      hint.className = "replacement-hint text-muted";
-      return;
-    }
-
-    if (value >= 70) {
-      hint.textContent = "Recommendation: replace";
-      hint.className = "replacement-hint badge bg-danger";
-    } else if (value >= 40) {
-      hint.textContent = "Recommendation: monitor / re-check";
-      hint.className = "replacement-hint badge bg-warning text-dark";
-    } else {
-      hint.textContent = "Recommendation: no replacement needed";
-      hint.className = "replacement-hint badge bg-success";
-    }
-  }
-
-  function bindSeverityTouched(row) {
-    const sev = row.querySelector('select[name$="-severity"]');
-    if (!sev) return;
-    sev.addEventListener('change', () => {
-      sev.dataset.touched = "1";
-    });
-  }
-
-  function bindReplacementTouched(row) {
-    const checkbox = row.querySelector('input[type="checkbox"][name$="-needs_replacement"]');
-    if (!checkbox) return;
-    checkbox.addEventListener('change', () => {
-      checkbox.dataset.touched = "1";
-      const hint = row.querySelector('.replacement-hint');
-      if (hint) {
-        hint.textContent = "";
-        hint.className = "replacement-hint text-muted";
-      }
-    });
-  }
-
-  function addForm() {
-    const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-    const index = parseInt(totalForms.value || '0', 10);
-
-    const template = document.getElementById('empty-form-template').innerHTML;
-    const html = template.replaceAll('__prefix__', index);
-
-    const wrapper = document.createElement('tbody');
-    wrapper.innerHTML = html.trim();
-    const newRow = wrapper.querySelector('tr.part-form');
-
-    document.getElementById('formset-body').appendChild(newRow);
-    totalForms.value = index + 1;
-
-    bindSeverityTouched(newRow);
-    bindReplacementTouched(newRow);
-
-    const slider = newRow.querySelector('.wear-slider');
-    if (slider) {
-      updateColor(slider);
-      syncSeverityByWear(slider);
-      updateReplacementHint(slider);
-    }
-  }
-
-  function removeRow(button) {
-    const row = button.closest('tr');
-    if (!row) return;
-
-    const del = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
-    if (del) {
-      del.checked = true;
-      row.style.display = 'none';
-    } else {
-      row.remove();
-    }
-  }
-
-  // init
-  document.querySelectorAll('#formset-body tr.part-form').forEach(row => {
-    bindSeverityTouched(row);
-    bindReplacementTouched(row);
-
-    const slider = row.querySelector('.wear-slider');
-    if (slider) {
-      updateColor(slider);
-      syncSeverityByWear(slider);
-      // Server may already provide hint. If empty, populate from slider.
-      const hint = row.querySelector('.replacement-hint');
-      if (hint && hint.textContent.trim() === "") {
-        updateReplacementHint(slider);
-      }
-    }
-  });
-
-  {% if inspection.status == 'signed' %}
-    document.querySelectorAll('input, select, textarea, button').forEach(el => {
-      if (el.tagName.toLowerCase() === 'a') return;
-      if (el.closest('a')) return;
-      el.disabled = true;
-    });
-  {% endif %}
-</script>
 {% endblock %}

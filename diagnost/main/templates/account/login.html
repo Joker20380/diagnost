@@ -2,94 +2,154 @@
 {% load static %}
 {% load i18n %}
 {% load allauth account %}
-{% block title %}
-    {% trans "Sign In" %}
-{% endblock title %}
+
+{% block title %}Вход{% endblock title %}
+{% block description %}Вход в личный кабинет Автозвук Владикавказ{% endblock %}
+
 {% block content %}
 
-  <!-- ================ start banner area ================= -->
-	<section class="blog-banner-area" id="category">
-		<div class="container h-100">
-			<div class="blog-banner">
-				<div class="text-center">
-					<h1>Войти</h1>
-					<nav aria-label="breadcrumb" class="banner-breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Войти</li>
-            </ol>
-          </nav>
-				</div>
-			</div>
-    </div>
-	</section>
-	<!-- ================ end banner area ================= -->
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
 
-  <!--================Login Box Area =================-->
-	<section class="login_box_area section-margin">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="login_form_inner register_form_inner">
-                        <form class="row login_form" action="#" method="post" novalidate="novalidate">
-    						{% if not SOCIALACCOUNT_ONLY %}
-        						{% setvar link %}
-            					<a href="{{ signup_url }}">
-            						{% endsetvar %}
-            						{% setvar end_link %}
-            					</a>
-        					{% endsetvar %}
-        					<div class="col-md-12 form-group">
-        						{% element p %}
-            						{% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
-        						{% endelement %}
-        					</div>
-        					{% url 'account_login' as login_url %}
-        					{% element form form=form method="post" action=login_url tags="entrance,login" %}
-            				{% slot body %}
-            				<div class="col-md-12 form-group">
-                				{% csrf_token %}
-                				{% element fields form=form unlabeled=True %}
-                				{% endelement %}
-                				{{ redirect_field }}
-            					{% endslot %}
-            					{% slot actions %}
-								<button type="submit" class="btn btn-primary">Войти</button>
-        					 </div>
-            				{% endslot %}
-    						{% endelement %}
-    						{% endif %}
-							{% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        					{% element hr %}
-        					{% endelement %}
-        					{% element button_group vertical=True %}
-            				{% if PASSKEY_LOGIN_ENABLED %}
-                				{% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
-                				{% trans "Sign in with a passkey" %}
-            					{% endelement %}
-            				{% endif %}
-        					{% if LOGIN_BY_CODE_ENABLED %}
-                				{% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
-                				{% trans "Mail me a sign-in code" %}
-                				{% endelement %}
-            				{% endif %}
-        					{% endelement %}
-    						{% endif %}
-    						{% if SOCIALACCOUNT_ENABLED %}
-        						{% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    						{% endif %}
-                        </form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	
-	<!--================End Login Box Area =================-->
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Личный кабинет</span>
+      <h1>Вход</h1>
+      <p>
+        Войдите в аккаунт, чтобы продолжить работу с диагностикой, заявками и сервисными данными.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Авторизация</span>
+        <h2>Войти в аккаунт</h2>
+
+        {% if not SOCIALACCOUNT_ONLY %}
+          {% url 'account_login' as login_url %}
+
+          <form method="post" action="{{ login_url }}" class="az-auth-form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="az-auth-errors">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+
+            {% for field in form %}
+              {% if field.is_hidden %}
+                {{ field }}
+              {% else %}
+                <div class="az-auth-field">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+
+                  {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                  {% endif %}
+
+                  {% if field.errors %}
+                    <div class="az-auth-field-errors">{{ field.errors }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            {{ redirect_field }}
+
+            <button type="submit" class="az-btn az-btn-primary az-auth-submit">
+              Войти
+            </button>
+          </form>
+
+          <div class="az-auth-links">
+            <a href="{% url 'account_reset_password' %}">Забыли пароль?</a>
+
+            {% if signup_url %}
+              <a href="{{ signup_url }}">Создать аккаунт</a>
+            {% else %}
+              <a href="{% url 'account_signup' %}">Создать аккаунт</a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+
+        {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED or SOCIALACCOUNT_ENABLED %}
+          <div class="az-auth-separator">
+            <span>или</span>
+          </div>
+        {% endif %}
+
+
+        {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+          <div class="az-auth-alt-actions">
+            {% if PASSKEY_LOGIN_ENABLED %}
+              <button type="submit"
+                      form="mfa_login"
+                      id="passkey_login"
+                      class="az-auth-alt-btn">
+                Войти с passkey
+              </button>
+            {% endif %}
+
+            {% if LOGIN_BY_CODE_ENABLED %}
+              <a href="{{ request_login_code_url }}" class="az-auth-alt-btn">
+                Получить код входа на email
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+
+        {% if SOCIALACCOUNT_ENABLED %}
+          <div class="az-auth-social">
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+          </div>
+        {% endif %}
+      </div>
+
+
+      <aside class="az-auth-side">
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Автозвук</span>
+          <h3>Зачем нужен аккаунт</h3>
+
+          <ul>
+            <li>Доступ к диагностическим данным.</li>
+            <li>Работа с сервисными заявками.</li>
+            <li>Просмотр результатов осмотра.</li>
+            <li>Сохранение истории обращений.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Нужна помощь?</h3>
+          <p>Если не получается войти, свяжитесь с сервисом.</p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Контакты
+          </a>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}
+
 {% block extra_body %}
-    {{ block.super }}
-    {% if PASSKEY_LOGIN_ENABLED %}
-        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
-    {% endif %}
+  {{ block.super }}
+  {% if PASSKEY_LOGIN_ENABLED %}
+    {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
+  {% endif %}
 {% endblock %}

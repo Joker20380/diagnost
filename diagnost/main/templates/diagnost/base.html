@@ -1,21 +1,21 @@
-{% load static i18n %}
+{% load static %}
+{% load webp %}
 
-{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<html lang="ru">
   <head>
-    <title>{% block title %}AI-Diagnostics{% endblock %} - AI-Diagnostics</title>
-
+    <title>{% block title %}{% endblock %} - Автозвук Владикавказ</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <meta name="description" content="{% block description %}{% trans "AI-Diagnostics — automotive diagnostics, inspection and technical consulting." %}{% endblock %}">
-    <meta name="robots" content="index,follow">
-    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <link rel="icon" href="{% static 'images/logo_autozvuk.webp' %}" type="image/webp">
 
-    <link rel="icon" href="{% static 'images/logo_ai.png' %}" type="image/png">
-
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Oxygen:400,700" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800|Oxygen:400,700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
@@ -24,237 +24,319 @@
     <link rel="stylesheet" href="{% static 'fonts/ionicons/css/ionicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/font-awesome.min.css' %}">
 
-    <!-- Theme Style -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/autozvuk-modern.css' %}">
 
-    <style>
-      /* Language switcher: fix clipping + keep navbar look */
-      .lang-switcher-form { margin: 0; padding: 0; }
-      .lang-select {
-        background: transparent;
-        color: inherit;
-        border: 1px solid rgba(255,255,255,.25);
-        border-radius: .2rem;
-        padding: .25rem .55rem;
-        line-height: 1.2;
-        min-width: 64px;
-        cursor: pointer;
-      }
-      .lang-select:focus { outline: none; box-shadow: none; }
-      @media (max-width: 991.98px) {
-        .lang-select { margin-top: .5rem; }
-      }
-    </style>
+    {% block extra_css %}{% endblock %}
+    {% block extra_body %}{% endblock %}
   </head>
 
-  <body>
+  <body class="az-body">
+
     {% include 'includes/cookie_notice.html' %}
 
-    <header role="banner">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
+    <header class="az-header" role="banner">
+      <nav class="navbar navbar-expand-lg az-navbar">
+        <div class="container-fluid az-navbar-container">
 
-          <a class="navbar-brand" href="{% url 'index' %}">
-            <img width="100" src="{% static 'images/logo_ai.png' %}" alt="{% trans 'AI-Diagnostics logo' %}">
+          <a class="az-brand" href="{% url 'index' %}" aria-label="Автозвук Владикавказ">
+            <span class="az-brand-logo-wrap">
+              <img class="az-brand-logo"
+                   src="{% static 'images/logo_autozvuk.webp' %}"
+                   alt="Автозвук Владикавказ">
+            </span>
+
+            <span class="az-brand-text">
+              <span class="az-brand-title">Автозвук</span>
+              <span class="az-brand-subtitle">диагностика · ремонт · тюнинг</span>
+            </span>
           </a>
 
-          <button class="navbar-toggler" type="button"
+          <button class="navbar-toggler az-burger"
+                  type="button"
                   data-toggle="collapse"
-                  data-target="#navbarsExample05"
-                  aria-controls="navbarsExample05"
+                  data-target="#azMainNav"
+                  aria-controls="azMainNav"
                   aria-expanded="false"
-                  aria-label="{% trans 'Toggle navigation' %}">
-            <span class="navbar-toggler-icon"></span>
+                  aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
 
-          <div class="collapse navbar-collapse" id="navbarsExample05">
-            <ul class="navbar-nav pl-md-5 ml-auto">
-              <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
-                   href="{% url 'index' %}">{% trans "Home" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
-                   href="{% url 'about' %}">{% trans "About" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}"
-                   href="{% url 'projects' %}">{% trans "Projects" %}</a>
-              </li>
+          <div class="collapse navbar-collapse az-nav-collapse" id="azMainNav">
+            {% with current=request.resolver_match.url_name %}
+              <ul class="navbar-nav az-main-menu ml-auto">
 
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown04"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {% trans "Services" %}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown04">
-                  <a class="dropdown-item" href="#">{% trans "Auto diagnostics" %}</a>
-                </div>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if current == 'index' %}active{% endif %}"
+                     href="{% url 'index' %}">
+                    Домой
+                  </a>
+                </li>
 
-              <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}"
-                   href="{% url 'blog' %}">{% trans "Blog" %}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %}"
-                   href="{% url 'contacts' %}">{% trans "Contacts" %}</a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if current == 'about' %}active{% endif %}"
+                     href="{% url 'about' %}">
+                    О нас
+                  </a>
+                </li>
 
-              <!-- Language switcher -->
-		<li class="nav-item d-flex align-items-center">
-  <form action="{% url 'set_language' %}" method="post" class="lang-switcher-form" id="langForm">
-    {% csrf_token %}
-    <input type="hidden" name="next" id="langNext" value="{{ request.get_full_path }}">
-    {% get_current_language as CURRENT_LANG %}
+                <li class="nav-item">
+                  <a class="nav-link {% if current == 'projects' %}active{% endif %}"
+                     href="{% url 'projects' %}">
+                    Проекты
+                  </a>
+                </li>
 
-    <select name="language"
-            class="lang-select"
-            aria-label="{% trans 'Language' %}"
-            onchange="setLangNextAndSubmit(this)">
-      <option value="en" {% if CURRENT_LANG == "en" %}selected{% endif %}>EN</option>
-      <option value="nl" {% if CURRENT_LANG == "nl" %}selected{% endif %}>NL</option>
-      <option value="fr" {% if CURRENT_LANG == "fr" %}selected{% endif %}>FR</option>
-    </select>
-  </form>
-</li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle {% if '/service/' in request.path %}active{% endif %}"
+                     href="#"
+                     id="azServicesDropdown"
+                     data-toggle="dropdown"
+                     aria-haspopup="true"
+                     aria-expanded="false">
+                    Услуги
+                  </a>
 
-<script>
-  function setLangNextAndSubmit(sel) {
-    const lang = sel.value;
-    const nextInput = document.getElementById('langNext');
-    const form = document.getElementById('langForm');
+                  <div class="dropdown-menu az-dropdown-menu" aria-labelledby="azServicesDropdown">
+                    <a class="dropdown-item" href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/">
+                      <span>Компьютерная диагностика</span>
+                    </a>
 
-    // current path + query
-    const current = nextInput.value || window.location.pathname + window.location.search;
+                    <a class="dropdown-item" href="/service/remont-hodovoj-chasti-avtomobilya-vo-vladikavkaze/">
+                      <span>Ремонт ходовой</span>
+                    </a>
 
-    // split query
-    const [pathPart, queryPart] = current.split('?', 2);
-    let path = pathPart || '/';
-    const query = queryPart ? ('?' + queryPart) : '';
+                    <a class="dropdown-item" href="#">
+                      <span>Развал-схождение</span>
+                    </a>
 
-    // strip known prefixes first
-    path = path.replace(/^\/(nl|fr)(?=\/|$)/, '') || '/';
+                    <a class="dropdown-item" href="#">
+                      <span>Шумоизоляция</span>
+                    </a>
 
-    // add prefix back for nl/fr; EN has no prefix (because prefix_default_language=False)
-    if (lang === 'nl' || lang === 'fr') {
-      if (path === '/') path = '';
-      path = '/' + lang + path;
-    }
+                    <a class="dropdown-item" href="#">
+                      <span>Аудиоподготовка</span>
+                    </a>
+                  </div>
+                </li>
 
-    nextInput.value = path + query;
-    form.submit();
-  }
-</script>
+                <li class="nav-item">
+                  <a class="nav-link {% if current == 'blog' %}active{% endif %}"
+                     href="{% url 'blog' %}">
+                    Новости
+                  </a>
+                </li>
 
-            </ul>
+                <li class="nav-item">
+                  <a class="nav-link {% if current == 'contacts' %}active{% endif %}"
+                     href="{% url 'contacts' %}">
+                    Контакты
+                  </a>
+                </li>
 
-            <div class="navbar-nav ml-auto">
-              <form method="get" action="{% url 'blog' %}" class="search-form">
+              </ul>
+            {% endwith %}
+
+            <div class="az-header-actions">
+              <form method="get"
+                    action="{% url 'blog' %}"
+                    class="az-search-form"
+                    role="search">
                 <span class="icon ion ion-search"></span>
-                <input type="text" name="q" class="form-control" placeholder="{% trans 'Search...' %}">
+                <input type="text"
+                       name="q"
+                       value="{{ request.GET.q }}"
+                       placeholder="Поиск...">
               </form>
+
+              <a class="az-header-phone" href="tel:+79188266181">
+                <span class="fa fa-phone"></span>
+                <span>+7 918 826-61-81</span>
+              </a>
             </div>
 
           </div>
         </div>
       </nav>
     </header>
-    <!-- END header -->
 
     {% if messages %}
-      <ul class="messages">
+      <div class="az-system-messages">
         {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          <div class="az-alert az-alert-{{ message.tags|default:'info' }}" role="alert">
+            <div class="az-alert-text">{{ message }}</div>
+            <button type="button"
+                    class="az-alert-close"
+                    aria-label="Закрыть уведомление">
+              &times;
+            </button>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
     {% endif %}
 
-    {% block content %}{% endblock %}
+    <main class="az-page-main">
+      {% block content %}{% endblock %}
+    </main>
 
-    <section class="section bg-primary">
+    <section class="az-newsletter-section">
       <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-8">
-            <h2 class="text-white mb-0">{% trans "Subscribe to our updates" %}</h2>
-            <p class="text-white lead">{% trans "Stay informed about our latest news, updates, and developments." %}</p>
+        <div class="az-newsletter-card">
+          <div class="az-newsletter-content">
+            <span class="az-section-kicker">Новости и полезные материалы</span>
+            <h2>Подпишитесь на обновления</h2>
+            <p>
+              Получайте новости, советы по диагностике, ремонту ходовой и обслуживанию автомобиля.
+            </p>
           </div>
-          <div class="col-lg-4 text-lg-right">
-            <form method="post" action="{% url 'subscribe' %}" class="newsletter_form">
-              {% csrf_token %}
+
+          <form method="post" action="{% url 'subscribe' %}" class="az-newsletter-form">
+            {% csrf_token %}
+
+            {% if subscriber_form %}
               {{ subscriber_form.email }}
-              <button type="submit" class="btn btn-outline-white px-4 py-3">{% trans "Subscribe" %}</button>
-            </form>
-          </div>
+            {% else %}
+              <input type="email"
+                     name="email"
+                     placeholder="Ваш email"
+                     required>
+            {% endif %}
+
+            <button type="submit">
+              Подписаться
+            </button>
+          </form>
         </div>
       </div>
     </section>
 
-    <footer class="site-footer" role="contentinfo">
+    <footer class="az-footer" role="contentinfo">
       <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-4 mb-5">
-            <h3>AI-Diagnostics</h3>
-            <p class="mb-5">
-              {% trans "We help automotive service centers make confident, data-driven diagnostic decisions." %}
+
+        <div class="az-footer-top">
+          <div class="az-footer-brand">
+            <a class="az-footer-logo" href="{% url 'index' %}">
+              <img src="{% static 'images/logo_autozvuk.webp' %}" alt="Автозвук Владикавказ">
+              <span>Автозвук Владикавказ</span>
+            </a>
+
+            <p>
+              Диагностика, ремонт ходовой, автоэлектрика, шумоизоляция и тюнинг автомобилей во Владикавказе.
             </p>
 
-            <ul class="list-unstyled footer-link d-flex footer-social">
-              <li><a href="#" class="p-2" aria-label="VK"><span class="fa fa-vk"></span></a></li>
-              <li><a href="#" class="p-2" aria-label="YouTube"><span class="fa fa-youtube"></span></a></li>
-              <li><a href="#" class="p-2" aria-label="Telegram"><span class="fa fa-telegram"></span></a></li>
-              <li><a href="#" class="p-2" aria-label="Instagram"><span class="fa fa-instagram"></span></a></li>
+            <ul class="az-social-list">
+              <li>
+                <a href="#" aria-label="VK">
+                  <span class="fa fa-vk"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#" aria-label="YouTube">
+                  <span class="fa fa-youtube"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#" aria-label="Telegram">
+                  <span class="fa fa-telegram"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#" aria-label="Instagram">
+                  <span class="fa fa-instagram"></span>
+                </a>
+              </li>
+            </ul>
+
+            <div class="az-rating-widget">
+              <iframe src="https://yandex.ru/sprav/widget/rating-badge/107260779606?type=rating"
+                      width="150"
+                      height="50"
+                      frameborder="0"
+                      loading="lazy"
+                      title="Рейтинг Автозвук Владикавказ в Яндекс">
+              </iframe>
+            </div>
+          </div>
+
+          <div class="az-footer-col">
+            <h3>Услуги</h3>
+            <ul>
+              <li><a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/">Компьютерная диагностика</a></li>
+              <li><a href="/service/remont-hodovoj-chasti-avtomobilya-vo-vladikavkaze/">Ремонт ходовой</a></li>
+              <li><a href="#">Развал-схождение</a></li>
+              <li><a href="#">Шумоизоляция</a></li>
+              <li><a href="#">Аудиоподготовка</a></li>
             </ul>
           </div>
 
-          <div class="col-md-5 mb-5 pl-md-5">
-            <h3>{% trans "Contact" %}</h3>
-            <ul class="list-unstyled footer-link">
-              <li class="d-block">
-                <span class="d-block">{% trans "Contact information:" %}</span>
-                <span></span>
-              </li>
-              <li class="d-block">
-                <span class="d-block">{% trans "Phone:" %}</span>
-                <span>+32465000000</span>
-              </li>
-              <li class="d-block">
-                <span class="d-block">{% trans "Email:" %}</span>
-                <span>jvov2038@gmail.com</span>
-              </li>
+          <div class="az-footer-col">
+            <h3>Навигация</h3>
+            <ul>
+              <li><a href="{% url 'about' %}">О нас</a></li>
+              <li><a href="{% url 'projects' %}">Проекты</a></li>
+              <li><a href="{% url 'blog' %}">Новости</a></li>
+              <li><a href="{% url 'contacts' %}">Контакты</a></li>
             </ul>
           </div>
 
-          <div class="col-md-3 mb-5">
-            <h3>{% trans "Links" %}</h3>
-            <ul class="list-unstyled footer-link">
-              <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-              <li><a href="{% url 'projects' %}">{% trans "Projects" %}</a></li>
-              <li><a href="{% url 'blog' %}">{% trans "Blog" %}</a></li>
-              <li><a href="{% url 'contacts' %}">{% trans "Contacts" %}</a></li>
+          <div class="az-footer-contacts">
+            <h3>Контакты</h3>
+
+            <ul>
+              <li>
+                <span class="az-contact-label">Адрес</span>
+                <span>РСО-Алания, г. Владикавказ, Архонское шоссе д. 11</span>
+              </li>
+
+              <li>
+                <span class="az-contact-label">Телефон</span>
+                <a href="tel:+79188266181">+7 (918) 826-61-81</a>
+              </li>
+
+              <li>
+                <span class="az-contact-label">Email</span>
+                <a href="mailto:vladazvuk@mail.ru">vladazvuk@mail.ru</a>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-12 text-md-center text-left">
-            <p class="copyright">
-              {% trans "Copyright" %} &copy;<script>document.write(new Date().getFullYear());</script>
-              {% trans "All rights reserved" %} | {% trans "Template made with" %}
-              <i class="fa fa-heart text-danger" aria-hidden="true"></i>
-              {% trans "by" %} <a href="#" target="_blank">White_cat</a>
-            </p>
-          </div>
+        <div class="az-footer-bottom">
+          <p>
+            © <span id="azCurrentYear"></span> Автозвук Владикавказ. Все права защищены.
+          </p>
+
+          <p>
+            Разработка: <a href="#" target="_blank" rel="noopener">White_cat</a>
+          </p>
         </div>
+
       </div>
     </footer>
-    <!-- END footer -->
 
-    <!-- loader -->
+    <button type="button" class="az-scroll-top" aria-label="Наверх">
+      <span class="fa fa-angle-up"></span>
+    </button>
+
     <div id="loader" class="show fullscreen">
       <svg class="circular" width="48px" height="48px">
-        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214"/>
+        <circle class="path-bg"
+                cx="24"
+                cy="24"
+                r="22"
+                fill="none"
+                stroke-width="4"
+                stroke="#eeeeee"/>
+        <circle class="path"
+                cx="24"
+                cy="24"
+                r="22"
+                fill="none"
+                stroke-width="4"
+                stroke-miterlimit="10"
+                stroke="#f4b214"/>
       </svg>
     </div>
 
@@ -265,5 +347,8 @@
     <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
     <script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/autozvuk-modern.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
   </body>
 </html>

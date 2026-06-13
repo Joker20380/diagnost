@@ -99,14 +99,19 @@ class RobotsTxtView(TemplateView):
 class SitemapXmlView(View):
     def get(self, request, *args, **kwargs):
         context = {
-            'news': News.objects.all(),
-            'programs': Prog.objects.all(),
-            'docs': Documents.objects.all(),
-            'lectures': Lecture.objects.all(),
-            'request': request
+            "base": "https://www.autozvuk15.ru",
+
+            # ВАЖНО: именно services/projects — так будет читабельно и не путаться
+            "services": Service.objects.all(),   # можешь добавить фильтр published
+            "projects": Prog.objects.all(),      # твои "проекты" — это Prog
+
+            # Если хочешь пока убрать docs/lectures из sitemap — не передавай
+            # "docs": Documents.objects.all(),
+            # "lectures": Lecture.objects.all(),
         }
-        xml_content = render_to_string('sitemap.xml', context)
-        return HttpResponse(xml_content, content_type='application/xml')
+        xml_content = render_to_string("sitemap.xml", context=context)
+        return HttpResponse(xml_content, content_type="application/xml; charset=utf-8")
+
 
 
 class Index(DataMixin, ListView):
@@ -236,6 +241,27 @@ class ShowLecture(DataMixin, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['lecture'])
+        return dict(list(context.items()) + list(c_def.items()))
+
+    @staticmethod
+    def post_last3():
+        return News.objects.reverse()[:3]
+
+    @staticmethod
+    def post_last6():
+        return News.objects.reverse()[:6]
+
+
+class ShowService(DataMixin, DetailView):
+    paginate_by = 1
+    model = Service
+    template_name = 'diagnost/service-view.html'
+    slug_url_kwarg = 'service_slug'
+    context_object_name = 'service'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title=context['service'])
         return dict(list(context.items()) + list(c_def.items()))
 
     @staticmethod

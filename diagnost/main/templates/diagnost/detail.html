@@ -1,215 +1,401 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
 
-{% block title %}Diagnostics Result{% endblock %}
-{% block description %}Diagnostic session details{% endblock %}
+{% block title %}Результат диагностики{% endblock %}
+{% block description %}Детали сессии диагностики автомобиля, найденные ошибки, рекомендации и осмотр ходовой части{% endblock %}
 
 {% block content %}
-<div class="top-shadow"></div>
 
-<div class="inner-page">
-  <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-    <div class="container">
-      <div class="row slider-text align-items-center justify-content-center">
-        <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Diagnostics Result</span></h1>
-          <p class="mb-5 w-75 mx-auto">Session analysis and recommendations</p>
-        </div>
+<section class="az-diagnostic-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-diagnostic-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-diagnostic-hero-content">
+      <span class="az-hero-kicker">Диагностическая сессия</span>
+
+      <h1>Результат диагностики</h1>
+
+      <p>
+        Сводка по автомобилю, найденные коды ошибок, системные рекомендации и данные осмотра ходовой части.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="{% url 'diagnostic_upload' %}" class="az-btn az-btn-primary">
+          Загрузить новый отчёт
+        </a>
+
+        <button type="button" class="az-btn az-btn-outline az-print-page">
+          Распечатать отчёт
+        </button>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<section class="section">
+
+<section class="az-diagnostic-page">
   <div class="container">
 
-    <!-- General info -->
-    <div class="mb-4">
-      <h4>General information</h4>
-      <p><strong>VIN:</strong> {{ session.vin|default:"—" }}</p>
-      <p><strong>Model:</strong> {{ session.vehicle_model|default:"—" }}</p>
-      <p><strong>Date:</strong> {{ session.created_at|date:"d.m.Y H:i" }}</p>
-      <p><strong>Status:</strong> {{ session.get_status_display|default:session.status }}</p>
+    <div class="az-diagnostic-summary-grid">
+
+      <div class="az-diagnostic-summary-card">
+        <span class="az-diagnostic-summary-label">VIN</span>
+        <strong>{{ session.vin|default:"—" }}</strong>
+      </div>
+
+      <div class="az-diagnostic-summary-card">
+        <span class="az-diagnostic-summary-label">Модель</span>
+        <strong>{{ session.vehicle_model|default:"—" }}</strong>
+      </div>
+
+      <div class="az-diagnostic-summary-card">
+        <span class="az-diagnostic-summary-label">Дата</span>
+        <strong>{{ session.created_at|date:"d.m.Y H:i" }}</strong>
+      </div>
+
+      <div class="az-diagnostic-summary-card">
+        <span class="az-diagnostic-summary-label">Статус</span>
+        <strong>{{ session.get_status_display|default:session.status }}</strong>
+      </div>
+
     </div>
 
-    <!-- Fault codes -->
-    <div class="mb-4">
-      <h4>Detected fault codes</h4>
-      {% if codes %}
-        <ul class="list-group">
-          {% for code in codes %}
-            <li class="list-group-item">
-              <strong>{{ code.code }}</strong> — {{ code.description|default:"No description available" }}
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p>No fault codes were found.</p>
-      {% endif %}
-    </div>
 
-    <!-- Recommendations -->
-    <div class="mb-4">
-      <h4>Recommendations</h4>
+    <div class="az-diagnostic-layout">
 
-      {% if session.recommendation %}
-        <div class="alert alert-info">
-          <div class="d-flex justify-content-between align-items-center">
-            <strong>System notes</strong>
-            {% if session.ai_generated_at %}
-              <span class="small text-muted">
-                Generated: {{ session.ai_generated_at|date:"d.m.Y H:i" }}
-              </span>
-            {% endif %}
-          </div>
-          <div class="small text-muted mt-1">
-            This is a preliminary analysis. Final decisions must be confirmed
-            in the technician inspection and/or the specialist report.
-          </div>
-        </div>
+      <main class="az-diagnostic-main">
 
-        <pre class="bg-light p-3">{{ session.recommendation }}</pre>
-      {% else %}
-        <p>Recommendations are not available yet.</p>
-      {% endif %}
-    </div>
-
-    <!-- Suspension -->
-    <div class="mb-4">
-      <h4>Suspension</h4>
-
-      {% if session.status == 'suspension_pending' %}
-        <p class="mb-2">⚠️ Suspension inspection is pending</p>
-        <a href="{% url 'suspension_inspection' session.id %}" class="btn btn-warning">
-          Perform suspension inspection
-        </a>
-
-      {% elif session.status == 'suspension_done' %}
-        {% with inspection=session.suspension_inspection %}
-          {% if inspection %}
-
-            {% if inspection.status == 'signed' %}
-              <div class="alert alert-success">
-                <strong>Inspection signed by technician.</strong>
-                {% if inspection.inspector %}
-                  Technician: {{ inspection.inspector }}.
-                {% endif %}
-                {% if inspection.signed_at %}
-                  Date: {{ inspection.signed_at|date:"d.m.Y H:i" }}.
-                {% endif %}
-                <div class="small text-muted mt-1">
-                  This section is factual (human evidence). AI does not make decisions here.
-                </div>
-              </div>
-            {% else %}
-              <div class="alert alert-warning">
-                <strong>Inspection is in draft.</strong>
-                <div class="small text-muted mt-1">
-                  You can edit it until it is signed.
-                  Only a signed inspection is considered final.
-                </div>
-              </div>
-            {% endif %}
-
-            <p class="mb-1">
-              <strong>Technician:</strong> {{ inspection.inspector|default:"—" }}
-            </p>
-            <p class="mb-3">
-              <strong>Comment:</strong> {{ inspection.comment|default:"—" }}
-            </p>
-
-            <div class="row mb-3">
-              <div class="col-md-3">
-                <strong>Mileage:</strong> {{ inspection.mileage_km|default:"—" }}
-              </div>
-              <div class="col-md-3">
-                <strong>Lift used:</strong>
-                {% if inspection.lift_used %}Yes{% else %}No{% endif %}
-              </div>
-              <div class="col-md-3">
-                <strong>Test drive:</strong>
-                {% if inspection.test_drive %}Yes{% else %}No{% endif %}
-              </div>
-              <div class="col-md-3">
-                <strong>Overall risk:</strong>
-                {{ inspection.get_overall_risk_display|default:"—" }}
-              </div>
+        <section class="az-diagnostic-card">
+          <div class="az-diagnostic-card-head">
+            <div>
+              <span class="az-section-kicker">DTC / коды ошибок</span>
+              <h2>Найденные коды ошибок</h2>
             </div>
 
-            {% with parts=inspection.parts.all %}
-              {% if parts|length %}
-                <div class="table-responsive">
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Part</th>
-                        <th>Wear</th>
-                        <th>Severity</th>
-                        <th>Cause</th>
-                        <th>Signs / measurements</th>
-                        <th>Part number</th>
-                        <th>Replacement</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for part in parts %}
-                        <tr>
-                          <td>{{ part.part_type|default:"—" }}</td>
-                          <td>{{ part.wear_percent }}%</td>
-                          <td>{{ part.get_severity_display|default:"—" }}</td>
-                          <td>{{ part.reason|default:"—" }}</td>
-                          <td style="white-space: pre-wrap;">
-                            {{ part.evidence|default:"—" }}
-                          </td>
-                          <td>{{ part.part_number|default:"—" }}</td>
-                          <td>
-                            {% if part.needs_replacement %}
-                              <span class="text-danger">Yes</span>
-                            {% else %}
-                              No
-                            {% endif %}
-                          </td>
-                        </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-              {% else %}
-                <p>No parts were added.</p>
-              {% endif %}
-            {% endwith %}
+            <span class="az-diagnostic-count">
+              {{ codes|length }}
+            </span>
+          </div>
 
-            <div class="mt-3">
-              <a href="{% url 'suspension_inspection' session.id %}"
-                 class="btn btn-outline-secondary">
-                {% if inspection.status == 'signed' %}
-                  Open inspection (view)
-                {% else %}
-                  Continue inspection (edit)
-                {% endif %}
+          {% if codes %}
+            <div class="az-dtc-list">
+              {% for code in codes %}
+                <div class="az-dtc-item">
+                  <div class="az-dtc-code">
+                    {{ code.code }}
+                  </div>
+
+                  <div class="az-dtc-description">
+                    <strong>{{ code.description|default:"Описание отсутствует" }}</strong>
+                    <span>
+                      Требуется проверка в контексте симптомов, данных автомобиля и фактического состояния узлов.
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="az-empty-inline">
+              <h3>Коды ошибок не найдены</h3>
+              <p>
+                В загруженном отчёте нет активных кодов ошибок или они не были распознаны системой.
+              </p>
+            </div>
+          {% endif %}
+        </section>
+
+
+        <section class="az-diagnostic-card">
+          <div class="az-diagnostic-card-head">
+            <div>
+              <span class="az-section-kicker">Анализ</span>
+              <h2>Рекомендации</h2>
+            </div>
+          </div>
+
+          {% if session.recommendation %}
+            <div class="az-ai-notice">
+              <div>
+                <strong>Системные подсказки</strong>
+                <p>
+                  Это предварительный анализ. Финальные решения фиксируются в осмотрах мастера
+                  и/или заключении специалиста.
+                </p>
+              </div>
+
+              {% if session.ai_generated_at %}
+                <span>Сгенерировано: {{ session.ai_generated_at|date:"d.m.Y H:i" }}</span>
+              {% endif %}
+            </div>
+
+            <div class="az-recommendation-box">
+              {{ session.recommendation|linebreaksbr }}
+            </div>
+          {% else %}
+            <div class="az-empty-inline">
+              <h3>Рекомендации пока не сформированы</h3>
+              <p>
+                Система ещё не подготовила предварительный анализ по этой диагностической сессии.
+              </p>
+            </div>
+          {% endif %}
+        </section>
+
+
+        <section class="az-diagnostic-card">
+          <div class="az-diagnostic-card-head">
+            <div>
+              <span class="az-section-kicker">Human evidence</span>
+              <h2>Ходовая часть</h2>
+            </div>
+          </div>
+
+          {% if session.status == 'suspension_pending' %}
+
+            <div class="az-suspension-state az-suspension-warning">
+              <div>
+                <h3>Ожидается осмотр подвески</h3>
+                <p>
+                  Диагностическая сессия требует фактической проверки ходовой части мастером.
+                </p>
+              </div>
+
+              <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-primary">
+                Провести осмотр
               </a>
             </div>
 
-          {% else %}
-            <p>Inspection data was not found.</p>
-            <a href="{% url 'suspension_inspection' session.id %}"
-               class="btn btn-outline-secondary">
-              Fill in inspection
-            </a>
-          {% endif %}
-        {% endwith %}
-      {% else %}
-        <p class="text-muted">
-          Suspension is not in this session’s pipeline yet.
-        </p>
-      {% endif %}
-    </div>
+          {% elif session.status == 'suspension_done' %}
 
-    <a href="{% url 'diagnostic_upload' %}"
-       class="btn btn-outline-primary">
-      Upload a new report
-    </a>
+            {% with inspection=session.suspension_inspection %}
+              {% if inspection %}
+
+                {% if inspection.status == 'signed' %}
+                  <div class="az-inspection-status az-inspection-signed">
+                    <strong>Осмотр подписан мастером</strong>
+
+                    <p>
+                      {% if inspection.inspector %}
+                        Мастер: {{ inspection.inspector }}.
+                      {% endif %}
+
+                      {% if inspection.signed_at %}
+                        Дата подписи: {{ inspection.signed_at|date:"d.m.Y H:i" }}.
+                      {% endif %}
+                    </p>
+
+                    <span>
+                      Этот блок — фактология. ИИ здесь не принимает решений.
+                    </span>
+                  </div>
+                {% else %}
+                  <div class="az-inspection-status az-inspection-draft">
+                    <strong>Осмотр в черновике</strong>
+                    <p>
+                      Можно редактировать до подписи. Финальным считается только подписанный осмотр.
+                    </p>
+                  </div>
+                {% endif %}
+
+
+                <div class="az-inspection-meta-grid">
+                  <div>
+                    <span>Мастер</span>
+                    <strong>{{ inspection.inspector|default:"—" }}</strong>
+                  </div>
+
+                  <div>
+                    <span>Пробег</span>
+                    <strong>{{ inspection.mileage_km|default:"—" }}{% if inspection.mileage_km %} км{% endif %}</strong>
+                  </div>
+
+                  <div>
+                    <span>Подъёмник</span>
+                    <strong>{% if inspection.lift_used %}Да{% else %}Нет{% endif %}</strong>
+                  </div>
+
+                  <div>
+                    <span>Тест-драйв</span>
+                    <strong>{% if inspection.test_drive %}Да{% else %}Нет{% endif %}</strong>
+                  </div>
+
+                  <div>
+                    <span>Общий риск</span>
+                    <strong>{{ inspection.get_overall_risk_display|default:"—" }}</strong>
+                  </div>
+                </div>
+
+
+                <div class="az-inspection-comment">
+                  <span>Комментарий мастера</span>
+                  <p>{{ inspection.comment|default:"—" }}</p>
+                </div>
+
+
+                {% with parts=inspection.parts.all %}
+                  {% if parts %}
+                    <div class="az-parts-table-wrap">
+                      <table class="az-parts-table">
+                        <thead>
+                          <tr>
+                            <th>Деталь</th>
+                            <th>Износ</th>
+                            <th>Критичность</th>
+                            <th>Причина</th>
+                            <th>Признаки / замеры</th>
+                            <th>Каталожный номер</th>
+                            <th>Замена</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {% for part in parts %}
+                            <tr>
+                              <td>
+                                <strong>{{ part.part_type|default:"—" }}</strong>
+                              </td>
+
+                              <td>
+                                <span class="az-wear-pill">{{ part.wear_percent }}%</span>
+                              </td>
+
+                              <td>
+                                <span class="az-severity-pill">
+                                  {{ part.get_severity_display|default:"—" }}
+                                </span>
+                              </td>
+
+                              <td>{{ part.reason|default:"—" }}</td>
+
+                              <td class="az-pre-line">{{ part.evidence|default:"—" }}</td>
+
+                              <td>{{ part.part_number|default:"—" }}</td>
+
+                              <td>
+                                {% if part.needs_replacement %}
+                                  <span class="az-replacement-yes">Да</span>
+                                {% else %}
+                                  <span class="az-replacement-no">Нет</span>
+                                {% endif %}
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  {% else %}
+                    <div class="az-empty-inline">
+                      <h3>Детали не добавлены</h3>
+                      <p>
+                        В осмотре пока нет конкретных элементов ходовой части.
+                      </p>
+                    </div>
+                  {% endif %}
+                {% endwith %}
+
+
+                <div class="az-diagnostic-actions-row">
+                  <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-dark">
+                    {% if inspection.status == 'signed' %}
+                      Открыть осмотр
+                    {% else %}
+                      Продолжить осмотр
+                    {% endif %}
+                  </a>
+                </div>
+
+              {% else %}
+
+                <div class="az-empty-inline">
+                  <h3>Данные осмотра не найдены</h3>
+                  <p>
+                    Сессия отмечена как требующая осмотра, но данные осмотра пока отсутствуют.
+                  </p>
+
+                  <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-dark">
+                    Заполнить осмотр
+                  </a>
+                </div>
+
+              {% endif %}
+            {% endwith %}
+
+          {% else %}
+
+            <div class="az-empty-inline">
+              <h3>Подвеска не в пайплайне этой сессии</h3>
+              <p>
+                Для этой диагностической сессии не требуется отдельный осмотр ходовой части.
+              </p>
+            </div>
+
+          {% endif %}
+        </section>
+
+      </main>
+
+
+      <aside class="az-diagnostic-sidebar">
+
+        <div class="az-diagnostic-side-card">
+          <span class="az-section-kicker">Сессия</span>
+          <h3>Краткая сводка</h3>
+
+          <ul>
+            <li>
+              <span>VIN</span>
+              <strong>{{ session.vin|default:"—" }}</strong>
+            </li>
+
+            <li>
+              <span>Модель</span>
+              <strong>{{ session.vehicle_model|default:"—" }}</strong>
+            </li>
+
+            <li>
+              <span>Ошибок</span>
+              <strong>{{ codes|length }}</strong>
+            </li>
+
+            <li>
+              <span>Статус</span>
+              <strong>{{ session.get_status_display|default:session.status }}</strong>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="az-diagnostic-side-help">
+          <h3>Как читать отчёт</h3>
+
+          <ol>
+            <li>Коды ошибок показывают направление проверки, но не всегда точную причину.</li>
+            <li>Рекомендации системы являются предварительными.</li>
+            <li>Фактический осмотр мастера имеет приоритет над автоматическим анализом.</li>
+            <li>Решение по ремонту принимается после проверки симптомов и состояния узлов.</li>
+          </ol>
+        </div>
+
+
+        <div class="az-diagnostic-side-cta">
+          <span class="az-section-kicker">Новый отчёт</span>
+
+          <h3>Нужно проверить другой автомобиль?</h3>
+
+          <p>
+            Загрузите новый отчёт диагностики, чтобы сформировать отдельную сессию анализа.
+          </p>
+
+          <a href="{% url 'diagnostic_upload' %}" class="az-btn az-btn-primary">
+            Загрузить отчёт
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
 
   </div>
 </section>
+
 {% endblock %}

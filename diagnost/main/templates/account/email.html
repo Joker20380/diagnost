@@ -1,137 +1,228 @@
-{% extends "school/base_one.html" %}
-{% load allauth i18n %}
-{% block title %}
-    {% trans "Signup" %}
-{% endblock title %}
+{% extends "diagnost/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Email-адреса{% endblock %}
+{% block description %}Управление email-адресами аккаунта Автозвук Владикавказ{% endblock %}
+
 {% block content %}
 
-<!-- ================ start banner area ================= -->
-	<section class="blog-banner-area" id="category">
-		<div class="container h-100">
-			<div class="blog-banner">
-				<div class="text-center">
-					<h1>Email</h1>
-					<nav aria-label="breadcrumb" class="banner-breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{% url 'index' %}">Домой</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Email</li>
-            </ol>
-          </nav>
-				</div>
-			</div>
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Настройки аккаунта</span>
+      <h1>Email-адреса</h1>
+      <p>
+        Управляйте email-адресами аккаунта: добавляйте новый адрес, выбирайте основной
+        и повторно отправляйте письмо подтверждения.
+      </p>
     </div>
-	</section>
-	<!-- ================ end banner area ================= -->
+  </div>
+</section>
 
-  <!--================Login Box Area =================-->
-	<section class="login_box_area section-margin">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="login_form_inner register_form_inner">
-						<h3 style="margin-bottom: 35px"></h3>
-                       <form class="row login_form" action="#" method="post" novalidate="novalidate">
-					    {% element h1 %}
-					        {% trans "Email Addresses" %}
-					    {% endelement %}
-					    {% if emailaddresses %}
-					        {% element p %}
-					            {% trans 'The following email addresses are associated with your account:' %}
-					        {% endelement %}
-					        {% url 'account_email' as email_url %}
-					        {% element form form=form action=email_url method="post" tags="email,list" %}
-					            {% slot body %}
-					                {% csrf_token %}
-					                {% for radio in emailaddress_radios %}
-					                    {% with emailaddress=radio.emailaddress %}
-					                        {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
-					                            {% slot label %}
-					                                {{ emailaddress.email }}
-					                                {% if emailaddress.verified %}
-					                                    {% element badge tags="success,email,verified" %}
-					                                        {% translate "Verified" %}
-					                                    {% endelement %}
-					                                {% else %}
-					                                    {% element badge tags="warning,email,unverified" %}
-					                                        {% translate "Unverified" %}
-					                                    {% endelement %}
-					                                {% endif %}
-					                                {% if emailaddress.primary %}
-					                                    {% element badge tags="email,primary" %}
-					                                        {% translate "Primary" %}
-					                                    {% endelement %}
-					                                {% endif %}
-					                            {% endslot %}
-					                        {% endelement %}
-					                    {% endwith %}
-					                {% endfor %}
-					            {% endslot %}
-					            {% slot actions %}
-					            	<div class="col-md-6 form-group p_star">
-                                		<button type="submit" name="action_primary" class="button button-register w-100">
-                							{% trans 'Make Primary' %}
-                						</button>
-									</div>
 
-					                
-					                <div class="col-md-6 form-group p_star">
-                                		<button tags="secondary" type="submit" name="action_send" class="button button-register w-100">
-                							{% trans 'Re-send Verification' %}
-                						</button>
-									</div>
+<section class="az-auth-page">
+  <div class="container">
 
-					                
-					                <div class="col-md-6 form-group p_star">
-                                		<button tags="danger,delete" type="submit" name="action_remove" class="button button-register w-100">
-                							{% trans 'Remove' %}
-                						</button>
-									</div>
+    <div class="az-auth-layout">
 
-					            {% endslot %}
-					        {% endelement %}
-					    {% else %}
-					        {% include "account/snippets/warn_no_email.html" %}
-					    {% endif %}
-					    {% if can_add_email %}
-					        {% element h2 %}
-					            {% trans "Add Email Address" %}
-					        {% endelement %}
-					        {% url 'account_email' as action_url %}
-					        {% element form form=form method="post" action=action_url tags="email,add" %}
-					            {% slot body %}
-					                {% csrf_token %}
-					                {% element fields form=form %}
-					                {% endelement %}
-					            {% endslot %}
-					            {% slot actions %}
-					        		<div class="col-md-12 form-group p_star">
-                                		<button type="submit" name="action_add" class="button button-register w-100">
-                							{% trans "Add Email" %}
-                						</button>
-									</div>
-					            {% endslot %}
-					        {% endelement %}
-					    {% endif %}
-					</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Email</span>
+
+        <h2>Адреса аккаунта</h2>
+
+        {% if emailaddresses %}
+          <p class="az-auth-card-text">
+            Эти email-адреса связаны с вашим аккаунтом. Основной адрес используется для входа,
+            уведомлений и восстановления доступа.
+          </p>
+
+          {% url 'account_email' as email_url %}
+
+          <form method="post"
+                action="{{ email_url }}"
+                class="az-auth-email-manage-form"
+                id="azEmailManageForm">
+            {% csrf_token %}
+
+            <div class="az-email-list">
+              {% for radio in emailaddress_radios %}
+                {% with emailaddress=radio.emailaddress %}
+                  <label class="az-email-item" for="{{ radio.id }}">
+                    <input type="radio"
+                           name="email"
+                           id="{{ radio.id }}"
+                           value="{{ emailaddress.email }}"
+                           {% if radio.checked %}checked{% endif %}>
+
+                    <span class="az-email-item-main">
+                      <strong>{{ emailaddress.email }}</strong>
+
+                      <span class="az-email-badges">
+                        {% if emailaddress.verified %}
+                          <span class="az-email-badge az-email-badge-success">
+                            Подтверждён
+                          </span>
+                        {% else %}
+                          <span class="az-email-badge az-email-badge-warning">
+                            Не подтверждён
+                          </span>
+                        {% endif %}
+
+                        {% if emailaddress.primary %}
+                          <span class="az-email-badge az-email-badge-primary">
+                            Основной
+                          </span>
+                        {% endif %}
+                      </span>
+                    </span>
+                  </label>
+                {% endwith %}
+              {% endfor %}
+            </div>
+
+            <div class="az-email-actions-grid">
+              <button type="submit"
+                      name="action_primary"
+                      class="az-btn az-btn-dark">
+                Сделать основным
+              </button>
+
+              <button type="submit"
+                      name="action_send"
+                      class="az-btn az-btn-outline-dark">
+                Отправить подтверждение
+              </button>
+
+              <button type="submit"
+                      name="action_remove"
+                      class="az-btn az-btn-danger"
+                      id="azRemoveEmailButton">
+                Удалить
+              </button>
+            </div>
+          </form>
+        {% else %}
+          <div class="az-auth-info-box">
+            <strong>Email-адрес не добавлен</strong>
+            <p>
+              У аккаунта пока нет привязанного email-адреса. Добавьте email, чтобы использовать
+              восстановление доступа и уведомления.
+            </p>
+          </div>
+        {% endif %}
+
+
+        {% if can_add_email %}
+          <div class="az-auth-separator">
+            <span>добавить</span>
+          </div>
+
+          <div class="az-auth-add-email">
+            <h3>Добавить email-адрес</h3>
+
+            {% url 'account_email' as action_url %}
+
+            <form method="post"
+                  action="{{ action_url }}"
+                  class="az-auth-form"
+                  novalidate>
+              {% csrf_token %}
+
+              {% if form.non_field_errors %}
+                <div class="az-auth-errors">
+                  {{ form.non_field_errors }}
+                </div>
+              {% endif %}
+
+              {% for field in form %}
+                {% if field.is_hidden %}
+                  {{ field }}
+                {% else %}
+                  <div class="az-auth-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                      <small>{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                      <div class="az-auth-field-errors">{{ field.errors }}</div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+
+              <button type="submit"
+                      name="action_add"
+                      class="az-btn az-btn-primary az-auth-submit">
+                Добавить email
+              </button>
+            </form>
+          </div>
+        {% endif %}
+
+        <div class="az-auth-links">
+          <a href="{% url 'index' %}">На главную</a>
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Безопасность</span>
+
+          <h3>Зачем нужен email</h3>
+
+          <ul>
+            <li>Для восстановления доступа к аккаунту.</li>
+            <li>Для подтверждения личности владельца.</li>
+            <li>Для получения важных уведомлений.</li>
+            <li>Для связи с сервисом по диагностике и заявкам.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Проблема с email?</h3>
+          <p>
+            Если письмо подтверждения не приходит, проверьте папку «Спам» или свяжитесь с нами.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Контакты
+          </a>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}
-	
+
+
 {% block extra_body %}
-	<script>
-		(function() {
-		var message = "{% trans 'Do you really want to remove the selected email address?' %}";
-		var actions = document.getElementsByName('action_remove');
-		if (actions.length) {
-			actions[0].addEventListener("click", function(e) {
-			if (! confirm(message)) {
-				e.preventDefault();
-				}
-				});
-				}
-				})();
-	</script>
+  {{ block.super }}
+
+  <script>
+    (function () {
+      var message = "Удалить выбранный email-адрес?";
+      var removeButton = document.getElementById("azRemoveEmailButton");
+
+      if (!removeButton) {
+        return;
+      }
+
+      removeButton.addEventListener("click", function (event) {
+        if (!confirm(message)) {
+          event.preventDefault();
+        }
+      });
+    })();
+  </script>
 {% endblock extra_body %}

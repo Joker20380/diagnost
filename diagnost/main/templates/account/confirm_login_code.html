@@ -1,40 +1,149 @@
-{% extends "account/base_entrance.html" %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% load allauth account %}
-{% block head_title %}
-    {% translate "Sign In" %}
-{% endblock head_title %}
+{% load account %}
+
+{% block head_title %}Код входа{% endblock head_title %}
+{% block title %}Код входа{% endblock %}
+{% block description %}Ввод одноразового кода для входа в личный кабинет Автозвук Владикавказ{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% translate "Enter Sign-In Code" %}
-    {% endelement %}
-    {% setvar email_link %}
-        <a href="mailto:{{ email }}">{{ email }}</a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}We’ve sent a code to {{ email_link }}. The code expires shortly, so please enter it soon.{% endblocktranslate %}
-    {% endelement %}
-    {% url 'account_confirm_login_code' as login_url %}
-    {% element form form=form method="post" action=login_url tags="entrance,login" %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" tags="prominent,login" %}
-                {% translate "Sign In" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% element button type="submit" form="logout-from-stage" tags="link" %}
-        {% translate "Cancel" %}
-    {% endelement %}
-    <form id="logout-from-stage"
-          method="post"
-          action="{% url 'account_logout' %}">
-        <input type="hidden" name="next" value="{% url 'account_login' %}">
-        {% csrf_token %}
-    </form>
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Безопасный вход</span>
+      <h1>Введите код входа</h1>
+      <p>
+        Мы отправили одноразовый код на ваш email. Введите его, чтобы продолжить вход в аккаунт.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Sign-in code</span>
+
+        <h2>Код для входа</h2>
+
+        <p class="az-auth-card-text">
+          Код был отправлен на адрес:
+        </p>
+
+        <div class="az-auth-email-box">
+          <span class="ion ion-android-mail"></span>
+          <a href="mailto:{{ email }}">{{ email }}</a>
+        </div>
+
+        <div class="az-auth-info-box">
+          <strong>Код действует ограниченное время</strong>
+          <p>
+            Введите код как можно скорее. Если срок действия истёк, вернитесь ко входу
+            и запросите новый код.
+          </p>
+        </div>
+
+        {% url 'account_confirm_login_code' as login_url %}
+
+        <form method="post"
+              action="{{ login_url }}"
+              class="az-auth-form"
+              novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="az-auth-errors">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            {% if field.is_hidden %}
+              {{ field }}
+            {% else %}
+              <div class="az-auth-field az-auth-code-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                  <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="az-auth-field-errors">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          {{ redirect_field }}
+
+          <div class="az-auth-actions-row">
+            <button type="submit" class="az-btn az-btn-primary">
+              Войти
+            </button>
+
+            <button type="submit"
+                    form="logout-from-stage"
+                    class="az-btn az-btn-outline-dark">
+              Отмена
+            </button>
+          </div>
+        </form>
+
+        <div class="az-auth-links">
+          <a href="{% url 'account_login' %}">Вернуться ко входу</a>
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Одноразовый код</span>
+
+          <h3>Зачем нужен код</h3>
+
+          <ul>
+            <li>Позволяет войти без обычного пароля.</li>
+            <li>Код отправляется только на подтверждённый email.</li>
+            <li>Срок действия ограничен для безопасности.</li>
+            <li>После отмены потребуется начать вход заново.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Код не пришёл?</h3>
+          <p>
+            Проверьте папку «Спам» или вернитесь на страницу входа и запросите код повторно.
+          </p>
+
+          <a href="{% url 'account_login' %}" class="az-btn az-btn-primary">
+            Страница входа
+          </a>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+
+<form id="logout-from-stage"
+      method="post"
+      action="{% url 'account_logout' %}"
+      style="display: none;">
+  <input type="hidden" name="next" value="{% url 'account_login' %}">
+  {% csrf_token %}
+</form>
+
 {% endblock content %}

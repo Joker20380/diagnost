@@ -1,89 +1,256 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
-{% block description %}Company news and updates from AI-Diagnostics (Ghent, Belgium){% endblock %}
-{% block title %}News{% endblock %}
+{% block description %}
+Новости Автозвук Владикавказ: диагностика автомобилей, ремонт ходовой, автозвук, шумоизоляция, автоэлектрика и полезные советы для владельцев авто.
+{% endblock %}
+
+{% block title %}Новости{% endblock %}
 
 {% block content %}
 
-  <div class="top-shadow"></div>
+<section class="az-inner-hero az-blog-hero" style="background-image: url('{% static 'images/projects.webp' %}');">
+  <div class="az-inner-hero-overlay"></div>
 
-  <div class="inner-page">
-    <div class="slider-item" style="background-image: url('{% static 'images/projects.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>Our News</span></h1>
-            <p class="mb-5 w-75">Updates, releases, and insights from our team</p>
-          </div>
-        </div>
+  <div class="container">
+    <div class="az-inner-hero-content">
+      <span class="az-hero-kicker">Новости и полезные материалы</span>
+      <h1>Наши новости</h1>
+      <p>
+        Публикуем материалы о диагностике, ремонте ходовой, автоэлектрике, автозвуке,
+        шумоизоляции и обслуживании автомобилей.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          Получить консультацию
+        </a>
+
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Контакты сервиса
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <section class="section border-t">
-    <div class="container">
-      <div class="row justify-content-center mb-5 element-animate">
-        <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">News</h2>
-          <p class="mb-5 lead">Explore our latest updates</p>
-        </div>
+
+<section class="az-blog-page-section">
+  <div class="container">
+
+    <div class="az-blog-page-head">
+      <div>
+        <span class="az-section-kicker">База знаний</span>
+        <h2>Новости и статьи</h2>
+        <p>
+          Собираем полезные материалы, которые помогают лучше понимать автомобиль,
+          вовремя замечать неисправности и принимать правильные решения по ремонту.
+        </p>
       </div>
+
+      <form method="get" action="{% url 'blog' %}" class="az-blog-search-form">
+        <span class="ion ion-search"></span>
+        <input type="text"
+               name="q"
+               value="{{ request.GET.q }}"
+               placeholder="Поиск по новостям...">
+        <button type="submit">Найти</button>
+      </form>
     </div>
 
-    <div class="container">
-      <div class="row no-gutters">
-        {% for n in view.news_all_news %}
-          <div class="col-md-4 element-animate">
-            <a href="{{ n.get_absolute_url }}" class="link-thumbnail">
-              <h3>{{ n.title }}</h3>
-              <span class="ion-plus icon"></span>
 
-              {% if n.photo %}
-                <img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid">
-              {% else %}
-                <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" class="img-fluid">
-              {% endif %}
-            </a>
+    {% if view.news_all_news %}
+      <div class="row">
+        {% for n in view.news_all_news %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <article class="az-blog-page-card">
+
+              <a href="{{ n.get_absolute_url }}" class="az-blog-page-image">
+                {% if n.photo %}
+                  <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+                {% else %}
+                  <img src="{% static 'images/no_photo.webp' %}" alt="{{ n.title }}" loading="lazy">
+                {% endif %}
+              </a>
+
+              <div class="az-blog-page-body">
+                {% if n.time_update %}
+                  <span class="az-blog-date">{{ n.time_update|date:"d.m.Y" }}</span>
+                {% endif %}
+
+                <h3>
+                  <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
+                </h3>
+
+                <p>
+                  {{ n.content|striptags|truncatewords:22 }}
+                </p>
+
+                <a href="{{ n.get_absolute_url }}" class="az-link-more">
+                  Читать дальше
+                  <span class="ion-android-arrow-dropright-circle"></span>
+                </a>
+              </div>
+
+            </article>
           </div>
         {% endfor %}
       </div>
-    </div>
-  </section>
-  <!-- END section -->
+    {% else %}
+      <div class="az-empty-state">
+        {% if request.GET.q %}
+          <h3>По запросу ничего не найдено</h3>
+          <p>
+            Попробуйте изменить поисковую фразу или вернуться ко всем новостям.
+          </p>
 
-  <section class="section bg-light block-11">
-    <div class="container">
-      <div class="row justify-content-center mb-5">
-        <div class="col-md-8 text-center">
-          <h2 class="heading mb-4">Reviews</h2>
+          <a href="{% url 'blog' %}" class="az-btn az-btn-dark">
+            Все новости
+          </a>
+        {% else %}
+          <h3>Новости скоро появятся</h3>
+          <p>
+            Раздел наполняется материалами о диагностике, ремонте, автозвуке и обслуживании автомобилей.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
+            Связаться с сервисом
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+
+<section class="az-blog-topics">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Темы</span>
+      <h2>О чём пишем</h2>
+      <p>
+        Новости работают не только для SEO, но и как нормальная база знаний для клиента.
+      </p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="az-blog-topic-card">
+          <span class="ion ion-easel"></span>
+          <h3>Диагностика</h3>
+          <p>Ошибки, симптомы, электронные системы и поиск причины неисправности.</p>
         </div>
       </div>
 
-      <div class="nonloop-block-11 owl-carousel">
-        {% for r in view.all_reviews %}
-          <div class="item">
-            <div class="block-33 h-100">
-              <div class="vcard d-flex mb-3">
-                <div class="image align-self-center">
-                  <img src="{{ r.photo.url }}" alt="{{ r.name }}">
-                </div>
-                <div class="name-text align-self-center">
-                  <h2 class="heading">{{ r.name }}</h2>
-                  <span class="meta">Client</span>
-                </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="az-blog-topic-card">
+          <span class="ion ion-hammer"></span>
+          <h3>Ходовая часть</h3>
+          <p>Подвеска, рулевое управление, тормоза, шумы, стуки и вибрации.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="az-blog-topic-card">
+          <span class="ion ion-volume-high"></span>
+          <h3>Автозвук</h3>
+          <p>Аудиосистемы, установка компонентов, шумоизоляция и настройка звука.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="az-blog-topic-card">
+          <span class="ion ion-flash"></span>
+          <h3>Автоэлектрика</h3>
+          <p>Электронные неисправности, питание, датчики, блоки и сопутствующие проблемы.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+{% if view.all_reviews %}
+<section class="az-blog-reviews">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Отзывы</span>
+      <h2>Отзывы клиентов</h2>
+      <p>
+        Обратная связь показывает, насколько понятным и полезным был сервис для клиента.
+      </p>
+    </div>
+
+    <div class="nonloop-block-11 owl-carousel az-reviews-carousel">
+      {% for r in view.all_reviews %}
+        <div class="item">
+          <div class="az-review-card">
+
+            <div class="az-review-head">
+              <div class="az-review-avatar">
+                {% if r.photo %}
+                  <img src="{{ r.photo.url }}" alt="{{ r.name }}" loading="lazy">
+                {% else %}
+                  <img src="{% static 'images/no_photo.webp' %}" alt="{{ r.name }}" loading="lazy">
+                {% endif %}
               </div>
 
-              <div class="text">
-                <blockquote>
-                  <p>{{ r.body }}</p>
-                </blockquote>
+              <div>
+                <h3>{{ r.name }}</h3>
+                {% if r.email %}
+                  <span>{{ r.email }}</span>
+                {% else %}
+                  <span>Клиент Автозвук</span>
+                {% endif %}
               </div>
             </div>
+
+            <blockquote>
+              {{ r.body }}
+            </blockquote>
+
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
     </div>
-  </section>
+
+  </div>
+</section>
+{% endif %}
+
+
+<section class="az-blog-cta">
+  <div class="container">
+    <div class="az-blog-cta-card">
+
+      <div>
+        <span class="az-section-kicker">Есть вопрос по автомобилю?</span>
+        <h2>Не ждите, пока мелкий симптом станет дорогим ремонтом</h2>
+        <p>
+          Позвоните нам, расскажите, что происходит с автомобилем, и мы подскажем,
+          стоит ли начинать с диагностики, осмотра ходовой или проверки электроники.
+        </p>
+      </div>
+
+      <div class="az-blog-cta-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          Позвонить
+        </a>
+
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Контакты
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 {% endblock %}

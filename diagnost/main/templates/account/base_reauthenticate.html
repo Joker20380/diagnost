@@ -1,29 +1,109 @@
-{% extends "account/base_entrance.html" %}
-{% load allauth %}
+{% extends "diagnost/base.html" %}
+{% load static %}
 {% load i18n %}
-{% block head_title %}
-    {% trans "Confirm Access" %}
-{% endblock head_title %}
+
+{% block head_title %}Подтверждение доступа{% endblock head_title %}
+{% block title %}Подтверждение доступа{% endblock %}
+{% block description %}Повторное подтверждение доступа к аккаунту Автозвук Владикавказ{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Confirm Access" %}
-    {% endelement %}
-    {% element p %}
-        {% blocktranslate %}Please reauthenticate to safeguard your account.{% endblocktranslate %}
-    {% endelement %}
-    {% block reauthenticate_content %}{% endblock %}
-    {% if reauthentication_alternatives %}
-        {% element hr %}
-        {% endelement %}
-        {% element h2 %}
-            {% translate "Alternative options" %}
-        {% endelement %}
-        {% element button_group %}
-            {% for alt in reauthentication_alternatives %}
-                {% element button href=alt.url tags="primary,outline" %}
-                    {{ alt.description }}
-                {% endelement %}
-            {% endfor %}
-        {% endelement %}
-    {% endif %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Безопасность аккаунта</span>
+      <h1>Подтверждение доступа</h1>
+      <p>
+        Для защиты аккаунта нужно повторно подтвердить, что это действительно вы.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Проверка безопасности</span>
+
+        <h2>Подтвердите доступ</h2>
+
+        <p class="az-auth-card-text">
+          Некоторые действия требуют повторной авторизации. Это помогает защитить
+          личный кабинет, диагностические данные и историю обращений.
+        </p>
+
+        <div class="az-auth-info-box">
+          <strong>Зачем это нужно?</strong>
+          <p>
+            Если сессия была открыта давно или выполняется важное действие,
+            система просит пройти дополнительную проверку.
+          </p>
+        </div>
+
+        <div class="az-auth-embedded">
+          {% block reauthenticate_content %}{% endblock %}
+        </div>
+
+        {% if reauthentication_alternatives %}
+          <div class="az-auth-separator">
+            <span>или</span>
+          </div>
+
+          <div class="az-auth-alt-block">
+            <h3>Альтернативные варианты</h3>
+
+            <div class="az-auth-alt-actions">
+              {% for alt in reauthentication_alternatives %}
+                <a href="{{ alt.url }}" class="az-auth-alt-btn">
+                  {{ alt.description }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="az-auth-links">
+          <a href="{% url 'account_login' %}">Вернуться ко входу</a>
+          <a href="{% url 'index' %}">На главную</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Защита</span>
+
+          <h3>Что защищает проверка</h3>
+
+          <ul>
+            <li>Доступ к личному кабинету.</li>
+            <li>Историю обращений и диагностик.</li>
+            <li>Изменение важных данных аккаунта.</li>
+            <li>Действия, связанные с безопасностью.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Не получается пройти проверку?</h3>
+          <p>
+            Попробуйте войти заново или свяжитесь с сервисом.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+            Контакты
+          </a>
+        </div>
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

@@ -1,240 +1,397 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
-{% block description %}Contact information page – AI-powered car diagnostics{% endblock %}
-{% block title %}Contacts{% endblock %}
+{% block description %}
+Контакты Автозвук Владикавказ: адрес, телефон, email, форма обратной связи, карта проезда и запись на диагностику автомобиля.
+{% endblock %}
+
+{% block title %}Контакты{% endblock %}
 
 {% block content %}
-    <div class="top-shadow"></div>
-    <div class="inner-page">
-      <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-        <div class="container">
-          <div class="row slider-text align-items-center justify-content-center">
-            <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-              <h1 class="pt-5"><span>Contacts</span></h1>
-              <p class="mb-5 w-75">Please feel free to contact us</p>
-            </div>
-          </div>
-        </div>
+
+<section class="az-inner-hero az-contacts-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-inner-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-inner-hero-content">
+      <span class="az-hero-kicker">Связь с сервисом</span>
+      <h1>Контакты</h1>
+      <p>
+        Позвоните, напишите или приезжайте в сервис. Поможем с диагностикой, ремонтом ходовой,
+        автоэлектрикой, шумоизоляцией и автозвуком.
+      </p>
+
+      <div class="az-hero-actions">
+        {% if main_contact and main_contact.phone %}
+          <a href="tel:{{ main_contact.phone }}" class="az-btn az-btn-primary">
+            Позвонить
+          </a>
+        {% else %}
+          <a href="tel:+79188266181" class="az-btn az-btn-primary">
+            Позвонить
+          </a>
+        {% endif %}
+
+        <a href="#azContactForm" class="az-btn az-btn-outline">
+          Написать сообщение
+        </a>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Contact Form -->
-    <section class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 mb-5 order-2">
-            <form method="post" id="contact_form">
-              {% csrf_token %}
 
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label for="name">Name</label>
-                  <input type="text"
-                         id="contact_form_name"
-                         name="name"
-                         class="form-control"
-                         placeholder="Your name"
-                         required>
-                </div>
-                <div class="col-md-6 form-group">
-                  <label for="phone">Phone</label>
-                  <input type="tel"
-                         id="contact_form_phone"
-                         name="phone"
-                         class="form-control"
-                         placeholder="Your phone number">
-                </div>
-              </div>
+<section class="az-contacts-quick">
+  <div class="container">
 
-              <div class="row">
-                <div class="col-md-12 form-group"></div>
-              </div>
+    <div class="row">
 
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <label for="email">Email</label>
-                  <input type="email"
-                         id="contact_form_email"
-                         name="email"
-                         class="form-control"
-                         placeholder="Your email"
-                         required>
-                </div>
-              </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-contact-quick-card">
+          <span class="ion ion-ios-location"></span>
+          <h3>Адрес</h3>
 
-              <div class="contact_form_text mt-3">
-                <select id="contact_form_contact"
-                        name="contact"
-                        class="form-control"
-                        style="width: 100%;">
-                  <option value="">Select recipient (optional)</option>
-
-                  {% if main_contact %}
-                    <option value="{{ main_contact.id }}">
-                      Main contact ({{ main_contact.name }})
-                    </option>
-                  {% endif %}
-
-                  {% for group in contact_groups %}
-                    {% for contact in group.contacts.all %}
-                      <option value="{{ contact.id }}">
-                        {{ group.name }}: {{ contact.name }}
-                      </option>
-                    {% endfor %}
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <label for="message">Message</label>
-                  <textarea id="contact_form_message"
-                            name="message"
-                            class="form-control"
-                            rows="4"
-                            placeholder="Your message"
-                            required></textarea>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="submit"
-                         value="Send message"
-                         class="btn btn-primary px-3 py-3">
-                </div>
-              </div>
-            </form>
-          </div>
-
-          {% if main_contact %}
-            <div class="col-md-6 order-2 mb-5">
-              <div class="row justify-content-right">
-                <div class="col-md-8 mx-auto contact-form-contact-info">
-
-                  {% if main_contact.address %}
-                    <p class="d-flex">
-                      <span class="ion-ios-location icon mr-5"></span>
-                      <span>{{ main_contact.address }}</span>
-                    </p>
-                  {% endif %}
-
-                  {% if main_contact.phone %}
-                    <p class="d-flex">
-                      <span class="ion-ios-telephone icon mr-5"></span>
-                      <span>{{ main_contact.phone }}</span>
-                    </p>
-                  {% endif %}
-
-                  {% if main_contact.email %}
-                    <p class="d-flex">
-                      <span class="ion-android-mail icon mr-5"></span>
-                      <span>{{ main_contact.email }}</span>
-                    </p>
-                  {% endif %}
-
-                </div>
-              </div>
-            </div>
+          {% if main_contact and main_contact.address %}
+            <p>{{ main_contact.address }}</p>
+          {% else %}
+            <p>РСО-Алания, г. Владикавказ, Архонское шоссе д. 11</p>
           {% endif %}
         </div>
       </div>
-    </section>
 
-    <!-- Map -->
-    <div class="contact_map">
-      <div class="map_container">
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-contact-quick-card">
+          <span class="ion ion-ios-telephone"></span>
+          <h3>Телефон</h3>
 
+          {% if main_contact and main_contact.phone %}
+            <p>
+              <a href="tel:{{ main_contact.phone }}">{{ main_contact.phone }}</a>
+            </p>
+          {% else %}
+            <p>
+              <a href="tel:+79188266181">+7 (918) 826-61-81</a>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-contact-quick-card">
+          <span class="ion ion-android-mail"></span>
+          <h3>Email</h3>
+
+          {% if main_contact and main_contact.email %}
+            <p>
+              <a href="mailto:{{ main_contact.email }}">{{ main_contact.email }}</a>
+            </p>
+          {% else %}
+            <p>
+              <a href="mailto:vladazvuk@mail.ru">vladazvuk@mail.ru</a>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-contacts-main">
+  <div class="container">
+
+    <div class="az-contacts-layout">
+
+      <div class="az-contact-form-card" id="azContactForm">
+        <span class="az-section-kicker">Форма обратной связи</span>
+        <h2>Напишите нам</h2>
+        <p>
+          Опишите проблему автомобиля или задачу по установке оборудования.
+          Чем точнее симптомы, тем быстрее получится выбрать правильный сценарий.
+        </p>
+
+        <form method="post" id="contact_form" class="az-contact-form" novalidate>
+          {% csrf_token %}
+
+          <div class="az-form-grid">
+            <div class="az-form-group">
+              <label for="contact_form_name">Имя <span>*</span></label>
+              <input type="text"
+                     id="contact_form_name"
+                     name="name"
+                     placeholder="Ваше имя"
+                     required>
+              <div class="az-invalid-feedback">Укажите имя</div>
+            </div>
+
+            <div class="az-form-group">
+              <label for="contact_form_phone">Телефон</label>
+              <input type="tel"
+                     id="contact_form_phone"
+                     name="phone"
+                     placeholder="Ваш телефон">
+            </div>
+          </div>
+
+          <div class="az-form-group">
+            <label for="contact_form_email">Email <span>*</span></label>
+            <input type="email"
+                   id="contact_form_email"
+                   name="email"
+                   placeholder="Ваш email"
+                   required>
+            <div class="az-invalid-feedback">Укажите корректный email</div>
+          </div>
+
+          <div class="az-form-group">
+            <label for="contact_form_contact">Получатель</label>
+            <select id="contact_form_contact" name="contact">
+              <option value="">Выберите получателя, если нужно</option>
+
+              {% if main_contact %}
+                <option value="{{ main_contact.id }}">
+                  Основные контакты{% if main_contact.name %} — {{ main_contact.name }}{% endif %}
+                </option>
+              {% endif %}
+
+              {% for group in contact_groups %}
+                {% for contact in group.contacts.all %}
+                  <option value="{{ contact.id }}">
+                    {{ group.name }}: {{ contact.name }}
+                  </option>
+                {% endfor %}
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="az-form-group">
+            <label for="contact_form_message">Сообщение <span>*</span></label>
+            <textarea id="contact_form_message"
+                      name="message"
+                      rows="6"
+                      placeholder="Например: загорелся Check Engine, появился стук в подвеске, нужна шумоизоляция дверей..."
+                      required></textarea>
+            <div class="az-invalid-feedback">Напишите сообщение</div>
+          </div>
+
+          <button type="submit" class="az-btn az-btn-primary az-contact-submit">
+            Отправить сообщение
+          </button>
+        </form>
+      </div>
+
+
+      <aside class="az-contact-side">
+
+        <div class="az-contact-side-card">
+          <span class="az-section-kicker">Основной контакт</span>
+
+          {% if main_contact %}
+            <h3>{{ main_contact.name|default:"Автозвук Владикавказ" }}</h3>
+
+            <ul class="az-contact-side-list">
+              {% if main_contact.address %}
+                <li>
+                  <span class="ion ion-ios-location"></span>
+                  <div>
+                    <strong>Адрес</strong>
+                    <p>{{ main_contact.address }}</p>
+                  </div>
+                </li>
+              {% endif %}
+
+              {% if main_contact.phone %}
+                <li>
+                  <span class="ion ion-ios-telephone"></span>
+                  <div>
+                    <strong>Телефон</strong>
+                    <p><a href="tel:{{ main_contact.phone }}">{{ main_contact.phone }}</a></p>
+                  </div>
+                </li>
+              {% endif %}
+
+              {% if main_contact.email %}
+                <li>
+                  <span class="ion ion-android-mail"></span>
+                  <div>
+                    <strong>Email</strong>
+                    <p><a href="mailto:{{ main_contact.email }}">{{ main_contact.email }}</a></p>
+                  </div>
+                </li>
+              {% endif %}
+            </ul>
+          {% else %}
+            <h3>Автозвук Владикавказ</h3>
+
+            <ul class="az-contact-side-list">
+              <li>
+                <span class="ion ion-ios-location"></span>
+                <div>
+                  <strong>Адрес</strong>
+                  <p>РСО-Алания, г. Владикавказ, Архонское шоссе д. 11</p>
+                </div>
+              </li>
+
+              <li>
+                <span class="ion ion-ios-telephone"></span>
+                <div>
+                  <strong>Телефон</strong>
+                  <p><a href="tel:+79188266181">+7 (918) 826-61-81</a></p>
+                </div>
+              </li>
+
+              <li>
+                <span class="ion ion-android-mail"></span>
+                <div>
+                  <strong>Email</strong>
+                  <p><a href="mailto:vladazvuk@mail.ru">vladazvuk@mail.ru</a></p>
+                </div>
+              </li>
+            </ul>
+          {% endif %}
+        </div>
+
+
+        <div class="az-contact-help-card">
+          <h3>Что написать в заявке?</h3>
+
+          <ul>
+            <li>Марка, модель и год автомобиля</li>
+            <li>Какие симптомы появились</li>
+            <li>Когда проявляется проблема</li>
+            <li>Были ли ошибки на панели</li>
+            <li>Что уже проверяли или ремонтировали</li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+
+{% if contact_groups %}
+<section class="az-contact-groups-section">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Кому написать</span>
+      <h2>Контакты по направлениям</h2>
+      <p>
+        Можно выбрать конкретного получателя в форме или нажать кнопку в карточке,
+        чтобы форма автоматически подставила нужный контакт.
+      </p>
+    </div>
+
+    <div class="row">
+      {% for group in contact_groups %}
+        {% for contact in group.contacts.all %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="az-contact-person-card">
+              <span class="az-contact-person-group">{{ group.name }}</span>
+
+              <h3>{{ contact.name }}</h3>
+
+              {% if contact.address %}
+                <p class="az-contact-person-line">
+                  <span class="ion ion-ios-location"></span>
+                  {{ contact.address }}
+                </p>
+              {% endif %}
+
+              {% if contact.phone %}
+                <p class="az-contact-person-line">
+                  <span class="ion ion-ios-telephone"></span>
+                  <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                </p>
+              {% endif %}
+
+              {% if contact.email %}
+                <p class="az-contact-person-line">
+                  <span class="ion ion-android-mail"></span>
+                  <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                </p>
+              {% endif %}
+
+              <button type="button"
+                      class="az-contact-select-btn"
+                      data-contact-id="{{ contact.id }}">
+                Написать сюда
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+<section class="az-map-section">
+  <div class="container">
+
+    <div class="az-map-head">
+      <div>
+        <span class="az-section-kicker">Как нас найти</span>
+        <h2>Мы на карте</h2>
+        <p>
+          Приезжайте в сервис по адресу: РСО-Алания, г. Владикавказ, Архонское шоссе д. 11.
+        </p>
       </div>
     </div>
 
-    {% if location_lat and location_lon %}
-      <script>
-        const map = L.map('geomap').setView([{{ location_lat }}, {{ location_lon }}], 18);
+    <div class="az-map-card">
+      <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=107260779606"
+              width="100%"
+              height="520"
+              frameborder="0"
+              loading="lazy"
+              title="Автозвук Владикавказ на карте">
+      </iframe>
+    </div>
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap'
-        }).addTo(map);
+  </div>
+</section>
 
-        const gifIcon = L.icon({
-          iconUrl: "{% static 'onetech/images/logo_map.gif' %}",
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        });
 
-        L.marker([{{ location_lat }}, {{ location_lon }}], { icon: gifIcon })
-          .addTo(map)
-          .bindPopup(`
-            <div style="
-              background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-              padding: 12px;
-              border-radius: 12px;
-              box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-              max-width: 260px;
-              font-family: sans-serif;
-            ">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="{% static 'images/logo_autozvuk.webp' %}"
-                     alt="Contact"
-                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
-                <div>
-                  <strong style="font-size: 1.1em;">{{ location_name|escapejs }}</strong><br>
-                  <span style="font-size: 0.9em; color: #555;">Car service</span>
-                </div>
-              </div>
-              <div style="margin-top: 10px; font-size: 0.9em; color: #333;">
-                Welcome! We are here to help.
-              </div>
-              <a href="{% url 'index' %}"
-                 style="
-                   display: inline-block;
-                   margin-top: 10px;
-                   padding: 6px 12px;
-                   background: #007bff;
-                   color: #fff;
-                   border-radius: 6px;
-                   text-decoration: none;
-                   font-size: 0.9em;
-                 ">
-                Learn more
-              </a>
-            </div>
-          `)
-          .openPopup();
-      </script>
-    {% else %}
-      <script>
-        document.getElementById('geomap').innerHTML =
-          '<p style="padding: 2em; text-align: center;">Location is not configured yet</p>';
-      </script>
-    {% endif %}
+<section class="az-contacts-bottom-cta">
+  <div class="container">
+    <div class="az-contacts-bottom-card">
 
-    <script>
-      document.getElementById('contact_form').addEventListener('submit', function(e) {
-        const form = e.target;
-        const requiredFields = form.querySelectorAll('[required]');
-        let isValid = true;
+      <div>
+        <span class="az-section-kicker">Нужна диагностика?</span>
+        <h2>Лучше уточнить проблему до дорогого ремонта</h2>
+        <p>
+          Позвоните или отправьте сообщение. Мы подскажем, с чего начать:
+          компьютерная диагностика, осмотр ходовой, автоэлектрика или консультация по автозвуку.
+        </p>
+      </div>
 
-        requiredFields.forEach(field => {
-          if (!field.value.trim()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-          } else {
-            field.classList.remove('is-invalid');
-          }
-        });
+      <div class="az-contacts-bottom-actions">
+        {% if main_contact and main_contact.phone %}
+          <a href="tel:{{ main_contact.phone }}" class="az-btn az-btn-primary">
+            {{ main_contact.phone }}
+          </a>
+        {% else %}
+          <a href="tel:+79188266181" class="az-btn az-btn-primary">
+            +7 (918) 826-61-81
+          </a>
+        {% endif %}
 
-        if (!isValid) {
-          e.preventDefault();
-          e.stopPropagation();
-          alert('Please fill in all required fields');
-        }
+        <a href="#azContactForm" class="az-btn az-btn-outline">
+          Написать
+        </a>
+      </div>
 
-        form.classList.add('was-validated');
-      });
-    </script>
+    </div>
+  </div>
+</section>
 
 {% endblock content %}
-

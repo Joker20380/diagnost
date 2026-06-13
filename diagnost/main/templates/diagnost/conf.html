@@ -1,58 +1,170 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
-{% block description %}Privacy Policy of AI-Diagnostics (Ghent, Belgium). Learn how we collect, use, and protect personal data.{% endblock %}
-{% block title %}Privacy Policy{% endblock %}
+{% block description %}
+Политика конфиденциальности сайта Автозвук Владикавказ: обработка персональных данных, формы обратной связи, контакты и пользовательская информация.
+{% endblock %}
+
+{% block title %}Политика конфиденциальности{% endblock %}
 
 {% block content %}
 
-  <div class="top-shadow"></div>
+<section class="az-inner-hero az-static-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-inner-hero-overlay"></div>
 
-  <div class="inner-page">
-    <div class="slider-item" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>Privacy Policy</span></h1>
-            <p class="mb-5 w-75"></p>
-          </div>
-        </div>
+  <div class="container">
+    <div class="az-inner-hero-content">
+      <span class="az-hero-kicker">Внутренняя информация</span>
+      <h1>Политика конфиденциальности</h1>
+      <p>
+        Информация о том, как сайт «Автозвук Владикавказ» обрабатывает обращения,
+        контактные данные и сообщения пользователей.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+          Связаться с нами
+        </a>
+
+        <a href="{% url 'index' %}" class="az-btn az-btn-outline">
+          На главную
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <section class="section">
-    {% for n in view.news_all_conf %}
-      <div class="container">
-        <div class="row">
-          <div class="col-12" style="margin-top: -150px;">
-            {% if n.photo %}
-              <p><img src="{{ n.photo.url }}" alt="{{ n.title }}" class="img-fluid"></p>
-            {% else %}
-              <p><img src="{% static 'images/no_photo.webp' %}" alt="No image" class="img-fluid"></p>
-            {% endif %}
+
+<section class="az-static-page-section">
+  <div class="container">
+
+    <div class="az-static-layout">
+
+      <main class="az-static-main">
+
+        {% if view.news_all_conf %}
+          {% for n in view.news_all_conf %}
+            <article class="az-static-article">
+
+              {% if n.photo %}
+                <div class="az-static-cover">
+                  <img src="{{ n.photo.url }}" alt="{{ n.title }}" loading="lazy">
+                </div>
+              {% endif %}
+
+              <div class="az-static-content-card">
+                <span class="az-section-kicker">Документ</span>
+
+                {% if n.title %}
+                  <h2>{{ n.title }}</h2>
+                {% else %}
+                  <h2>Политика конфиденциальности</h2>
+                {% endif %}
+
+                <div class="az-static-prose">
+                  {{ n.content|safe }}
+                </div>
+              </div>
+
+            </article>
+          {% endfor %}
+        {% else %}
+          <div class="az-empty-state">
+            <h3>Документ пока не добавлен</h3>
+            <p>
+              Политика конфиденциальности ещё не опубликована в административной панели.
+              Добавьте материал в соответствующий раздел, и он появится на этой странице.
+            </p>
+
+            <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
+              Связаться
+            </a>
+          </div>
+        {% endif %}
+
+      </main>
+
+
+      <aside class="az-static-sidebar">
+
+        <div class="az-static-side-card">
+          <span class="az-section-kicker">Кратко</span>
+
+          <h3>Что описывает документ</h3>
+
+          <ul>
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <p>Какие данные может отправить пользователь через формы сайта.</p>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <p>Для чего используются имя, телефон, email и текст сообщения.</p>
+            </li>
+
+            <li>
+              <span class="ion ion-checkmark-circled"></span>
+              <p>Как пользователь может связаться с владельцем сайта.</p>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="az-static-contact-card">
+          <span class="az-section-kicker">Контакты</span>
+
+          <h3>Есть вопрос по данным?</h3>
+
+          <p>
+            Напишите нам через форму обратной связи или позвоните в сервис.
+          </p>
+
+          <div class="az-static-contact-actions">
+            <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+              Написать
+            </a>
+
+            <a href="tel:+79188266181" class="az-btn az-btn-dark">
+              Позвонить
+            </a>
           </div>
         </div>
 
-        <div class="row justify-content-center">
-          <div class="col-md-8 mb-5"></div>
-        </div>
+      </aside>
 
-        <div class="row justify-content-center">
-          <div class="col-md-8 mb-5">
-            <h2></h2>
-          </div>
-        </div>
+    </div>
 
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <p>{% autoescape off %}{{ n.content }}{% endautoescape %}</p>
+  </div>
+</section>
 
-            <p><a href="#" class="btn btn-primary py-3 px-3">Subscribe</a></p>
-          </div>
-        </div>
+
+<section class="az-static-bottom-cta">
+  <div class="container">
+    <div class="az-static-bottom-card">
+
+      <div>
+        <span class="az-section-kicker">Автозвук Владикавказ</span>
+        <h2>Нужна помощь или консультация?</h2>
+        <p>
+          Свяжитесь с нами, если у вас есть вопрос по работе сайта, форме обратной связи
+          или услугам автосервиса.
+        </p>
       </div>
-    {% endfor %}
-  </section>
+
+      <div class="az-static-bottom-actions">
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+          Контакты
+        </a>
+
+        <a href="{% url 'index' %}" class="az-btn az-btn-outline">
+          На главную
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 {% endblock %}

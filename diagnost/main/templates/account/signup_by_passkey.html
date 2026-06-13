@@ -1,38 +1,142 @@
-{% extends "account/base_entrance.html" %}
-{% load allauth i18n %}
-{% block head_title %}
-    {% trans "Signup" %}
-{% endblock head_title %}
+{% extends "diagnost/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}Регистрация через Passkey{% endblock head_title %}
+{% block title %}Регистрация через Passkey{% endblock %}
+{% block description %}Регистрация в личном кабинете Автозвук Владикавказ с помощью Passkey{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Passkey Sign Up" %}
-    {% endelement %}
-    {% setvar link %}
-        <a href="{{ login_url }}">
-        {% endsetvar %}
-        {% setvar end_link %}
-        </a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
-    {% endelement %}
-    {% url 'account_signup_by_passkey' as action_url %}
-    {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button tags="prominent,signup" type="submit" %}
-                {% trans "Sign Up" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% element hr %}
-    {% endelement %}
-    {% element button href=signup_url tags="prominent,signup,outline,primary" %}
-        {% trans "Other options" %}
-    {% endelement %}
+
+<section class="az-auth-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-auth-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-auth-hero-content">
+      <span class="az-hero-kicker">Безопасная регистрация</span>
+      <h1>Регистрация через Passkey</h1>
+      <p>
+        Создайте аккаунт без обычного пароля — с использованием Passkey на вашем устройстве.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-auth-page">
+  <div class="container">
+
+    <div class="az-auth-layout">
+
+      <div class="az-auth-card">
+        <span class="az-section-kicker">Passkey sign up</span>
+
+        <h2>Создать аккаунт через Passkey</h2>
+
+        {% url 'account_login' as default_login_url %}
+        {% url 'account_signup' as default_signup_url %}
+
+        <p class="az-auth-card-text">
+          Уже есть аккаунт?
+          <a href="{{ login_url|default:default_login_url }}">Войдите</a>
+          вместо регистрации.
+        </p>
+
+        <div class="az-auth-info-box">
+          <strong>Что такое Passkey?</strong>
+          <p>
+            Passkey позволяет входить без пароля — через подтверждение на устройстве:
+            отпечаток пальца, Face ID, PIN-код или системный ключ безопасности.
+          </p>
+        </div>
+
+        {% url 'account_signup_by_passkey' as action_url %}
+
+        <form method="post"
+              action="{{ action_url }}"
+              class="az-auth-form"
+              novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="az-auth-errors">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          {% for field in form %}
+            {% if field.is_hidden %}
+              {{ field }}
+            {% else %}
+              <div class="az-auth-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                  <small>{{ field.help_text }}</small>
+                {% endif %}
+
+                {% if field.errors %}
+                  <div class="az-auth-field-errors">
+                    {{ field.errors }}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          {{ redirect_field }}
+
+          <div class="az-auth-actions-row">
+            <button type="submit" class="az-btn az-btn-primary">
+              Зарегистрироваться
+            </button>
+
+            <a href="{{ signup_url|default:default_signup_url }}" class="az-btn az-btn-outline-dark">
+              Другие варианты
+            </a>
+          </div>
+        </form>
+
+        <div class="az-auth-links">
+          <a href="{{ login_url|default:default_login_url }}">Войти в аккаунт</a>
+          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+        </div>
+      </div>
+
+
+      <aside class="az-auth-side">
+
+        <div class="az-auth-side-card">
+          <span class="az-section-kicker">Passkey</span>
+
+          <h3>Преимущества</h3>
+
+          <ul>
+            <li>Не нужно запоминать пароль.</li>
+            <li>Вход подтверждается вашим устройством.</li>
+            <li>Снижается риск кражи пароля.</li>
+            <li>Удобно для быстрого входа в личный кабинет.</li>
+          </ul>
+        </div>
+
+        <div class="az-auth-side-cta">
+          <h3>Passkey не подходит?</h3>
+
+          <p>
+            Используйте обычную регистрацию через email и пароль.
+          </p>
+
+          <a href="{{ signup_url|default:default_signup_url }}" class="az-btn az-btn-primary">
+            Обычная регистрация
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
 {% endblock content %}

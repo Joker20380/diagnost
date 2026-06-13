@@ -1,58 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-   <!-- Главная страница -->
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}/</loc>
-      <changefreq>weekly</changefreq>
-      <priority>1.0</priority>
-   </url>
+  <!-- Главная -->
+  <url>
+    <loc>{{ base }}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 
-   <!-- Страница "О нас" -->
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}{% url 'about' %}</loc>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
+  <!-- О нас -->
+  <url>
+    <loc>{{ base }}{% url 'about' %}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
-   <!-- Новости -->
-   {% for object in news %}
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
-      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.9</priority>
-   </url>
-   {% endfor %}
+  <!-- Услуги -->
+  {% for obj in services %}
+  <url>
+    <loc>{{ base }}{{ obj.get_absolute_url }}</loc>
+    {# лучше time_update; если его нет — убери lastmod вообще #}
+    {% if obj.time_update %}<lastmod>{{ obj.time_update|date:"Y-m-d" }}</lastmod>{% endif %}
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  {% endfor %}
 
-   <!-- Программы -->
-   {% for object in programs %}
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
-      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.8</priority>
-   </url>
-   {% endfor %}
-
-   <!-- Документы -->
-   {% for object in docs %}
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
-      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-   {% endfor %}
-
-   <!-- Лекции -->
-   {% for object in lectures %}
-   <url>
-      <loc>{{ request.scheme }}://{{ request.get_host }}{{ object.get_absolute_url }}</loc>
-      <lastmod>{{ object.time_create|date:"Y-m-d" }}</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
-   </url>
-   {% endfor %}
+  <!-- Проекты -->
+  {% for obj in projects %}
+  <url>
+    <loc>{{ base }}{{ obj.get_absolute_url }}</loc>
+    {% if obj.time_update %}<lastmod>{{ obj.time_update|date:"Y-m-d" }}</lastmod>{% endif %}
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  {% endfor %}
 
 </urlset>

@@ -1,22 +1,64 @@
 {% extends "account/base_reauthenticate.html" %}
-{% load allauth %}
 {% load i18n %}
+
 {% block reauthenticate_content %}
-    {% element p %}
-        {% blocktranslate %}Enter your password:{% endblocktranslate %}
-    {% endelement %}
-    {% url 'account_reauthenticate' as action_url %}
-    {% element form form=form method="post" action=action_url %}
-        {% slot body %}
-            {% csrf_token %}
-            {% element fields form=form unlabeled=True %}
-            {% endelement %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" tags="primary,reauthenticate" %}
-                {% trans "Confirm" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-{% endblock %}
+
+  <div class="az-auth-info-box">
+    <strong>Введите пароль</strong>
+    <p>
+      Для продолжения подтвердите доступ к аккаунту текущим паролем.
+    </p>
+  </div>
+
+  {% url 'account_reauthenticate' as action_url %}
+
+  <form method="post"
+        action="{{ action_url }}"
+        class="az-auth-form az-reauth-form"
+        novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="az-auth-errors">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    {% for field in form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+        <div class="az-auth-field">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label|default:"Пароль" }}
+          </label>
+
+          {{ field }}
+
+          {% if field.help_text %}
+            <small>{{ field.help_text }}</small>
+          {% endif %}
+
+          {% if field.errors %}
+            <div class="az-auth-field-errors">
+              {{ field.errors }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {{ redirect_field }}
+
+    <div class="az-auth-actions-row">
+      <button type="submit" class="az-btn az-btn-primary">
+        Подтвердить
+      </button>
+
+      <a href="{% url 'account_reset_password' %}" class="az-btn az-btn-outline-dark">
+        Забыли пароль?
+      </a>
+    </div>
+  </form>
+
+{% endblock reauthenticate_content %}

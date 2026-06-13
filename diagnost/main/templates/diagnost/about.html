@@ -1,104 +1,308 @@
 {% extends 'diagnost/base.html' %}
 {% load static %}
+{% load webp %}
 
-{% block description %}About AI-Diagnostics – an AI-powered automotive diagnostics company based in Ghent, Belgium{% endblock %}
-{% block title %}About Us{% endblock %}
+{% block description %}
+О компании Автозвук во Владикавказе: диагностика автомобилей, ремонт ходовой части, автоэлектрика, автозвук, шумоизоляция и технический сервис нового поколения.
+{% endblock %}
+
+{% block title %}О нас{% endblock %}
 
 {% block content %}
-  <div class="top-shadow"></div>
 
-  <div class="inner-page">
-    <div class="slider-item" style="background-image: url('{% static 'images/about.webp' %}');">
-      <div class="container">
-        <div class="row slider-text align-items-center justify-content-center">
-          <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-            <h1 class="pt-5"><span>About Us</span></h1>
-            <p class="mb-5 w-75">
-              Get to know our team of engineers and diagnosticians who believe in clarity,
-              technology, and responsible automotive service.
-            </p>
-          </div>
-        </div>
+<section class="az-inner-hero az-about-hero" style="background-image: url('{% static 'images/about.webp' %}');">
+  <div class="az-inner-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-inner-hero-content">
+      <span class="az-hero-kicker">Автозвук Владикавказ</span>
+      <h1>О компании</h1>
+      <p>
+        Мы объединяем опыт автосервиса, диагностику, автоэлектрику, ремонт ходовой и культуру качественного автозвука.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
+          Связаться с нами
+        </a>
+        <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
+          Смотреть проекты
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <section>
-    <!-- Mission / Goals -->
-    <div class="half d-lg-flex d-block">
-      <div class="image element-animate"
-           data-animate-effect="fadeIn"
-           style="background-image: url('{% static 'images/industrial_hero2.webp' %}')">
+
+<section class="az-about-intro">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="az-about-image">
+          <img src="{% static 'images/industrial_hero2.webp' %}" alt="Автосервис Автозвук во Владикавказе">
+        </div>
       </div>
 
-      <div class="text text-center element-animate">
-        <h3 class="mb-4">Our Mission</h3>
-        <p class="mb-5">
-          AI-Diagnostics was created to reduce uncertainty in complex automotive situations.
-          Our goal is not just to identify faults, but to explain them clearly and support
-          informed decisions.
+      <div class="col-lg-6">
+        <div class="az-about-content">
+          <span class="az-section-kicker">Кто мы</span>
+          <h2>Техцентр, который снижает неопределённость в ремонте</h2>
 
-          <br><br>
-          We focus on:
-          <br><br>
-          • Advanced computer diagnostics enhanced by artificial intelligence.<br>
-          • Suspension, drivetrain, and electronics diagnostics with special attention to modern vehicles and SUVs.<br>
-          • Data-driven analysis instead of guesswork or part replacement “by intuition”.<br>
-          • Transparent diagnostic reports understandable to both professionals and car owners.<br>
-          • Continuous improvement through modern tools, software, and evidence-based methods.<br>
-          • A client-centric service model aligned with European quality and compliance standards.
-        </p>
+          <p>
+            «Автозвук» — это автосервис во Владикавказе, который вырос из мастерской по автомобильному звуку
+            в комплексный технический центр. Сегодня мы занимаемся диагностикой, ремонтом ходовой части,
+            автоэлектрикой, шумоизоляцией и установкой аудиосистем.
+          </p>
 
+          <p>
+            Наш подход простой: сначала понять причину проблемы, затем предложить понятное решение.
+            Клиент должен понимать, что происходит с автомобилем, какие работы действительно нужны
+            и какой результат он получит после ремонта.
+          </p>
+
+          <div class="az-about-stats">
+            <div>
+              <strong>1999</strong>
+              <span>год начала истории</span>
+            </div>
+
+            <div>
+              <strong>25+</strong>
+              <span>лет практического опыта</span>
+            </div>
+
+            <div>
+              <strong>4</strong>
+              <span>ключевых направления</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="az-about-goals">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Наши цели</span>
+      <h2>Делать автомобиль понятнее, надёжнее и комфортнее</h2>
+      <p>
+        Мы развиваем сервис не как набор отдельных услуг, а как единую систему: диагностика, ремонт, настройка и сопровождение клиента.
+      </p>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-easel"></span>
+          <h3>Точная диагностика</h3>
+          <p>
+            Используем современное оборудование, технический опыт и цифровой анализ для поиска реальной причины неисправности.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-hammer"></span>
+          <h3>Ремонт ходовой</h3>
+          <p>
+            Работаем с подвеской, рулевым управлением, тормозной системой и особенно внимательно подходим к внедорожникам.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-volume-high"></span>
+          <h3>Автозвук</h3>
+          <p>
+            Устанавливаем, настраиваем и дорабатываем аудиосистемы под автомобиль и индивидуальные предпочтения владельца.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-gear-a"></span>
+          <h3>Современное оборудование</h3>
+          <p>
+            Используем инструменты и системы анализа, которые помогают быстрее принимать правильные технические решения.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-ribbon-b"></span>
+          <h3>Гарантия качества</h3>
+          <p>
+            Опираемся на опыт мастеров, контроль результата и честное объяснение выполненных работ.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="az-about-goal-card">
+          <span class="ion ion-chatboxes"></span>
+          <h3>Прозрачный сервис</h3>
+          <p>
+            Объясняем клиенту проблему человеческим языком: что критично, что можно отложить и почему.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-about-history">
+  <div class="container">
+    <div class="row align-items-start">
+
+      <div class="col-lg-5 mb-5 mb-lg-0">
+        <div class="az-about-history-sticky">
+          <span class="az-section-kicker">История компании</span>
+          <h2>От одного бокса до современного автосервиса</h2>
+          <p>
+            История «Автозвука» началась с увлечения автомобильной электроникой и качественным звуком.
+            Со временем это выросло в полноценный сервисный центр.
+          </p>
+
+          <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
+            Приехать в сервис
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="az-timeline">
+
+          <div class="az-timeline-item">
+            <div class="az-timeline-year">1999</div>
+            <div class="az-timeline-card">
+              <h3>Начало во дворе гостиницы «Кадгарон»</h3>
+              <p>
+                Компания начала работу в небольшом одиночном боксе в Республике Северная Осетия — Алания.
+                Команда энтузиастов занималась автозвуком и автомобильной электроникой.
+              </p>
+            </div>
+          </div>
+
+          <div class="az-timeline-item">
+            <div class="az-timeline-year">Рост</div>
+            <div class="az-timeline-card">
+              <h3>Клиенты приходили за качеством</h3>
+              <p>
+                Подход отличался вниманием к деталям: не просто установка оборудования, а аккуратная настройка,
+                индивидуальный подбор решений и работа на результат.
+              </p>
+            </div>
+          </div>
+
+          <div class="az-timeline-item">
+            <div class="az-timeline-year">Новый этап</div>
+            <div class="az-timeline-card">
+              <h3>Расширение направлений</h3>
+              <p>
+                Постепенно появились электронная диагностика, установка охранных систем, ремонт автоэлектрики,
+                а затем и ремонт ходовой части.
+              </p>
+            </div>
+          </div>
+
+          <div class="az-timeline-item">
+            <div class="az-timeline-year">Сегодня</div>
+            <div class="az-timeline-card">
+              <h3>Архонское шоссе, 11</h3>
+              <p>
+                Сейчас «Автозвук» работает в просторном сервисе по адресу Архонское шоссе, 11.
+                Здесь всё ориентировано на эффективность работы мастеров и комфорт клиентов.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="az-about-values">
+  <div class="container">
+
+    <div class="az-home-section-head text-center">
+      <span class="az-section-kicker">Принципы</span>
+      <h2>Что остаётся неизменным</h2>
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-4 mb-4">
+        <div class="az-value-card">
+          <h3>Техническая честность</h3>
+          <p>
+            Мы не подменяем диагностику догадками. Сначала проверка, потом решение.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="az-value-card">
+          <h3>Уважение к автомобилю</h3>
+          <p>
+            Каждый автомобиль получает аккуратное отношение — от диагностики до финальной сборки.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="az-value-card">
+          <h3>Ответственность перед клиентом</h3>
+          <p>
+            Клиент должен получить не только услугу, но и ясность: что сделано, почему и какой следующий шаг.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="az-about-cta">
+  <div class="container">
+    <div class="az-about-cta-card">
+      <div>
+        <span class="az-section-kicker">Нужна диагностика?</span>
+        <h2>Расскажите, что происходит с автомобилем</h2>
         <p>
-          <a href="#" class="btn btn-primary btn-sm px-3 py-2">Learn more</a>
+          Поможем понять проблему, подобрать правильный сценарий диагностики и определить дальнейшие действия.
         </p>
       </div>
-    </div>
 
-    <!-- Company Story -->
-    <div class="half d-lg-flex d-block">
-      <div class="image order-2 element-animate"
-           data-animate-effect="fadeIn"
-           style="background-image: url('{% static 'images/industrial_hero2.webp' %}')">
-      </div>
-
-      <div class="text text-center element-animate">
-        <h3 class="mb-4">Our Story</h3>
-        <p class="mb-5">
-          AI-Diagnostics was founded in Ghent, Belgium, by professionals with hands-on
-          experience at the very bottom of the automotive service chain — where uncertainty,
-          misdiagnosis, and lack of transparency are most visible.
-
-          <br><br>
-          Years of practical work in vehicle diagnostics revealed a systemic problem:
-          modern cars generate vast amounts of data, yet many service decisions are still
-          made without structured analysis or clear reasoning.
-
-          <br><br>
-          The company was built to change this paradigm. Instead of selling “diagnostics”
-          as a procedure, we focus on reducing uncertainty — for technicians, service
-          managers, and vehicle owners alike.
-
-          <br><br>
-          Based in Ghent, at the heart of Europe’s technological and automotive ecosystem,
-          AI-Diagnostics combines real diagnostic experience with software engineering,
-          artificial intelligence, and strict European standards for quality, safety,
-          and accountability.
-
-          <br><br>
-          Today, AI-Diagnostics is an evolving platform and service focused on:
-          <br><br>
-          • Intelligent fault interpretation.<br>
-          • Risk-aware diagnostic decision support.<br>
-          • High-quality diagnostic documentation.<br>
-          • Responsible use of AI in technical systems.
-
-          <br><br>
-          The core principle remains unchanged: respect for engineering, respect for data,
-          and respect for every vehicle and client.
-        </p>
+      <div class="az-about-cta-actions">
+        <a href="tel:+79188266181" class="az-btn az-btn-primary">
+          Позвонить
+        </a>
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Контакты
+        </a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
 {% endblock %}
