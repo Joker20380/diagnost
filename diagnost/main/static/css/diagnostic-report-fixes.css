@@ -1,0 +1,106 @@
+/* Diagnostic session layout fixes */
+
+.az-diagnostic-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 320px !important;
+  gap: 28px !important;
+  align-items: start !important;
+}
+
+.az-diagnostic-main {
+  min-width: 0 !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.az-diagnostic-sidebar {
+  min-width: 0 !important;
+  width: 100% !important;
+  position: relative !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
+  z-index: 2;
+}
+
+.az-diagnostic-card {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+.az-dtc-list {
+  display: grid;
+  gap: 16px;
+}
+
+.az-dtc-list .az-dtc-item {
+  display: grid !important;
+  grid-template-columns: 150px minmax(0, 1fr) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+.az-dtc-list .az-dtc-code {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.az-dtc-report-description {
+  min-width: 0 !important;
+  overflow: hidden;
+}
+
+.az-dtc-report-description span,
+.az-dtc-report-checks,
+.az-dtc-report-title {
+  overflow-wrap: anywhere;
+}
+
+.az-parts-table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 18px;
+}
+
+.az-parts-table {
+  width: 100%;
+  min-width: 880px;
+  table-layout: auto;
+}
+
+.az-parts-table th,
+.az-parts-table td {
+  white-space: normal;
+  vertical-align: top;
+}
+
+.az-parts-table td.az-pre-line {
+  min-width: 150px;
+}
+
+@media (max-width: 991px) {
+  .az-diagnostic-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .az-diagnostic-sidebar {
+    position: static !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .az-dtc-list .az-dtc-item {
+    grid-template-columns: 1fr !important;
+  }
+
+  .az-dtc-list .az-dtc-code {
+    min-height: 70px;
+  }
+}

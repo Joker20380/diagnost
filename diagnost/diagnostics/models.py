@@ -7,6 +7,179 @@ from django.utils import timezone
 from users.models import UserProfile
 
 
+class VehicleBrand(models.Model):
+    name = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(max_length=140, unique=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Марка автомобиля"
+        verbose_name_plural = "Марки автомобилей"
+
+    def __str__(self):
+        return self.name
+
+
+class DTCImportBatch(models.Model):
+    source_name = models.CharField(max_length=255, blank=True)
+    source_url = models.URLField(blank=True)
+    file_name = models.CharField(max_length=255, blank=True)
+
+    rows_total = models.PositiveIntegerField(default=0)
+    rows_created = models.PositiveIntegerField(default=0)
+    rows_updated = models.PositiveIntegerField(default=0)
+    rows_skipped = models.PositiveIntegerField(default=0)
+
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Пакет импорта DTC"
+        verbose_name_plural = "Пакеты импорта DTC"
+
+    def __str__(self):
+        return f"{self.source_name or 'DTC import'} — {self.created_at:%Y-%m-%d %H:%M}"
+
+
+class DTCReference(models.Model):
+    class System(models.TextChoices):
+        POWERTRAIN = "P", "Двигатель / трансмиссия"
+        CHASSIS = "C", "Ходовая часть"
+        BODY = "B", "Кузовная электроника"
+        NETWORK = "U", "Сеть / CAN"
+        OEM = "O", "OEM / заводской код"
+
+    class Scope(models.TextChoices):
+        GENERIC = "generic", "Универсальный OBD-II"
+        MANUFACTURER = "manufacturer", "Бренд-специфичный"
+        UNKNOWN = "unknown", "Неизвестно"
+
+    class Severity(models.TextChoices):
+        INFO = "info", "Информационный"
+        LOW = "low", "Низкий"
+        MEDIUM = "medium", "Средний"
+        HIGH = "high", "Высокий"
+        CRITICAL = "critical", "Критический"
+
+    code = models.CharField(max_length=32, db_index=True)
+    system = models.CharField(max_length=1, choices=System.choices, db_index=True)
+    scope = models.CharField(
+        max_length=32,
+        choices=Scope.choices,
+        default=Scope.UNKNOWN,
+        db_index=True,
+    )
+
+    manufacturer = models.CharField(
+        max_length=120,
+        blank=True,
+        default="",
+        help_text="Пусто для generic OBD-II. Для бренд-специфичных кодов — Toyota, BMW, Hyundai и т.п.",
+    )
+    brand = models.ForeignKey(
+        VehicleBrand,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="dtc_references",
+    )
+
+    title_ru = models.CharField(max_length=500, blank=True)
+    title_en = models.CharField(max_length=500, blank=True)
+
+    description_ru = models.TextField(blank=True)
+    description_en = models.TextField(blank=True)
+
+    symptoms = models.TextField(blank=True)
+    possible_causes = models.TextField(blank=True)
+    diagnostic_notes = models.TextField(blank=True)
+    recommended_checks = models.TextField(blank=True)
+
+    severity = models.CharField(
+        max_length=32,
+        choices=Severity.choices,
+        default=Severity.MEDIUM,
+    )
+
+    source_name = models.CharField(max_length=255, blank=True)
+    source_url = models.URLField(blank=True)
+
+    is_active = models.BooleanField(default=True)
+    import_batch = models.ForeignKey(
+        DTCImportBatch,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="dtc_references",
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["code", "manufacturer"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["code", "manufacturer"],
+                name="unique_dtc_reference_per_manufacturer",
+            )
+        ]
+        indexes = [
+            models.Index(fields=["code"]),
+            models.Index(fields=["system", "scope"]),
+            models.Index(fields=["manufacturer"]),
+        ]
+        verbose_name = "Справочник DTC"
+        verbose_name_plural = "Справочник DTC"
+
+    def save(self, *args, **kwargs):
+        self.code = (self.code or "").upper().strip()
+
+        if self.code:
+            if self.code[0] in ["P", "C", "B", "U"]:
+                self.system = self.code[0]
+            else:
+                self.system = self.System.OEM
+
+        self.manufacturer = (self.manufacturer or "").strip()
+
+        if not self.scope or self.scope == self.Scope.UNKNOWN:
+            self.scope = self.Scope.MANUFACTURER if self.manufacturer else self.Scope.GENERIC
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        if self.manufacturer:
+            return f"{self.code} [{self.manufacturer}]"
+        return self.code
+
+
+class OBDLiveDataPIDReference(models.Model):
+    pid = models.CharField(max_length=20, unique=True)
+    name_ru = models.CharField(max_length=255, blank=True)
+    name_en = models.CharField(max_length=255, blank=True)
+    unit = models.CharField(max_length=50, blank=True)
+
+    description_ru = models.TextField(blank=True)
+    description_en = models.TextField(blank=True)
+    diagnostic_value = models.TextField(
+        blank=True,
+        help_text="Чем этот PID полезен при диагностике.",
+    )
+
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["pid"]
+        verbose_name = "Справочник PID Live Data"
+        verbose_name_plural = "Справочник PID Live Data"
+
+    def __str__(self):
+        return f"{self.pid} — {self.name_ru or self.name_en}"
+
+
+
 class DiagnosticSession(models.Model):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.SET_NULL, null=True, blank=True
@@ -67,9 +240,34 @@ class DiagnosticCode(models.Model):
     session = models.ForeignKey(
         DiagnosticSession, on_delete=models.CASCADE, related_name="codes"
     )
-    code = models.CharField(max_length=10)
-    description = models.CharField(max_length=255, blank=True)
+    code = models.CharField(max_length=32)
+    description = models.CharField(max_length=500, blank=True)
+
+    module_code = models.CharField(max_length=64, blank=True)
+    module_name = models.CharField(max_length=255, blank=True)
+    status_text = models.CharField(max_length=64, blank=True)
+    raw_text = models.TextField(blank=True)
     is_known = models.BooleanField(default=True)
+
+    reference = models.ForeignKey(
+        DTCReference,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="session_codes",
+        help_text="Связь с глобальным справочником DTC.",
+    )
+
+    def save(self, *args, **kwargs):
+        self.code = (self.code or "").upper().strip()
+
+        if self.reference_id is None and self.code:
+            self.reference = (
+                DTCReference.objects.filter(code=self.code, manufacturer="")
+                .first()
+            )
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.code} ({self.session.vin})"
