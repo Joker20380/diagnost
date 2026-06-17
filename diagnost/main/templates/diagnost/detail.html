@@ -4,6 +4,11 @@
 {% block title %}Результат диагностики{% endblock %}
 {% block description %}Детали сессии диагностики автомобиля, найденные ошибки, рекомендации и осмотр ходовой части{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/diagnostic-report-fixes.css' %}">
+<link rel="stylesheet" href="{% static 'css/dtc-reference.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <section class="az-diagnostic-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
@@ -68,7 +73,7 @@
         <section class="az-diagnostic-card">
           <div class="az-diagnostic-card-head">
             <div>
-              <span class="az-section-kicker">DTC / коды ошибок</span>
+              <span class="az-section-kicker">Коды ошибок</span>
               <h2>Найденные коды ошибок</h2>
             </div>
 
@@ -85,11 +90,51 @@
                     {{ code.code }}
                   </div>
 
-                  <div class="az-dtc-description">
-                    <strong>{{ code.description|default:"Описание отсутствует" }}</strong>
-                    <span>
-                      Требуется проверка в контексте симптомов, данных автомобиля и фактического состояния узлов.
-                    </span>
+                  <div class="az-dtc-description az-dtc-report-description">
+                    {% with ref=code.reference %}
+                      <strong>
+                        {% if ref %}
+                          <a href="{% url 'diagnostics:dtc_detail' ref.code %}" class="az-dtc-report-title">
+                            {{ ref.title_ru|default:ref.title_en|default:code.description|default:"Описание отсутствует" }}
+                          </a>
+                        {% else %}
+                          {{ code.description|default:"Описание отсутствует" }}
+                        {% endif %}
+                      </strong>
+
+                      {% if ref %}
+                        <span>
+                          {{ ref.description_ru|default:ref.description_en|truncatechars:220|default:"Описание по этому коду пока дополняется." }}
+                        </span>
+
+                        <div class="az-dtc-report-meta">
+                          <span>{{ ref.get_system_display }}</span>
+                          <span>{{ ref.get_scope_display }}</span>
+                          <span>{{ ref.get_severity_display }}</span>
+                          {% if ref.manufacturer %}
+                            <span>{{ ref.manufacturer }}</span>
+                          {% endif %}
+                        </div>
+
+                        {% if ref.recommended_checks %}
+                          <div class="az-dtc-report-checks">
+                            <b>Что проверить:</b>
+                            {{ ref.recommended_checks|truncatechars:260 }}
+                          </div>
+                        {% endif %}
+
+                        <div class="az-dtc-report-actions">
+                          <a href="{% url 'diagnostics:dtc_detail' ref.code %}" class="az-dtc-report-link">
+                            Открыть расшифровку {{ ref.code }}
+                          </a>
+                        </div>
+                      {% else %}
+                        <span>
+                          Код пока не связан со справочником. Требуется проверка в контексте симптомов,
+                          данных автомобиля и фактического состояния узлов.
+                        </span>
+                      {% endif %}
+                    {% endwith %}
                   </div>
                 </div>
               {% endfor %}
@@ -108,44 +153,7 @@
         <section class="az-diagnostic-card">
           <div class="az-diagnostic-card-head">
             <div>
-              <span class="az-section-kicker">Анализ</span>
-              <h2>Рекомендации</h2>
-            </div>
-          </div>
-
-          {% if session.recommendation %}
-            <div class="az-ai-notice">
-              <div>
-                <strong>Системные подсказки</strong>
-                <p>
-                  Это предварительный анализ. Финальные решения фиксируются в осмотрах мастера
-                  и/или заключении специалиста.
-                </p>
-              </div>
-
-              {% if session.ai_generated_at %}
-                <span>Сгенерировано: {{ session.ai_generated_at|date:"d.m.Y H:i" }}</span>
-              {% endif %}
-            </div>
-
-            <div class="az-recommendation-box">
-              {{ session.recommendation|linebreaksbr }}
-            </div>
-          {% else %}
-            <div class="az-empty-inline">
-              <h3>Рекомендации пока не сформированы</h3>
-              <p>
-                Система ещё не подготовила предварительный анализ по этой диагностической сессии.
-              </p>
-            </div>
-          {% endif %}
-        </section>
-
-
-        <section class="az-diagnostic-card">
-          <div class="az-diagnostic-card-head">
-            <div>
-              <span class="az-section-kicker">Human evidence</span>
+              <span class="az-section-kicker">Фактология мастера</span>
               <h2>Ходовая часть</h2>
             </div>
           </div>
@@ -378,7 +386,7 @@
 
 
         <div class="az-diagnostic-side-cta">
-          <span class="az-section-kicker">Новый отчёт</span>
+          <span class="az-section-kicker">Новая диагностика</span>
 
           <h3>Нужно проверить другой автомобиль?</h3>
 

@@ -1,0 +1,250 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+
+{% block title %}{{ ref.code }} — {{ ref.title_ru|default:ref.title_en|default:"расшифровка DTC кода" }}{% endblock %}
+{% block description %}{{ ref.code }}: {{ ref.title_ru|default:ref.title_en|default:"расшифровка кода неисправности автомобиля" }}. Возможные причины, симптомы и план проверки во Владикавказе.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dtc-reference.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="az-dtc-code-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-dtc-code-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-dtc-code-hero-content">
+      <span class="az-hero-kicker">Расшифровка DTC / OBD-II</span>
+
+      <div class="az-dtc-code-label">{{ ref.code }}</div>
+
+      <h1>{{ ref.title_ru|default:ref.title_en|default:"Описание кода пока дополняется" }}</h1>
+
+      <p>
+        Код помогает определить направление диагностики, но не является готовым диагнозом.
+        Для точного вывода нужны данные автомобиля, сопутствующие ошибки, freeze frame и live data.
+      </p>
+
+      <div class="az-dtc-pill-row">
+        <span class="az-dtc-pill az-dtc-pill-dark">{{ ref.get_system_display }}</span>
+        <span class="az-dtc-pill az-dtc-pill-dark">{{ ref.get_scope_display }}</span>
+        <span class="az-dtc-pill az-dtc-pill-dark">{{ ref.get_severity_display }}</span>
+        {% if ref.manufacturer %}
+          <span class="az-dtc-pill az-dtc-pill-dark">{{ ref.manufacturer }}</span>
+        {% endif %}
+      </div>
+
+      <div class="az-hero-actions" style="margin-top: 28px;">
+        <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
+          Записаться на диагностику
+        </a>
+
+        <a href="{% url 'diagnostics:dtc_search' %}" class="az-btn az-btn-outline">
+          Найти другой код
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-diagnostic-page">
+  <div class="container">
+
+    <div class="az-diagnostic-layout">
+
+      <main class="az-diagnostic-main">
+
+        <section class="az-diagnostic-card">
+          <div class="az-diagnostic-card-head">
+            <div>
+              <span class="az-section-kicker">Описание</span>
+              <h2>Что означает {{ ref.code }}</h2>
+            </div>
+          </div>
+
+          <p class="az-dtc-text-block">
+            {{ ref.description_ru|default:ref.description_en|default:"Описание пока не заполнено. Код есть в справочнике, но подробная расшифровка ещё дополняется." }}
+          </p>
+        </section>
+
+
+        <section class="az-dtc-detail-grid">
+
+          <div class="az-diagnostic-card">
+            <div class="az-diagnostic-card-head">
+              <div>
+                <span class="az-section-kicker">Симптомы</span>
+                <h2>Как может проявляться</h2>
+              </div>
+            </div>
+
+            <p class="az-dtc-text-block">
+              {{ ref.symptoms|default:"Симптомы зависят от конкретного автомобиля, блока управления, условий появления ошибки и сопутствующих кодов." }}
+            </p>
+          </div>
+
+
+          <div class="az-diagnostic-card">
+            <div class="az-diagnostic-card-head">
+              <div>
+                <span class="az-section-kicker">Причины</span>
+                <h2>Возможные источники проблемы</h2>
+              </div>
+            </div>
+
+            <p class="az-dtc-text-block">
+              {{ ref.possible_causes|default:"Причины нужно уточнять по сопутствующим ошибкам, freeze frame, live data, питанию, массе, проводке и фактическому состоянию узла." }}
+            </p>
+          </div>
+
+        </section>
+
+
+        <section class="az-diagnostic-card">
+          <div class="az-diagnostic-card-head">
+            <div>
+              <span class="az-section-kicker">План проверки</span>
+              <h2>Что проверить в первую очередь</h2>
+            </div>
+          </div>
+
+          <p class="az-dtc-text-block">
+            {{ ref.recommended_checks|default:"Считать все блоки, проверить сопутствующие ошибки, freeze frame, live data, питание, массу, проводку и разъёмы. Не менять деталь только по одному коду." }}
+          </p>
+        </section>
+
+
+        {% if ref.diagnostic_notes %}
+          <section class="az-diagnostic-card">
+            <div class="az-diagnostic-card-head">
+              <div>
+                <span class="az-section-kicker">Практика диагностики</span>
+                <h2>Диагностические заметки</h2>
+              </div>
+            </div>
+
+            <p class="az-dtc-text-block">{{ ref.diagnostic_notes }}</p>
+          </section>
+        {% endif %}
+
+
+        <section class="az-diagnostic-card">
+          <div class="az-dtc-warning-box">
+            <strong>Важно:</strong>
+            один и тот же код может иметь разные причины на разных автомобилях.
+            Например, ошибка по смеси не всегда означает неисправный датчик, а ошибка катализатора не всегда означает,
+            что катализатор нужно сразу менять. Правильный путь — сначала диагностика, потом решение.
+          </div>
+        </section>
+
+      </main>
+
+
+      <aside class="az-diagnostic-sidebar">
+
+        <div class="az-diagnostic-side-card">
+          <span class="az-section-kicker">Сводка</span>
+          <h3>Параметры кода</h3>
+
+          <ul class="az-dtc-side-list">
+            <li>
+              <span>Код</span>
+              <strong>{{ ref.code }}</strong>
+            </li>
+
+            <li>
+              <span>Система</span>
+              <strong>{{ ref.get_system_display }}</strong>
+            </li>
+
+            <li>
+              <span>Тип</span>
+              <strong>{{ ref.get_scope_display }}</strong>
+            </li>
+
+            <li>
+              <span>Критичность</span>
+              <strong>{{ ref.get_severity_display }}</strong>
+            </li>
+
+            {% if ref.manufacturer %}
+              <li>
+                <span>Марка</span>
+                <strong>{{ ref.manufacturer }}</strong>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+
+
+        <div class="az-diagnostic-side-help">
+          <h3>Как читать DTC-код</h3>
+
+          <ol>
+            <li>Код показывает направление проверки, но не точную причину.</li>
+            <li>Важно смотреть сопутствующие ошибки и freeze frame.</li>
+            <li>Live data часто важнее самого текста ошибки.</li>
+            <li>Деталь меняют только после проверки цепи, питания, массы и условий работы.</li>
+          </ol>
+        </div>
+
+
+        <div class="az-diagnostic-side-cta">
+          <span class="az-section-kicker">Нужна проверка?</span>
+
+          <h3>Проверим код на автомобиле</h3>
+
+          <p>
+            Считаем ошибки, посмотрим live data и поможем понять реальную причину неисправности.
+          </p>
+
+          <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
+            Компьютерная диагностика
+          </a>
+        </div>
+
+
+        {% if related %}
+          <div class="az-diagnostic-side-card">
+            <span class="az-section-kicker">Варианты</span>
+            <h3>Бренд-специфичные записи</h3>
+
+            {% for item in related %}
+              <a href="{% url 'diagnostics:dtc_detail' item.code %}" class="az-dtc-related-link">
+                <strong>{{ item.code }}</strong>
+                {% if item.manufacturer %} — {{ item.manufacturer }}{% endif %}
+                <br>
+                <span>{{ item.title_ru|default:item.title_en }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+
+        <div class="az-diagnostic-side-card">
+          <span class="az-section-kicker">API</span>
+          <h3>JSON-данные</h3>
+
+          <p>
+            Эту запись можно использовать в отчётах, ассистенте и внутренних инструментах.
+          </p>
+
+          <a href="{% url 'diagnostics:dtc_api_detail' ref.code %}" class="az-btn az-btn-dark">
+            Открыть JSON
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dtc-reference.js' %}"></script>
+{% endblock %}

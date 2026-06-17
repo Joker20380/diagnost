@@ -1,0 +1,14 @@
+
+# Local patch backups
+*.bak
+*.bak.*
+*.orig
+*.rej
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Collected/static vendor output from hosting
+../static/autocomplete_light/
+../static/django_select2/

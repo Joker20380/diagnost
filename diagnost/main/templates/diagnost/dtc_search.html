@@ -1,0 +1,145 @@
+{% extends 'diagnost/base.html' %}
+{% load static %}
+
+{% block title %}Поиск DTC и OBD-II кодов{% endblock %}
+{% block description %}Справочник DTC и OBD-II кодов неисправностей автомобиля: расшифровка, возможные причины, симптомы и план проверки во Владикавказе.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dtc-reference.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="az-dtc-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
+  <div class="az-dtc-hero-overlay"></div>
+
+  <div class="container">
+    <div class="az-dtc-hero-content">
+      <span class="az-hero-kicker">DTC / OBD-II справочник</span>
+
+      <h1>Расшифровка кодов ошибок автомобиля</h1>
+
+      <p>
+        Введите код неисправности — например P0171, P0420 или U0100.
+        Справочник покажет описание, возможные причины и план проверки без замены деталей наугад.
+      </p>
+
+      <div class="az-hero-actions">
+        <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
+          Компьютерная диагностика
+        </a>
+
+        <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
+          Связаться с мастером
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="az-diagnostic-page">
+  <div class="container">
+
+    <section class="az-diagnostic-card az-dtc-search-card">
+      <div class="az-diagnostic-card-head">
+        <div>
+          <span class="az-section-kicker">Поиск по базе</span>
+          <h2>Введите DTC-код</h2>
+        </div>
+      </div>
+
+      <form method="get" class="az-dtc-search-form">
+        <input data-dtc-input name="q" value="{{ query }}" placeholder="P0171" autocomplete="off" autofocus>
+        <button type="submit" class="az-btn az-btn-primary">
+          Найти код
+        </button>
+      </form>
+
+      <div class="az-dtc-mini-note">
+        Код ошибки — это направление проверки, а не готовый диагноз.
+        Для точного вывода нужны сопутствующие ошибки, freeze frame, live data и проверка автомобиля.
+      </div>
+    </section>
+
+
+    {% if query %}
+      <section class="az-diagnostic-card">
+        <div class="az-diagnostic-card-head">
+          <div>
+            <span class="az-section-kicker">Результаты</span>
+            <h2>По запросу: {{ query }}</h2>
+          </div>
+
+          <span class="az-diagnostic-count">
+            {{ results|length }}
+          </span>
+        </div>
+
+        {% if results %}
+          <div class="az-dtc-result-list">
+            {% for item in results %}
+              <a class="az-dtc-result-item" href="{% url 'diagnostics:dtc_detail' item.code %}">
+                <div class="az-dtc-result-code">
+                  {{ item.code }}
+                </div>
+
+                <div class="az-dtc-result-body">
+                  <h3>{{ item.title_ru|default:item.title_en|default:"Описание пока не заполнено" }}</h3>
+
+                  <p>
+                    {{ item.description_ru|default:item.description_en|truncatechars:220|default:"Справка по этому коду пока дополняется." }}
+                  </p>
+
+                  <div class="az-dtc-pill-row">
+                    <span class="az-dtc-pill">{{ item.get_system_display }}</span>
+                    <span class="az-dtc-pill">{{ item.get_scope_display }}</span>
+                    <span class="az-dtc-pill">{{ item.get_severity_display }}</span>
+                    {% if item.manufacturer %}
+                      <span class="az-dtc-pill">{{ item.manufacturer }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="az-empty-inline">
+            <h3>Код не найден</h3>
+            <p>
+              В справочнике пока нет такого кода. Его можно добавить через админку или CSV-импорт.
+            </p>
+          </div>
+        {% endif %}
+      </section>
+    {% endif %}
+
+
+    <section class="az-diagnostic-card">
+      <div class="az-diagnostic-card-head">
+        <div>
+          <span class="az-section-kicker">Частые коды</span>
+          <h2>Популярные ошибки</h2>
+        </div>
+      </div>
+
+      <div class="az-dtc-popular-grid">
+        <a href="{% url 'diagnostics:dtc_detail' 'P0171' %}">P0171</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'P0420' %}">P0420</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'P0300' %}">P0300</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'P0560' %}">P0560</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'P0335' %}">P0335</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'P0340' %}">P0340</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'U0100' %}">U0100</a>
+        <a href="{% url 'diagnostics:dtc_detail' 'U0121' %}">U0121</a>
+      </div>
+    </section>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dtc-reference.js' %}"></script>
+{% endblock %}

@@ -427,14 +427,15 @@ def upload_diagnostic(request):
             session.save()
 
             # временно: фейковый анализ, пока нет парсера
-            codes = ['P0171', 'P0420']
-            for code in codes:
-                DiagnosticCode.objects.create(session=session, code=code, description="Заглушка")
-
-            session.recommendation = analyze_dtc(codes)
-            # ✅ фиксируем время генерации подсказок
-            session.ai_generated_at = timezone.now()
-            session.save(update_fields=['recommendation', 'ai_generated_at'])
+            # DTC codes must come only from a real parser/importer.
+            # Demo P0171/P0420 codes are disabled.
+            # Recommendation is generated from real Launch PDF data when possible.
+            try:
+                from diagnostics.launch_pdf_parser import parse_and_apply_launch_pdf
+                parse_and_apply_launch_pdf(session)
+            except Exception as exc:
+                session.notes = ((session.notes or "") + f"\nLaunch PDF parse error: {exc}").strip()
+                session.save(update_fields=["notes"])
 
             return redirect('diagnostic_detail', session_id=session.id)
     else:
