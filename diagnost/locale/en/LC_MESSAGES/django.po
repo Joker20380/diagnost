@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 18:01+0300\n"
+"POT-Creation-Date: 2026-06-18 18:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,15 +316,311 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
-#: main/templates/diagnost/base.html:10 main/templates/diagnost/base.html:45
-#: main/templates/diagnost/base.html:49 main/templates/diagnost/base.html:242
-#: main/templates/diagnost/base.html:243 main/templates/diagnost/base.html:244
+#: main/templates/diagnost/about.html:5
+#| msgid ""
+#| "Автозвук Владикавказ: компьютерная диагностика автомобиля, ремонт ходовой "
+#| "части, автоэлектрика, развал-схождение, шумоизоляция и аудиоподготовка."
+msgid ""
+"О компании Автозвук во Владикавказе: диагностика автомобилей, ремонт ходовой "
+"части, автоэлектрика, автозвук, шумоизоляция и технический сервис нового "
+"поколения."
+msgstr "About Avtozvuk in Vladikavkaz: car diagnostics, suspension repair, auto electrics, car audio, sound insulation and next-generation technical service."
+
+#: main/templates/diagnost/about.html:10 main/templates/diagnost/base.html:84
+#: main/templates/diagnost/base.html:307
+msgid "О нас"
+msgstr "About us"
+
+#: main/templates/diagnost/about.html:19 main/templates/diagnost/base.html:10
+#: main/templates/diagnost/base.html:45 main/templates/diagnost/base.html:49
+#: main/templates/diagnost/base.html:242 main/templates/diagnost/base.html:243
+#: main/templates/diagnost/base.html:244
 msgid "Автозвук Владикавказ"
 msgstr "Avtozvuk Vladikavkaz"
 
-#: main/templates/diagnost/base.html:53 main/templates/diagnost/index.html:214
+#: main/templates/diagnost/about.html:20
+msgid "О компании"
+msgstr "About the company"
+
+#: main/templates/diagnost/about.html:22
+#| msgid ""
+#| "Получайте новости, советы по диагностике, ремонту ходовой и обслуживанию "
+#| "автомобиля."
+msgid ""
+"Мы объединяем опыт автосервиса, диагностику, автоэлектрику, ремонт ходовой и "
+"культуру качественного автозвука."
+msgstr "We combine auto service experience, diagnostics, auto electrics, suspension repair and a culture of quality car audio."
+
+#: main/templates/diagnost/about.html:29
+msgid "Связаться с нами"
+msgstr "Contact us"
+
+#: main/templates/diagnost/about.html:32 main/templates/diagnost/index.html:152
+msgid "Смотреть проекты"
+msgstr "View projects"
+
+#: main/templates/diagnost/about.html:46
+#| msgid "Автозвук Владикавказ"
+msgid "Автосервис Автозвук во Владикавказе"
+msgstr "Avtozvuk auto service in Vladikavkaz"
+
+#: main/templates/diagnost/about.html:52
+msgid "Кто мы"
+msgstr "Who we are"
+
+#: main/templates/diagnost/about.html:53
+msgid "Техцентр, который снижает неопределённость в ремонте"
+msgstr "A technical center that reduces uncertainty in repairs"
+
+#: main/templates/diagnost/about.html:56
+msgid ""
+"«Автозвук» — это автосервис во Владикавказе, который вырос из мастерской по "
+"автомобильному звуку в комплексный технический центр. Сегодня мы занимаемся "
+"диагностикой, ремонтом ходовой части, автоэлектрикой, шумоизоляцией и "
+"установкой аудиосистем."
+msgstr "Avtozvuk is an auto service in Vladikavkaz that grew from a car audio workshop into a full technical center. Today we work with diagnostics, suspension repair, auto electrics, sound insulation and audio system installation."
+
+#: main/templates/diagnost/about.html:64
+msgid ""
+"Наш подход простой: сначала понять причину проблемы, затем предложить "
+"понятное решение. Клиент должен понимать, что происходит с автомобилем, "
+"какие работы действительно нужны и какой результат он получит после ремонта."
+msgstr "Our approach is simple: first understand the cause of the problem, then offer a clear solution. The client should understand what is happening with the car, which work is truly needed and what result they will get after the repair."
+
+#: main/templates/diagnost/about.html:74
+msgid "год начала истории"
+msgstr "year our story began"
+
+#: main/templates/diagnost/about.html:79
+msgid "лет практического опыта"
+msgstr "years of practical experience"
+
+#: main/templates/diagnost/about.html:84
+#| msgid "Подпишитесь на обновления"
+msgid "ключевых направления"
+msgstr "key service areas"
+
+#: main/templates/diagnost/about.html:100
+#| msgid "Наши проекты"
+msgid "Наши цели"
+msgstr "Our goals"
+
+#: main/templates/diagnost/about.html:101
+msgid "Делать автомобиль понятнее, надёжнее и комфортнее"
+msgstr "Making cars clearer, more reliable and more comfortable"
+
+#: main/templates/diagnost/about.html:103
+msgid ""
+"Мы развиваем сервис не как набор отдельных услуг, а как единую систему: "
+"диагностика, ремонт, настройка и сопровождение клиента."
+msgstr "We develop the service not as a set of separate jobs, but as one system: diagnostics, repair, setup and customer support."
+
+#: main/templates/diagnost/about.html:114
+#| msgid "Компьютерная диагностика"
+msgid "Точная диагностика"
+msgstr "Accurate diagnostics"
+
+#: main/templates/diagnost/about.html:116
+#| msgid ""
+#| "Используем современное оборудование и экспертный подход, чтобы быстрее "
+#| "найти причину неисправности и снизить неопределённость перед ремонтом."
+msgid ""
+"Используем современное оборудование, технический опыт и цифровой анализ для "
+"поиска реальной причины неисправности."
+msgstr "We use modern equipment, technical experience and digital analysis to find the real cause of a fault."
+
+#: main/templates/diagnost/about.html:126 main/templates/diagnost/base.html:113
+#: main/templates/diagnost/base.html:295 main/templates/diagnost/index.html:70
+#: main/templates/diagnost/index.html:198
+msgid "Ремонт ходовой"
+msgstr "Suspension repair"
+
+#: main/templates/diagnost/about.html:128
+#| msgid ""
+#| "Проверим подвеску, рулевое управление, тормозную систему и поможем "
+#| "принять правильное решение по ремонту без лишней замены деталей."
+msgid ""
+"Работаем с подвеской, рулевым управлением, тормозной системой и особенно "
+"внимательно подходим к внедорожникам."
+msgstr "We work with suspension, steering, braking systems and pay special attention to SUVs."
+
+#: main/templates/diagnost/about.html:138 main/templates/diagnost/base.html:53
+#: main/templates/diagnost/index.html:214
 msgid "Автозвук"
 msgstr "Avtozvuk"
+
+#: main/templates/diagnost/about.html:140
+msgid ""
+"Устанавливаем, настраиваем и дорабатываем аудиосистемы под автомобиль и "
+"индивидуальные предпочтения владельца."
+msgstr "We install, tune and improve audio systems for the car and the owner’s individual preferences."
+
+#: main/templates/diagnost/about.html:150
+msgid "Современное оборудование"
+msgstr "Modern equipment"
+
+#: main/templates/diagnost/about.html:152
+msgid ""
+"Используем инструменты и системы анализа, которые помогают быстрее принимать "
+"правильные технические решения."
+msgstr "We use tools and analysis systems that help make the right technical decisions faster."
+
+#: main/templates/diagnost/about.html:162
+msgid "Гарантия качества"
+msgstr "Quality assurance"
+
+#: main/templates/diagnost/about.html:164
+msgid ""
+"Опираемся на опыт мастеров, контроль результата и честное объяснение "
+"выполненных работ."
+msgstr "We rely on technician experience, result control and honest explanations of the work performed."
+
+#: main/templates/diagnost/about.html:174
+msgid "Прозрачный сервис"
+msgstr "Transparent service"
+
+#: main/templates/diagnost/about.html:176
+msgid ""
+"Объясняем клиенту проблему человеческим языком: что критично, что можно "
+"отложить и почему."
+msgstr "We explain the problem in plain language: what is critical, what can wait and why."
+
+#: main/templates/diagnost/about.html:195
+msgid "История компании"
+msgstr "Company history"
+
+#: main/templates/diagnost/about.html:196
+msgid "От одного бокса до современного автосервиса"
+msgstr "From one workshop bay to a modern auto service"
+
+#: main/templates/diagnost/about.html:198
+msgid ""
+"История «Автозвука» началась с увлечения автомобильной электроникой и "
+"качественным звуком. Со временем это выросло в полноценный сервисный центр."
+msgstr "Avtozvuk’s story began with a passion for automotive electronics and quality sound. Over time it grew into a full-service technical center."
+
+#: main/templates/diagnost/about.html:205
+msgid "Приехать в сервис"
+msgstr "Visit the service center"
+
+#: main/templates/diagnost/about.html:216
+msgid "Начало во дворе гостиницы «Кадгарон»"
+msgstr "The beginning in the courtyard of the Kadgaron hotel"
+
+#: main/templates/diagnost/about.html:218
+msgid ""
+"Компания начала работу в небольшом одиночном боксе в Республике Северная "
+"Осетия — Алания. Команда энтузиастов занималась автозвуком и автомобильной "
+"электроникой."
+msgstr "The company began in a small single workshop bay in the Republic of North Ossetia–Alania. A team of enthusiasts worked on car audio and automotive electronics."
+
+#: main/templates/diagnost/about.html:227
+msgid "Рост"
+msgstr "Growth"
+
+#: main/templates/diagnost/about.html:229
+msgid "Клиенты приходили за качеством"
+msgstr "Clients came for quality"
+
+#: main/templates/diagnost/about.html:231
+msgid ""
+"Подход отличался вниманием к деталям: не просто установка оборудования, а "
+"аккуратная настройка, индивидуальный подбор решений и работа на результат."
+msgstr "The approach stood out through attention to detail: not just equipment installation, but careful tuning, individual solution selection and result-focused work."
+
+#: main/templates/diagnost/about.html:240
+msgid "Новый этап"
+msgstr "New stage"
+
+#: main/templates/diagnost/about.html:242
+msgid "Расширение направлений"
+msgstr "Expansion of services"
+
+#: main/templates/diagnost/about.html:244
+msgid ""
+"Постепенно появились электронная диагностика, установка охранных систем, "
+"ремонт автоэлектрики, а затем и ремонт ходовой части."
+msgstr "Electronic diagnostics, security system installation, auto electrical repairs and later suspension repair were gradually added."
+
+#: main/templates/diagnost/about.html:253
+msgid "Сегодня"
+msgstr "Today"
+
+#: main/templates/diagnost/about.html:255
+msgid "Архонское шоссе, 11"
+msgstr "Arkhonskoye Highway, 11"
+
+#: main/templates/diagnost/about.html:257
+msgid ""
+"Сейчас «Автозвук» работает в просторном сервисе по адресу Архонское шоссе, "
+"11. Здесь всё ориентировано на эффективность работы мастеров и комфорт "
+"клиентов."
+msgstr "Today Avtozvuk works in a spacious service center at Arkhonskoye Highway, 11. Everything here is focused on technician efficiency and customer comfort."
+
+#: main/templates/diagnost/about.html:277
+msgid "Принципы"
+msgstr "Principles"
+
+#: main/templates/diagnost/about.html:278
+#| msgid "Что говорят клиенты"
+msgid "Что остаётся неизменным"
+msgstr "What remains unchanged"
+
+#: main/templates/diagnost/about.html:285
+msgid "Техническая честность"
+msgstr "Technical honesty"
+
+#: main/templates/diagnost/about.html:287
+msgid "Мы не подменяем диагностику догадками. Сначала проверка, потом решение."
+msgstr "We do not replace diagnostics with guesses. First we check, then we decide."
+
+#: main/templates/diagnost/about.html:296
+#| msgid "Шумоизоляция автомобиля"
+msgid "Уважение к автомобилю"
+msgstr "Respect for the car"
+
+#: main/templates/diagnost/about.html:298
+msgid ""
+"Каждый автомобиль получает аккуратное отношение — от диагностики до "
+"финальной сборки."
+msgstr "Every car is treated carefully — from diagnostics to final assembly."
+
+#: main/templates/diagnost/about.html:307
+msgid "Ответственность перед клиентом"
+msgstr "Responsibility to the client"
+
+#: main/templates/diagnost/about.html:309
+msgid ""
+"Клиент должен получить не только услугу, но и ясность: что сделано, почему и "
+"какой следующий шаг."
+msgstr "The client should receive not only a service, but also clarity: what was done, why, and what the next step is."
+
+#: main/templates/diagnost/about.html:326
+#| msgid "Диагностика"
+msgid "Нужна диагностика?"
+msgstr "Need diagnostics?"
+
+#: main/templates/diagnost/about.html:327
+#| msgid "Ремонт ходовой части автомобиля"
+msgid "Расскажите, что происходит с автомобилем"
+msgstr "Tell us what is happening with the car"
+
+#: main/templates/diagnost/about.html:329
+msgid ""
+"Поможем понять проблему, подобрать правильный сценарий диагностики и "
+"определить дальнейшие действия."
+msgstr "We will help understand the problem, choose the right diagnostic scenario and define the next steps."
+
+#: main/templates/diagnost/about.html:337 main/templates/diagnost/index.html:34
+#: main/templates/diagnost/index.html:155
+msgid "Позвонить"
+msgstr "Call"
+
+#: main/templates/diagnost/about.html:340 main/templates/diagnost/base.html:140
+#: main/templates/diagnost/base.html:310 main/templates/diagnost/base.html:315
+#: main/templates/diagnost/index.html:64
+msgid "Контакты"
+msgstr "Contacts"
 
 #: main/templates/diagnost/base.html:54
 msgid "диагностика · ремонт · тюнинг"
@@ -338,10 +634,6 @@ msgstr "Open menu"
 msgid "Домой"
 msgstr "Home"
 
-#: main/templates/diagnost/base.html:84 main/templates/diagnost/base.html:307
-msgid "О нас"
-msgstr "About us"
-
 #: main/templates/diagnost/base.html:91 main/templates/diagnost/base.html:308
 #: main/templates/diagnost/index.html:400
 msgid "Проекты"
@@ -354,11 +646,6 @@ msgstr "Services"
 #: main/templates/diagnost/base.html:108 main/templates/diagnost/base.html:290
 msgid "Компьютерная диагностика"
 msgstr "Computer diagnostics"
-
-#: main/templates/diagnost/base.html:113 main/templates/diagnost/base.html:295
-#: main/templates/diagnost/index.html:70 main/templates/diagnost/index.html:198
-msgid "Ремонт ходовой"
-msgstr "Suspension repair"
 
 #: main/templates/diagnost/base.html:117 main/templates/diagnost/base.html:298
 #: main/templates/diagnost/index.html:206
@@ -376,11 +663,6 @@ msgstr "Audio preparation"
 #: main/templates/diagnost/base.html:133 main/templates/diagnost/base.html:309
 msgid "Новости"
 msgstr "News"
-
-#: main/templates/diagnost/base.html:140 main/templates/diagnost/base.html:310
-#: main/templates/diagnost/base.html:315 main/templates/diagnost/index.html:64
-msgid "Контакты"
-msgstr "Contacts"
 
 #: main/templates/diagnost/base.html:156
 msgid "Поиск..."
@@ -414,7 +696,9 @@ msgstr "Subscribe to updates"
 msgid ""
 "Получайте новости, советы по диагностике, ремонту ходовой и обслуживанию "
 "автомобиля."
-msgstr "Receive news, diagnostic tips, suspension repair advice and car maintenance materials."
+msgstr ""
+"Receive news, diagnostic tips, suspension repair advice and car maintenance "
+"materials."
 
 #: main/templates/diagnost/base.html:224 main/templates/diagnost/base.html:225
 msgid "Ваш email"
@@ -428,7 +712,9 @@ msgstr "Subscribe"
 msgid ""
 "Диагностика, ремонт ходовой, автоэлектрика, шумоизоляция и тюнинг "
 "автомобилей во Владикавказе."
-msgstr "Diagnostics, suspension repair, auto electrics, sound insulation and car tuning in Vladikavkaz."
+msgstr ""
+"Diagnostics, suspension repair, auto electrics, sound insulation and car "
+"tuning in Vladikavkaz."
 
 #: main/templates/diagnost/base.html:280
 msgid "Рейтинг Автозвук Владикавказ в Яндекс"
@@ -466,7 +752,9 @@ msgstr "Back to top"
 msgid ""
 "Автозвук Владикавказ: компьютерная диагностика автомобиля, ремонт ходовой "
 "части, автоэлектрика, развал-схождение, шумоизоляция и аудиоподготовка."
-msgstr "Avtozvuk Vladikavkaz: computer car diagnostics, suspension repair, auto electrics, wheel alignment, sound insulation and audio preparation."
+msgstr ""
+"Avtozvuk Vladikavkaz: computer car diagnostics, suspension repair, auto "
+"electrics, wheel alignment, sound insulation and audio preparation."
 
 #: main/templates/diagnost/index.html:21
 msgid "Диагностика · ремонт · тюнинг"
@@ -480,15 +768,13 @@ msgstr "Computer car diagnostics in Vladikavkaz"
 msgid ""
 "Используем современное оборудование и экспертный подход, чтобы быстрее найти "
 "причину неисправности и снизить неопределённость перед ремонтом."
-msgstr "We use modern equipment and an expert approach to find the cause of a fault faster and reduce uncertainty before repair."
+msgstr ""
+"We use modern equipment and an expert approach to find the cause of a fault "
+"faster and reduce uncertainty before repair."
 
 #: main/templates/diagnost/index.html:31
 msgid "Записаться на диагностику"
 msgstr "Book diagnostics"
-
-#: main/templates/diagnost/index.html:34 main/templates/diagnost/index.html:155
-msgid "Позвонить"
-msgstr "Call"
 
 #: main/templates/diagnost/index.html:39
 msgid "OBD-диагностика"
@@ -514,7 +800,9 @@ msgstr "Car suspension repair"
 msgid ""
 "Проверим подвеску, рулевое управление, тормозную систему и поможем принять "
 "правильное решение по ремонту без лишней замены деталей."
-msgstr "We check the suspension, steering and braking system and help you make the right repair decision without unnecessary part replacement."
+msgstr ""
+"We check the suspension, steering and braking system and help you make the "
+"right repair decision without unnecessary part replacement."
 
 #: main/templates/diagnost/index.html:61
 msgid "Посмотреть услугу"
@@ -540,7 +828,9 @@ msgstr "Wheel alignment and handling setup"
 msgid ""
 "Настроим колёсную базу, улучшим поведение автомобиля на дороге и поможем "
 "избежать ускоренного износа шин."
-msgstr "We adjust wheel geometry, improve the car’s road behavior and help avoid accelerated tire wear."
+msgstr ""
+"We adjust wheel geometry, improve the car’s road behavior and help avoid "
+"accelerated tire wear."
 
 #: main/templates/diagnost/index.html:91
 msgid "Записаться"
@@ -574,7 +864,9 @@ msgstr "Car sound insulation"
 msgid ""
 "Улучшим акустический комфорт, снизим лишние шумы и подготовим автомобиль под "
 "качественную аудиосистему."
-msgstr "We improve acoustic comfort, reduce unwanted noise and prepare the car for a quality audio system."
+msgstr ""
+"We improve acoustic comfort, reduce unwanted noise and prepare the car for a "
+"quality audio system."
 
 #: main/templates/diagnost/index.html:121
 msgid "Обсудить проект"
@@ -612,11 +904,9 @@ msgstr "Audio preparation and sound upgrade"
 msgid ""
 "Подберём, установим и настроим компоненты так, чтобы система играла чисто, "
 "мощно и без лишних вибраций."
-msgstr "We select, install and tune components so the system sounds clean, powerful and free of unwanted vibrations."
-
-#: main/templates/diagnost/index.html:152
-msgid "Смотреть проекты"
-msgstr "View projects"
+msgstr ""
+"We select, install and tune components so the system sounds clean, powerful "
+"and free of unwanted vibrations."
 
 #: main/templates/diagnost/index.html:160
 msgid "Акустика"
@@ -646,7 +936,9 @@ msgstr "We solve car technical issues comprehensively"
 msgid ""
 "Не просто меняем детали, а выстраиваем понятную схему: диагностика, причина, "
 "решение, результат."
-msgstr "We do not simply replace parts; we build a clear path: diagnostics, cause, solution and result."
+msgstr ""
+"We do not simply replace parts; we build a clear path: diagnostics, cause, "
+"solution and result."
 
 #: main/templates/diagnost/index.html:190
 msgid "Диагностика"
@@ -666,7 +958,8 @@ msgstr "Geometry adjustment, road stability and even tire wear."
 
 #: main/templates/diagnost/index.html:215
 msgid "Аудиоподготовка, шумоизоляция, установка и настройка компонентов."
-msgstr "Audio preparation, sound insulation, component installation and tuning."
+msgstr ""
+"Audio preparation, sound insulation, component installation and tuning."
 
 #: main/templates/diagnost/index.html:230
 msgid "Диагностика автомобиля во Владикавказе"
@@ -685,7 +978,10 @@ msgid ""
 "Главная задача сервиса — не навязать замену деталей, а быстро сократить зону "
 "неопределённости. Поэтому мы начинаем с диагностики, проверки симптомов и "
 "понятного объяснения клиенту."
-msgstr "The main goal of the service is not to push part replacement, but to quickly reduce uncertainty. That is why we start with diagnostics, symptom checks and a clear explanation for the client."
+msgstr ""
+"The main goal of the service is not to push part replacement, but to quickly "
+"reduce uncertainty. That is why we start with diagnostics, symptom checks "
+"and a clear explanation for the client."
 
 #: main/templates/diagnost/index.html:249
 msgid "Фиксируем симптомы"
@@ -695,7 +991,9 @@ msgstr "Record symptoms"
 msgid ""
 "Слушаем клиента, проверяем поведение автомобиля и первичные признаки "
 "неисправности."
-msgstr "We listen to the client, check the car’s behavior and identify the first signs of a fault."
+msgstr ""
+"We listen to the client, check the car’s behavior and identify the first "
+"signs of a fault."
 
 #: main/templates/diagnost/index.html:257
 msgid "Проводим диагностику"
@@ -704,7 +1002,9 @@ msgstr "Run diagnostics"
 #: main/templates/diagnost/index.html:258
 msgid ""
 "Используем оборудование, опыт мастера и техническую логику поиска причины."
-msgstr "We use equipment, technician experience and technical logic to find the cause."
+msgstr ""
+"We use equipment, technician experience and technical logic to find the "
+"cause."
 
 #: main/templates/diagnost/index.html:265
 msgid "Даём решение"
@@ -714,7 +1014,8 @@ msgstr "Provide a solution"
 msgid ""
 "Объясняем, что нужно делать сейчас, что можно отложить и какие риски есть "
 "дальше."
-msgstr "We explain what should be done now, what can wait and what risks remain."
+msgstr ""
+"We explain what should be done now, what can wait and what risks remain."
 
 #: main/templates/diagnost/index.html:272
 msgid "Получить консультацию"
@@ -728,7 +1029,9 @@ msgstr "Fast solution"
 msgid ""
 "Оцениваем ситуацию на месте и предлагаем понятный план действий без лишнего "
 "затягивания."
-msgstr "We assess the situation on site and offer a clear action plan without unnecessary delays."
+msgstr ""
+"We assess the situation on site and offer a clear action plan without "
+"unnecessary delays."
 
 #: main/templates/diagnost/index.html:302
 msgid "Комфорт для клиента"
@@ -736,7 +1039,9 @@ msgstr "Comfort for the client"
 
 #: main/templates/diagnost/index.html:304
 msgid "Можно остаться и подождать окончание работ в удобной клиентской зоне."
-msgstr "You can stay and wait for the work to be completed in a comfortable client area."
+msgstr ""
+"You can stay and wait for the work to be completed in a comfortable client "
+"area."
 
 #: main/templates/diagnost/index.html:314
 msgid "Заказ запчастей"
@@ -770,7 +1075,9 @@ msgstr "Portfolio"
 msgid ""
 "Посмотрите примеры наших работ по автозвуку, шумоизоляции и технической "
 "доработке автомобилей."
-msgstr "See examples of our car audio, sound insulation and technical upgrade projects."
+msgstr ""
+"See examples of our car audio, sound insulation and technical upgrade "
+"projects."
 
 #: main/templates/diagnost/index.html:417
 msgid "Проект"
@@ -795,7 +1102,8 @@ msgstr "Our news"
 #: main/templates/diagnost/index.html:482
 msgid ""
 "Пишем о диагностике, ремонте, обслуживании и типичных проблемах автомобилей."
-msgstr "We write about diagnostics, repair, maintenance and common car problems."
+msgstr ""
+"We write about diagnostics, repair, maintenance and common car problems."
 
 #: main/templates/diagnost/index.html:546
 msgid "Все новости"
