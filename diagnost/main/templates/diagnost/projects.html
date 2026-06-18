@@ -1,12 +1,13 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
-{% load static %}
+{% load static i18n %}
 
 {% block description %}
+{% blocktrans trimmed %}
 Проекты Автозвук Владикавказ: автозвук, шумоизоляция, диагностика, ремонт, доработка автомобилей и реализованные работы сервиса.
+{% endblocktrans %}
 {% endblock %}
 
-{% block title %}Проекты{% endblock %}
+{% block title %}{% trans "Проекты" %}{% endblock %}
 
 {% block content %}
 
@@ -15,18 +16,20 @@
 
   <div class="container">
     <div class="az-inner-hero-content">
-      <span class="az-hero-kicker">Портфолио работ</span>
-      <h1>Наши проекты</h1>
+      <span class="az-hero-kicker">{% trans "Портфолио работ" %}</span>
+      <h1>{% trans "Наши проекты" %}</h1>
       <p>
+        {% blocktrans trimmed %}
         Показываем реальные работы по автозвуку, шумоизоляции, диагностике и технической доработке автомобилей.
+        {% endblocktrans %}
       </p>
 
       <div class="az-hero-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Обсудить проект
+          {% trans "Обсудить проект" %}
         </a>
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Контакты
+          {% trans "Контакты" %}
         </a>
       </div>
     </div>
@@ -38,11 +41,13 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Реализованные работы</span>
-      <h2>Проекты сервиса</h2>
+      <span class="az-section-kicker">{% trans "Реализованные работы" %}</span>
+      <h2>{% trans "Проекты сервиса" %}</h2>
       <p>
+        {% blocktrans trimmed %}
         Каждый проект — это не просто установка или ремонт, а конкретная техническая задача:
         понять проблему, подобрать решение и довести результат до нормального состояния.
+        {% endblocktrans %}
       </p>
     </div>
 
@@ -61,10 +66,10 @@
               </span>
 
               <span class="az-project-page-body">
-                <span class="az-project-label">Проект</span>
+                <span class="az-project-label">{% trans "Проект" %}</span>
                 <strong>{{ p.title }}</strong>
                 <span class="az-project-page-more">
-                  Смотреть подробнее
+                  {% trans "Смотреть подробнее" %}
                   <i class="ion-android-arrow-dropright-circle"></i>
                 </span>
               </span>
@@ -75,12 +80,14 @@
       </div>
     {% else %}
       <div class="az-empty-state">
-        <h3>Проекты скоро появятся</h3>
+        <h3>{% trans "Проекты скоро появятся" %}</h3>
         <p>
+          {% blocktrans trimmed %}
           Сейчас раздел наполняется. Свяжитесь с нами, если хотите обсудить диагностику, ремонт или установку автозвука.
+          {% endblocktrans %}
         </p>
         <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
-          Связаться
+          {% trans "Связаться" %}
         </a>
       </div>
     {% endif %}
@@ -96,15 +103,17 @@
 
       <div class="col-lg-5 mb-5 mb-lg-0">
         <div class="az-projects-method-content">
-          <span class="az-section-kicker">Как работаем</span>
-          <h2>Проект ведём от задачи до результата</h2>
+          <span class="az-section-kicker">{% trans "Как работаем" %}</span>
+          <h2>{% trans "Проект ведём от задачи до результата" %}</h2>
           <p>
+            {% blocktrans trimmed %}
             В хорошей работе важен не только финальный внешний вид. Важно, чтобы решение было технически правильным,
             надёжным и понятным для владельца автомобиля.
+            {% endblocktrans %}
           </p>
 
           <a href="{% url 'about' %}" class="az-link-more">
-            Узнать о компании
+            {% trans "Узнать о компании" %}
             <span class="ion-android-arrow-dropright-circle"></span>
           </a>
         </div>
@@ -115,33 +124,41 @@
 
           <div class="az-projects-method-card">
             <span>01</span>
-            <h3>Разбираем задачу</h3>
+            <h3>{% trans "Разбираем задачу" %}</h3>
             <p>
+              {% blocktrans trimmed %}
               Выясняем цель: звук, комфорт, диагностика, ремонт ходовой или устранение конкретной неисправности.
+              {% endblocktrans %}
             </p>
           </div>
 
           <div class="az-projects-method-card">
             <span>02</span>
-            <h3>Подбираем решение</h3>
+            <h3>{% trans "Подбираем решение" %}</h3>
             <p>
+              {% blocktrans trimmed %}
               Предлагаем реалистичный вариант по работам, компонентам, срокам и ожидаемому результату.
+              {% endblocktrans %}
             </p>
           </div>
 
           <div class="az-projects-method-card">
             <span>03</span>
-            <h3>Выполняем работу</h3>
+            <h3>{% trans "Выполняем работу" %}</h3>
             <p>
+              {% blocktrans trimmed %}
               Делаем установку, ремонт или настройку с контролем качества на каждом этапе.
+              {% endblocktrans %}
             </p>
           </div>
 
           <div class="az-projects-method-card">
             <span>04</span>
-            <h3>Проверяем результат</h3>
+            <h3>{% trans "Проверяем результат" %}</h3>
             <p>
+              {% blocktrans trimmed %}
               Финально проверяем работу системы, объясняем клиенту результат и дальнейшие рекомендации.
+              {% endblocktrans %}
             </p>
           </div>
 
@@ -159,10 +176,12 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Отзывы</span>
-      <h2>Отзывы клиентов</h2>
+      <span class="az-section-kicker">{% trans "Отзывы" %}</span>
+      <h2>{% trans "Отзывы клиентов" %}</h2>
       <p>
+        {% blocktrans trimmed %}
         Обратная связь помогает держать качество работ и сервиса на нормальном уровне.
+        {% endblocktrans %}
       </p>
     </div>
 
@@ -185,7 +204,7 @@
                 {% if r.email %}
                   <span>{{ r.email }}</span>
                 {% else %}
-                  <span>Клиент Автозвук</span>
+                  <span>{% trans "Клиент Автозвук" %}</span>
                 {% endif %}
               </div>
             </div>
@@ -209,20 +228,22 @@
     <div class="az-projects-cta-card">
 
       <div>
-        <span class="az-section-kicker">Есть задача по автомобилю?</span>
-        <h2>Обсудим проект до начала работ</h2>
+        <span class="az-section-kicker">{% trans "Есть задача по автомобилю?" %}</span>
+        <h2>{% trans "Обсудим проект до начала работ" %}</h2>
         <p>
+          {% blocktrans trimmed %}
           Расскажите, что хотите получить: диагностику, ремонт ходовой, шумоизоляцию, улучшение звука
           или комплексную доработку автомобиля.
+          {% endblocktrans %}
         </p>
       </div>
 
       <div class="az-projects-cta-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Позвонить
+          {% trans "Позвонить" %}
         </a>
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Написать / приехать
+          {% trans "Написать / приехать" %}
         </a>
       </div>
 
