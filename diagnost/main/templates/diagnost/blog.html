@@ -1,12 +1,13 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
-{% load static %}
+{% load static i18n %}
 
 {% block description %}
+{% blocktrans trimmed %}
 Новости Автозвук Владикавказ: диагностика автомобилей, ремонт ходовой, автозвук, шумоизоляция, автоэлектрика и полезные советы для владельцев авто.
+{% endblocktrans %}
 {% endblock %}
 
-{% block title %}Новости{% endblock %}
+{% block title %}{% trans "Новости" %}{% endblock %}
 
 {% block content %}
 
@@ -15,20 +16,22 @@
 
   <div class="container">
     <div class="az-inner-hero-content">
-      <span class="az-hero-kicker">Новости и полезные материалы</span>
-      <h1>Наши новости</h1>
+      <span class="az-hero-kicker">{% trans "Новости и полезные материалы" %}</span>
+      <h1>{% trans "Наши новости" %}</h1>
       <p>
+        {% blocktrans trimmed %}
         Публикуем материалы о диагностике, ремонте ходовой, автоэлектрике, автозвуке,
         шумоизоляции и обслуживании автомобилей.
+        {% endblocktrans %}
       </p>
 
       <div class="az-hero-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Получить консультацию
+          {% trans "Получить консультацию" %}
         </a>
 
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Контакты сервиса
+          {% trans "Контакты сервиса" %}
         </a>
       </div>
     </div>
@@ -41,11 +44,13 @@
 
     <div class="az-blog-page-head">
       <div>
-        <span class="az-section-kicker">База знаний</span>
-        <h2>Новости и статьи</h2>
+        <span class="az-section-kicker">{% trans "База знаний" %}</span>
+        <h2>{% trans "Новости и статьи" %}</h2>
         <p>
+          {% blocktrans trimmed %}
           Собираем полезные материалы, которые помогают лучше понимать автомобиль,
           вовремя замечать неисправности и принимать правильные решения по ремонту.
+          {% endblocktrans %}
         </p>
       </div>
 
@@ -54,8 +59,9 @@
         <input type="text"
                name="q"
                value="{{ request.GET.q }}"
-               placeholder="Поиск по новостям...">
-        <button type="submit">Найти</button>
+               placeholder="{% trans 'Поиск по новостям...' %}"
+               aria-label="{% trans 'Поиск по новостям' %}">
+        <button type="submit">{% trans "Найти" %}</button>
       </form>
     </div>
 
@@ -88,7 +94,7 @@
                 </p>
 
                 <a href="{{ n.get_absolute_url }}" class="az-link-more">
-                  Читать дальше
+                  {% trans "Читать дальше" %}
                   <span class="ion-android-arrow-dropright-circle"></span>
                 </a>
               </div>
@@ -100,22 +106,26 @@
     {% else %}
       <div class="az-empty-state">
         {% if request.GET.q %}
-          <h3>По запросу ничего не найдено</h3>
+          <h3>{% trans "По запросу ничего не найдено" %}</h3>
           <p>
+            {% blocktrans trimmed %}
             Попробуйте изменить поисковую фразу или вернуться ко всем новостям.
+            {% endblocktrans %}
           </p>
 
           <a href="{% url 'blog' %}" class="az-btn az-btn-dark">
-            Все новости
+            {% trans "Все новости" %}
           </a>
         {% else %}
-          <h3>Новости скоро появятся</h3>
+          <h3>{% trans "Новости скоро появятся" %}</h3>
           <p>
+            {% blocktrans trimmed %}
             Раздел наполняется материалами о диагностике, ремонте, автозвуке и обслуживании автомобилей.
+            {% endblocktrans %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
-            Связаться с сервисом
+            {% trans "Связаться с сервисом" %}
           </a>
         {% endif %}
       </div>
@@ -129,10 +139,12 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Темы</span>
-      <h2>О чём пишем</h2>
+      <span class="az-section-kicker">{% trans "Темы" %}</span>
+      <h2>{% trans "О чём пишем" %}</h2>
       <p>
+        {% blocktrans trimmed %}
         Новости работают не только для SEO, но и как нормальная база знаний для клиента.
+        {% endblocktrans %}
       </p>
     </div>
 
@@ -141,32 +153,32 @@
       <div class="col-md-6 col-lg-3 mb-4">
         <div class="az-blog-topic-card">
           <span class="ion ion-easel"></span>
-          <h3>Диагностика</h3>
-          <p>Ошибки, симптомы, электронные системы и поиск причины неисправности.</p>
+          <h3>{% trans "Диагностика" %}</h3>
+          <p>{% trans "Ошибки, симптомы, электронные системы и поиск причины неисправности." %}</p>
         </div>
       </div>
 
       <div class="col-md-6 col-lg-3 mb-4">
         <div class="az-blog-topic-card">
           <span class="ion ion-hammer"></span>
-          <h3>Ходовая часть</h3>
-          <p>Подвеска, рулевое управление, тормоза, шумы, стуки и вибрации.</p>
+          <h3>{% trans "Ходовая часть" %}</h3>
+          <p>{% trans "Подвеска, рулевое управление, тормоза, шумы, стуки и вибрации." %}</p>
         </div>
       </div>
 
       <div class="col-md-6 col-lg-3 mb-4">
         <div class="az-blog-topic-card">
           <span class="ion ion-volume-high"></span>
-          <h3>Автозвук</h3>
-          <p>Аудиосистемы, установка компонентов, шумоизоляция и настройка звука.</p>
+          <h3>{% trans "Автозвук" %}</h3>
+          <p>{% trans "Аудиосистемы, установка компонентов, шумоизоляция и настройка звука." %}</p>
         </div>
       </div>
 
       <div class="col-md-6 col-lg-3 mb-4">
         <div class="az-blog-topic-card">
           <span class="ion ion-flash"></span>
-          <h3>Автоэлектрика</h3>
-          <p>Электронные неисправности, питание, датчики, блоки и сопутствующие проблемы.</p>
+          <h3>{% trans "Автоэлектрика" %}</h3>
+          <p>{% trans "Электронные неисправности, питание, датчики, блоки и сопутствующие проблемы." %}</p>
         </div>
       </div>
 
@@ -181,10 +193,12 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Отзывы</span>
-      <h2>Отзывы клиентов</h2>
+      <span class="az-section-kicker">{% trans "Отзывы" %}</span>
+      <h2>{% trans "Отзывы клиентов" %}</h2>
       <p>
+        {% blocktrans trimmed %}
         Обратная связь показывает, насколько понятным и полезным был сервис для клиента.
+        {% endblocktrans %}
       </p>
     </div>
 
@@ -207,7 +221,7 @@
                 {% if r.email %}
                   <span>{{ r.email }}</span>
                 {% else %}
-                  <span>Клиент Автозвук</span>
+                  <span>{% trans "Клиент Автозвук" %}</span>
                 {% endif %}
               </div>
             </div>
@@ -231,21 +245,23 @@
     <div class="az-blog-cta-card">
 
       <div>
-        <span class="az-section-kicker">Есть вопрос по автомобилю?</span>
-        <h2>Не ждите, пока мелкий симптом станет дорогим ремонтом</h2>
+        <span class="az-section-kicker">{% trans "Есть вопрос по автомобилю?" %}</span>
+        <h2>{% trans "Не ждите, пока мелкий симптом станет дорогим ремонтом" %}</h2>
         <p>
+          {% blocktrans trimmed %}
           Позвоните нам, расскажите, что происходит с автомобилем, и мы подскажем,
           стоит ли начинать с диагностики, осмотра ходовой или проверки электроники.
+          {% endblocktrans %}
         </p>
       </div>
 
       <div class="az-blog-cta-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Позвонить
+          {% trans "Позвонить" %}
         </a>
 
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Контакты
+          {% trans "Контакты" %}
         </a>
       </div>
 
