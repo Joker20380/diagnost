@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 00:43+0100\n"
+"POT-Creation-Date: 2026-06-18 17:35+0300\n"
 "PO-Revision-Date: 2026-01-17 00:00+0100\n"
 "Last-Translator: AI-Diagnostics Team <info@ai-diagnostics.be>\n"
 "Language-Team: French\n"
@@ -18,155 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: diagnost/diagnost/settings.py:152
-msgid "Deutsch"
-msgstr "Duits"
-
-
-#: diagnost/diagnost/settings.py:153
-msgid "English"
-msgstr "Anglais"
-
-#: diagnost/diagnost/settings.py:154
-msgid "Nederlands"
-msgstr "Néerlandais"
-
-#: diagnost/diagnost/settings.py:155
-msgid "Français"
-msgstr "Français"
-
-#: diagnost/main/templates/account/account_inactive.html:5
-#: diagnost/main/templates/account/account_inactive.html:9
-msgid "Account Inactive"
-msgstr "Compte inactif"
-
-#: diagnost/main/templates/account/account_inactive.html:12
-msgid "This account is inactive."
-msgstr "Ce compte est inactif."
-
-#: diagnost/main/templates/account/base_reauthenticate.html:5
-#: diagnost/main/templates/account/base_reauthenticate.html:9
-msgid "Confirm Access"
-msgstr "Confirmer l’accès"
-
-#: diagnost/main/templates/account/base_reauthenticate.html:12
-msgid "Please reauthenticate to safeguard your account."
-msgstr "Veuillez vous réauthentifier afin de sécuriser votre compte."
-
-#: diagnost/main/templates/account/base_reauthenticate.html:19
-#: diagnost/main/templates/mfa/authenticate.html:37
-msgid "Alternative options"
-msgstr "Options alternatives"
-
-#: diagnost/main/templates/account/confirm_email_verification_code.html:5
-msgid "Email Verification"
-msgstr "Vérification de l’e-mail"
-
-#: diagnost/main/templates/account/confirm_email_verification_code.html:9
-msgid "Enter Email Verification Code"
-msgstr "Saisir le code de vérification de l’e-mail"
-
-#: diagnost/main/templates/account/confirm_email_verification_code.html:15
-#: diagnost/main/templates/account/confirm_login_code.html:15
-#, python-format
-msgid ""
-"We’ve sent a code to %(email_link)s. The code expires shortly, so please "
-"enter it soon."
-msgstr ""
-"Nous avons envoyé un code à %(email_link)s. Ce code expire prochainement, "
-"merci de le saisir rapidement."
-
-#: diagnost/main/templates/account/confirm_email_verification_code.html:27
-#: diagnost/main/templates/account/email_confirm.html:24
-#: diagnost/main/templates/account/reauthenticate.html:18
-#: diagnost/main/templates/mfa/reauthenticate.html:18
-msgid "Confirm"
-msgstr "Confirmer"
-
-#: diagnost/main/templates/account/confirm_email_verification_code.html:31
-#: diagnost/main/templates/account/confirm_email_verification_code.html:35
-#: diagnost/main/templates/account/confirm_login_code.html:32
-#: diagnost/main/templates/mfa/authenticate.html:28
-#: diagnost/main/templates/mfa/authenticate.html:44
-#: diagnost/main/templates/mfa/webauthn/signup_form.html:26
-msgid "Cancel"
-msgstr "Annuler"
-
-#: diagnost/main/templates/account/confirm_login_code.html:5
-#: diagnost/main/templates/account/confirm_login_code.html:27
-#: diagnost/main/templates/account/login.html:6
-#: diagnost/main/templates/account/request_login_code.html:5
-#: diagnost/main/templates/allauth/layouts/base.html:68
-#: diagnost/main/templates/mfa/authenticate.html:6
-#: diagnost/main/templates/mfa/authenticate.html:24
-#: diagnost/main/templates/openid/login.html:5
-#: diagnost/main/templates/openid/login.html:9
-#: diagnost/main/templates/openid/login.html:20
-#: diagnost/main/templates/socialaccount/login.html:7
-#: diagnost/main/templates/socialaccount/login_redirect.html:5
-msgid "Sign In"
-msgstr "Se connecter"
-
-#: diagnost/main/templates/account/confirm_login_code.html:9
-msgid "Enter Sign-In Code"
-msgstr "Saisir le code de connexion"
-
-#: diagnost/main/templates/account/email.html:4
-#: diagnost/main/templates/account/signup.html:5
-#: diagnost/main/templates/account/signup_by_passkey.html:4
-#: diagnost/main/templates/socialaccount/signup.html:5
-msgid "Signup"
-msgstr "Inscription"
-
-#: diagnost/main/templates/account/email.html:35
-msgid "Email Addresses"
-msgstr "Adresses e-mail"
-
-#: diagnost/main/templates/account/email.html:39
-msgid "The following email addresses are associated with your account:"
-msgstr "Les adresses e-mail suivantes sont associées à votre compte :"
-
-#: diagnost/main/templates/account/email.html:52
-msgid "Verified"
-msgstr "Vérifiée"
-
-#: diagnost/main/templates/account/email.html:56
-msgid "Unverified"
-msgstr "Non vérifiée"
-
-#: diagnost/main/templates/account/email.html:61
-msgid "Primary"
-msgstr "Principale"
-
-#: diagnost/main/templates/account/email.html:72
-msgid "Make Primary"
-msgstr "Définir comme principale"
-
-#: diagnost/main/templates/account/email.html:79
-#: diagnost/main/templates/account/email_change.html:37
-msgid "Re-send Verification"
-msgstr "Renvoyer la vérification"
-
-#: diagnost/main/templates/account/email.html:86
-#: diagnost/main/templates/mfa/webauthn/authenticator_confirm_delete.html:16
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:60
-#: diagnost/main/templates/socialaccount/connections.html:40
-msgid "Remove"
-msgstr "Supprimer"
-
-#: diagnost/main/templates/account/email.html:97
-msgid "Add Email Address"
-msgstr "Ajouter une adresse e-mail"
-
-#: diagnost/main/templates/account/email.html:109
-msgid "Add Email"
-msgstr "Ajouter l’e-mail"
-
-#: diagnost/main/templates/account/email.html:126
-msgid "Do you really want to remove the selected email address?"
-msgstr "Souhaitez-vous vraiment supprimer l’adresse e-mail sélectionnée ?"
-
-#: diagnost/main/templates/account/email/account_already_exists_message.txt:4
+#: main/templates/account/email/account_already_exists_message.txt:4
 #, python-format
 msgid ""
 "You are receiving this email because you or someone else tried to signup for "
@@ -183,7 +34,8 @@ msgid ""
 "\n"
 "%(password_reset_url)s"
 msgstr ""
-"Vous recevez cet e-mail car vous ou une autre personne avez tenté de créer un\n"
+"Vous recevez cet e-mail car vous ou une autre personne avez tenté de créer "
+"un\n"
 "compte avec l’adresse e-mail suivante :\n"
 "\n"
 "%(email)s\n"
@@ -194,16 +46,16 @@ msgstr ""
 "\n"
 "%(password_reset_url)s"
 
-#: diagnost/main/templates/account/email/account_already_exists_subject.txt:3
+#: main/templates/account/email/account_already_exists_subject.txt:3
 msgid "Account Already Exists"
 msgstr "Le compte existe déjà"
 
-#: diagnost/main/templates/account/email/base_message.txt:1
+#: main/templates/account/email/base_message.txt:1
 #, python-format
 msgid "Hello from %(site_name)s!"
 msgstr "Bonjour de la part de %(site_name)s !"
 
-#: diagnost/main/templates/account/email/base_message.txt:5
+#: main/templates/account/email/base_message.txt:5
 #, python-format
 msgid ""
 "Thank you for using %(site_name)s!\n"
@@ -212,7 +64,7 @@ msgstr ""
 "Merci d’utiliser %(site_name)s !\n"
 "%(site_domain)s"
 
-#: diagnost/main/templates/account/email/base_notification.txt:5
+#: main/templates/account/email/base_notification.txt:5
 msgid ""
 "You are receiving this mail because the following change was made to your "
 "account:"
@@ -220,7 +72,7 @@ msgstr ""
 "Vous recevez cet e-mail car la modification suivante a été apportée à votre "
 "compte :"
 
-#: diagnost/main/templates/account/email/base_notification.txt:10
+#: main/templates/account/email/base_notification.txt:10
 #, python-format
 msgid ""
 "If you do not recognize this change then please take proper security "
@@ -238,24 +90,24 @@ msgstr ""
 "- Navigateur : %(user_agent)s\n"
 "- Date : %(timestamp)s"
 
-#: diagnost/main/templates/account/email/email_changed_message.txt:4
+#: main/templates/account/email/email_changed_message.txt:4
 #, python-format
 msgid "Your email has been changed from %(from_email)s to %(to_email)s."
 msgstr "Votre adresse e-mail a été modifiée de %(from_email)s à %(to_email)s."
 
-#: diagnost/main/templates/account/email/email_changed_subject.txt:3
+#: main/templates/account/email/email_changed_subject.txt:3
 msgid "Email Changed"
 msgstr "E-mail modifié"
 
-#: diagnost/main/templates/account/email/email_confirm_message.txt:4
+#: main/templates/account/email/email_confirm_message.txt:4
 msgid "Your email has been confirmed."
 msgstr "Votre adresse e-mail a été confirmée."
 
-#: diagnost/main/templates/account/email/email_confirm_subject.txt:3
+#: main/templates/account/email/email_confirm_subject.txt:3
 msgid "Email Confirmation"
 msgstr "Confirmation de l’e-mail"
 
-#: diagnost/main/templates/account/email/email_confirmation_message.txt:5
+#: main/templates/account/email/email_confirmation_message.txt:5
 #, python-format
 msgid ""
 "You're receiving this email because user %(user_display)s has given your "
@@ -264,7 +116,7 @@ msgstr ""
 "Vous recevez cet e-mail car l’utilisateur %(user_display)s a indiqué votre "
 "adresse e-mail pour créer un compte sur %(site_domain)s."
 
-#: diagnost/main/templates/account/email/email_confirmation_message.txt:7
+#: main/templates/account/email/email_confirmation_message.txt:7
 msgid ""
 "Your email verification code is listed below. Please enter it in your open "
 "browser window."
@@ -272,25 +124,25 @@ msgstr ""
 "Votre code de vérification d’e-mail est indiqué ci-dessous. Veuillez le "
 "saisir dans la fenêtre de votre navigateur."
 
-#: diagnost/main/templates/account/email/email_confirmation_message.txt:9
+#: main/templates/account/email/email_confirmation_message.txt:9
 #, python-format
 msgid "To confirm this is correct, go to %(activate_url)s"
 msgstr "Pour confirmer, rendez-vous sur %(activate_url)s"
 
-#: diagnost/main/templates/account/email/email_confirmation_subject.txt:3
+#: main/templates/account/email/email_confirmation_subject.txt:3
 msgid "Please Confirm Your Email Address"
 msgstr "Veuillez confirmer votre adresse e-mail"
 
-#: diagnost/main/templates/account/email/email_deleted_message.txt:4
+#: main/templates/account/email/email_deleted_message.txt:4
 #, python-format
 msgid "Email address %(deleted_email)s has been removed from your account."
 msgstr "L’adresse e-mail %(deleted_email)s a été supprimée de votre compte."
 
-#: diagnost/main/templates/account/email/email_deleted_subject.txt:3
+#: main/templates/account/email/email_deleted_subject.txt:3
 msgid "Email Removed"
 msgstr "E-mail supprimé"
 
-#: diagnost/main/templates/account/email/login_code_message.txt:5
+#: main/templates/account/email/login_code_message.txt:5
 msgid ""
 "Your sign-in code is listed below. Please enter it in your open browser "
 "window."
@@ -298,26 +150,26 @@ msgstr ""
 "Votre code de connexion est indiqué ci-dessous. Veuillez le saisir dans la "
 "fenêtre de votre navigateur."
 
-#: diagnost/main/templates/account/email/login_code_message.txt:9
-#: diagnost/main/templates/account/email/unknown_account_message.txt:6
+#: main/templates/account/email/login_code_message.txt:9
+#: main/templates/account/email/unknown_account_message.txt:6
 msgid "This mail can be safely ignored if you did not initiate this action."
 msgstr ""
 "Vous pouvez ignorer cet e-mail en toute sécurité si vous n’êtes pas à "
 "l’origine de cette action."
 
-#: diagnost/main/templates/account/email/login_code_subject.txt:3
+#: main/templates/account/email/login_code_subject.txt:3
 msgid "Sign-In Code"
 msgstr "Code de connexion"
 
-#: diagnost/main/templates/account/email/password_changed_message.txt:4
+#: main/templates/account/email/password_changed_message.txt:4
 msgid "Your password has been changed."
 msgstr "Votre mot de passe a été modifié."
 
-#: diagnost/main/templates/account/email/password_changed_subject.txt:3
+#: main/templates/account/email/password_changed_subject.txt:3
 msgid "Password Changed"
 msgstr "Mot de passe modifié"
 
-#: diagnost/main/templates/account/email/password_reset_key_message.txt:4
+#: main/templates/account/email/password_reset_key_message.txt:4
 msgid ""
 "You're receiving this email because you or someone else has requested a "
 "password reset for your user account.\n"
@@ -329,35 +181,32 @@ msgstr ""
 "Vous pouvez ignorer cet e-mail si vous n’êtes pas à l’origine de la demande. "
 "Cliquez sur le lien ci-dessous pour réinitialiser votre mot de passe."
 
-#: diagnost/main/templates/account/email/password_reset_key_message.txt:9
+#: main/templates/account/email/password_reset_key_message.txt:9
 #, python-format
 msgid "In case you forgot, your username is %(username)s."
 msgstr "En cas d’oubli, votre nom d’utilisateur est %(username)s."
 
-#: diagnost/main/templates/account/email/password_reset_key_subject.txt:3
+#: main/templates/account/email/password_reset_key_subject.txt:3
 msgid "Password Reset Email"
 msgstr "E-mail de réinitialisation du mot de passe"
 
-#: diagnost/main/templates/account/email/password_reset_message.txt:4
+#: main/templates/account/email/password_reset_message.txt:4
 msgid "Your password has been reset."
 msgstr "Votre mot de passe a été réinitialisé."
 
-#: diagnost/main/templates/account/email/password_reset_subject.txt:3
-#: diagnost/main/templates/account/password_reset.html:5
-#: diagnost/main/templates/account/password_reset_done.html:7
-#: diagnost/main/templates/account/password_reset_from_key.html:7
+#: main/templates/account/email/password_reset_subject.txt:3
 msgid "Password Reset"
 msgstr "Réinitialisation du mot de passe"
 
-#: diagnost/main/templates/account/email/password_set_message.txt:4
+#: main/templates/account/email/password_set_message.txt:4
 msgid "Your password has been set."
 msgstr "Votre mot de passe a été défini."
 
-#: diagnost/main/templates/account/email/password_set_subject.txt:3
+#: main/templates/account/email/password_set_subject.txt:3
 msgid "Password Set"
 msgstr "Mot de passe défini"
 
-#: diagnost/main/templates/account/email/unknown_account_message.txt:4
+#: main/templates/account/email/unknown_account_message.txt:4
 #, python-format
 msgid ""
 "You are receiving this email because you, or someone else, tried to access "
@@ -368,63 +217,23 @@ msgstr ""
 "à un compte avec l’adresse e-mail %(email)s. Cependant, aucun compte "
 "correspondant n’existe dans notre base de données."
 
-#: diagnost/main/templates/account/email/unknown_account_message.txt:8
+#: main/templates/account/email/unknown_account_message.txt:8
 msgid "If it was you, you can sign up for an account using the link below."
 msgstr ""
 "Si vous êtes à l’origine de cette action, vous pouvez créer un compte via le "
 "lien ci-dessous."
 
-#: diagnost/main/templates/account/email/unknown_account_subject.txt:3
+#: main/templates/account/email/unknown_account_subject.txt:3
 msgid "Unknown Account"
 msgstr "Compte inconnu"
 
-#: diagnost/main/templates/account/email_change.html:5
-#: diagnost/main/templates/account/email_change.html:9
-msgid "Email Address"
-msgstr "Adresse e-mail"
-
-#: diagnost/main/templates/account/email_change.html:21
-#: diagnost/main/templates/account/email_change.html:29
-msgid "Current email"
-msgstr "E-mail actuel"
-
-#: diagnost/main/templates/account/email_change.html:31
-msgid "Changing to"
-msgstr "Changer vers"
-
-#: diagnost/main/templates/account/email_change.html:35
-msgid "Your email address is still pending verification."
-msgstr "Votre adresse e-mail est toujours en attente de vérification."
-
-#: diagnost/main/templates/account/email_change.html:41
-msgid "Cancel Change"
-msgstr "Annuler la modification"
-
-#: diagnost/main/templates/account/email_change.html:49
-msgid "Change to"
-msgstr "Changer vers"
-
-#: diagnost/main/templates/account/email_change.html:55
-#: diagnost/main/templates/allauth/layouts/base.html:31
-msgid "Change Email"
-msgstr "Modifier l’e-mail"
-
-#: diagnost/main/templates/account/email_confirm.html:6
-#: diagnost/main/templates/account/email_confirm.html:10
-msgid "Confirm Email Address"
-msgstr "Confirmer l’adresse e-mail"
-
-#: diagnost/main/templates/account/email_confirm.html:16
+#: main/templates/account/messages/cannot_delete_primary_email.txt:2
 #, python-format
-msgid ""
-"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an email "
-"address for user %(user_display)s."
+msgid "You cannot remove your primary email address (%(email)s)."
 msgstr ""
-"Veuillez confirmer que <a href=\"mailto:%(email)s\">%(email)s</a> est bien "
-"l’adresse e-mail de l’utilisateur %(user_display)s."
+"Vous ne pouvez pas supprimer votre adresse e-mail principale (%(email)s)."
 
-#: diagnost/main/templates/account/email_confirm.html:30
-#: diagnost/main/templates/account/messages/email_confirmation_failed.txt:2
+#: main/templates/account/messages/email_confirmation_failed.txt:2
 #, python-format
 msgid ""
 "Unable to confirm %(email)s because it is already confirmed by a different "
@@ -433,292 +242,363 @@ msgstr ""
 "Impossible de confirmer %(email)s car cette adresse est déjà confirmée par "
 "un autre compte."
 
-#: diagnost/main/templates/account/email_confirm.html:36
-#, python-format
-msgid ""
-"This email confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new email confirmation request</a>."
-msgstr ""
-"Ce lien de confirmation a expiré ou est invalide. Veuillez <a "
-"href=\"%(email_url)s\">demander un nouvel e-mail de confirmation</a>."
-
-#: diagnost/main/templates/account/login.html:44
-#, python-format
-msgid ""
-"If you have not created an account yet, then please %(link)ssign "
-"up%(end_link)s first."
-msgstr ""
-"Si vous n’avez pas encore créé de compte, veuillez d’abord vous "
-"%(link)sinscrire%(end_link)s."
-
-#: diagnost/main/templates/account/login.html:68
-msgid "Sign in with a passkey"
-msgstr "Se connecter avec une clé d’accès"
-
-#: diagnost/main/templates/account/login.html:73
-#: diagnost/main/templates/account/request_login_code.html:9
-msgid "Mail me a sign-in code"
-msgstr "M’envoyer un code de connexion"
-
-#: diagnost/main/templates/account/logout.html:5
-#: diagnost/main/templates/allauth/layouts/base.html:61
-msgid "Sign Out"
-msgstr "Se déconnecter"
-
-#: diagnost/main/templates/account/logout.html:35
-msgid "Are you sure you want to sign out?"
-msgstr "Êtes-vous sûr de vouloir vous déconnecter ?"
-
-#: diagnost/main/templates/account/messages/cannot_delete_primary_email.txt:2
-#, python-format
-msgid "You cannot remove your primary email address (%(email)s)."
-msgstr "Vous ne pouvez pas supprimer votre adresse e-mail principale (%(email)s)."
-
-#: diagnost/main/templates/account/messages/email_confirmation_sent.txt:2
+#: main/templates/account/messages/email_confirmation_sent.txt:2
 #, python-format
 msgid "Confirmation email sent to %(email)s."
 msgstr "E-mail de confirmation envoyé à %(email)s."
 
-#: diagnost/main/templates/account/messages/email_confirmed.txt:2
+#: main/templates/account/messages/email_confirmed.txt:2
 #, python-format
 msgid "You have confirmed %(email)s."
 msgstr "Vous avez confirmé %(email)s."
 
-#: diagnost/main/templates/account/messages/email_deleted.txt:2
+#: main/templates/account/messages/email_deleted.txt:2
 #, python-format
 msgid "Removed email address %(email)s."
 msgstr "Adresse e-mail %(email)s supprimée."
 
-#: diagnost/main/templates/account/messages/logged_in.txt:4
+#: main/templates/account/messages/logged_in.txt:4
 #, python-format
 msgid "Successfully signed in as %(name)s."
 msgstr "Connexion réussie en tant que %(name)s."
 
-#: diagnost/main/templates/account/messages/logged_out.txt:2
+#: main/templates/account/messages/logged_out.txt:2
 msgid "You have signed out."
 msgstr "Vous êtes déconnecté."
 
-#: diagnost/main/templates/account/messages/login_code_sent.txt:2
+#: main/templates/account/messages/login_code_sent.txt:2
 #, python-format
 msgid "A sign-in code has been mailed to %(email)s."
 msgstr "Un code de connexion a été envoyé à %(email)s."
 
-#: diagnost/main/templates/account/messages/password_changed.txt:2
+#: main/templates/account/messages/password_changed.txt:2
 msgid "Password successfully changed."
 msgstr "Mot de passe modifié avec succès."
 
-#: diagnost/main/templates/account/messages/password_set.txt:2
+#: main/templates/account/messages/password_set.txt:2
 msgid "Password successfully set."
 msgstr "Mot de passe défini avec succès."
 
-#: diagnost/main/templates/account/messages/primary_email_set.txt:2
+#: main/templates/account/messages/primary_email_set.txt:2
 msgid "Primary email address set."
 msgstr "Adresse e-mail principale définie."
 
-#: diagnost/main/templates/account/messages/unverified_primary_email.txt:2
+#: main/templates/account/messages/unverified_primary_email.txt:2
 msgid "Your primary email address must be verified."
 msgstr "Votre adresse e-mail principale doit être vérifiée."
 
-#: diagnost/main/templates/account/password_change.html:4
-#: diagnost/main/templates/account/password_change.html:8
-#: diagnost/main/templates/account/password_change.html:20
-#: diagnost/main/templates/account/password_reset_from_key_done.html:5
-#: diagnost/main/templates/allauth/layouts/base.html:37
-msgid "Change Password"
-msgstr "Modifier le mot de passe"
-
-#: diagnost/main/templates/account/password_change.html:22
-msgid "Forgot Password?"
-msgstr "Mot de passe oublié ?"
-
-#: diagnost/main/templates/account/password_reset.html:41
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll send you "
-"an email allowing you to reset it."
-msgstr ""
-"Mot de passe oublié ? Saisissez votre adresse e-mail ci-dessous et nous vous "
-"enverrons un e-mail pour le réinitialiser."
-
-#: diagnost/main/templates/account/password_reset.html:54
-msgid "Reset My Password"
-msgstr "Réinitialiser mon mot de passe"
-
-#: diagnost/main/templates/account/password_reset.html:61
-msgid "Please contact us if you have any trouble resetting your password."
-msgstr ""
-"Veuillez nous contacter si vous rencontrez des difficultés pour "
-"réinitialiser votre mot de passe."
-
-#: diagnost/main/templates/account/password_reset_done.html:43
-msgid ""
-"We have sent you an email. If you have not received it please check your "
-"spam folder. Otherwise contact us if you do not receive it in a few minutes."
-msgstr ""
-"Nous vous avons envoyé un e-mail. Si vous ne l’avez pas reçu, veuillez "
-"vérifier votre dossier spam. Sinon, contactez-nous si vous ne le recevez pas "
-"dans quelques minutes."
-
-#: diagnost/main/templates/account/password_reset_from_key_done.html:38
-msgid "Your password is now changed."
-msgstr "Votre mot de passe a été modifié."
-
-#: diagnost/main/templates/account/password_set.html:6
-#: diagnost/main/templates/account/password_set.html:18
-#: diagnost/main/templates/account/password_set.html:22
-#: diagnost/main/templates/account/password_set.html:76
-msgid "Set Password"
-msgstr "Définir le mot de passe"
-
-#: diagnost/main/templates/account/reauthenticate.html:6
-msgid "Enter your password:"
-msgstr "Saisissez votre mot de passe :"
-
-#: diagnost/main/templates/account/request_login_code.html:12
-msgid ""
-"You will receive an email containing a special code for a password-free sign-"
-"in."
-msgstr ""
-"Vous recevrez un e-mail contenant un code spécial pour une connexion sans "
-"mot de passe."
-
-#: diagnost/main/templates/account/request_login_code.html:24
-msgid "Request Code"
-msgstr "Demander un code"
-
-#: diagnost/main/templates/account/request_login_code.html:30
-msgid "Other sign-in options"
-msgstr "Autres options de connexion"
-
-#: diagnost/main/templates/account/signup_by_passkey.html:8
-msgid "Passkey Sign Up"
-msgstr "Inscription avec clé d’accès"
-
-#: diagnost/main/templates/account/signup_by_passkey.html:17
-#, python-format
-msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
-msgstr ""
-"Vous avez déjà un compte ? Veuillez alors vous %(link)sconnecter%(end_link)s."
-
-#: diagnost/main/templates/account/signup_by_passkey.html:29
-#: diagnost/main/templates/allauth/layouts/base.html:74
-#: diagnost/main/templates/socialaccount/signup.html:9
-#: diagnost/main/templates/socialaccount/signup.html:25
-msgid "Sign Up"
-msgstr "S’inscrire"
-
-#: diagnost/main/templates/account/signup_by_passkey.html:36
-msgid "Other options"
-msgstr "Autres options"
-
-#: diagnost/main/templates/account/signup_closed.html:5
-#: diagnost/main/templates/account/signup_closed.html:9
-msgid "Sign Up Closed"
-msgstr "Inscriptions fermées"
-
-#: diagnost/main/templates/account/signup_closed.html:12
-msgid "We are sorry, but the sign up is currently closed."
-msgstr "Nous sommes désolés, mais les inscriptions sont actuellement fermées."
-
-#: diagnost/main/templates/account/snippets/already_logged_in.html:7
+#: main/templates/account/snippets/already_logged_in.html:7
 msgid "Note"
 msgstr "Note"
 
-#: diagnost/main/templates/account/snippets/already_logged_in.html:7
+#: main/templates/account/snippets/already_logged_in.html:7
 #, python-format
 msgid "You are already logged in as %(user_display)s."
 msgstr "Vous êtes déjà connecté en tant que %(user_display)s."
 
-#: diagnost/main/templates/account/snippets/warn_no_email.html:3
+#: main/templates/account/snippets/warn_no_email.html:3
 msgid "Warning:"
 msgstr "Attention :"
 
-#: diagnost/main/templates/account/snippets/warn_no_email.html:3
+#: main/templates/account/snippets/warn_no_email.html:3
 msgid ""
 "You currently do not have any email address set up. You should really add an "
 "email address so you can receive notifications, reset your password, etc."
 msgstr ""
 "Vous n’avez actuellement aucune adresse e-mail configurée. Il est fortement "
-"recommandé d’en ajouter une afin de recevoir des notifications, réinitialiser "
-"votre mot de passe, etc."
+"recommandé d’en ajouter une afin de recevoir des notifications, "
+"réinitialiser votre mot de passe, etc."
 
-#: diagnost/main/templates/account/verification_sent.html:5
-#: diagnost/main/templates/account/verification_sent.html:9
-#: diagnost/main/templates/account/verified_email_required.html:5
-#: diagnost/main/templates/account/verified_email_required.html:9
-msgid "Verify Your Email Address"
-msgstr "Vérifiez votre adresse e-mail"
-
-#: diagnost/main/templates/account/verification_sent.html:12
-msgid ""
-"We have sent an email to you for verification. Follow the link provided to "
-"finalize the signup process. If you do not see the verification email in "
-"your main inbox, check your spam folder. Please contact us if you do not "
-"receive the verification email within a few minutes."
-msgstr ""
-"Nous vous avons envoyé un e-mail de vérification. Suivez le lien fourni pour "
-"finaliser le processus d’inscription. Si vous ne voyez pas l’e-mail dans "
-"votre boîte de réception, vérifiez votre dossier spam. Contactez-nous si "
-"vous ne le recevez pas dans les minutes qui suivent."
-
-#: diagnost/main/templates/account/verified_email_required.html:13
-msgid ""
-"This part of the site requires us to verify that\n"
-"you are who you claim to be. For this purpose, we require that you\n"
-"verify ownership of your email address. "
-msgstr ""
-"Cette partie du site nécessite que nous vérifiions\n"
-"votre identité. Pour cela, nous vous demandons de\n"
-"confirmer la propriété de votre adresse e-mail. "
-
-#: diagnost/main/templates/account/verified_email_required.html:18
-msgid ""
-"We have sent an email to you for\n"
-"verification. Please click on the link inside that email. If you do not see "
-"the verification email in your main inbox, check your spam folder. "
-"Otherwise\n"
-"contact us if you do not receive it within a few minutes."
-msgstr ""
-"Nous vous avons envoyé un e-mail de\n"
-"vérification. Veuillez cliquer sur le lien contenu dans cet e-mail. Si vous "
-"ne le voyez pas dans votre boîte de réception, vérifiez votre dossier spam. "
-"Sinon,\n"
-"contactez-nous si vous ne le recevez pas dans les minutes qui suivent."
-
-#: diagnost/main/templates/account/verified_email_required.html:23
-#, python-format
-msgid ""
-"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your "
-"email address</a>."
-msgstr ""
-"<strong>Note :</strong> vous pouvez toujours <a href=\"%(email_url)s\">modifier "
-"votre adresse e-mail</a>."
-
-#: diagnost/main/templates/allauth/layouts/base.html:18
+#: main/templates/allauth/layouts/base.html:18
 msgid "Messages:"
 msgstr "Messages :"
 
-#: diagnost/main/templates/allauth/layouts/base.html:25
+#: main/templates/allauth/layouts/base.html:25
 msgid "Menu:"
 msgstr "Menu :"
 
-#: diagnost/main/templates/allauth/layouts/base.html:43
-#: diagnost/main/templates/socialaccount/connections.html:5
-#: diagnost/main/templates/socialaccount/connections.html:9
+#: main/templates/allauth/layouts/base.html:31
+msgid "Change Email"
+msgstr "Modifier l’e-mail"
+
+#: main/templates/allauth/layouts/base.html:37
+msgid "Change Password"
+msgstr "Modifier le mot de passe"
+
+#: main/templates/allauth/layouts/base.html:43
+#: main/templates/socialaccount/connections.html:5
+#: main/templates/socialaccount/connections.html:9
 msgid "Account Connections"
 msgstr "Connexions de compte"
 
-#: diagnost/main/templates/allauth/layouts/base.html:49
-#: diagnost/main/templates/mfa/authenticate.html:10
-#: diagnost/main/templates/mfa/index.html:5
-#: diagnost/main/templates/mfa/index.html:9
+#: main/templates/allauth/layouts/base.html:49
+#: main/templates/mfa/authenticate.html:10 main/templates/mfa/index.html:5
+#: main/templates/mfa/index.html:9
 msgid "Two-Factor Authentication"
 msgstr "Authentification à deux facteurs"
 
-#: diagnost/main/templates/allauth/layouts/base.html:55
+#: main/templates/allauth/layouts/base.html:55
 msgid "Sessions"
 msgstr "Sessions"
 
-#: diagnost/main/templates/mfa/authenticate.html:13
+#: main/templates/allauth/layouts/base.html:61
+msgid "Sign Out"
+msgstr "Se déconnecter"
+
+#: main/templates/allauth/layouts/base.html:68
+#: main/templates/mfa/authenticate.html:6
+#: main/templates/mfa/authenticate.html:24 main/templates/openid/login.html:5
+#: main/templates/openid/login.html:9 main/templates/openid/login.html:20
+#: main/templates/socialaccount/login.html:7
+#: main/templates/socialaccount/login_redirect.html:5
+msgid "Sign In"
+msgstr "Se connecter"
+
+#: main/templates/allauth/layouts/base.html:74
+#: main/templates/socialaccount/signup.html:9
+#: main/templates/socialaccount/signup.html:25
+msgid "Sign Up"
+msgstr "S’inscrire"
+
+#: main/templates/diagnost/base.html:10 main/templates/diagnost/base.html:45
+#: main/templates/diagnost/base.html:49 main/templates/diagnost/base.html:247
+#: main/templates/diagnost/base.html:248 main/templates/diagnost/base.html:249
+msgid "Автозвук Владикавказ"
+msgstr ""
+
+#: main/templates/diagnost/base.html:53
+msgid "Автозвук"
+msgstr ""
+
+#: main/templates/diagnost/base.html:54
+msgid "диагностика · ремонт · тюнинг"
+msgstr ""
+
+#: main/templates/diagnost/base.html:64
+msgid "Открыть меню"
+msgstr ""
+
+#: main/templates/diagnost/base.html:77
+msgid "Домой"
+msgstr ""
+
+#: main/templates/diagnost/base.html:84 main/templates/diagnost/base.html:312
+msgid "О нас"
+msgstr ""
+
+#: main/templates/diagnost/base.html:91 main/templates/diagnost/base.html:313
+msgid "Проекты"
+msgstr ""
+
+#: main/templates/diagnost/base.html:102 main/templates/diagnost/base.html:291
+msgid "Услуги"
+msgstr ""
+
+#: main/templates/diagnost/base.html:108 main/templates/diagnost/base.html:295
+msgid "Компьютерная диагностика"
+msgstr ""
+
+#: main/templates/diagnost/base.html:113 main/templates/diagnost/base.html:300
+msgid "Ремонт ходовой"
+msgstr ""
+
+#: main/templates/diagnost/base.html:117 main/templates/diagnost/base.html:303
+msgid "Развал-схождение"
+msgstr ""
+
+#: main/templates/diagnost/base.html:121 main/templates/diagnost/base.html:304
+msgid "Шумоизоляция"
+msgstr ""
+
+#: main/templates/diagnost/base.html:125 main/templates/diagnost/base.html:305
+msgid "Аудиоподготовка"
+msgstr ""
+
+#: main/templates/diagnost/base.html:133 main/templates/diagnost/base.html:314
+msgid "Новости"
+msgstr ""
+
+#: main/templates/diagnost/base.html:140 main/templates/diagnost/base.html:315
+#: main/templates/diagnost/base.html:320
+msgid "Контакты"
+msgstr ""
+
+#: main/templates/diagnost/base.html:156
+msgid "Поиск..."
+msgstr ""
+
+#: main/templates/diagnost/base.html:157
+msgid "Поиск по сайту"
+msgstr ""
+
+#: main/templates/diagnost/base.html:165 main/templates/diagnost/base.html:169
+msgid "Выбор языка"
+msgstr ""
+
+#: main/templates/diagnost/base.html:180
+msgid "Позвонить в Автозвук"
+msgstr ""
+
+#: main/templates/diagnost/base.html:198
+msgid "Закрыть уведомление"
+msgstr ""
+
+#: main/templates/diagnost/base.html:214
+msgid "Новости и полезные материалы"
+msgstr ""
+
+#: main/templates/diagnost/base.html:215
+msgid "Подпишитесь на обновления"
+msgstr ""
+
+#: main/templates/diagnost/base.html:217
+msgid ""
+"Получайте новости, советы по диагностике, ремонту ходовой и обслуживанию "
+"автомобиля."
+msgstr ""
+
+#: main/templates/diagnost/base.html:229 main/templates/diagnost/base.html:230
+msgid "Ваш email"
+msgstr ""
+
+#: main/templates/diagnost/base.html:235
+msgid "Подписаться"
+msgstr ""
+
+#: main/templates/diagnost/base.html:253
+msgid ""
+"Диагностика, ремонт ходовой, автоэлектрика, шумоизоляция и тюнинг "
+"автомобилей во Владикавказе."
+msgstr ""
+
+#: main/templates/diagnost/base.html:285
+msgid "Рейтинг Автозвук Владикавказ в Яндекс"
+msgstr ""
+
+#: main/templates/diagnost/base.html:310
+msgid "Навигация"
+msgstr ""
+
+#: main/templates/diagnost/base.html:324
+msgid "Адрес"
+msgstr ""
+
+#: main/templates/diagnost/base.html:325
+msgid "РСО-Алания, г. Владикавказ, Архонское шоссе д. 11"
+msgstr ""
+
+#: main/templates/diagnost/base.html:329
+msgid "Телефон"
+msgstr ""
+
+#: main/templates/diagnost/base.html:343
+msgid "Автозвук Владикавказ. Все права защищены."
+msgstr ""
+
+#: main/templates/diagnost/base.html:347
+msgid "Разработка:"
+msgstr ""
+
+#: main/templates/diagnost/base.html:354
+msgid "Наверх"
+msgstr ""
+
+#: main/templates/diagnost/news-view.html:35
+msgid "No image"
+msgstr ""
+
+#: main/templates/diagnost/news-view.html:60
+msgid "Subscribe"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:4
+#: main/templates/diagnost/unsubscribe_form.html:16
+#: main/templates/diagnost/unsubscribe_form.html:67
+msgid "Unsubscribe"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:5
+msgid "Unsubscribe from email notifications"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:18
+msgid "Manage your email notification preferences"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:34
+msgid "Confirm unsubscription"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:36
+msgid ""
+"You will stop receiving informational and service emails. This will not "
+"affect your account or access to the platform."
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:71
+#: main/templates/diagnost/upload.html:96
+msgid "Back to home"
+msgstr ""
+
+#: main/templates/diagnost/unsubscribe_form.html:78
+msgid "You can resubscribe at any time by subscribing again on the website."
+msgstr ""
+
+#: main/templates/diagnost/upload.html:5
+msgid ""
+"Upload a vehicle diagnostic report for structured analysis and "
+"recommendations."
+msgstr ""
+
+#: main/templates/diagnost/upload.html:7 main/templates/diagnost/upload.html:17
+msgid "Upload diagnostics"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:19
+msgid ""
+"Upload a diagnostic report to generate a structured analysis and preliminary "
+"recommendations."
+msgstr ""
+
+#: main/templates/diagnost/upload.html:35
+msgid "Upload your report"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:37
+msgid ""
+"The uploaded file will be processed automatically. Diagnostic data is used "
+"exclusively for analysis and is not shared with third parties."
+msgstr ""
+
+#: main/templates/diagnost/upload.html:52
+msgid "Vehicle VIN"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:65
+msgid "Vehicle model"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:78
+msgid "Diagnostic report file"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:86
+msgid ""
+"Supported formats: Launch X431 diagnostic reports. Maximum file size depends "
+"on system limits."
+msgstr ""
+
+#: main/templates/diagnost/upload.html:92
+msgid "Upload and analyze"
+msgstr ""
+
+#: main/templates/diagnost/upload.html:101
+msgid ""
+"The analysis result will be available after processing. Final conclusions "
+"must be confirmed during technician inspection."
+msgstr ""
+
+#: main/templates/mfa/authenticate.html:13
 msgid ""
 "Your account is protected by two-factor authentication. Please enter an "
 "authenticator code:"
@@ -726,189 +606,205 @@ msgstr ""
 "Votre compte est protégé par l’authentification à deux facteurs. Veuillez "
 "saisir le code d’authentification :"
 
-#: diagnost/main/templates/mfa/authenticate.html:41
-#: diagnost/main/templates/mfa/webauthn/reauthenticate.html:15
+#: main/templates/mfa/authenticate.html:28
+#: main/templates/mfa/authenticate.html:44
+#: main/templates/mfa/webauthn/signup_form.html:26
+msgid "Cancel"
+msgstr "Annuler"
+
+#: main/templates/mfa/authenticate.html:37
+msgid "Alternative options"
+msgstr "Options alternatives"
+
+#: main/templates/mfa/authenticate.html:41
+#: main/templates/mfa/webauthn/reauthenticate.html:15
 msgid "Use a security key"
 msgstr "Utiliser une clé de sécurité"
 
-#: diagnost/main/templates/mfa/email/recovery_codes_generated_message.txt:4
+#: main/templates/mfa/email/recovery_codes_generated_message.txt:4
 msgid ""
 "A new set of Two-Factor Authentication recovery codes has been generated."
 msgstr ""
 "Un nouvel ensemble de codes de récupération pour l’authentification à deux "
 "facteurs a été généré."
 
-#: diagnost/main/templates/mfa/email/recovery_codes_generated_subject.txt:3
+#: main/templates/mfa/email/recovery_codes_generated_subject.txt:3
 msgid "New Recovery Codes Generated"
 msgstr "Nouveaux codes de récupération générés"
 
-#: diagnost/main/templates/mfa/email/totp_activated_message.txt:4
-#: diagnost/main/templates/mfa/messages/totp_activated.txt:2
+#: main/templates/mfa/email/totp_activated_message.txt:4
+#: main/templates/mfa/messages/totp_activated.txt:2
 msgid "Authenticator app activated."
 msgstr "Application d’authentification activée."
 
-#: diagnost/main/templates/mfa/email/totp_activated_subject.txt:3
+#: main/templates/mfa/email/totp_activated_subject.txt:3
 msgid "Authenticator App Activated"
 msgstr "Application d’authentification activée"
 
-#: diagnost/main/templates/mfa/email/totp_deactivated_message.txt:4
-#: diagnost/main/templates/mfa/messages/totp_deactivated.txt:2
+#: main/templates/mfa/email/totp_deactivated_message.txt:4
+#: main/templates/mfa/messages/totp_deactivated.txt:2
 msgid "Authenticator app deactivated."
 msgstr "Application d’authentification désactivée."
 
-#: diagnost/main/templates/mfa/email/totp_deactivated_subject.txt:3
+#: main/templates/mfa/email/totp_deactivated_subject.txt:3
 msgid "Authenticator App Deactivated"
 msgstr "Application d’authentification désactivée"
 
-#: diagnost/main/templates/mfa/email/webauthn_added_message.txt:4
+#: main/templates/mfa/email/webauthn_added_message.txt:4
 msgid "A new security key has been added."
 msgstr "Une nouvelle clé de sécurité a été ajoutée."
 
-#: diagnost/main/templates/mfa/email/webauthn_added_subject.txt:3
+#: main/templates/mfa/email/webauthn_added_subject.txt:3
 msgid "Security Key Added"
 msgstr "Clé de sécurité ajoutée"
 
-#: diagnost/main/templates/mfa/email/webauthn_removed_message.txt:4
+#: main/templates/mfa/email/webauthn_removed_message.txt:4
 msgid "A security key has been removed."
 msgstr "Une clé de sécurité a été supprimée."
 
-#: diagnost/main/templates/mfa/email/webauthn_removed_subject.txt:3
+#: main/templates/mfa/email/webauthn_removed_subject.txt:3
 msgid "Security Key Removed"
 msgstr "Clé de sécurité supprimée"
 
-#: diagnost/main/templates/mfa/index.html:14
-#: diagnost/main/templates/mfa/totp/base.html:4
+#: main/templates/mfa/index.html:14 main/templates/mfa/totp/base.html:4
 msgid "Authenticator App"
 msgstr "Application d’authentification"
 
-#: diagnost/main/templates/mfa/index.html:19
+#: main/templates/mfa/index.html:19
 msgid "Authentication using an authenticator app is active."
 msgstr "L’authentification via l’application d’authentification est active."
 
-#: diagnost/main/templates/mfa/index.html:23
+#: main/templates/mfa/index.html:23
 msgid "An authenticator app is not active."
 msgstr "Aucune application d’authentification n’est active."
 
-#: diagnost/main/templates/mfa/index.html:32
-#: diagnost/main/templates/mfa/totp/deactivate_form.html:24
+#: main/templates/mfa/index.html:32
+#: main/templates/mfa/totp/deactivate_form.html:24
 msgid "Deactivate"
 msgstr "Désactiver"
 
-#: diagnost/main/templates/mfa/index.html:36
-#: diagnost/main/templates/mfa/totp/activate_form.html:32
+#: main/templates/mfa/index.html:36
+#: main/templates/mfa/totp/activate_form.html:32
 msgid "Activate"
 msgstr "Activer"
 
-#: diagnost/main/templates/mfa/index.html:45
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:8
-#: diagnost/main/templates/mfa/webauthn/base.html:4
+#: main/templates/mfa/index.html:45
+#: main/templates/mfa/webauthn/authenticator_list.html:8
+#: main/templates/mfa/webauthn/base.html:4
 msgid "Security Keys"
 msgstr "Clés de sécurité"
 
-#: diagnost/main/templates/mfa/index.html:50
+#: main/templates/mfa/index.html:50
 #, python-format
 msgid "You have added %(count)s security key."
 msgid_plural "You have added %(count)s security keys."
 msgstr[0] "Vous avez ajouté %(count)s clé de sécurité."
 msgstr[1] "Vous avez ajouté %(count)s clés de sécurité."
 
-#: diagnost/main/templates/mfa/index.html:54
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:12
+#: main/templates/mfa/index.html:54
+#: main/templates/mfa/webauthn/authenticator_list.html:12
 msgid "No security keys have been added."
 msgstr "Aucune clé de sécurité n’a été ajoutée."
 
-#: diagnost/main/templates/mfa/index.html:62
+#: main/templates/mfa/index.html:62
 msgid "Manage"
 msgstr "Gérer"
 
-#: diagnost/main/templates/mfa/index.html:67
-#: diagnost/main/templates/mfa/webauthn/add_form.html:18
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:70
+#: main/templates/mfa/index.html:67
+#: main/templates/mfa/webauthn/add_form.html:18
+#: main/templates/mfa/webauthn/authenticator_list.html:70
 msgid "Add"
 msgstr "Ajouter"
 
-#: diagnost/main/templates/mfa/index.html:77
-#: diagnost/main/templates/mfa/recovery_codes/base.html:4
-#: diagnost/main/templates/mfa/recovery_codes/generate.html:6
-#: diagnost/main/templates/mfa/recovery_codes/index.html:6
+#: main/templates/mfa/index.html:77
+#: main/templates/mfa/recovery_codes/base.html:4
+#: main/templates/mfa/recovery_codes/generate.html:6
+#: main/templates/mfa/recovery_codes/index.html:6
 msgid "Recovery Codes"
 msgstr "Codes de récupération"
 
-#: diagnost/main/templates/mfa/index.html:82
-#: diagnost/main/templates/mfa/recovery_codes/index.html:9
+#: main/templates/mfa/index.html:82
+#: main/templates/mfa/recovery_codes/index.html:9
 #, python-format
 msgid ""
 "There is %(unused_count)s out of %(total_count)s recovery codes available."
 msgid_plural ""
 "There are %(unused_count)s out of %(total_count)s recovery codes available."
-msgstr[0] "Il y a %(unused_count)s code de récupération disponible sur %(total_count)s."
-msgstr[1] "Il y a %(unused_count)s codes de récupération disponibles sur %(total_count)s."
+msgstr[0] ""
+"Il y a %(unused_count)s code de récupération disponible sur %(total_count)s."
+msgstr[1] ""
+"Il y a %(unused_count)s codes de récupération disponibles sur "
+"%(total_count)s."
 
-#: diagnost/main/templates/mfa/index.html:86
+#: main/templates/mfa/index.html:86
 msgid "No recovery codes set up."
 msgstr "Aucun code de récupération configuré."
 
-#: diagnost/main/templates/mfa/index.html:96
+#: main/templates/mfa/index.html:96
 msgid "View"
 msgstr "Voir"
 
-#: diagnost/main/templates/mfa/index.html:102
+#: main/templates/mfa/index.html:102
 msgid "Download"
 msgstr "Télécharger"
 
-#: diagnost/main/templates/mfa/index.html:110
-#: diagnost/main/templates/mfa/recovery_codes/generate.html:29
+#: main/templates/mfa/index.html:110
+#: main/templates/mfa/recovery_codes/generate.html:29
 msgid "Generate"
 msgstr "Générer"
 
-#: diagnost/main/templates/mfa/messages/recovery_codes_generated.txt:2
+#: main/templates/mfa/messages/recovery_codes_generated.txt:2
 msgid "A new set of recovery codes has been generated."
 msgstr "Un nouvel ensemble de codes de récupération a été généré."
 
-#: diagnost/main/templates/mfa/messages/webauthn_added.txt:2
+#: main/templates/mfa/messages/webauthn_added.txt:2
 msgid "Security key added."
 msgstr "Clé de sécurité ajoutée."
 
-#: diagnost/main/templates/mfa/messages/webauthn_removed.txt:2
+#: main/templates/mfa/messages/webauthn_removed.txt:2
 msgid "Security key removed."
 msgstr "Clé de sécurité supprimée."
 
-#: diagnost/main/templates/mfa/reauthenticate.html:6
+#: main/templates/mfa/reauthenticate.html:6
 msgid "Enter an authenticator code:"
 msgstr "Saisissez le code d’authentification :"
 
-#: diagnost/main/templates/mfa/recovery_codes/generate.html:9
+#: main/templates/mfa/reauthenticate.html:18
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: main/templates/mfa/recovery_codes/generate.html:9
 msgid "You are about to generate a new set of recovery codes for your account."
 msgstr ""
-"Vous êtes sur le point de générer un nouvel ensemble de codes de récupération "
-"pour votre compte."
+"Vous êtes sur le point de générer un nouvel ensemble de codes de "
+"récupération pour votre compte."
 
-#: diagnost/main/templates/mfa/recovery_codes/generate.html:11
+#: main/templates/mfa/recovery_codes/generate.html:11
 msgid "This action will invalidate your existing codes."
 msgstr "Cette action invalidera vos codes existants."
 
-#: diagnost/main/templates/mfa/recovery_codes/generate.html:13
+#: main/templates/mfa/recovery_codes/generate.html:13
 msgid "Are you sure?"
 msgstr "Êtes-vous sûr ?"
 
-#: diagnost/main/templates/mfa/recovery_codes/index.html:13
+#: main/templates/mfa/recovery_codes/index.html:13
 msgid "Unused codes"
 msgstr "Codes inutilisés"
 
-#: diagnost/main/templates/mfa/recovery_codes/index.html:25
+#: main/templates/mfa/recovery_codes/index.html:25
 msgid "Download codes"
 msgstr "Télécharger les codes"
 
-#: diagnost/main/templates/mfa/recovery_codes/index.html:30
+#: main/templates/mfa/recovery_codes/index.html:30
 msgid "Generate new codes"
 msgstr "Générer de nouveaux codes"
 
-#: diagnost/main/templates/mfa/totp/activate_form.html:4
-#: diagnost/main/templates/mfa/totp/activate_form.html:8
+#: main/templates/mfa/totp/activate_form.html:4
+#: main/templates/mfa/totp/activate_form.html:8
 msgid "Activate Authenticator App"
 msgstr "Activer l’application d’authentification"
 
-#: diagnost/main/templates/mfa/totp/activate_form.html:11
+#: main/templates/mfa/totp/activate_form.html:11
 msgid ""
 "To protect your account with two-factor authentication, scan the QR code "
 "below with your authenticator app. Then, input the verification code "
@@ -918,11 +814,11 @@ msgstr ""
 "le code QR ci-dessous avec votre application d’authentification, puis "
 "saisissez le code de vérification généré par l’application."
 
-#: diagnost/main/templates/mfa/totp/activate_form.html:21
+#: main/templates/mfa/totp/activate_form.html:21
 msgid "Authenticator secret"
 msgstr "Secret d’authentification"
 
-#: diagnost/main/templates/mfa/totp/activate_form.html:24
+#: main/templates/mfa/totp/activate_form.html:24
 msgid ""
 "You can store this secret and use it to reinstall your authenticator app at "
 "a later time."
@@ -930,12 +826,12 @@ msgstr ""
 "Vous pouvez conserver ce secret et l’utiliser ultérieurement pour "
 "réinstaller votre application d’authentification."
 
-#: diagnost/main/templates/mfa/totp/deactivate_form.html:5
-#: diagnost/main/templates/mfa/totp/deactivate_form.html:9
+#: main/templates/mfa/totp/deactivate_form.html:5
+#: main/templates/mfa/totp/deactivate_form.html:9
 msgid "Deactivate Authenticator App"
 msgstr "Désactiver l’application d’authentification"
 
-#: diagnost/main/templates/mfa/totp/deactivate_form.html:12
+#: main/templates/mfa/totp/deactivate_form.html:12
 msgid ""
 "You are about to deactivate authenticator app based authentication. Are you "
 "sure?"
@@ -943,69 +839,75 @@ msgstr ""
 "Vous êtes sur le point de désactiver l’authentification via l’application "
 "d’authentification. Êtes-vous sûr ?"
 
-#: diagnost/main/templates/mfa/webauthn/add_form.html:7
+#: main/templates/mfa/webauthn/add_form.html:7
 msgid "Add Security Key"
 msgstr "Ajouter une clé de sécurité"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_confirm_delete.html:6
+#: main/templates/mfa/webauthn/authenticator_confirm_delete.html:6
 msgid "Remove Security Key"
 msgstr "Supprimer la clé de sécurité"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_confirm_delete.html:9
+#: main/templates/mfa/webauthn/authenticator_confirm_delete.html:9
 msgid "Are you sure you want to remove this security key?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette clé de sécurité ?"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:18
+#: main/templates/mfa/webauthn/authenticator_confirm_delete.html:16
+#: main/templates/mfa/webauthn/authenticator_list.html:60
+#: main/templates/socialaccount/connections.html:40
+msgid "Remove"
+msgstr "Supprimer"
+
+#: main/templates/mfa/webauthn/authenticator_list.html:18
 msgid "Key"
 msgstr "Clé"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:21
+#: main/templates/mfa/webauthn/authenticator_list.html:21
 msgid "Usage"
 msgstr "Utilisation"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:33
+#: main/templates/mfa/webauthn/authenticator_list.html:33
 msgid "Passkey"
 msgstr "Clé d’accès"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:37
+#: main/templates/mfa/webauthn/authenticator_list.html:37
 msgid "Security key"
 msgstr "Clé de sécurité"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:40
+#: main/templates/mfa/webauthn/authenticator_list.html:40
 msgid "This key does not indicate whether it is a passkey."
 msgstr "Cette clé n’indique pas s’il s’agit d’une clé d’accès."
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:41
+#: main/templates/mfa/webauthn/authenticator_list.html:41
 msgid "Unspecified"
 msgstr "Non spécifié"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:46
+#: main/templates/mfa/webauthn/authenticator_list.html:46
 #, python-format
 msgid "Added on %(created_at)s"
 msgstr "Ajoutée le %(created_at)s"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:48
+#: main/templates/mfa/webauthn/authenticator_list.html:48
 #, python-format
 msgid "Last used %(last_used)s"
 msgstr "Dernière utilisation %(last_used)s"
 
-#: diagnost/main/templates/mfa/webauthn/authenticator_list.html:56
+#: main/templates/mfa/webauthn/authenticator_list.html:56
 msgid "Edit"
 msgstr "Modifier"
 
-#: diagnost/main/templates/mfa/webauthn/edit_form.html:7
+#: main/templates/mfa/webauthn/edit_form.html:7
 msgid "Edit Security Key"
 msgstr "Modifier la clé de sécurité"
 
-#: diagnost/main/templates/mfa/webauthn/edit_form.html:18
+#: main/templates/mfa/webauthn/edit_form.html:18
 msgid "Save"
 msgstr "Enregistrer"
 
-#: diagnost/main/templates/mfa/webauthn/signup_form.html:7
+#: main/templates/mfa/webauthn/signup_form.html:7
 msgid "Create Passkey"
 msgstr "Créer une clé d’accès"
 
-#: diagnost/main/templates/mfa/webauthn/signup_form.html:10
+#: main/templates/mfa/webauthn/signup_form.html:10
 msgid ""
 "You are about to create a passkey for your account. As you can add "
 "additional keys later on, you can use a descriptive name to tell the keys "
@@ -1015,27 +917,27 @@ msgstr ""
 "vous pourrez ajouter d’autres clés ultérieurement, vous pouvez utiliser un "
 "nom descriptif pour les différencier."
 
-#: diagnost/main/templates/mfa/webauthn/signup_form.html:21
+#: main/templates/mfa/webauthn/signup_form.html:21
 msgid "Create"
 msgstr "Créer"
 
-#: diagnost/main/templates/mfa/webauthn/snippets/scripts.html:2
+#: main/templates/mfa/webauthn/snippets/scripts.html:2
 msgid "This functionality requires JavaScript."
 msgstr "Cette fonctionnalité nécessite JavaScript."
 
-#: diagnost/main/templates/socialaccount/authentication_error.html:5
-#: diagnost/main/templates/socialaccount/authentication_error.html:9
+#: main/templates/socialaccount/authentication_error.html:5
+#: main/templates/socialaccount/authentication_error.html:9
 msgid "Third-Party Login Failure"
 msgstr "Échec de connexion via un service tiers"
 
-#: diagnost/main/templates/socialaccount/authentication_error.html:12
+#: main/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your third-party account."
 msgstr ""
 "Une erreur s’est produite lors de la tentative de connexion via votre compte "
 "tiers."
 
-#: diagnost/main/templates/socialaccount/connections.html:13
+#: main/templates/socialaccount/connections.html:13
 msgid ""
 "You can sign in to your account using any of the following third-party "
 "accounts:"
@@ -1043,41 +945,41 @@ msgstr ""
 "Vous pouvez vous connecter à votre compte en utilisant l’un des comptes "
 "tiers suivants :"
 
-#: diagnost/main/templates/socialaccount/connections.html:46
+#: main/templates/socialaccount/connections.html:46
 msgid "You currently have no third-party accounts connected to this account."
 msgstr "Aucun compte tiers n’est actuellement connecté à ce compte."
 
-#: diagnost/main/templates/socialaccount/connections.html:50
+#: main/templates/socialaccount/connections.html:50
 msgid "Add a Third-Party Account"
 msgstr "Ajouter un compte tiers"
 
-#: diagnost/main/templates/socialaccount/email/account_connected_message.txt:4
+#: main/templates/socialaccount/email/account_connected_message.txt:4
 #, python-format
 msgid ""
 "A third-party account from %(provider)s has been connected to your account."
 msgstr "Un compte tiers de %(provider)s a été connecté à votre compte."
 
-#: diagnost/main/templates/socialaccount/email/account_connected_subject.txt:3
+#: main/templates/socialaccount/email/account_connected_subject.txt:3
 msgid "Third-Party Account Connected"
 msgstr "Compte tiers connecté"
 
-#: diagnost/main/templates/socialaccount/email/account_disconnected_message.txt:4
+#: main/templates/socialaccount/email/account_disconnected_message.txt:4
 #, python-format
 msgid ""
 "A third-party account from %(provider)s has been disconnected from your "
 "account."
 msgstr "Un compte tiers de %(provider)s a été déconnecté de votre compte."
 
-#: diagnost/main/templates/socialaccount/email/account_disconnected_subject.txt:3
+#: main/templates/socialaccount/email/account_disconnected_subject.txt:3
 msgid "Third-Party Account Disconnected"
 msgstr "Compte tiers déconnecté"
 
-#: diagnost/main/templates/socialaccount/login.html:41
+#: main/templates/socialaccount/login.html:41
 #, python-format
 msgid "Connect %(provider)s"
 msgstr "Connecter %(provider)s"
 
-#: diagnost/main/templates/socialaccount/login.html:45
+#: main/templates/socialaccount/login.html:45
 #, python-format
 msgid ""
 "You are about to connect a new third-party account from %(provider_img)s."
@@ -1085,29 +987,29 @@ msgstr ""
 "Vous êtes sur le point de connecter un nouveau compte tiers de "
 "%(provider_img)s."
 
-#: diagnost/main/templates/socialaccount/login.html:50
+#: main/templates/socialaccount/login.html:50
 #, python-format
 msgid "Sign In Via %(provider)s"
 msgstr "Se connecter via %(provider)s"
 
-#: diagnost/main/templates/socialaccount/login.html:53
+#: main/templates/socialaccount/login.html:53
 #, python-format
 msgid "You are about to sign in using a third-party account from %(provider)s."
 msgstr ""
 "Vous êtes sur le point de vous connecter à l’aide d’un compte tiers de "
 "%(provider)s."
 
-#: diagnost/main/templates/socialaccount/login.html:61
-#: diagnost/main/templates/socialaccount/login_redirect.html:10
+#: main/templates/socialaccount/login.html:61
+#: main/templates/socialaccount/login_redirect.html:10
 msgid "Continue"
 msgstr "Continuer"
 
-#: diagnost/main/templates/socialaccount/login_cancelled.html:5
-#: diagnost/main/templates/socialaccount/login_cancelled.html:9
+#: main/templates/socialaccount/login_cancelled.html:5
+#: main/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
 msgstr "Connexion annulée"
 
-#: diagnost/main/templates/socialaccount/login_cancelled.html:13
+#: main/templates/socialaccount/login_cancelled.html:13
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
@@ -1118,19 +1020,23 @@ msgstr ""
 "existants. S’il s’agit d’une erreur, veuillez procéder à la <a "
 "href=\"%(login_url)s\">connexion</a>."
 
-#: diagnost/main/templates/socialaccount/messages/account_connected.txt:2
+#: main/templates/socialaccount/messages/account_connected.txt:2
 msgid "The third-party account has been connected."
 msgstr "Le compte tiers a été connecté."
 
-#: diagnost/main/templates/socialaccount/messages/account_connected_other.txt:2
+#: main/templates/socialaccount/messages/account_connected_other.txt:2
 msgid "The third-party account is already connected to a different account."
 msgstr "Ce compte tiers est déjà connecté à un autre compte."
 
-#: diagnost/main/templates/socialaccount/messages/account_disconnected.txt:2
+#: main/templates/socialaccount/messages/account_disconnected.txt:2
 msgid "The third-party account has been disconnected."
 msgstr "Le compte tiers a été déconnecté."
 
-#: diagnost/main/templates/socialaccount/signup.html:12
+#: main/templates/socialaccount/signup.html:5
+msgid "Signup"
+msgstr "Inscription"
+
+#: main/templates/socialaccount/signup.html:12
 #, python-format
 msgid ""
 "You are about to use your %(provider_name)s account to login to\n"
@@ -1140,6 +1046,243 @@ msgstr ""
 "connecter à\n"
 "%(site_name)s. En dernière étape, veuillez compléter le formulaire suivant :"
 
-#: diagnost/main/templates/socialaccount/snippets/login.html:11
+#: main/templates/socialaccount/snippets/login.html:11
 msgid "Or use a third-party"
 msgstr "Ou utiliser un service tiers"
+
+#~ msgid "Deutsch"
+#~ msgstr "Duits"
+
+#~ msgid "English"
+#~ msgstr "Anglais"
+
+#~ msgid "Nederlands"
+#~ msgstr "Néerlandais"
+
+#~ msgid "Français"
+#~ msgstr "Français"
+
+#~ msgid "Account Inactive"
+#~ msgstr "Compte inactif"
+
+#~ msgid "This account is inactive."
+#~ msgstr "Ce compte est inactif."
+
+#~ msgid "Confirm Access"
+#~ msgstr "Confirmer l’accès"
+
+#~ msgid "Please reauthenticate to safeguard your account."
+#~ msgstr "Veuillez vous réauthentifier afin de sécuriser votre compte."
+
+#~ msgid "Email Verification"
+#~ msgstr "Vérification de l’e-mail"
+
+#~ msgid "Enter Email Verification Code"
+#~ msgstr "Saisir le code de vérification de l’e-mail"
+
+#, python-format
+#~ msgid ""
+#~ "We’ve sent a code to %(email_link)s. The code expires shortly, so please "
+#~ "enter it soon."
+#~ msgstr ""
+#~ "Nous avons envoyé un code à %(email_link)s. Ce code expire prochainement, "
+#~ "merci de le saisir rapidement."
+
+#~ msgid "Enter Sign-In Code"
+#~ msgstr "Saisir le code de connexion"
+
+#~ msgid "Email Addresses"
+#~ msgstr "Adresses e-mail"
+
+#~ msgid "The following email addresses are associated with your account:"
+#~ msgstr "Les adresses e-mail suivantes sont associées à votre compte :"
+
+#~ msgid "Verified"
+#~ msgstr "Vérifiée"
+
+#~ msgid "Unverified"
+#~ msgstr "Non vérifiée"
+
+#~ msgid "Primary"
+#~ msgstr "Principale"
+
+#~ msgid "Make Primary"
+#~ msgstr "Définir comme principale"
+
+#~ msgid "Re-send Verification"
+#~ msgstr "Renvoyer la vérification"
+
+#~ msgid "Add Email Address"
+#~ msgstr "Ajouter une adresse e-mail"
+
+#~ msgid "Add Email"
+#~ msgstr "Ajouter l’e-mail"
+
+#~ msgid "Do you really want to remove the selected email address?"
+#~ msgstr "Souhaitez-vous vraiment supprimer l’adresse e-mail sélectionnée ?"
+
+#~ msgid "Email Address"
+#~ msgstr "Adresse e-mail"
+
+#~ msgid "Current email"
+#~ msgstr "E-mail actuel"
+
+#~ msgid "Changing to"
+#~ msgstr "Changer vers"
+
+#~ msgid "Your email address is still pending verification."
+#~ msgstr "Votre adresse e-mail est toujours en attente de vérification."
+
+#~ msgid "Cancel Change"
+#~ msgstr "Annuler la modification"
+
+#~ msgid "Change to"
+#~ msgstr "Changer vers"
+
+#~ msgid "Confirm Email Address"
+#~ msgstr "Confirmer l’adresse e-mail"
+
+#, python-format
+#~ msgid ""
+#~ "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an "
+#~ "email address for user %(user_display)s."
+#~ msgstr ""
+#~ "Veuillez confirmer que <a href=\"mailto:%(email)s\">%(email)s</a> est "
+#~ "bien l’adresse e-mail de l’utilisateur %(user_display)s."
+
+#, python-format
+#~ msgid ""
+#~ "This email confirmation link expired or is invalid. Please <a "
+#~ "href=\"%(email_url)s\">issue a new email confirmation request</a>."
+#~ msgstr ""
+#~ "Ce lien de confirmation a expiré ou est invalide. Veuillez <a "
+#~ "href=\"%(email_url)s\">demander un nouvel e-mail de confirmation</a>."
+
+#, python-format
+#~ msgid ""
+#~ "If you have not created an account yet, then please %(link)ssign "
+#~ "up%(end_link)s first."
+#~ msgstr ""
+#~ "Si vous n’avez pas encore créé de compte, veuillez d’abord vous "
+#~ "%(link)sinscrire%(end_link)s."
+
+#~ msgid "Sign in with a passkey"
+#~ msgstr "Se connecter avec une clé d’accès"
+
+#~ msgid "Mail me a sign-in code"
+#~ msgstr "M’envoyer un code de connexion"
+
+#~ msgid "Are you sure you want to sign out?"
+#~ msgstr "Êtes-vous sûr de vouloir vous déconnecter ?"
+
+#~ msgid "Forgot Password?"
+#~ msgstr "Mot de passe oublié ?"
+
+#~ msgid ""
+#~ "Forgotten your password? Enter your email address below, and we'll send "
+#~ "you an email allowing you to reset it."
+#~ msgstr ""
+#~ "Mot de passe oublié ? Saisissez votre adresse e-mail ci-dessous et nous "
+#~ "vous enverrons un e-mail pour le réinitialiser."
+
+#~ msgid "Reset My Password"
+#~ msgstr "Réinitialiser mon mot de passe"
+
+#~ msgid "Please contact us if you have any trouble resetting your password."
+#~ msgstr ""
+#~ "Veuillez nous contacter si vous rencontrez des difficultés pour "
+#~ "réinitialiser votre mot de passe."
+
+#~ msgid ""
+#~ "We have sent you an email. If you have not received it please check your "
+#~ "spam folder. Otherwise contact us if you do not receive it in a few "
+#~ "minutes."
+#~ msgstr ""
+#~ "Nous vous avons envoyé un e-mail. Si vous ne l’avez pas reçu, veuillez "
+#~ "vérifier votre dossier spam. Sinon, contactez-nous si vous ne le recevez "
+#~ "pas dans quelques minutes."
+
+#~ msgid "Your password is now changed."
+#~ msgstr "Votre mot de passe a été modifié."
+
+#~ msgid "Set Password"
+#~ msgstr "Définir le mot de passe"
+
+#~ msgid "Enter your password:"
+#~ msgstr "Saisissez votre mot de passe :"
+
+#~ msgid ""
+#~ "You will receive an email containing a special code for a password-free "
+#~ "sign-in."
+#~ msgstr ""
+#~ "Vous recevrez un e-mail contenant un code spécial pour une connexion sans "
+#~ "mot de passe."
+
+#~ msgid "Request Code"
+#~ msgstr "Demander un code"
+
+#~ msgid "Other sign-in options"
+#~ msgstr "Autres options de connexion"
+
+#~ msgid "Passkey Sign Up"
+#~ msgstr "Inscription avec clé d’accès"
+
+#, python-format
+#~ msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
+#~ msgstr ""
+#~ "Vous avez déjà un compte ? Veuillez alors vous "
+#~ "%(link)sconnecter%(end_link)s."
+
+#~ msgid "Other options"
+#~ msgstr "Autres options"
+
+#~ msgid "Sign Up Closed"
+#~ msgstr "Inscriptions fermées"
+
+#~ msgid "We are sorry, but the sign up is currently closed."
+#~ msgstr ""
+#~ "Nous sommes désolés, mais les inscriptions sont actuellement fermées."
+
+#~ msgid "Verify Your Email Address"
+#~ msgstr "Vérifiez votre adresse e-mail"
+
+#~ msgid ""
+#~ "We have sent an email to you for verification. Follow the link provided "
+#~ "to finalize the signup process. If you do not see the verification email "
+#~ "in your main inbox, check your spam folder. Please contact us if you do "
+#~ "not receive the verification email within a few minutes."
+#~ msgstr ""
+#~ "Nous vous avons envoyé un e-mail de vérification. Suivez le lien fourni "
+#~ "pour finaliser le processus d’inscription. Si vous ne voyez pas l’e-mail "
+#~ "dans votre boîte de réception, vérifiez votre dossier spam. Contactez-"
+#~ "nous si vous ne le recevez pas dans les minutes qui suivent."
+
+#~ msgid ""
+#~ "This part of the site requires us to verify that\n"
+#~ "you are who you claim to be. For this purpose, we require that you\n"
+#~ "verify ownership of your email address. "
+#~ msgstr ""
+#~ "Cette partie du site nécessite que nous vérifiions\n"
+#~ "votre identité. Pour cela, nous vous demandons de\n"
+#~ "confirmer la propriété de votre adresse e-mail. "
+
+#~ msgid ""
+#~ "We have sent an email to you for\n"
+#~ "verification. Please click on the link inside that email. If you do not "
+#~ "see the verification email in your main inbox, check your spam folder. "
+#~ "Otherwise\n"
+#~ "contact us if you do not receive it within a few minutes."
+#~ msgstr ""
+#~ "Nous vous avons envoyé un e-mail de\n"
+#~ "vérification. Veuillez cliquer sur le lien contenu dans cet e-mail. Si "
+#~ "vous ne le voyez pas dans votre boîte de réception, vérifiez votre "
+#~ "dossier spam. Sinon,\n"
+#~ "contactez-nous si vous ne le recevez pas dans les minutes qui suivent."
+
+#, python-format
+#~ msgid ""
+#~ "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change "
+#~ "your email address</a>."
+#~ msgstr ""
+#~ "<strong>Note :</strong> vous pouvez toujours <a "
+#~ "href=\"%(email_url)s\">modifier votre adresse e-mail</a>."

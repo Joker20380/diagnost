@@ -24,3 +24,4 @@ local_settings.py
 virtualenv.pyz
 .htaccess
 *.mo
+runtime/

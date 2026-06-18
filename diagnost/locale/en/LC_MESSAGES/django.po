@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-18 17:35+0300\n"
-"PO-Revision-Date: 2026-01-17 00:00+0100\n"
-"Last-Translator: AI-Diagnostics Team <info@ai-diagnostics.be>\n"
-"Language-Team: German\n"
-"Language: de\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,25 +35,15 @@ msgid ""
 "\n"
 "%(password_reset_url)s"
 msgstr ""
-"Sie erhalten diese E-Mail, weil Sie oder jemand anderes versucht hat, ein\n"
-"Konto mit der folgenden E-Mail-Adresse zu registrieren:\n"
-"\n"
-"%(email)s\n"
-"\n"
-"Es existiert jedoch bereits ein Konto mit dieser E-Mail-Adresse. Falls Sie\n"
-"das vergessen haben, nutzen Sie bitte die „Passwort vergessen“-Funktion, um\n"
-"wieder Zugriff auf Ihr Konto zu erhalten:\n"
-"\n"
-"%(password_reset_url)s"
 
 #: main/templates/account/email/account_already_exists_subject.txt:3
 msgid "Account Already Exists"
-msgstr "Konto existiert bereits"
+msgstr ""
 
 #: main/templates/account/email/base_message.txt:1
 #, python-format
 msgid "Hello from %(site_name)s!"
-msgstr "Hallo von %(site_name)s!"
+msgstr ""
 
 #: main/templates/account/email/base_message.txt:5
 #, python-format
@@ -60,16 +51,12 @@ msgid ""
 "Thank you for using %(site_name)s!\n"
 "%(site_domain)s"
 msgstr ""
-"Vielen Dank, dass Sie %(site_name)s nutzen!\n"
-"%(site_domain)s"
 
 #: main/templates/account/email/base_notification.txt:5
 msgid ""
 "You are receiving this mail because the following change was made to your "
 "account:"
 msgstr ""
-"Sie erhalten diese E-Mail, weil die folgende Änderung an Ihrem Konto "
-"vorgenommen wurde:"
 
 #: main/templates/account/email/base_notification.txt:10
 #, python-format
@@ -81,30 +68,23 @@ msgid ""
 "- Browser: %(user_agent)s\n"
 "- Date: %(timestamp)s"
 msgstr ""
-"Wenn Sie diese Änderung nicht erkennen, treffen Sie bitte umgehend passende "
-"Sicherheitsmaßnahmen. Die Änderung an Ihrem Konto stammt von:\n"
-"\n"
-"- IP-Adresse: %(ip)s\n"
-"- Browser: %(user_agent)s\n"
-"- Datum: %(timestamp)s"
 
 #: main/templates/account/email/email_changed_message.txt:4
 #, python-format
 msgid "Your email has been changed from %(from_email)s to %(to_email)s."
 msgstr ""
-"Ihre E-Mail-Adresse wurde von %(from_email)s auf %(to_email)s geändert."
 
 #: main/templates/account/email/email_changed_subject.txt:3
 msgid "Email Changed"
-msgstr "E-Mail-Adresse geändert"
+msgstr ""
 
 #: main/templates/account/email/email_confirm_message.txt:4
 msgid "Your email has been confirmed."
-msgstr "Ihre E-Mail-Adresse wurde bestätigt."
+msgstr ""
 
 #: main/templates/account/email/email_confirm_subject.txt:3
 msgid "Email Confirmation"
-msgstr "E-Mail-Bestätigung"
+msgstr ""
 
 #: main/templates/account/email/email_confirmation_message.txt:5
 #, python-format
@@ -112,61 +92,53 @@ msgid ""
 "You're receiving this email because user %(user_display)s has given your "
 "email address to register an account on %(site_domain)s."
 msgstr ""
-"Sie erhalten diese E-Mail, weil der Benutzer %(user_display)s Ihre E-Mail-"
-"Adresse angegeben hat, um ein Konto auf %(site_domain)s zu registrieren."
 
 #: main/templates/account/email/email_confirmation_message.txt:7
 msgid ""
 "Your email verification code is listed below. Please enter it in your open "
 "browser window."
 msgstr ""
-"Ihr E-Mail-Bestätigungscode steht unten. Bitte geben Sie ihn im geöffneten "
-"Browserfenster ein."
 
 #: main/templates/account/email/email_confirmation_message.txt:9
 #, python-format
 msgid "To confirm this is correct, go to %(activate_url)s"
-msgstr "Um dies zu bestätigen, öffnen Sie %(activate_url)s"
+msgstr ""
 
 #: main/templates/account/email/email_confirmation_subject.txt:3
 msgid "Please Confirm Your Email Address"
-msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse"
+msgstr ""
 
 #: main/templates/account/email/email_deleted_message.txt:4
 #, python-format
 msgid "Email address %(deleted_email)s has been removed from your account."
-msgstr "Die E-Mail-Adresse %(deleted_email)s wurde aus Ihrem Konto entfernt."
+msgstr ""
 
 #: main/templates/account/email/email_deleted_subject.txt:3
 msgid "Email Removed"
-msgstr "E-Mail-Adresse entfernt"
+msgstr ""
 
 #: main/templates/account/email/login_code_message.txt:5
 msgid ""
 "Your sign-in code is listed below. Please enter it in your open browser "
 "window."
 msgstr ""
-"Ihr Anmeldecode steht unten. Bitte geben Sie ihn im geöffneten "
-"Browserfenster ein."
 
 #: main/templates/account/email/login_code_message.txt:9
 #: main/templates/account/email/unknown_account_message.txt:6
 msgid "This mail can be safely ignored if you did not initiate this action."
 msgstr ""
-"Sie können diese E-Mail ignorieren, wenn Sie diese Aktion nicht gestartet "
-"haben."
 
 #: main/templates/account/email/login_code_subject.txt:3
 msgid "Sign-In Code"
-msgstr "Anmeldecode"
+msgstr ""
 
 #: main/templates/account/email/password_changed_message.txt:4
 msgid "Your password has been changed."
-msgstr "Ihr Passwort wurde geändert."
+msgstr ""
 
 #: main/templates/account/email/password_changed_subject.txt:3
 msgid "Password Changed"
-msgstr "Passwort geändert"
+msgstr ""
 
 #: main/templates/account/email/password_reset_key_message.txt:4
 msgid ""
@@ -175,36 +147,31 @@ msgid ""
 "It can be safely ignored if you did not request a password reset. Click the "
 "link below to reset your password."
 msgstr ""
-"Sie erhalten diese E-Mail, weil Sie oder jemand anderes eine "
-"Passwortzurücksetzung für Ihr Benutzerkonto angefordert hat.\n"
-"Sie können diese Nachricht ignorieren, wenn Sie keine Zurücksetzung "
-"angefordert haben. Klicken Sie auf den Link unten, um Ihr Passwort "
-"zurückzusetzen."
 
 #: main/templates/account/email/password_reset_key_message.txt:9
 #, python-format
 msgid "In case you forgot, your username is %(username)s."
-msgstr "Falls Sie es vergessen haben: Ihr Benutzername ist %(username)s."
+msgstr ""
 
 #: main/templates/account/email/password_reset_key_subject.txt:3
 msgid "Password Reset Email"
-msgstr "E-Mail zum Zurücksetzen des Passworts"
+msgstr ""
 
 #: main/templates/account/email/password_reset_message.txt:4
 msgid "Your password has been reset."
-msgstr "Ihr Passwort wurde zurückgesetzt."
+msgstr ""
 
 #: main/templates/account/email/password_reset_subject.txt:3
 msgid "Password Reset"
-msgstr "Passwort zurücksetzen"
+msgstr ""
 
 #: main/templates/account/email/password_set_message.txt:4
 msgid "Your password has been set."
-msgstr "Ihr Passwort wurde gesetzt."
+msgstr ""
 
 #: main/templates/account/email/password_set_subject.txt:3
 msgid "Password Set"
-msgstr "Passwort gesetzt"
+msgstr ""
 
 #: main/templates/account/email/unknown_account_message.txt:4
 #, python-format
@@ -213,23 +180,19 @@ msgid ""
 "an account with email %(email)s. However, we do not have any record of such "
 "an account in our database."
 msgstr ""
-"Sie erhalten diese E-Mail, weil Sie oder jemand anderes versucht hat, auf "
-"ein Konto mit der E-Mail-Adresse %(email)s zuzugreifen. Allerdings haben wir "
-"kein solches Konto in unserer Datenbank."
 
 #: main/templates/account/email/unknown_account_message.txt:8
 msgid "If it was you, you can sign up for an account using the link below."
 msgstr ""
-"Wenn Sie es waren, können Sie über den Link unten ein Konto registrieren."
 
 #: main/templates/account/email/unknown_account_subject.txt:3
 msgid "Unknown Account"
-msgstr "Unbekanntes Konto"
+msgstr ""
 
 #: main/templates/account/messages/cannot_delete_primary_email.txt:2
 #, python-format
 msgid "You cannot remove your primary email address (%(email)s)."
-msgstr "Sie können Ihre primäre E-Mail-Adresse (%(email)s) nicht entfernen."
+msgstr ""
 
 #: main/templates/account/messages/email_confirmation_failed.txt:2
 #, python-format
@@ -237,111 +200,106 @@ msgid ""
 "Unable to confirm %(email)s because it is already confirmed by a different "
 "account."
 msgstr ""
-"%(email)s kann nicht bestätigt werden, da es bereits von einem anderen Konto "
-"bestätigt wurde."
 
 #: main/templates/account/messages/email_confirmation_sent.txt:2
 #, python-format
 msgid "Confirmation email sent to %(email)s."
-msgstr "Bestätigungs-E-Mail an %(email)s gesendet."
+msgstr ""
 
 #: main/templates/account/messages/email_confirmed.txt:2
 #, python-format
 msgid "You have confirmed %(email)s."
-msgstr "Sie haben %(email)s bestätigt."
+msgstr ""
 
 #: main/templates/account/messages/email_deleted.txt:2
 #, python-format
 msgid "Removed email address %(email)s."
-msgstr "E-Mail-Adresse %(email)s entfernt."
+msgstr ""
 
 #: main/templates/account/messages/logged_in.txt:4
 #, python-format
 msgid "Successfully signed in as %(name)s."
-msgstr "Erfolgreich als %(name)s angemeldet."
+msgstr ""
 
 #: main/templates/account/messages/logged_out.txt:2
 msgid "You have signed out."
-msgstr "Sie haben sich abgemeldet."
+msgstr ""
 
 #: main/templates/account/messages/login_code_sent.txt:2
 #, python-format
 msgid "A sign-in code has been mailed to %(email)s."
-msgstr "Ein Anmeldecode wurde an %(email)s gesendet."
+msgstr ""
 
 #: main/templates/account/messages/password_changed.txt:2
 msgid "Password successfully changed."
-msgstr "Passwort erfolgreich geändert."
+msgstr ""
 
 #: main/templates/account/messages/password_set.txt:2
 msgid "Password successfully set."
-msgstr "Passwort erfolgreich gesetzt."
+msgstr ""
 
 #: main/templates/account/messages/primary_email_set.txt:2
 msgid "Primary email address set."
-msgstr "Primäre E-Mail-Adresse festgelegt."
+msgstr ""
 
 #: main/templates/account/messages/unverified_primary_email.txt:2
 msgid "Your primary email address must be verified."
-msgstr "Ihre primäre E-Mail-Adresse muss verifiziert werden."
+msgstr ""
 
 #: main/templates/account/snippets/already_logged_in.html:7
 msgid "Note"
-msgstr "Hinweis"
+msgstr ""
 
 #: main/templates/account/snippets/already_logged_in.html:7
 #, python-format
 msgid "You are already logged in as %(user_display)s."
-msgstr "Sie sind bereits als %(user_display)s angemeldet."
+msgstr ""
 
 #: main/templates/account/snippets/warn_no_email.html:3
 msgid "Warning:"
-msgstr "Warnung:"
+msgstr ""
 
 #: main/templates/account/snippets/warn_no_email.html:3
 msgid ""
 "You currently do not have any email address set up. You should really add an "
 "email address so you can receive notifications, reset your password, etc."
 msgstr ""
-"Sie haben derzeit keine E-Mail-Adresse hinterlegt. Sie sollten unbedingt "
-"eine E-Mail-Adresse hinzufügen, damit Sie Benachrichtigungen erhalten, Ihr "
-"Passwort zurücksetzen usw. können."
 
 #: main/templates/allauth/layouts/base.html:18
 msgid "Messages:"
-msgstr "Nachrichten:"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:25
 msgid "Menu:"
-msgstr "Menü:"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:31
 msgid "Change Email"
-msgstr "E-Mail-Adresse ändern"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:37
 msgid "Change Password"
-msgstr "Passwort ändern"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:43
 #: main/templates/socialaccount/connections.html:5
 #: main/templates/socialaccount/connections.html:9
 msgid "Account Connections"
-msgstr "Konto-Verknüpfungen"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:49
 #: main/templates/mfa/authenticate.html:10 main/templates/mfa/index.html:5
 #: main/templates/mfa/index.html:9
 msgid "Two-Factor Authentication"
-msgstr "Zwei-Faktor-Authentifizierung"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:55
 msgid "Sessions"
-msgstr "Sitzungen"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:61
 msgid "Sign Out"
-msgstr "Abmelden"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:68
 #: main/templates/mfa/authenticate.html:6
@@ -350,13 +308,13 @@ msgstr "Abmelden"
 #: main/templates/socialaccount/login.html:7
 #: main/templates/socialaccount/login_redirect.html:5
 msgid "Sign In"
-msgstr "Anmelden"
+msgstr ""
 
 #: main/templates/allauth/layouts/base.html:74
 #: main/templates/socialaccount/signup.html:9
 #: main/templates/socialaccount/signup.html:25
 msgid "Sign Up"
-msgstr "Registrieren"
+msgstr ""
 
 #: main/templates/diagnost/base.html:10 main/templates/diagnost/base.html:45
 #: main/templates/diagnost/base.html:49 main/templates/diagnost/base.html:247
@@ -507,15 +465,13 @@ msgstr ""
 
 #: main/templates/diagnost/news-view.html:60
 msgid "Subscribe"
-msgstr "Abonnieren"
+msgstr ""
 
 #: main/templates/diagnost/unsubscribe_form.html:4
 #: main/templates/diagnost/unsubscribe_form.html:16
 #: main/templates/diagnost/unsubscribe_form.html:67
-#, fuzzy
-#| msgid "Subscribe"
 msgid "Unsubscribe"
-msgstr "Abonnieren"
+msgstr ""
 
 #: main/templates/diagnost/unsubscribe_form.html:5
 msgid "Unsubscribe from email notifications"
@@ -551,10 +507,8 @@ msgid ""
 msgstr ""
 
 #: main/templates/diagnost/upload.html:7 main/templates/diagnost/upload.html:17
-#, fuzzy
-#| msgid "Auto diagnostics"
 msgid "Upload diagnostics"
-msgstr "Fahrzeugdiagnose"
+msgstr ""
 
 #: main/templates/diagnost/upload.html:19
 msgid ""
@@ -605,125 +559,121 @@ msgid ""
 "Your account is protected by two-factor authentication. Please enter an "
 "authenticator code:"
 msgstr ""
-"Ihr Konto ist durch Zwei-Faktor-Authentifizierung geschützt. Bitte geben Sie "
-"einen Authenticator-Code ein:"
 
 #: main/templates/mfa/authenticate.html:28
 #: main/templates/mfa/authenticate.html:44
 #: main/templates/mfa/webauthn/signup_form.html:26
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr ""
 
 #: main/templates/mfa/authenticate.html:37
 msgid "Alternative options"
-msgstr "Alternative Optionen"
+msgstr ""
 
 #: main/templates/mfa/authenticate.html:41
 #: main/templates/mfa/webauthn/reauthenticate.html:15
 msgid "Use a security key"
-msgstr "Sicherheitsschlüssel verwenden"
+msgstr ""
 
 #: main/templates/mfa/email/recovery_codes_generated_message.txt:4
 msgid ""
 "A new set of Two-Factor Authentication recovery codes has been generated."
 msgstr ""
-"Ein neuer Satz Wiederherstellungscodes für die Zwei-Faktor-Authentifizierung "
-"wurde erstellt."
 
 #: main/templates/mfa/email/recovery_codes_generated_subject.txt:3
 msgid "New Recovery Codes Generated"
-msgstr "Neue Wiederherstellungscodes erstellt"
+msgstr ""
 
 #: main/templates/mfa/email/totp_activated_message.txt:4
 #: main/templates/mfa/messages/totp_activated.txt:2
 msgid "Authenticator app activated."
-msgstr "Authenticator-App aktiviert."
+msgstr ""
 
 #: main/templates/mfa/email/totp_activated_subject.txt:3
 msgid "Authenticator App Activated"
-msgstr "Authenticator-App aktiviert"
+msgstr ""
 
 #: main/templates/mfa/email/totp_deactivated_message.txt:4
 #: main/templates/mfa/messages/totp_deactivated.txt:2
 msgid "Authenticator app deactivated."
-msgstr "Authenticator-App deaktiviert."
+msgstr ""
 
 #: main/templates/mfa/email/totp_deactivated_subject.txt:3
 msgid "Authenticator App Deactivated"
-msgstr "Authenticator-App deaktiviert"
+msgstr ""
 
 #: main/templates/mfa/email/webauthn_added_message.txt:4
 msgid "A new security key has been added."
-msgstr "Ein neuer Sicherheitsschlüssel wurde hinzugefügt."
+msgstr ""
 
 #: main/templates/mfa/email/webauthn_added_subject.txt:3
 msgid "Security Key Added"
-msgstr "Sicherheitsschlüssel hinzugefügt"
+msgstr ""
 
 #: main/templates/mfa/email/webauthn_removed_message.txt:4
 msgid "A security key has been removed."
-msgstr "Ein Sicherheitsschlüssel wurde entfernt."
+msgstr ""
 
 #: main/templates/mfa/email/webauthn_removed_subject.txt:3
 msgid "Security Key Removed"
-msgstr "Sicherheitsschlüssel entfernt"
+msgstr ""
 
 #: main/templates/mfa/index.html:14 main/templates/mfa/totp/base.html:4
 msgid "Authenticator App"
-msgstr "Authenticator-App"
+msgstr ""
 
 #: main/templates/mfa/index.html:19
 msgid "Authentication using an authenticator app is active."
-msgstr "Die Authentifizierung mit einer Authenticator-App ist aktiv."
+msgstr ""
 
 #: main/templates/mfa/index.html:23
 msgid "An authenticator app is not active."
-msgstr "Eine Authenticator-App ist nicht aktiv."
+msgstr ""
 
 #: main/templates/mfa/index.html:32
 #: main/templates/mfa/totp/deactivate_form.html:24
 msgid "Deactivate"
-msgstr "Deaktivieren"
+msgstr ""
 
 #: main/templates/mfa/index.html:36
 #: main/templates/mfa/totp/activate_form.html:32
 msgid "Activate"
-msgstr "Aktivieren"
+msgstr ""
 
 #: main/templates/mfa/index.html:45
 #: main/templates/mfa/webauthn/authenticator_list.html:8
 #: main/templates/mfa/webauthn/base.html:4
 msgid "Security Keys"
-msgstr "Sicherheitsschlüssel"
+msgstr ""
 
 #: main/templates/mfa/index.html:50
 #, python-format
 msgid "You have added %(count)s security key."
 msgid_plural "You have added %(count)s security keys."
-msgstr[0] "Sie haben %(count)s Sicherheitsschlüssel hinzugefügt."
-msgstr[1] "Sie haben %(count)s Sicherheitsschlüssel hinzugefügt."
+msgstr[0] ""
+msgstr[1] ""
 
 #: main/templates/mfa/index.html:54
 #: main/templates/mfa/webauthn/authenticator_list.html:12
 msgid "No security keys have been added."
-msgstr "Es wurden keine Sicherheitsschlüssel hinzugefügt."
+msgstr ""
 
 #: main/templates/mfa/index.html:62
 msgid "Manage"
-msgstr "Verwalten"
+msgstr ""
 
 #: main/templates/mfa/index.html:67
 #: main/templates/mfa/webauthn/add_form.html:18
 #: main/templates/mfa/webauthn/authenticator_list.html:70
 msgid "Add"
-msgstr "Hinzufügen"
+msgstr ""
 
 #: main/templates/mfa/index.html:77
 #: main/templates/mfa/recovery_codes/base.html:4
 #: main/templates/mfa/recovery_codes/generate.html:6
 #: main/templates/mfa/recovery_codes/index.html:6
 msgid "Recovery Codes"
-msgstr "Wiederherstellungscodes"
+msgstr ""
 
 #: main/templates/mfa/index.html:82
 #: main/templates/mfa/recovery_codes/index.html:9
@@ -733,78 +683,73 @@ msgid ""
 msgid_plural ""
 "There are %(unused_count)s out of %(total_count)s recovery codes available."
 msgstr[0] ""
-"Es ist %(unused_count)s von %(total_count)s Wiederherstellungscode verfügbar."
 msgstr[1] ""
-"Es sind %(unused_count)s von %(total_count)s Wiederherstellungscodes "
-"verfügbar."
 
 #: main/templates/mfa/index.html:86
 msgid "No recovery codes set up."
-msgstr "Keine Wiederherstellungscodes eingerichtet."
+msgstr ""
 
 #: main/templates/mfa/index.html:96
 msgid "View"
-msgstr "Ansehen"
+msgstr ""
 
 #: main/templates/mfa/index.html:102
 msgid "Download"
-msgstr "Herunterladen"
+msgstr ""
 
 #: main/templates/mfa/index.html:110
 #: main/templates/mfa/recovery_codes/generate.html:29
 msgid "Generate"
-msgstr "Erstellen"
+msgstr ""
 
 #: main/templates/mfa/messages/recovery_codes_generated.txt:2
 msgid "A new set of recovery codes has been generated."
-msgstr "Ein neuer Satz Wiederherstellungscodes wurde erstellt."
+msgstr ""
 
 #: main/templates/mfa/messages/webauthn_added.txt:2
 msgid "Security key added."
-msgstr "Sicherheitsschlüssel hinzugefügt."
+msgstr ""
 
 #: main/templates/mfa/messages/webauthn_removed.txt:2
 msgid "Security key removed."
-msgstr "Sicherheitsschlüssel entfernt."
+msgstr ""
 
 #: main/templates/mfa/reauthenticate.html:6
 msgid "Enter an authenticator code:"
-msgstr "Authenticator-Code eingeben:"
+msgstr ""
 
 #: main/templates/mfa/reauthenticate.html:18
 msgid "Confirm"
-msgstr "Bestätigen"
+msgstr ""
 
 #: main/templates/mfa/recovery_codes/generate.html:9
 msgid "You are about to generate a new set of recovery codes for your account."
 msgstr ""
-"Sie sind dabei, einen neuen Satz Wiederherstellungscodes für Ihr Konto zu "
-"erstellen."
 
 #: main/templates/mfa/recovery_codes/generate.html:11
 msgid "This action will invalidate your existing codes."
-msgstr "Diese Aktion macht Ihre bestehenden Codes ungültig."
+msgstr ""
 
 #: main/templates/mfa/recovery_codes/generate.html:13
 msgid "Are you sure?"
-msgstr "Sind Sie sicher?"
+msgstr ""
 
 #: main/templates/mfa/recovery_codes/index.html:13
 msgid "Unused codes"
-msgstr "Unbenutzte Codes"
+msgstr ""
 
 #: main/templates/mfa/recovery_codes/index.html:25
 msgid "Download codes"
-msgstr "Codes herunterladen"
+msgstr ""
 
 #: main/templates/mfa/recovery_codes/index.html:30
 msgid "Generate new codes"
-msgstr "Neue Codes erstellen"
+msgstr ""
 
 #: main/templates/mfa/totp/activate_form.html:4
 #: main/templates/mfa/totp/activate_form.html:8
 msgid "Activate Authenticator App"
-msgstr "Authenticator-App aktivieren"
+msgstr ""
 
 #: main/templates/mfa/totp/activate_form.html:11
 msgid ""
@@ -812,102 +757,95 @@ msgid ""
 "below with your authenticator app. Then, input the verification code "
 "generated by the app below."
 msgstr ""
-"Um Ihr Konto mit Zwei-Faktor-Authentifizierung zu schützen, scannen Sie den "
-"QR-Code unten mit Ihrer Authenticator-App. Geben Sie anschließend den von "
-"der App generierten Bestätigungscode unten ein."
 
 #: main/templates/mfa/totp/activate_form.html:21
 msgid "Authenticator secret"
-msgstr "Authenticator-Geheimnis"
+msgstr ""
 
 #: main/templates/mfa/totp/activate_form.html:24
 msgid ""
 "You can store this secret and use it to reinstall your authenticator app at "
 "a later time."
 msgstr ""
-"Sie können dieses Geheimnis speichern und es später verwenden, um Ihre "
-"Authenticator-App erneut einzurichten."
 
 #: main/templates/mfa/totp/deactivate_form.html:5
 #: main/templates/mfa/totp/deactivate_form.html:9
 msgid "Deactivate Authenticator App"
-msgstr "Authenticator-App deaktivieren"
+msgstr ""
 
 #: main/templates/mfa/totp/deactivate_form.html:12
 msgid ""
 "You are about to deactivate authenticator app based authentication. Are you "
 "sure?"
 msgstr ""
-"Sie sind dabei, die Authentifizierung über die Authenticator-App zu "
-"deaktivieren. Sind Sie sicher?"
 
 #: main/templates/mfa/webauthn/add_form.html:7
 msgid "Add Security Key"
-msgstr "Sicherheitsschlüssel hinzufügen"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_confirm_delete.html:6
 msgid "Remove Security Key"
-msgstr "Sicherheitsschlüssel entfernen"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_confirm_delete.html:9
 msgid "Are you sure you want to remove this security key?"
-msgstr "Möchten Sie diesen Sicherheitsschlüssel wirklich entfernen?"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_confirm_delete.html:16
 #: main/templates/mfa/webauthn/authenticator_list.html:60
 #: main/templates/socialaccount/connections.html:40
 msgid "Remove"
-msgstr "Entfernen"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:18
 msgid "Key"
-msgstr "Schlüssel"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:21
 msgid "Usage"
-msgstr "Verwendung"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:33
 msgid "Passkey"
-msgstr "Passkey"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:37
 msgid "Security key"
-msgstr "Sicherheitsschlüssel"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:40
 msgid "This key does not indicate whether it is a passkey."
-msgstr "Dieser Schlüssel gibt nicht an, ob es sich um einen Passkey handelt."
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:41
 msgid "Unspecified"
-msgstr "Nicht angegeben"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:46
 #, python-format
 msgid "Added on %(created_at)s"
-msgstr "Hinzugefügt am %(created_at)s"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:48
 #, python-format
 msgid "Last used %(last_used)s"
-msgstr "Zuletzt verwendet %(last_used)s"
+msgstr ""
 
 #: main/templates/mfa/webauthn/authenticator_list.html:56
 msgid "Edit"
-msgstr "Bearbeiten"
+msgstr ""
 
 #: main/templates/mfa/webauthn/edit_form.html:7
 msgid "Edit Security Key"
-msgstr "Sicherheitsschlüssel bearbeiten"
+msgstr ""
 
 #: main/templates/mfa/webauthn/edit_form.html:18
 msgid "Save"
-msgstr "Speichern"
+msgstr ""
 
 #: main/templates/mfa/webauthn/signup_form.html:7
 msgid "Create Passkey"
-msgstr "Passkey erstellen"
+msgstr ""
 
 #: main/templates/mfa/webauthn/signup_form.html:10
 msgid ""
@@ -915,56 +853,48 @@ msgid ""
 "additional keys later on, you can use a descriptive name to tell the keys "
 "apart."
 msgstr ""
-"Sie sind dabei, einen Passkey für Ihr Konto zu erstellen. Da Sie später "
-"weitere Schlüssel hinzufügen können, können Sie einen aussagekräftigen Namen "
-"verwenden, um die Schlüssel voneinander zu unterscheiden."
 
 #: main/templates/mfa/webauthn/signup_form.html:21
 msgid "Create"
-msgstr "Erstellen"
+msgstr ""
 
 #: main/templates/mfa/webauthn/snippets/scripts.html:2
 msgid "This functionality requires JavaScript."
-msgstr "Diese Funktionalität erfordert JavaScript."
+msgstr ""
 
 #: main/templates/socialaccount/authentication_error.html:5
 #: main/templates/socialaccount/authentication_error.html:9
 msgid "Third-Party Login Failure"
-msgstr "Anmeldung über Drittanbieter fehlgeschlagen"
+msgstr ""
 
 #: main/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your third-party account."
 msgstr ""
-"Beim Versuch, sich über Ihr Drittanbieter-Konto anzumelden, ist ein Fehler "
-"aufgetreten."
 
 #: main/templates/socialaccount/connections.html:13
 msgid ""
 "You can sign in to your account using any of the following third-party "
 "accounts:"
 msgstr ""
-"Sie können sich mit einem der folgenden Drittanbieter-Konten bei Ihrem Konto "
-"anmelden:"
 
 #: main/templates/socialaccount/connections.html:46
 msgid "You currently have no third-party accounts connected to this account."
-msgstr "Derzeit sind keine Drittanbieter-Konten mit diesem Konto verbunden."
+msgstr ""
 
 #: main/templates/socialaccount/connections.html:50
 msgid "Add a Third-Party Account"
-msgstr "Ein Drittanbieter-Konto hinzufügen"
+msgstr ""
 
 #: main/templates/socialaccount/email/account_connected_message.txt:4
 #, python-format
 msgid ""
 "A third-party account from %(provider)s has been connected to your account."
 msgstr ""
-"Ein Drittanbieter-Konto von %(provider)s wurde mit Ihrem Konto verbunden."
 
 #: main/templates/socialaccount/email/account_connected_subject.txt:3
 msgid "Third-Party Account Connected"
-msgstr "Drittanbieter-Konto verbunden"
+msgstr ""
 
 #: main/templates/socialaccount/email/account_disconnected_message.txt:4
 #, python-format
@@ -972,46 +902,41 @@ msgid ""
 "A third-party account from %(provider)s has been disconnected from your "
 "account."
 msgstr ""
-"Ein Drittanbieter-Konto von %(provider)s wurde von Ihrem Konto getrennt."
 
 #: main/templates/socialaccount/email/account_disconnected_subject.txt:3
 msgid "Third-Party Account Disconnected"
-msgstr "Drittanbieter-Konto getrennt"
+msgstr ""
 
 #: main/templates/socialaccount/login.html:41
 #, python-format
 msgid "Connect %(provider)s"
-msgstr "%(provider)s verbinden"
+msgstr ""
 
 #: main/templates/socialaccount/login.html:45
 #, python-format
 msgid ""
 "You are about to connect a new third-party account from %(provider_img)s."
 msgstr ""
-"Sie sind dabei, ein neues Drittanbieter-Konto von %(provider_img)s zu "
-"verbinden."
 
 #: main/templates/socialaccount/login.html:50
 #, python-format
 msgid "Sign In Via %(provider)s"
-msgstr "Über %(provider)s anmelden"
+msgstr ""
 
 #: main/templates/socialaccount/login.html:53
 #, python-format
 msgid "You are about to sign in using a third-party account from %(provider)s."
 msgstr ""
-"Sie sind dabei, sich über ein Drittanbieter-Konto von %(provider)s "
-"anzumelden."
 
 #: main/templates/socialaccount/login.html:61
 #: main/templates/socialaccount/login_redirect.html:10
 msgid "Continue"
-msgstr "Weiter"
+msgstr ""
 
 #: main/templates/socialaccount/login_cancelled.html:5
 #: main/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
-msgstr "Anmeldung abgebrochen"
+msgstr ""
 
 #: main/templates/socialaccount/login_cancelled.html:13
 #, python-format
@@ -1020,26 +945,22 @@ msgid ""
 "accounts. If this was a mistake, please proceed to <a "
 "href=\"%(login_url)s\">sign in</a>."
 msgstr ""
-"Sie haben entschieden, die Anmeldung auf unserer Website mit einem Ihrer "
-"bestehenden Konten abzubrechen. Wenn dies ein Fehler war, fahren Sie bitte "
-"fort mit <a href=\"%(login_url)s\">Anmelden</a>."
 
 #: main/templates/socialaccount/messages/account_connected.txt:2
 msgid "The third-party account has been connected."
-msgstr "Das Drittanbieter-Konto wurde verbunden."
+msgstr ""
 
 #: main/templates/socialaccount/messages/account_connected_other.txt:2
 msgid "The third-party account is already connected to a different account."
 msgstr ""
-"Dieses Drittanbieter-Konto ist bereits mit einem anderen Konto verbunden."
 
 #: main/templates/socialaccount/messages/account_disconnected.txt:2
 msgid "The third-party account has been disconnected."
-msgstr "Das Drittanbieter-Konto wurde getrennt."
+msgstr ""
 
 #: main/templates/socialaccount/signup.html:5
 msgid "Signup"
-msgstr "Registrieren"
+msgstr ""
 
 #: main/templates/socialaccount/signup.html:12
 #, python-format
@@ -1047,323 +968,7 @@ msgid ""
 "You are about to use your %(provider_name)s account to login to\n"
 "%(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Sie sind dabei, Ihr %(provider_name)s-Konto zu verwenden, um sich bei\n"
-"%(site_name)s anzumelden. Als letzten Schritt füllen Sie bitte das folgende "
-"Formular aus:"
 
 #: main/templates/socialaccount/snippets/login.html:11
 msgid "Or use a third-party"
-msgstr "Oder einen Drittanbieter nutzen"
-
-#~ msgid "English"
-#~ msgstr "Englisch"
-
-#~ msgid "Nederlands"
-#~ msgstr "Niederländisch"
-
-#~ msgid "Français"
-#~ msgstr "Französisch"
-
-#~ msgid "Account Inactive"
-#~ msgstr "Konto inaktiv"
-
-#~ msgid "This account is inactive."
-#~ msgstr "Dieses Konto ist inaktiv."
-
-#~ msgid "Confirm Access"
-#~ msgstr "Zugriff bestätigen"
-
-#~ msgid "Please reauthenticate to safeguard your account."
-#~ msgstr "Bitte authentifizieren Sie sich erneut, um Ihr Konto zu schützen."
-
-#~ msgid "Email Verification"
-#~ msgstr "E-Mail-Verifizierung"
-
-#~ msgid "Enter Email Verification Code"
-#~ msgstr "E-Mail-Bestätigungscode eingeben"
-
-#, python-format
-#~ msgid ""
-#~ "We’ve sent a code to %(email_link)s. The code expires shortly, so please "
-#~ "enter it soon."
-#~ msgstr ""
-#~ "Wir haben einen Code an %(email_link)s gesendet. Der Code läuft in Kürze "
-#~ "ab, bitte geben Sie ihn daher zeitnah ein."
-
-#~ msgid "Enter Sign-In Code"
-#~ msgstr "Anmeldecode eingeben"
-
-#~ msgid "Email Addresses"
-#~ msgstr "E-Mail-Adressen"
-
-#~ msgid "The following email addresses are associated with your account:"
-#~ msgstr "Die folgenden E-Mail-Adressen sind mit Ihrem Konto verknüpft:"
-
-#~ msgid "Verified"
-#~ msgstr "Verifiziert"
-
-#~ msgid "Unverified"
-#~ msgstr "Nicht verifiziert"
-
-#~ msgid "Primary"
-#~ msgstr "Primär"
-
-#~ msgid "Make Primary"
-#~ msgstr "Als primär festlegen"
-
-#~ msgid "Re-send Verification"
-#~ msgstr "Bestätigung erneut senden"
-
-#~ msgid "Add Email Address"
-#~ msgstr "E-Mail-Adresse hinzufügen"
-
-#~ msgid "Add Email"
-#~ msgstr "E-Mail hinzufügen"
-
-#~ msgid "Do you really want to remove the selected email address?"
-#~ msgstr "Möchten Sie die ausgewählte E-Mail-Adresse wirklich entfernen?"
-
-#~ msgid "Email Address"
-#~ msgstr "E-Mail-Adresse"
-
-#~ msgid "Current email"
-#~ msgstr "Aktuelle E-Mail-Adresse"
-
-#~ msgid "Changing to"
-#~ msgstr "Ändern zu"
-
-#~ msgid "Your email address is still pending verification."
-#~ msgstr "Ihre E-Mail-Adresse wartet noch auf die Bestätigung."
-
-#~ msgid "Cancel Change"
-#~ msgstr "Änderung abbrechen"
-
-#~ msgid "Change to"
-#~ msgstr "Ändern zu"
-
-#~ msgid "Confirm Email Address"
-#~ msgstr "E-Mail-Adresse bestätigen"
-
-#, python-format
-#~ msgid ""
-#~ "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an "
-#~ "email address for user %(user_display)s."
-#~ msgstr ""
-#~ "Bitte bestätigen Sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> "
-#~ "eine E-Mail-Adresse des Benutzers %(user_display)s ist."
-
-#, python-format
-#~ msgid ""
-#~ "This email confirmation link expired or is invalid. Please <a "
-#~ "href=\"%(email_url)s\">issue a new email confirmation request</a>."
-#~ msgstr ""
-#~ "Dieser Bestätigungslink ist abgelaufen oder ungültig. Bitte <a "
-#~ "href=\"%(email_url)s\">fordern Sie eine neue Bestätigungs-E-Mail an</a>."
-
-#, python-format
-#~ msgid ""
-#~ "If you have not created an account yet, then please %(link)ssign "
-#~ "up%(end_link)s first."
-#~ msgstr ""
-#~ "Wenn Sie noch kein Konto erstellt haben, registrieren Sie sich bitte "
-#~ "zuerst %(link)s%(end_link)s."
-
-#~ msgid "Sign in with a passkey"
-#~ msgstr "Mit einem Passkey anmelden"
-
-#~ msgid "Mail me a sign-in code"
-#~ msgstr "Senden Sie mir einen Anmeldecode"
-
-#~ msgid "Are you sure you want to sign out?"
-#~ msgstr "Möchten Sie sich wirklich abmelden?"
-
-#~ msgid "Forgot Password?"
-#~ msgstr "Passwort vergessen?"
-
-#~ msgid ""
-#~ "Forgotten your password? Enter your email address below, and we'll send "
-#~ "you an email allowing you to reset it."
-#~ msgstr ""
-#~ "Passwort vergessen? Geben Sie unten Ihre E-Mail-Adresse ein, und wir "
-#~ "senden Ihnen eine E-Mail, mit der Sie Ihr Passwort zurücksetzen können."
-
-#~ msgid "Reset My Password"
-#~ msgstr "Mein Passwort zurücksetzen"
-
-#~ msgid "Please contact us if you have any trouble resetting your password."
-#~ msgstr ""
-#~ "Bitte kontaktieren Sie uns, wenn Sie Probleme beim Zurücksetzen Ihres "
-#~ "Passworts haben."
-
-#~ msgid ""
-#~ "We have sent an email. If you have not received it please check your spam "
-#~ "folder. Otherwise contact us if you do not receive it in a few minutes."
-#~ msgstr ""
-#~ "Wir haben eine E-Mail gesendet. Wenn Sie sie nicht erhalten haben, prüfen "
-#~ "Sie bitte Ihren Spam-Ordner. Andernfalls kontaktieren Sie uns, wenn Sie "
-#~ "sie nicht innerhalb weniger Minuten erhalten."
-
-#~ msgid "Your password is now changed."
-#~ msgstr "Ihr Passwort wurde geändert."
-
-#~ msgid "Set Password"
-#~ msgstr "Passwort setzen"
-
-#~ msgid "Enter your password:"
-#~ msgstr "Geben Sie Ihr Passwort ein:"
-
-#~ msgid ""
-#~ "You will receive an email containing a special code for a password-free "
-#~ "sign-in."
-#~ msgstr ""
-#~ "Sie erhalten eine E-Mail mit einem speziellen Code für eine passwortfreie "
-#~ "Anmeldung."
-
-#~ msgid "Request Code"
-#~ msgstr "Code anfordern"
-
-#~ msgid "Other sign-in options"
-#~ msgstr "Weitere Anmeldeoptionen"
-
-#~ msgid "Passkey Sign Up"
-#~ msgstr "Registrierung mit Passkey"
-
-#, python-format
-#~ msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
-#~ msgstr ""
-#~ "Sie haben bereits ein Konto? Dann melden Sie sich bitte "
-#~ "%(link)san%(end_link)s."
-
-#~ msgid "Other options"
-#~ msgstr "Weitere Optionen"
-
-#~ msgid "Sign Up Closed"
-#~ msgstr "Registrierung geschlossen"
-
-#~ msgid "We are sorry, but the sign up is currently closed."
-#~ msgstr "Es tut uns leid, aber die Registrierung ist derzeit geschlossen."
-
-#~ msgid "Verify Your Email Address"
-#~ msgstr "Bestätigen Sie Ihre E-Mail-Adresse"
-
-#~ msgid ""
-#~ "We have sent an email to you for verification. Follow the link provided "
-#~ "to finalize the signup process. If you do not see the verification email "
-#~ "in your main inbox, check your spam folder. Please contact us if you do "
-#~ "not receive the verification email within a few minutes."
-#~ msgstr ""
-#~ "Wir haben Ihnen eine E-Mail zur Bestätigung gesendet. Folgen Sie dem "
-#~ "Link, um den Registrierungsprozess abzuschließen. Wenn Sie die "
-#~ "Bestätigungs-E-Mail nicht in Ihrem Posteingang sehen, prüfen Sie bitte "
-#~ "Ihren Spam-Ordner. Kontaktieren Sie uns, wenn Sie die E-Mail nicht "
-#~ "innerhalb weniger Minuten erhalten."
-
-#~ msgid ""
-#~ "This part of the site requires us to verify that\n"
-#~ "you are who you claim to be. For this purpose, we require that you\n"
-#~ "verify ownership of your email address. "
-#~ msgstr ""
-#~ "Dieser Teil der Website erfordert, dass wir überprüfen, dass\n"
-#~ "Sie die Person sind, für die Sie sich ausgeben. Zu diesem Zweck müssen "
-#~ "Sie\n"
-#~ "den Besitz Ihrer E-Mail-Adresse bestätigen. "
-
-#~ msgid ""
-#~ "We have sent an email to you for\n"
-#~ "verification. Please click on the link inside that email. If you do not "
-#~ "see the verification email in your main inbox, check your spam folder. "
-#~ "Otherwise\n"
-#~ "contact us if you do not receive it within a few minutes."
-#~ msgstr ""
-#~ "Wir haben Ihnen eine E-Mail zur\n"
-#~ "Bestätigung gesendet. Bitte klicken Sie auf den Link in dieser E-Mail. "
-#~ "Wenn Sie die Bestätigungs-E-Mail nicht in Ihrem Posteingang sehen, prüfen "
-#~ "Sie bitte Ihren Spam-Ordner. Andernfalls\n"
-#~ "kontaktieren Sie uns, wenn Sie sie nicht innerhalb weniger Minuten "
-#~ "erhalten."
-
-#, python-format
-#~ msgid ""
-#~ "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change "
-#~ "your email address</a>."
-#~ msgstr ""
-#~ "<strong>Hinweis:</strong> Sie können Ihre <a href=\"%(email_url)s\">E-"
-#~ "Mail-Adresse weiterhin ändern</a>."
-
-#~ msgid ""
-#~ "AI-Diagnostics — automotive diagnostics, inspection and technical "
-#~ "consulting."
-#~ msgstr ""
-#~ "AI-Diagnostics — Fahrzeugdiagnose, Inspektion und technische Beratung."
-
-#~ msgid "AI-Diagnostics logo"
-#~ msgstr "AI-Diagnostics-Logo"
-
-#~ msgid "Toggle navigation"
-#~ msgstr "Navigation umschalten"
-
-#~ msgid "Home"
-#~ msgstr "Startseite"
-
-#~ msgid "About"
-#~ msgstr "Über uns"
-
-#~ msgid "Projects"
-#~ msgstr "Projekte"
-
-#~ msgid "Services"
-#~ msgstr "Leistungen"
-
-#~ msgid "Blog"
-#~ msgstr "Blog"
-
-#~ msgid "Contacts"
-#~ msgstr "Kontakt"
-
-#~ msgid "Language"
-#~ msgstr "Sprache"
-
-#~ msgid "Search..."
-#~ msgstr "Suchen..."
-
-#~ msgid "Subscribe to our updates"
-#~ msgstr "Updates abonnieren"
-
-#~ msgid "Stay informed about our latest news, updates, and developments."
-#~ msgstr ""
-#~ "Bleiben Sie über unsere neuesten Nachrichten, Updates und Entwicklungen "
-#~ "informiert."
-
-#~ msgid ""
-#~ "We help automotive service centers make confident, data-driven diagnostic "
-#~ "decisions."
-#~ msgstr ""
-#~ "Wir helfen Kfz-Werkstätten, sichere und datenbasierte "
-#~ "Diagnoseentscheidungen zu treffen."
-
-#~ msgid "Contact"
-#~ msgstr "Kontakt"
-
-#~ msgid "Contact information:"
-#~ msgstr "Kontaktinformationen:"
-
-#~ msgid "Phone:"
-#~ msgstr "Telefon:"
-
-#~ msgid "Email:"
-#~ msgstr "E-Mail:"
-
-#~ msgid "Links"
-#~ msgstr "Links"
-
-#~ msgid "Copyright"
-#~ msgstr "Copyright"
-
-#~ msgid "All rights reserved"
-#~ msgstr "Alle Rechte vorbehalten"
-
-#~ msgid "Template made with"
-#~ msgstr "Vorlage erstellt mit"
-
-#~ msgid "by"
-#~ msgstr "von"
+msgstr ""

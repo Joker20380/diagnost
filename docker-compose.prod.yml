@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: diagnost_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-diagnost_db}
+      POSTGRES_USER: ${POSTGRES_USER:-diagnost_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - diagnost_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-diagnost_user} -d ${POSTGRES_DB:-diagnost_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - diagnost_net
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: diagnost_web
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+      python manage.py compilemessages &&
+      python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn diagnost.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
+      "
+    ports:
+      - "127.0.0.1:8103:8000"
+    volumes:
+      - ./runtime/static:/app/diagnost/staticfiles
+      - ./runtime/media:/app/diagnost/media
+    networks:
+      - diagnost_net
+
+volumes:
+  diagnost_pgdata:
+
+networks:
+  diagnost_net:
+    driver: bridge
