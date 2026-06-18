@@ -417,3 +417,7 @@ SERVER_EMAIL = os.getenv('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
 
 # django-webp
 WEBP_CHECK_URLS = False
+
+
+# django.contrib.sites / django-allauth
+SITE_ID = 1
