@@ -1,10 +1,10 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block description %}
-Upload a vehicle diagnostic report for structured analysis and recommendations.
+{% trans "Upload a vehicle diagnostic report for structured analysis and recommendations." %}
 {% endblock %}
-{% block title %}Upload diagnostics{% endblock %}
+{% block title %}{% trans "Upload diagnostics" %}{% endblock %}
 
 {% block content %}
 <div class="top-shadow"></div>
@@ -14,10 +14,9 @@ Upload a vehicle diagnostic report for structured analysis and recommendations.
     <div class="container">
       <div class="row slider-text align-items-center justify-content-center">
         <div class="col-md-8 text-center col-sm-12 element-animate pt-5">
-          <h1 class="pt-5"><span>Upload diagnostics</span></h1>
-          <p class="mb-5 w-75">
-            Upload a diagnostic report to generate a structured analysis and
-            preliminary recommendations.
+          <h1 class="pt-5"><span>{% trans "Upload diagnostics" %}</span></h1>
+          <p class="mb-5 w-75 mx-auto">
+            {% trans "Upload a diagnostic report to generate a structured analysis and preliminary recommendations." %}
           </p>
         </div>
       </div>
@@ -29,66 +28,81 @@ Upload a vehicle diagnostic report for structured analysis and recommendations.
   <div class="container">
     <div class="row justify-content-center">
 
-      <div class="col-md-8">
+      <div class="col-lg-7 col-md-9 element-animate">
 
-        <p class="text-muted mb-4">
-          The uploaded file will be processed automatically.
-          Diagnostic data is used exclusively for analysis and is not shared
-          with third parties.
-        </p>
-
-        <form method="post"
-              enctype="multipart/form-data"
-              id="diagnostic_upload_form">
-
-          {% csrf_token %}
-
-          <div class="form-group mb-3">
-            <label for="{{ form.vin.id_for_label }}">
-              Vehicle VIN
-            </label>
-            {{ form.vin }}
-            {% if form.vin.errors %}
-              <div class="text-danger small">{{ form.vin.errors }}</div>
-            {% endif %}
+        <div class="p-4 p-md-5 bg-white border rounded" style="box-shadow: 0 8px 24px rgba(0,0,0,.06);">
+          <div class="mb-4 text-center">
+            <h2 class="h4 mb-2">{% trans "Upload your report" %}</h2>
+            <p class="text-muted mb-0">
+              {% trans "The uploaded file will be processed automatically. Diagnostic data is used exclusively for analysis and is not shared with third parties." %}
+            </p>
           </div>
 
-          <div class="form-group mb-3">
-            <label for="{{ form.vehicle_model.id_for_label }}">
-              Vehicle model
-            </label>
-            {{ form.vehicle_model }}
-            {% if form.vehicle_model.errors %}
-              <div class="text-danger small">{{ form.vehicle_model.errors }}</div>
-            {% endif %}
-          </div>
+          <form method="post" enctype="multipart/form-data" id="diagnostic_upload_form" class="mt-4">
+            {% csrf_token %}
 
-          <div class="form-group mb-4">
-            <label for="{{ form.raw_file.id_for_label }}">
-              Diagnostic report file
-            </label>
-            {{ form.raw_file }}
-            {% if form.raw_file.errors %}
-              <div class="text-danger small">{{ form.raw_file.errors }}</div>
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+              </div>
             {% endif %}
 
-            <small class="form-text text-muted">
-              Supported formats: Launch X431 diagnostic reports.
-              Maximum file size depends on system limits.
-            </small>
-          </div>
+            <div class="form-group mb-3">
+              <label class="form-label" for="{{ form.vin.id_for_label }}">
+                {% trans "Vehicle VIN" %}
+              </label>
+              {{ form.vin }}
+              {% if form.vin.help_text %}
+                <small class="form-text text-muted">{{ form.vin.help_text }}</small>
+              {% endif %}
+              {% for error in form.vin.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
 
-          <button type="submit"
-                  class="btn btn-primary px-4 py-2">
-            Upload and analyze
-          </button>
+            <div class="form-group mb-3">
+              <label class="form-label" for="{{ form.vehicle_model.id_for_label }}">
+                {% trans "Vehicle model" %}
+              </label>
+              {{ form.vehicle_model }}
+              {% if form.vehicle_model.help_text %}
+                <small class="form-text text-muted">{{ form.vehicle_model.help_text }}</small>
+              {% endif %}
+              {% for error in form.vehicle_model.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
 
-        </form>
+            <div class="form-group mb-4">
+              <label class="form-label" for="{{ form.raw_file.id_for_label }}">
+                {% trans "Diagnostic report file" %}
+              </label>
+              {{ form.raw_file }}
+              {% for error in form.raw_file.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
 
-        <p class="mt-4 small text-muted">
-          The analysis result will be available after processing.
-          Final conclusions are confirmed during technician inspection.
-        </p>
+              <small class="form-text text-muted">
+                {% trans "Supported formats: Launch X431 diagnostic reports. Maximum file size depends on system limits." %}
+              </small>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+              <button type="submit" class="btn btn-primary px-4 py-2">
+                {% trans "Upload and analyze" %}
+              </button>
+
+              <a href="{% url 'index' %}" class="btn btn-outline-secondary px-4 py-2">
+                {% trans "Back to home" %}
+              </a>
+            </div>
+
+            <p class="mt-4 small text-muted text-center mb-0">
+              {% trans "The analysis result will be available after processing. Final conclusions must be confirmed during technician inspection." %}
+            </p>
+
+          </form>
+        </div>
 
       </div>
 
