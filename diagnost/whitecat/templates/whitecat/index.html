@@ -1,0 +1,143 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>white_cat — разработка сложных web-систем</title>
+  <meta name="description" content="white_cat — разработка сложных web-систем, Django-платформ, CRM, личных кабинетов, интеграций, автоматизации и AI-assisted инструментов.">
+  <link rel="stylesheet" href="{% static 'whitecat/css/whitecat.css' %}">
+</head>
+<body>
+  <main class="wc-page">
+    <section class="wc-hero">
+      <div class="wc-shell">
+        <header class="wc-header">
+          <a class="wc-logo" href="/">
+            <span class="wc-logo-mark">_</span>
+            <span>white_cat</span>
+          </a>
+
+          <nav class="wc-nav" aria-label="Главная навигация">
+            <a href="#services">Услуги</a>
+            <a href="#stack">Стек</a>
+            <a href="#cases">Направления</a>
+            <a href="#contact">Контакт</a>
+          </nav>
+        </header>
+
+        <div class="wc-hero-grid">
+          <div class="wc-hero-copy">
+            <p class="wc-kicker">web systems / automation / ai-assisted tools</p>
+            <h1>Разработка сложных web-систем</h1>
+            <p class="wc-lead">
+              Проектируем и разрабатываем web-платформы, которые закрывают реальные бизнес-процессы:
+              личные кабинеты, CRM, интеграции, каталоги, аналитические панели, автоматизацию данных
+              и AI-assisted инструменты.
+            </p>
+
+            <div class="wc-actions">
+              <a class="wc-btn wc-btn-primary" href="mailto:urutskoeva.madina@gmail.com?subject=Проект%20для%20white_cat">Обсудить проект</a>
+              <a class="wc-btn wc-btn-secondary" href="#services">Что делаем</a>
+            </div>
+          </div>
+
+          <div class="wc-terminal" aria-label="Технологический блок">
+            <div class="wc-terminal-head">
+              <span></span><span></span><span></span>
+            </div>
+            <pre><code>class WhiteCat:
+    stack = ["Python", "Django", "C#", ".NET"]
+    focus = "complex web systems"
+
+    def build(self, business_process):
+        return {
+            "architecture": "clean",
+            "backend": "reliable",
+            "automation": "scalable",
+            "result": "working product",
+        }</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="wc-section">
+      <div class="wc-shell">
+        <div class="wc-section-head">
+          <p class="wc-kicker">services</p>
+          <h2>Что мы делаем</h2>
+          <p>
+            Не ограничиваемся витринным сайтом. Собираем рабочие системы:
+            от архитектуры и базы данных до интерфейса, деплоя и дальнейшего развития.
+          </p>
+        </div>
+
+        <div class="wc-cards">
+          {% for service in services %}
+            <article class="wc-card">
+              <h3>{{ service.title }}</h3>
+              <p>{{ service.text }}</p>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section id="stack" class="wc-section wc-section-dark">
+      <div class="wc-shell">
+        <div class="wc-section-head">
+          <p class="wc-kicker">technology stack</p>
+          <h2>Технологии</h2>
+          <p>
+            Используем стек, который подходит для долгоживущих систем:
+            backend, данные, интеграции, фоновые задачи и production-инфраструктура.
+          </p>
+        </div>
+
+        <div class="wc-stack">
+          {% for item in stack %}
+            <span>{{ item }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section id="cases" class="wc-section">
+      <div class="wc-shell">
+        <div class="wc-section-head">
+          <p class="wc-kicker">domains</p>
+          <h2>Направления</h2>
+          <p>
+            white_cat полезен там, где нужен не шаблон, а система с данными,
+            логикой, ролями, интеграциями и понятной дорожной картой развития.
+          </p>
+        </div>
+
+        <div class="wc-list">
+          {% for direction in directions %}
+            <div class="wc-list-item">
+              <span></span>
+              <p>{{ direction }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="wc-contact">
+      <div class="wc-shell">
+        <div class="wc-contact-box">
+          <p class="wc-kicker">contact</p>
+          <h2>Есть задача для разработки?</h2>
+          <p>
+            Опишите бизнес-процесс, проблему или идею продукта.
+            Мы разложим задачу на архитектуру, этапы, риски и понятный план внедрения.
+          </p>
+          <a class="wc-btn wc-btn-primary" href="mailto:urutskoeva.madina@gmail.com?subject=Проект%20для%20white_cat">Написать white_cat</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

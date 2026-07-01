@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.
 # Application definition
 
 INSTALLED_APPS = [
+    'whitecat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitecat.middleware.WhiteCatDomainRoutingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django_webp.middleware.ModdedWhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
