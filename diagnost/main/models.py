@@ -180,6 +180,43 @@ class CategoryNews(models.Model):
 class News(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
+
+    # Служебные поля автоматического импорта новостей.
+    meta_description = models.CharField(
+        max_length=320,
+        blank=True,
+        verbose_name="SEO description",
+    )
+    generated_source_id = models.CharField(
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name="Идентификатор внешнего материала",
+    )
+    source_note = models.TextField(
+        blank=True,
+        verbose_name="Примечание об источниках",
+    )
+    source_urls = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Ссылки на источники",
+    )
+    image_topic = models.CharField(
+        max_length=64,
+        blank=True,
+        db_index=True,
+        verbose_name="Тема изображения",
+    )
+    imported_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name="Время последнего импорта",
+    )
+
     content = CKEditor5Field(blank=True, verbose_name="Текст", config_name="extends")
     photo = WEBPField(verbose_name='фото 633x550px', upload_to=image_folder, blank=True, null=True)
     content2 = CKEditor5Field(blank=True, null=True, verbose_name="Текст2", config_name="extends")

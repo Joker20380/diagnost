@@ -62,18 +62,52 @@ class CategoryNewsAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(ImportExportModelAdmin):
-    list_display = ('id', 'title', 'get_photo', 'time_create', 'time_update', 'is_published')
-    list_display_links = ('id', 'title')
-    search_fields = ('title', 'content')
-    list_editable = ('is_published',)
-    list_filter = ('is_published', 'time_create')
-    prepopulated_fields = {"slug": ("title",)}
+    list_display = (
+        "id",
+        "title",
+        "generated_source_id",
+        "get_photo",
+        "time_create",
+        "time_update",
+        "is_published",
+    )
+    list_display_links = (
+        "id",
+        "title",
+    )
+    search_fields = (
+        "title",
+        "content",
+        "meta_description",
+        "generated_source_id",
+        "source_note",
+    )
+    list_editable = (
+        "is_published",
+    )
+    list_filter = (
+        "is_published",
+        "image_topic",
+        "time_create",
+    )
+    prepopulated_fields = {
+        "slug": (
+            "title",
+        ),
+    }
+    readonly_fields = (
+        "generated_source_id",
+        "imported_at",
+    )
 
     def get_photo(self, obj):
         if obj.photo:
-            return mark_safe(f"<img src='{obj.photo.url}' width=50>")
+            return mark_safe(
+                f"<img src='{obj.photo.url}' width=50>"
+            )
         return None
-    get_photo.short_description = 'Фото'
+
+    get_photo.short_description = "Фото"
 
 
 @admin.register(CategoryLecture)

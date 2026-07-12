@@ -1,7 +1,7 @@
 {% extends 'diagnost/base.html' %}
 {% load static i18n %}
 
-{% block description %}{{ news.content|striptags|truncatechars:160 }}{% endblock %}
+{% block description %}{% if news.meta_description %}{{ news.meta_description }}{% else %}{{ news.content|striptags|truncatechars:160 }}{% endif %}{% endblock %}
 {% block title %}{{ news.title }}{% endblock %}
 
 {% block content %}
@@ -54,6 +54,32 @@
           <div class="news-content">
             {% autoescape off %}{{ news.content }}{% endautoescape %}
           </div>
+
+          {% if news.source_note or news.source_urls %}
+            <aside class="news-sources mt-5">
+              <h2>{% trans "Источники материала" %}</h2>
+
+              {% if news.source_note %}
+                <p>{{ news.source_note }}</p>
+              {% endif %}
+
+              {% if news.source_urls %}
+                <ul>
+                  {% for source_url in news.source_urls %}
+                    <li>
+                      <a
+                        href="{{ source_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                      >
+                        {{ source_url }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </aside>
+          {% endif %}
 
           <p>
             <a href="#" class="btn btn-primary py-3 px-3">

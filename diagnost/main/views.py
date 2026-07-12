@@ -115,7 +115,7 @@ class SitemapXmlView(View):
 
 
 class Index(DataMixin, ListView):
-    queryset = News.objects.order_by('-time_update')
+    queryset = News.objects.filter(is_published=True).order_by('-time_update')
     model = News
     template_name = 'diagnost/index.html'
     context_object_name = 'news'
@@ -136,27 +136,27 @@ class Index(DataMixin, ListView):
 
     @staticmethod
     def all_news():
-        return News.objects.order_by('-time_create')
+        return News.objects.filter(is_published=True).order_by('-time_create')
 
     @staticmethod
     def second_news():
-        return News.objects.order_by('-time_create')[:3]
+        return News.objects.filter(is_published=True).order_by('-time_create')[:3]
 
     @staticmethod
     def first_news():
-        return News.objects.order_by('time_create')[:3]
+        return News.objects.filter(is_published=True).order_by('time_create')[:3]
 
     @staticmethod
     def one_news():
-        return News.objects.order_by('-time_create')[:1]
+        return News.objects.filter(is_published=True).order_by('-time_create')[:1]
 
     @staticmethod
     def one_second_news():
-        return News.objects.order_by('time_create')[:1]
+        return News.objects.filter(is_published=True).order_by('time_create')[:1]
 
 
 class About(DataMixin, ListView):
-    queryset = News.objects.order_by('-time_update')
+    queryset = News.objects.filter(is_published=True).order_by('-time_update')
     model = News
     template_name = 'diagnost/about.html'
     context_object_name = 'news'
@@ -175,6 +175,11 @@ class ShowNews(DataMixin, DetailView):
     slug_url_kwarg = 'news_slug'
     context_object_name = 'news'
 
+    def get_queryset(self):
+        return News.objects.filter(
+            is_published=True,
+        )
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['news'])
@@ -182,11 +187,11 @@ class ShowNews(DataMixin, DetailView):
 
     @staticmethod
     def post_last3():
-        return News.objects.reverse()[:3]
+        return News.objects.filter(is_published=True).reverse()[:3]
 
     @staticmethod
     def post_last6():
-        return News.objects.reverse()[:6]
+        return News.objects.filter(is_published=True).reverse()[:6]
 
 
 class ShowDoc(DataMixin, DetailView):
@@ -203,11 +208,11 @@ class ShowDoc(DataMixin, DetailView):
 
     @staticmethod
     def post_last3():
-        return News.objects.reverse()[:3]
+        return News.objects.filter(is_published=True).reverse()[:3]
 
     @staticmethod
     def post_last6():
-        return News.objects.reverse()[:6]
+        return News.objects.filter(is_published=True).reverse()[:6]
 
 
 class ShowProject(DataMixin, DetailView):
@@ -224,11 +229,11 @@ class ShowProject(DataMixin, DetailView):
 
     @staticmethod
     def post_last3():
-        return News.objects.reverse()[:3]
+        return News.objects.filter(is_published=True).reverse()[:3]
 
     @staticmethod
     def post_last6():
-        return News.objects.reverse()[:6]
+        return News.objects.filter(is_published=True).reverse()[:6]
 
 
 class ShowLecture(DataMixin, DetailView):
@@ -245,11 +250,11 @@ class ShowLecture(DataMixin, DetailView):
 
     @staticmethod
     def post_last3():
-        return News.objects.reverse()[:3]
+        return News.objects.filter(is_published=True).reverse()[:3]
 
     @staticmethod
     def post_last6():
-        return News.objects.reverse()[:6]
+        return News.objects.filter(is_published=True).reverse()[:6]
 
 
 class ShowService(DataMixin, DetailView):
@@ -266,11 +271,11 @@ class ShowService(DataMixin, DetailView):
 
     @staticmethod
     def post_last3():
-        return News.objects.reverse()[:3]
+        return News.objects.filter(is_published=True).reverse()[:3]
 
     @staticmethod
     def post_last6():
-        return News.objects.reverse()[:6]
+        return News.objects.filter(is_published=True).reverse()[:6]
 
 
 class Projects(DataMixin, ListView):
@@ -295,7 +300,7 @@ class Projects(DataMixin, ListView):
 
 
 class Blog(DataMixin, ListView):
-    queryset = News.objects.all().reverse()
+    queryset = News.objects.filter(is_published=True).reverse()
     template_name = "diagnost/blog.html"
     model = News
     context_object_name = 'news'
@@ -308,7 +313,7 @@ class Blog(DataMixin, ListView):
 
     @staticmethod
     def news_all_news():
-        return News.objects.all().reverse()
+        return News.objects.filter(is_published=True).reverse()
 
 
 def Subscribe(request):
@@ -565,10 +570,10 @@ def suspension_inspection(request, session_id):
 
 
 class Conf(ListView):
-    queryset = News.objects.all()
+    queryset = News.objects.filter(is_published=True)
     template_name = "diagnost/conf.html"
     model = News
 
     @staticmethod
     def news_all_conf():
-        return News.objects.filter(title='Политика конфиденциальности')
+        return News.objects.filter(is_published=True, title='Политика конфиденциальности')
