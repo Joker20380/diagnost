@@ -35,6 +35,16 @@ services:
       "
     ports:
       - "127.0.0.1:8103:8000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; r=urllib.request.Request('http://127.0.0.1:8000/', headers={'X-Forwarded-Proto':'https'}); urllib.request.urlopen(r, timeout=3)\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
     volumes:
       - ./runtime/static:/app/diagnost/staticfiles
       - ./runtime/media:/app/diagnost/media

@@ -16,6 +16,10 @@ media/
 staticfiles/
 *.sqlite3
 local_settings.py
+*.bak
+*.bak.*
+*.backup
+*~
 
 # OS / IDE
 .DS_Store

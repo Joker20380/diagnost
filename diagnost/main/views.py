@@ -450,22 +450,34 @@ def upload_diagnostic(request):
     if request.method == 'POST':
         form = DiagnosticUploadForm(request.POST, request.FILES)
         if form.is_valid():
+            if profile is None:
+                logger.error("Diagnostic upload rejected: user %s has no profile", request.user.pk)
+                messages.error(request, 'Профиль пользователя не найден. Обратитесь к администратору.')
+                return render(request, 'diagnost/upload.html', {'form': form})
+
             session = form.save(commit=False)
             session.user_profile = profile
             session.status = 'suspension_pending'
             session.handover_time = timezone.now()
             session.save()
 
-            # временно: фейковый анализ, пока нет парсера
-            # DTC codes must come only from a real parser/importer.
-            # Demo P0171/P0420 codes are disabled.
-            # Recommendation is generated from real Launch PDF data when possible.
             try:
                 from diagnostics.launch_pdf_parser import parse_and_apply_launch_pdf
                 parse_and_apply_launch_pdf(session)
-            except Exception as exc:
-                session.notes = ((session.notes or "") + f"\nLaunch PDF parse error: {exc}").strip()
-                session.save(update_fields=["notes"])
+            except Exception:
+                logger.exception(
+                    "Launch PDF parsing failed for session_id=%s user_id=%s",
+                    session.pk,
+                    request.user.pk,
+                )
+                if session.raw_file:
+                    session.raw_file.delete(save=False)
+                session.delete()
+                form.add_error(
+                    'raw_file',
+                    'Не удалось прочитать отчёт Launch. Проверьте файл и попробуйте снова.',
+                )
+                return render(request, 'diagnost/upload.html', {'form': form})
 
             return redirect('diagnostic_detail', session_id=session.id)
     else:

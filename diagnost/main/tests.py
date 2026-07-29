@@ -1,8 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from unittest.mock import patch
 
 from .models import ContactRequest, Subscriber
+from diagnostics.models import DiagnosticSession
+from users.models import UserProfile
 
 
 class PublicFormProtectionTests(TestCase):
@@ -49,3 +54,37 @@ class PublicFormProtectionTests(TestCase):
         subscriber.refresh_from_db()
         self.assertTrue(subscriber.is_active)
         self.assertEqual(Subscriber.objects.count(), 1)
+
+
+class DiagnosticUploadFailureTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username='upload-user',
+            password='test-password',
+        )
+        UserProfile.objects.get_or_create(user=self.user)
+        self.client.force_login(self.user)
+
+    @patch(
+        'diagnostics.launch_pdf_parser.parse_and_apply_launch_pdf',
+        side_effect=ValueError('broken report'),
+    )
+    def test_parser_failure_does_not_leave_session(self, mocked_parser):
+        report = SimpleUploadedFile(
+            'launch.pdf',
+            b'%PDF-1.4\n%%EOF\n',
+            content_type='application/pdf',
+        )
+        response = self.client.post(
+            reverse('diagnostic_upload'),
+            {
+                'vin': 'TESTVIN',
+                'vehicle_model': 'Test vehicle',
+                'raw_file': report,
+            },
+            secure=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Не удалось прочитать отчёт Launch')
+        self.assertFalse(DiagnosticSession.objects.exists())
+        mocked_parser.assert_called_once()
