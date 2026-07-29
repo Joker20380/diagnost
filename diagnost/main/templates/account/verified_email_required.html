@@ -2,9 +2,9 @@
 {% load static %}
 {% load i18n %}
 
-{% block head_title %}Подтвердите email{% endblock head_title %}
-{% block title %}Подтвердите email{% endblock %}
-{% block description %}Для доступа к этому разделу необходимо подтвердить email-адрес{% endblock %}
+{% block head_title %}{% translate "Подтвердите email" %}{% endblock head_title %}
+{% block title %}{% translate "Подтвердите email" %}{% endblock %}
+{% block description %}{% translate "Для доступа к этому разделу необходимо подтвердить email-адрес" %}{% endblock %}
 
 {% block content %}
 
@@ -13,10 +13,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Проверка аккаунта</span>
-      <h1>Подтвердите email</h1>
+      <span class="az-hero-kicker">{% translate "Проверка аккаунта" %}</span>
+      <h1>{% translate "Подтвердите email" %}</h1>
       <p>
-        Для доступа к этому разделу нужно подтвердить, что email-адрес принадлежит вам.
+        {% translate "Для доступа к этому разделу нужно подтвердить, что email-адрес принадлежит вам." %}
       </p>
     </div>
   </div>
@@ -31,44 +31,44 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Email verification required</span>
 
-        <h2>Требуется подтверждение email</h2>
+        <h2>{% translate "Требуется подтверждение email" %}</h2>
 
         <div class="az-auth-info-box">
-          <strong>Нужно подтвердить адрес электронной почты</strong>
+          <strong>{% translate "Нужно подтвердить адрес электронной почты" %}</strong>
           <p>
-            Этот раздел сайта требует дополнительной проверки аккаунта. Для этого
-            необходимо подтвердить владение email-адресом, привязанным к вашему аккаунту.
+            {% blocktranslate trimmed %}Этот раздел сайта требует дополнительной проверки аккаунта. Для этого
+            необходимо подтвердить владение email-адресом, привязанным к вашему аккаунту.{% endblocktranslate %}
           </p>
         </div>
 
         <p class="az-auth-card-text">
-          Мы отправили вам письмо со ссылкой для подтверждения. Откройте письмо и перейдите
+          {% blocktranslate trimmed %}Мы отправили вам письмо со ссылкой для подтверждения. Откройте письмо и перейдите
           по ссылке внутри него. Если письма нет во входящих, проверьте папку «Спам»,
-          «Промоакции» или другие разделы почты.
+          «Промоакции» или другие разделы почты.{% endblocktranslate %}
         </p>
 
         {% url 'account_email' as email_url %}
 
         <div class="az-auth-info-box">
-          <strong>Адрес можно изменить</strong>
+          <strong>{% translate "Адрес можно изменить" %}</strong>
           <p>
-            Если email указан неверно или письмо не приходит, вы можете изменить email-адрес
-            в настройках аккаунта и запросить подтверждение повторно.
+            {% blocktranslate trimmed %}Если email указан неверно или письмо не приходит, вы можете изменить email-адрес
+            в настройках аккаунта и запросить подтверждение повторно.{% endblocktranslate %}
           </p>
         </div>
 
         <div class="az-auth-actions-row">
           <a href="{{ email_url }}" class="az-btn az-btn-primary">
-            Управление email
+            {% translate "Управление email" %}
           </a>
 
           <a href="{% url 'index' %}" class="az-btn az-btn-outline-dark">
-            На главную
+            {% translate "На главную" %}
           </a>
         </div>
 
         <div class="az-auth-links">
-          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+          <a href="{% url 'contacts' %}">{% translate "Нужна помощь?" %}</a>
         </div>
       </div>
 
@@ -76,28 +76,28 @@
       <aside class="az-auth-side">
 
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Почему это важно</span>
+          <span class="az-section-kicker">{% translate "Почему это важно" %}</span>
 
-          <h3>Подтверждённый email</h3>
+          <h3>{% translate "Подтверждённый email" %}</h3>
 
           <ul>
-            <li>Защищает аккаунт от ошибочной регистрации.</li>
-            <li>Позволяет восстановить пароль.</li>
-            <li>Подтверждает владельца личного кабинета.</li>
-            <li>Открывает доступ к защищённым разделам сайта.</li>
+            <li>{% translate "Защищает аккаунт от ошибочной регистрации." %}</li>
+            <li>{% translate "Позволяет восстановить пароль." %}</li>
+            <li>{% translate "Подтверждает владельца личного кабинета." %}</li>
+            <li>{% translate "Открывает доступ к защищённым разделам сайта." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Письмо не пришло?</h3>
+          <h3>{% translate "Письмо не пришло?" %}</h3>
 
           <p>
-            Проверьте папку «Спам» или перейдите в управление email и отправьте письмо
-            подтверждения повторно.
+            {% blocktranslate trimmed %}Проверьте папку «Спам» или перейдите в управление email и отправьте письмо
+            подтверждения повторно.{% endblocktranslate %}
           </p>
 
           <a href="{{ email_url }}" class="az-btn az-btn-primary">
-            Проверить email
+            {% translate "Проверить email" %}
           </a>
         </div>
 

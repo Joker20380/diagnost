@@ -3,9 +3,9 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}Подтверждение email{% endblock head_title %}
-{% block title %}Подтверждение email{% endblock %}
-{% block description %}Подтверждение email-адреса аккаунта Автозвук Владикавказ{% endblock %}
+{% block head_title %}{% translate "Подтверждение email" %}{% endblock head_title %}
+{% block title %}{% translate "Подтверждение email" %}{% endblock %}
+{% block description %}{% translate "Подтверждение email-адреса аккаунта Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -14,11 +14,11 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Подтверждение аккаунта</span>
-      <h1>Подтверждение email</h1>
+      <span class="az-hero-kicker">{% translate "Подтверждение аккаунта" %}</span>
+      <h1>{% translate "Подтверждение email" %}</h1>
       <p>
-        Подтвердите email-адрес, чтобы завершить настройку аккаунта и использовать
-        восстановление доступа.
+        {% blocktranslate trimmed %}Подтвердите email-адрес, чтобы завершить настройку аккаунта и использовать
+        восстановление доступа.{% endblocktranslate %}
       </p>
     </div>
   </div>
@@ -33,14 +33,14 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Email confirmation</span>
 
-        <h2>Подтвердить email-адрес</h2>
+        <h2>{% translate "Подтвердить email-адрес" %}</h2>
 
         {% if confirmation %}
           {% user_display confirmation.email_address.user as user_display %}
 
           {% if can_confirm %}
             <p class="az-auth-card-text">
-              Подтвердите, что этот email-адрес принадлежит пользователю
+              {% translate "Подтвердите, что этот email-адрес принадлежит пользователю" %}
               <strong>{{ user_display }}</strong>.
             </p>
 
@@ -52,10 +52,10 @@
             </div>
 
             <div class="az-auth-info-box">
-              <strong>Что произойдёт после подтверждения?</strong>
+              <strong>{% translate "Что произойдёт после подтверждения?" %}</strong>
               <p>
-                Email будет привязан к аккаунту и сможет использоваться для входа,
-                восстановления пароля и важных уведомлений.
+                {% blocktranslate trimmed %}Email будет привязан к аккаунту и сможет использоваться для входа,
+                восстановления пароля и важных уведомлений.{% endblocktranslate %}
               </p>
             </div>
 
@@ -69,52 +69,52 @@
 
               <div class="az-auth-actions-row">
                 <button type="submit" class="az-btn az-btn-primary">
-                  Подтвердить email
+                  {% translate "Подтвердить email" %}
                 </button>
 
                 <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
-                  Вернуться ко входу
+                  {% translate "Вернуться ко входу" %}
                 </a>
               </div>
             </form>
 
           {% else %}
             <div class="az-auth-info-box az-auth-warning-box">
-              <strong>Подтверждение невозможно</strong>
+              <strong>{% translate "Подтверждение невозможно" %}</strong>
               <p>
                 Email
                 <strong>{{ confirmation.email_address.email }}</strong>
-                уже подтверждён другим аккаунтом или не может быть привязан к текущему пользователю.
+                {% translate "уже подтверждён другим аккаунтом или не может быть привязан к текущему пользователю." %}
               </p>
             </div>
 
             <div class="az-auth-actions-row">
               <a href="{% url 'account_email' %}" class="az-btn az-btn-primary">
-                Управление email
+                {% translate "Управление email" %}
               </a>
 
               <a href="{% url 'contacts' %}" class="az-btn az-btn-outline-dark">
-                Нужна помощь?
+                {% translate "Нужна помощь?" %}
               </a>
             </div>
           {% endif %}
 
         {% else %}
           <div class="az-auth-info-box az-auth-warning-box">
-            <strong>Ссылка недействительна</strong>
+            <strong>{% translate "Ссылка недействительна" %}</strong>
             <p>
-              Ссылка подтверждения email устарела или повреждена. Запросите новое письмо
-              подтверждения в настройках email-адреса.
+              {% blocktranslate trimmed %}Ссылка подтверждения email устарела или повреждена. Запросите новое письмо
+              подтверждения в настройках email-адреса.{% endblocktranslate %}
             </p>
           </div>
 
           <div class="az-auth-actions-row">
             <a href="{% url 'account_email' %}" class="az-btn az-btn-primary">
-              Запросить новое подтверждение
+              {% translate "Запросить новое подтверждение" %}
             </a>
 
             <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
-              Вернуться ко входу
+              {% translate "Вернуться ко входу" %}
             </a>
           </div>
         {% endif %}
@@ -125,27 +125,27 @@
       <aside class="az-auth-side">
 
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Безопасность</span>
+          <span class="az-section-kicker">{% translate "Безопасность" %}</span>
 
-          <h3>Зачем подтверждать email</h3>
+          <h3>{% translate "Зачем подтверждать email" %}</h3>
 
           <ul>
-            <li>Чтобы защитить аккаунт от ошибочной регистрации.</li>
-            <li>Чтобы восстановление пароля работало корректно.</li>
-            <li>Чтобы сервис мог связаться с владельцем аккаунта.</li>
-            <li>Чтобы данные диагностики были привязаны к правильному пользователю.</li>
+            <li>{% translate "Чтобы защитить аккаунт от ошибочной регистрации." %}</li>
+            <li>{% translate "Чтобы восстановление пароля работало корректно." %}</li>
+            <li>{% translate "Чтобы сервис мог связаться с владельцем аккаунта." %}</li>
+            <li>{% translate "Чтобы данные диагностики были привязаны к правильному пользователю." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Возникла проблема?</h3>
+          <h3>{% translate "Возникла проблема?" %}</h3>
           <p>
-            Если ссылка не работает или email уже занят другим аккаунтом,
-            свяжитесь с сервисом.
+            {% blocktranslate trimmed %}Если ссылка не работает или email уже занят другим аккаунтом,
+            свяжитесь с сервисом.{% endblocktranslate %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
 

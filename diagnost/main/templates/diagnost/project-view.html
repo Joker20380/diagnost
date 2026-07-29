@@ -1,9 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
-{% load static %}
+{% load static i18n %}
 
 {% block description %}
-{{ program.title }} — проект Автозвук Владикавказ: автозвук, шумоизоляция, диагностика, ремонт и доработка автомобиля.
+{% blocktranslate trimmed with title=program.title %}{{ title }} — проект Автозвук Владикавказ: автозвук, шумоизоляция, диагностика, ремонт и доработка автомобиля.{% endblocktranslate %}
 {% endblock %}
 
 {% block title %}{{ program.title }}{% endblock %}
@@ -16,22 +15,22 @@
 
   <div class="container">
     <div class="az-project-detail-hero-content">
-      <span class="az-hero-kicker">Проект Автозвук</span>
+      <span class="az-hero-kicker">{% translate "Проект Автозвук" %}</span>
 
       <h1>{{ program.title }}</h1>
 
       <p>
-        Реализованная работа сервиса «Автозвук» во Владикавказе: технический подход,
-        аккуратное исполнение и понятный результат для владельца автомобиля.
+        {% blocktranslate trimmed %}Реализованная работа сервиса «Автозвук» во Владикавказе: технический подход,
+        аккуратное исполнение и понятный результат для владельца автомобиля.{% endblocktranslate %}
       </p>
 
       <div class="az-hero-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Обсудить похожий проект
+          {% translate "Обсудить похожий проект" %}
         </a>
 
         <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
-          Все проекты
+          {% translate "Все проекты" %}
         </a>
       </div>
     </div>
@@ -55,7 +54,7 @@
         </div>
 
         <div class="az-project-detail-prose">
-          <span class="az-section-kicker">Описание проекта</span>
+          <span class="az-section-kicker">{% translate "Описание проекта" %}</span>
 
           <h2>{{ program.title }}</h2>
 
@@ -70,38 +69,38 @@
       <aside class="az-project-detail-sidebar">
 
         <div class="az-project-info-card">
-          <h3>Что важно в таких проектах</h3>
+          <h3>{% translate "Что важно в таких проектах" %}</h3>
 
           <ul>
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Точная задача</strong>
-                <p>Сначала определяем, что нужно получить: звук, комфорт, ремонт или диагностику.</p>
+                <strong>{% translate "Точная задача" %}</strong>
+                <p>{% translate "Сначала определяем, что нужно получить: звук, комфорт, ремонт или диагностику." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Подбор решения</strong>
-                <p>Смотрим автомобиль, бюджет, состояние узлов и реальные технические ограничения.</p>
+                <strong>{% translate "Подбор решения" %}</strong>
+                <p>{% translate "Смотрим автомобиль, бюджет, состояние узлов и реальные технические ограничения." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Аккуратное исполнение</strong>
-                <p>Работа должна быть не только заметной, но и надёжной в эксплуатации.</p>
+                <strong>{% translate "Аккуратное исполнение" %}</strong>
+                <p>{% translate "Работа должна быть не только заметной, но и надёжной в эксплуатации." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Проверка результата</strong>
-                <p>После выполнения проверяем итог и объясняем клиенту, что было сделано.</p>
+                <strong>{% translate "Проверка результата" %}</strong>
+                <p>{% translate "После выполнения проверяем итог и объясняем клиенту, что было сделано." %}</p>
               </div>
             </li>
           </ul>
@@ -109,22 +108,22 @@
 
 
         <div class="az-project-contact-card">
-          <span class="az-section-kicker">Нужна похожая работа?</span>
+          <span class="az-section-kicker">{% translate "Нужна похожая работа?" %}</span>
 
-          <h3>Расскажите, что хотите сделать с автомобилем</h3>
+          <h3>{% translate "Расскажите, что хотите сделать с автомобилем" %}</h3>
 
           <p>
-            Мы подскажем, с чего начать: диагностика, подбор компонентов, ремонт,
-            шумоизоляция или комплексная доработка.
+            {% blocktranslate trimmed %}Мы подскажем, с чего начать: диагностика, подбор компонентов, ремонт,
+            шумоизоляция или комплексная доработка.{% endblocktranslate %}
           </p>
 
           <div class="az-project-contact-actions">
             <a href="tel:+79188266181" class="az-btn az-btn-primary">
-              Позвонить
+              {% translate "Позвонить" %}
             </a>
 
             <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
-              Контакты
+              {% translate "Контакты" %}
             </a>
           </div>
         </div>
@@ -142,33 +141,33 @@
     <div class="az-project-result-card">
 
       <div>
-        <span class="az-section-kicker">Подход к работе</span>
-        <h2>Не просто сделать, а довести до результата</h2>
+        <span class="az-section-kicker">{% translate "Подход к работе" %}</span>
+        <h2>{% translate "Не просто сделать, а довести до результата" %}</h2>
         <p>
-          В проектах по автозвуку, шумоизоляции, диагностике и ремонту важна системность:
-          правильно понять задачу, выбрать технологию, выполнить работу и проверить итог.
+          {% blocktranslate trimmed %}В проектах по автозвуку, шумоизоляции, диагностике и ремонту важна системность:
+          правильно понять задачу, выбрать технологию, выполнить работу и проверить итог.{% endblocktranslate %}
         </p>
       </div>
 
       <div class="az-project-result-grid">
         <div>
           <strong>01</strong>
-          <span>Задача</span>
+          <span>{% translate "Задача" %}</span>
         </div>
 
         <div>
           <strong>02</strong>
-          <span>Решение</span>
+          <span>{% translate "Решение" %}</span>
         </div>
 
         <div>
           <strong>03</strong>
-          <span>Работа</span>
+          <span>{% translate "Работа" %}</span>
         </div>
 
         <div>
           <strong>04</strong>
-          <span>Результат</span>
+          <span>{% translate "Результат" %}</span>
         </div>
       </div>
 
@@ -182,9 +181,9 @@
     <div class="az-project-detail-bottom-card">
 
       <div>
-        <h2>Хотите реализовать похожий проект?</h2>
+        <h2>{% translate "Хотите реализовать похожий проект?" %}</h2>
         <p>
-          Позвоните или приезжайте в сервис. Разберём задачу по автомобилю и предложим рабочий сценарий.
+          {% translate "Позвоните или приезжайте в сервис. Разберём задачу по автомобилю и предложим рабочий сценарий." %}
         </p>
       </div>
 
@@ -194,7 +193,7 @@
         </a>
 
         <a href="{% url 'projects' %}" class="az-btn az-btn-outline">
-          Назад к проектам
+          {% translate "Назад к проектам" %}
         </a>
       </div>
 

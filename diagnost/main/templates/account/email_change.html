@@ -2,9 +2,9 @@
 {% load static %}
 {% load i18n %}
 
-{% block head_title %}Email-адрес{% endblock head_title %}
-{% block title %}Email-адрес{% endblock %}
-{% block description %}Изменение email-адреса аккаунта Автозвук Владикавказ{% endblock %}
+{% block head_title %}{% translate "Email-адрес" %}{% endblock head_title %}
+{% block title %}{% translate "Email-адрес" %}{% endblock %}
+{% block description %}{% translate "Изменение email-адреса аккаунта Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -13,11 +13,11 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Настройки аккаунта</span>
-      <h1>Email-адрес</h1>
+      <span class="az-hero-kicker">{% translate "Настройки аккаунта" %}</span>
+      <h1>{% translate "Email-адрес" %}</h1>
       <p>
-        Управляйте email-адресом аккаунта. Email используется для входа,
-        восстановления доступа и важных уведомлений.
+        {% blocktranslate trimmed %}Управляйте email-адресом аккаунта. Email используется для входа,
+        восстановления доступа и важных уведомлений.{% endblocktranslate %}
       </p>
     </div>
   </div>
@@ -32,14 +32,14 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Email</span>
 
-        <h2>Изменение email-адреса</h2>
+        <h2>{% translate "Изменение email-адреса" %}</h2>
 
         {% if not emailaddresses %}
           <div class="az-auth-info-box">
-            <strong>Email-адрес не добавлен</strong>
+            <strong>{% translate "Email-адрес не добавлен" %}</strong>
             <p>
-              У аккаунта пока нет подтверждённого email-адреса. Добавьте email,
-              чтобы использовать восстановление доступа и уведомления.
+              {% blocktranslate trimmed %}У аккаунта пока нет подтверждённого email-адреса. Добавьте email,
+              чтобы использовать восстановление доступа и уведомления.{% endblocktranslate %}
             </p>
           </div>
         {% endif %}
@@ -54,22 +54,22 @@
               </div>
 
               <div class="az-email-state-body">
-                <span>Текущий email</span>
+                <span>{% translate "Текущий email" %}</span>
                 <strong>{{ current_emailaddress.email }}</strong>
 
                 <div class="az-email-badges">
                   {% if current_emailaddress.verified %}
                     <span class="az-email-badge az-email-badge-success">
-                      Подтверждён
+                      {% translate "Подтверждён" %}
                     </span>
                   {% else %}
                     <span class="az-email-badge az-email-badge-warning">
-                      Не подтверждён
+                      {% translate "Не подтверждён" %}
                     </span>
                   {% endif %}
 
                   <span class="az-email-badge az-email-badge-primary">
-                    Текущий
+                    {% translate "Текущий" %}
                   </span>
                 </div>
               </div>
@@ -85,22 +85,22 @@
 
               <div class="az-email-state-body">
                 {% if not current_emailaddress %}
-                  <span>Текущий email ожидает подтверждения</span>
+                  <span>{% translate "Текущий email ожидает подтверждения" %}</span>
                 {% else %}
-                  <span>Смена email на</span>
+                  <span>{% translate "Смена email на" %}</span>
                 {% endif %}
 
                 <strong>{{ new_emailaddress.email }}</strong>
 
                 <div class="az-email-badges">
                   <span class="az-email-badge az-email-badge-warning">
-                    Ожидает подтверждения
+                    {% translate "Ожидает подтверждения" %}
                   </span>
                 </div>
 
                 <p>
-                  Новый email ещё не подтверждён. Можно повторно отправить письмо
-                  подтверждения или отменить смену адреса.
+                  {% blocktranslate trimmed %}Новый email ещё не подтверждён. Можно повторно отправить письмо
+                  подтверждения или отменить смену адреса.{% endblocktranslate %}
                 </p>
 
                 <div class="az-email-pending-actions">
@@ -108,7 +108,7 @@
                           form="pending-email"
                           name="action_send"
                           class="az-btn az-btn-outline-dark">
-                    Отправить подтверждение повторно
+                    {% translate "Отправить подтверждение повторно" %}
                   </button>
 
                   {% if current_emailaddress %}
@@ -117,7 +117,7 @@
                             name="action_remove"
                             class="az-btn az-btn-danger"
                             id="azCancelEmailChangeButton">
-                      Отменить смену
+                      {% translate "Отменить смену" %}
                     </button>
                   {% endif %}
                 </div>
@@ -143,17 +143,17 @@
           {% endif %}
 
           <div class="az-auth-separator">
-            <span>новый email</span>
+            <span>{% translate "новый email" %}</span>
           </div>
 
           <div class="az-auth-field">
-            <label for="{{ form.email.id_for_label }}">Изменить на</label>
+            <label for="{{ form.email.id_for_label }}">{% translate "Изменить на" %}</label>
 
             <input type="email"
                    name="{{ form.email.html_name }}"
                    id="{{ form.email.id_for_label }}"
                    value="{{ form.email.value|default_if_none:'' }}"
-                   placeholder="Введите новый email">
+                   placeholder="{% translate "Введите новый email" %}">
 
             {% if form.email.errors %}
               <div class="az-auth-field-errors">
@@ -165,14 +165,14 @@
           <button type="submit"
                   name="action_add"
                   class="az-btn az-btn-primary az-auth-submit">
-            Изменить email
+            {% translate "Изменить email" %}
           </button>
         </form>
 
 
         <div class="az-auth-links">
-          <a href="{% url 'index' %}">На главную</a>
-          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+          <a href="{% url 'index' %}">{% translate "На главную" %}</a>
+          <a href="{% url 'contacts' %}">{% translate "Нужна помощь?" %}</a>
         </div>
       </div>
 
@@ -180,27 +180,27 @@
       <aside class="az-auth-side">
 
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Безопасность</span>
+          <span class="az-section-kicker">{% translate "Безопасность" %}</span>
 
-          <h3>Почему email важен</h3>
+          <h3>{% translate "Почему email важен" %}</h3>
 
           <ul>
-            <li>Через email восстанавливается доступ к аккаунту.</li>
-            <li>Email используется для подтверждения личности.</li>
-            <li>На него могут приходить важные уведомления.</li>
-            <li>Он помогает связать аккаунт с реальным пользователем.</li>
+            <li>{% translate "Через email восстанавливается доступ к аккаунту." %}</li>
+            <li>{% translate "Email используется для подтверждения личности." %}</li>
+            <li>{% translate "На него могут приходить важные уведомления." %}</li>
+            <li>{% translate "Он помогает связать аккаунт с реальным пользователем." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Не приходит письмо?</h3>
+          <h3>{% translate "Не приходит письмо?" %}</h3>
           <p>
-            Проверьте папку «Спам». Если письмо всё равно не приходит,
-            свяжитесь с сервисом.
+            {% blocktranslate trimmed %}Проверьте папку «Спам». Если письмо всё равно не приходит,
+            свяжитесь с сервисом.{% endblocktranslate %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
 
@@ -227,6 +227,7 @@
 
 {% block extra_body %}
   {{ block.super }}
+  {% translate "Отменить смену email-адреса?" as cancel_email_change_message %}
 
   <script>
     (function () {
@@ -237,7 +238,7 @@
       }
 
       button.addEventListener("click", function (event) {
-        if (!confirm("Отменить смену email-адреса?")) {
+        if (!confirm("{{ cancel_email_change_message|escapejs }}")) {
           event.preventDefault();
         }
       });

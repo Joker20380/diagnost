@@ -3,8 +3,8 @@
 {% load i18n %}
 {% load allauth account %}
 
-{% block title %}Регистрация{% endblock title %}
-{% block description %}Регистрация в личном кабинете Автозвук Владикавказ{% endblock %}
+{% block title %}{% translate "Регистрация" %}{% endblock title %}
+{% block description %}{% translate "Регистрация в личном кабинете Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -13,10 +13,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Личный кабинет</span>
-      <h1>Регистрация</h1>
+      <span class="az-hero-kicker">{% translate "Личный кабинет" %}</span>
+      <h1>{% translate "Регистрация" %}</h1>
       <p>
-        Создайте аккаунт для доступа к сервисным данным, диагностике и истории обращений.
+        {% translate "Создайте аккаунт для доступа к сервисным данным, диагностике и истории обращений." %}
       </p>
     </div>
   </div>
@@ -29,8 +29,8 @@
     <div class="az-auth-layout">
 
       <div class="az-auth-card">
-        <span class="az-section-kicker">Новый аккаунт</span>
-        <h2>Создать аккаунт</h2>
+        <span class="az-section-kicker">{% translate "Новый аккаунт" %}</span>
+        <h2>{% translate "Создать аккаунт" %}</h2>
 
         {% url 'account_signup' as signup_url %}
 
@@ -65,26 +65,26 @@
           {{ redirect_field }}
 
           <button type="submit" class="az-btn az-btn-primary az-auth-submit">
-            Зарегистрироваться
+            {% translate "Зарегистрироваться" %}
           </button>
         </form>
 
         <div class="az-auth-links">
-          <a href="{% url 'account_login' %}">Уже есть аккаунт? Войти</a>
+          <a href="{% url 'account_login' %}">{% translate "Уже есть аккаунт? Войти" %}</a>
         </div>
       </div>
 
 
       <aside class="az-auth-side">
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Аккаунт</span>
-          <h3>Что будет доступно</h3>
+          <span class="az-section-kicker">{% translate "Аккаунт" %}</span>
+          <h3>{% translate "Что будет доступно" %}</h3>
 
           <ul>
-            <li>Личный кабинет клиента.</li>
-            <li>История обращений.</li>
-            <li>Результаты диагностики.</li>
-            <li>Связь с сервисом.</li>
+            <li>{% translate "Личный кабинет клиента." %}</li>
+            <li>{% translate "История обращений." %}</li>
+            <li>{% translate "Результаты диагностики." %}</li>
+            <li>{% translate "Связь с сервисом." %}</li>
           </ul>
         </div>
       </aside>

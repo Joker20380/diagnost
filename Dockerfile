@@ -85,4 +85,6 @@ COPY . /app
 
 WORKDIR /app/diagnost
 
+RUN django-admin compilemessages
+
 EXPOSE 8000

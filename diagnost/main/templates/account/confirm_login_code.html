@@ -3,9 +3,9 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}Код входа{% endblock head_title %}
-{% block title %}Код входа{% endblock %}
-{% block description %}Ввод одноразового кода для входа в личный кабинет Автозвук Владикавказ{% endblock %}
+{% block head_title %}{% translate "Код входа" %}{% endblock head_title %}
+{% block title %}{% translate "Код входа" %}{% endblock %}
+{% block description %}{% translate "Ввод одноразового кода для входа в личный кабинет Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -14,10 +14,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Безопасный вход</span>
-      <h1>Введите код входа</h1>
+      <span class="az-hero-kicker">{% translate "Безопасный вход" %}</span>
+      <h1>{% translate "Введите код входа" %}</h1>
       <p>
-        Мы отправили одноразовый код на ваш email. Введите его, чтобы продолжить вход в аккаунт.
+        {% translate "Мы отправили одноразовый код на ваш email. Введите его, чтобы продолжить вход в аккаунт." %}
       </p>
     </div>
   </div>
@@ -32,10 +32,10 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Sign-in code</span>
 
-        <h2>Код для входа</h2>
+        <h2>{% translate "Код для входа" %}</h2>
 
         <p class="az-auth-card-text">
-          Код был отправлен на адрес:
+          {% translate "Код был отправлен на адрес:" %}
         </p>
 
         <div class="az-auth-email-box">
@@ -44,10 +44,10 @@
         </div>
 
         <div class="az-auth-info-box">
-          <strong>Код действует ограниченное время</strong>
+          <strong>{% translate "Код действует ограниченное время" %}</strong>
           <p>
-            Введите код как можно скорее. Если срок действия истёк, вернитесь ко входу
-            и запросите новый код.
+            {% blocktranslate trimmed %}Введите код как можно скорее. Если срок действия истёк, вернитесь ко входу
+            и запросите новый код.{% endblocktranslate %}
           </p>
         </div>
 
@@ -88,46 +88,46 @@
 
           <div class="az-auth-actions-row">
             <button type="submit" class="az-btn az-btn-primary">
-              Войти
+              {% translate "Войти" %}
             </button>
 
             <button type="submit"
                     form="logout-from-stage"
                     class="az-btn az-btn-outline-dark">
-              Отмена
+              {% translate "Отмена" %}
             </button>
           </div>
         </form>
 
         <div class="az-auth-links">
-          <a href="{% url 'account_login' %}">Вернуться ко входу</a>
-          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+          <a href="{% url 'account_login' %}">{% translate "Вернуться ко входу" %}</a>
+          <a href="{% url 'contacts' %}">{% translate "Нужна помощь?" %}</a>
         </div>
       </div>
 
 
       <aside class="az-auth-side">
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Одноразовый код</span>
+          <span class="az-section-kicker">{% translate "Одноразовый код" %}</span>
 
-          <h3>Зачем нужен код</h3>
+          <h3>{% translate "Зачем нужен код" %}</h3>
 
           <ul>
-            <li>Позволяет войти без обычного пароля.</li>
-            <li>Код отправляется только на подтверждённый email.</li>
-            <li>Срок действия ограничен для безопасности.</li>
-            <li>После отмены потребуется начать вход заново.</li>
+            <li>{% translate "Позволяет войти без обычного пароля." %}</li>
+            <li>{% translate "Код отправляется только на подтверждённый email." %}</li>
+            <li>{% translate "Срок действия ограничен для безопасности." %}</li>
+            <li>{% translate "После отмены потребуется начать вход заново." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Код не пришёл?</h3>
+          <h3>{% translate "Код не пришёл?" %}</h3>
           <p>
-            Проверьте папку «Спам» или вернитесь на страницу входа и запросите код повторно.
+            {% translate "Проверьте папку «Спам» или вернитесь на страницу входа и запросите код повторно." %}
           </p>
 
           <a href="{% url 'account_login' %}" class="az-btn az-btn-primary">
-            Страница входа
+            {% translate "Страница входа" %}
           </a>
         </div>
       </aside>

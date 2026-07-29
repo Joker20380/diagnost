@@ -2,8 +2,8 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Аккаунт неактивен{% endblock %}
-{% block description %}Аккаунт пользователя временно неактивен{% endblock %}
+{% block title %}{% translate "Аккаунт неактивен" %}{% endblock %}
+{% block description %}{% translate "Аккаунт пользователя временно неактивен" %}{% endblock %}
 
 {% block content %}
 
@@ -12,10 +12,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Личный кабинет</span>
-      <h1>Аккаунт неактивен</h1>
+      <span class="az-hero-kicker">{% translate "Личный кабинет" %}</span>
+      <h1>{% translate "Аккаунт неактивен" %}</h1>
       <p>
-        Этот аккаунт сейчас отключён или ожидает дополнительного действия со стороны администратора.
+        {% translate "Этот аккаунт сейчас отключён или ожидает дополнительного действия со стороны администратора." %}
       </p>
     </div>
   </div>
@@ -27,30 +27,30 @@
 
     <div class="az-auth-single">
       <div class="az-auth-card">
-        <span class="az-section-kicker">Доступ ограничен</span>
+        <span class="az-section-kicker">{% translate "Доступ ограничен" %}</span>
 
-        <h2>Вход невозможен</h2>
+        <h2>{% translate "Вход невозможен" %}</h2>
 
         <p class="az-auth-card-text">
-          Аккаунт найден, но он находится в неактивном состоянии. Обычно это значит,
-          что доступ был временно отключён, аккаунт ещё не подтверждён или требуется проверка администратором.
+          {% blocktranslate trimmed %}Аккаунт найден, но он находится в неактивном состоянии. Обычно это значит,
+          что доступ был временно отключён, аккаунт ещё не подтверждён или требуется проверка администратором.{% endblocktranslate %}
         </p>
 
         <div class="az-auth-info-box">
-          <strong>Что можно сделать?</strong>
+          <strong>{% translate "Что можно сделать?" %}</strong>
           <p>
-            Свяжитесь с сервисом, если считаете, что аккаунт должен быть активен.
-            Мы проверим данные и подскажем следующий шаг.
+            {% blocktranslate trimmed %}Свяжитесь с сервисом, если считаете, что аккаунт должен быть активен.
+            Мы проверим данные и подскажем следующий шаг.{% endblocktranslate %}
           </p>
         </div>
 
         <div class="az-auth-actions-row">
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Связаться с нами
+            {% translate "Связаться с нами" %}
           </a>
 
           <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
-            Вернуться ко входу
+            {% translate "Вернуться ко входу" %}
           </a>
         </div>
       </div>

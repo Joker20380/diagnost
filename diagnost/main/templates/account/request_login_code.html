@@ -3,9 +3,9 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}Вход по коду{% endblock head_title %}
-{% block title %}Вход по коду{% endblock %}
-{% block description %}Запрос одноразового кода для входа в личный кабинет Автозвук Владикавказ{% endblock %}
+{% block head_title %}{% translate "Вход по коду" %}{% endblock head_title %}
+{% block title %}{% translate "Вход по коду" %}{% endblock %}
+{% block description %}{% translate "Запрос одноразового кода для входа в личный кабинет Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -14,10 +14,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Безопасный вход</span>
-      <h1>Вход по одноразовому коду</h1>
+      <span class="az-hero-kicker">{% translate "Безопасный вход" %}</span>
+      <h1>{% translate "Вход по одноразовому коду" %}</h1>
       <p>
-        Получите код на email и войдите в личный кабинет без ввода пароля.
+        {% translate "Получите код на email и войдите в личный кабинет без ввода пароля." %}
       </p>
     </div>
   </div>
@@ -32,18 +32,18 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Sign-in code</span>
 
-        <h2>Получить код для входа</h2>
+        <h2>{% translate "Получить код для входа" %}</h2>
 
         <p class="az-auth-card-text">
-          Укажите email, связанный с аккаунтом. Мы отправим на него одноразовый код
-          для входа без пароля.
+          {% blocktranslate trimmed %}Укажите email, связанный с аккаунтом. Мы отправим на него одноразовый код
+          для входа без пароля.{% endblocktranslate %}
         </p>
 
         <div class="az-auth-info-box">
-          <strong>Как это работает?</strong>
+          <strong>{% translate "Как это работает?" %}</strong>
           <p>
-            Код действует ограниченное время. После получения письма введите код
-            на следующей странице, чтобы завершить вход.
+            {% blocktranslate trimmed %}Код действует ограниченное время. После получения письма введите код
+            на следующей странице, чтобы завершить вход.{% endblocktranslate %}
           </p>
         </div>
 
@@ -86,18 +86,18 @@
 
           <div class="az-auth-actions-row">
             <button type="submit" class="az-btn az-btn-primary">
-              Получить код
+              {% translate "Получить код" %}
             </button>
 
             <a href="{% url 'account_login' %}" class="az-btn az-btn-outline-dark">
-              Другие способы входа
+              {% translate "Другие способы входа" %}
             </a>
           </div>
         </form>
 
         <div class="az-auth-links">
-          <a href="{% url 'account_login' %}">Войти с паролем</a>
-          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+          <a href="{% url 'account_login' %}">{% translate "Войти с паролем" %}</a>
+          <a href="{% url 'contacts' %}">{% translate "Нужна помощь?" %}</a>
         </div>
       </div>
 
@@ -105,28 +105,28 @@
       <aside class="az-auth-side">
 
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Без пароля</span>
+          <span class="az-section-kicker">{% translate "Без пароля" %}</span>
 
-          <h3>Когда удобно</h3>
+          <h3>{% translate "Когда удобно" %}</h3>
 
           <ul>
-            <li>Если вы не хотите вводить пароль на текущем устройстве.</li>
-            <li>Если временно не помните пароль.</li>
-            <li>Если нужен быстрый вход через подтверждённый email.</li>
-            <li>Если аккаунт поддерживает вход по одноразовому коду.</li>
+            <li>{% translate "Если вы не хотите вводить пароль на текущем устройстве." %}</li>
+            <li>{% translate "Если временно не помните пароль." %}</li>
+            <li>{% translate "Если нужен быстрый вход через подтверждённый email." %}</li>
+            <li>{% translate "Если аккаунт поддерживает вход по одноразовому коду." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Код не приходит?</h3>
+          <h3>{% translate "Код не приходит?" %}</h3>
 
           <p>
-            Проверьте правильность email и папку «Спам». Если письмо не приходит,
-            попробуйте войти обычным способом или свяжитесь с сервисом.
+            {% blocktranslate trimmed %}Проверьте правильность email и папку «Спам». Если письмо не приходит,
+            попробуйте войти обычным способом или свяжитесь с сервисом.{% endblocktranslate %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
 

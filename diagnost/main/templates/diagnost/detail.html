@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Результат диагностики{% endblock %}
-{% block description %}Детали сессии диагностики автомобиля, найденные ошибки, рекомендации и осмотр ходовой части{% endblock %}
+{% block title %}{% translate "Результат диагностики" %}{% endblock %}
+{% block description %}{% translate "Детали сессии диагностики автомобиля, найденные ошибки, рекомендации и осмотр ходовой части" %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/diagnostic-report-fixes.css' %}">
@@ -10,27 +10,29 @@
 {% endblock %}
 
 {% block content %}
+{% translate "Описание отсутствует" as missing_description %}
+{% translate "Описание по этому коду пока дополняется." as pending_description %}
 
 <section class="az-diagnostic-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
   <div class="az-diagnostic-hero-overlay"></div>
 
   <div class="container">
     <div class="az-diagnostic-hero-content">
-      <span class="az-hero-kicker">Диагностическая сессия</span>
+      <span class="az-hero-kicker">{% translate "Диагностическая сессия" %}</span>
 
-      <h1>Результат диагностики</h1>
+      <h1>{% translate "Результат диагностики" %}</h1>
 
       <p>
-        Сводка по автомобилю, найденные коды ошибок, системные рекомендации и данные осмотра ходовой части.
+        {% translate "Сводка по автомобилю, найденные коды ошибок, системные рекомендации и данные осмотра ходовой части." %}
       </p>
 
       <div class="az-hero-actions">
         <a href="{% url 'diagnostic_upload' %}" class="az-btn az-btn-primary">
-          Загрузить новый отчёт
+          {% translate "Загрузить новый отчёт" %}
         </a>
 
         <button type="button" class="az-btn az-btn-outline az-print-page">
-          Распечатать отчёт
+          {% translate "Распечатать отчёт" %}
         </button>
       </div>
     </div>
@@ -49,17 +51,17 @@
       </div>
 
       <div class="az-diagnostic-summary-card">
-        <span class="az-diagnostic-summary-label">Модель</span>
+        <span class="az-diagnostic-summary-label">{% translate "Модель" %}</span>
         <strong>{{ session.vehicle_model|default:"—" }}</strong>
       </div>
 
       <div class="az-diagnostic-summary-card">
-        <span class="az-diagnostic-summary-label">Дата</span>
+        <span class="az-diagnostic-summary-label">{% translate "Дата" %}</span>
         <strong>{{ session.created_at|date:"d.m.Y H:i" }}</strong>
       </div>
 
       <div class="az-diagnostic-summary-card">
-        <span class="az-diagnostic-summary-label">Статус</span>
+        <span class="az-diagnostic-summary-label">{% translate "Статус" %}</span>
         <strong>{{ session.get_status_display|default:session.status }}</strong>
       </div>
 
@@ -73,8 +75,8 @@
         <section class="az-diagnostic-card">
           <div class="az-diagnostic-card-head">
             <div>
-              <span class="az-section-kicker">Коды ошибок</span>
-              <h2>Найденные коды ошибок</h2>
+              <span class="az-section-kicker">{% translate "Коды ошибок" %}</span>
+              <h2>{% translate "Найденные коды ошибок" %}</h2>
             </div>
 
             <span class="az-diagnostic-count">
@@ -95,16 +97,16 @@
                       <strong>
                         {% if ref %}
                           <a href="{% url 'diagnostics:dtc_detail' ref.code %}" class="az-dtc-report-title">
-                            {{ ref.title_ru|default:ref.title_en|default:code.description|default:"Описание отсутствует" }}
+                            {{ ref.localized_title|default:code.description|default:missing_description }}
                           </a>
                         {% else %}
-                          {{ code.description|default:"Описание отсутствует" }}
+                          {{ code.description|default:missing_description }}
                         {% endif %}
                       </strong>
 
                       {% if ref %}
                         <span>
-                          {{ ref.description_ru|default:ref.description_en|truncatechars:220|default:"Описание по этому коду пока дополняется." }}
+                          {{ ref.localized_description|truncatechars:220|default:pending_description }}
                         </span>
 
                         <div class="az-dtc-report-meta">
@@ -118,20 +120,20 @@
 
                         {% if ref.recommended_checks %}
                           <div class="az-dtc-report-checks">
-                            <b>Что проверить:</b>
+                            <b>{% translate "Что проверить:" %}</b>
                             {{ ref.recommended_checks|truncatechars:260 }}
                           </div>
                         {% endif %}
 
                         <div class="az-dtc-report-actions">
                           <a href="{% url 'diagnostics:dtc_detail' ref.code %}" class="az-dtc-report-link">
-                            Открыть расшифровку {{ ref.code }}
+                            {% blocktranslate trimmed with code=ref.code %}Открыть расшифровку {{ code }}{% endblocktranslate %}
                           </a>
                         </div>
                       {% else %}
                         <span>
-                          Код пока не связан со справочником. Требуется проверка в контексте симптомов,
-                          данных автомобиля и фактического состояния узлов.
+                          {% blocktranslate trimmed %}Код пока не связан со справочником. Требуется проверка в контексте симптомов,
+                          данных автомобиля и фактического состояния узлов.{% endblocktranslate %}
                         </span>
                       {% endif %}
                     {% endwith %}
@@ -141,9 +143,9 @@
             </div>
           {% else %}
             <div class="az-empty-inline">
-              <h3>Коды ошибок не найдены</h3>
+              <h3>{% translate "Коды ошибок не найдены" %}</h3>
               <p>
-                В загруженном отчёте нет активных кодов ошибок или они не были распознаны системой.
+                {% translate "В загруженном отчёте нет активных кодов ошибок или они не были распознаны системой." %}
               </p>
             </div>
           {% endif %}
@@ -153,8 +155,8 @@
         <section class="az-diagnostic-card">
           <div class="az-diagnostic-card-head">
             <div>
-              <span class="az-section-kicker">Фактология мастера</span>
-              <h2>Ходовая часть</h2>
+              <span class="az-section-kicker">{% translate "Фактология мастера" %}</span>
+              <h2>{% translate "Ходовая часть" %}</h2>
             </div>
           </div>
 
@@ -162,14 +164,14 @@
 
             <div class="az-suspension-state az-suspension-warning">
               <div>
-                <h3>Ожидается осмотр подвески</h3>
+                <h3>{% translate "Ожидается осмотр подвески" %}</h3>
                 <p>
-                  Диагностическая сессия требует фактической проверки ходовой части мастером.
+                  {% translate "Диагностическая сессия требует фактической проверки ходовой части мастером." %}
                 </p>
               </div>
 
               <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-primary">
-                Провести осмотр
+                {% translate "Провести осмотр" %}
               </a>
             </div>
 
@@ -180,27 +182,27 @@
 
                 {% if inspection.status == 'signed' %}
                   <div class="az-inspection-status az-inspection-signed">
-                    <strong>Осмотр подписан мастером</strong>
+                    <strong>{% translate "Осмотр подписан мастером" %}</strong>
 
                     <p>
                       {% if inspection.inspector %}
-                        Мастер: {{ inspection.inspector }}.
+                        {% blocktranslate trimmed with inspector=inspection.inspector %}Мастер: {{ inspector }}.{% endblocktranslate %}
                       {% endif %}
 
                       {% if inspection.signed_at %}
-                        Дата подписи: {{ inspection.signed_at|date:"d.m.Y H:i" }}.
+                        {% blocktranslate trimmed with signed_at=inspection.signed_at|date:"d.m.Y H:i" %}Дата подписи: {{ signed_at }}.{% endblocktranslate %}
                       {% endif %}
                     </p>
 
                     <span>
-                      Этот блок — фактология. ИИ здесь не принимает решений.
+                      {% translate "Этот блок — фактология. ИИ здесь не принимает решений." %}
                     </span>
                   </div>
                 {% else %}
                   <div class="az-inspection-status az-inspection-draft">
-                    <strong>Осмотр в черновике</strong>
+                    <strong>{% translate "Осмотр в черновике" %}</strong>
                     <p>
-                      Можно редактировать до подписи. Финальным считается только подписанный осмотр.
+                      {% translate "Можно редактировать до подписи. Финальным считается только подписанный осмотр." %}
                     </p>
                   </div>
                 {% endif %}
@@ -208,34 +210,34 @@
 
                 <div class="az-inspection-meta-grid">
                   <div>
-                    <span>Мастер</span>
+                    <span>{% translate "Мастер" %}</span>
                     <strong>{{ inspection.inspector|default:"—" }}</strong>
                   </div>
 
                   <div>
-                    <span>Пробег</span>
-                    <strong>{{ inspection.mileage_km|default:"—" }}{% if inspection.mileage_km %} км{% endif %}</strong>
+                    <span>{% translate "Пробег" %}</span>
+                    <strong>{{ inspection.mileage_km|default:"—" }}{% if inspection.mileage_km %} {% translate "км" %}{% endif %}</strong>
                   </div>
 
                   <div>
-                    <span>Подъёмник</span>
-                    <strong>{% if inspection.lift_used %}Да{% else %}Нет{% endif %}</strong>
+                    <span>{% translate "Подъёмник" %}</span>
+                    <strong>{% if inspection.lift_used %}{% translate "Да" %}{% else %}{% translate "Нет" %}{% endif %}</strong>
                   </div>
 
                   <div>
-                    <span>Тест-драйв</span>
-                    <strong>{% if inspection.test_drive %}Да{% else %}Нет{% endif %}</strong>
+                    <span>{% translate "Тест-драйв" %}</span>
+                    <strong>{% if inspection.test_drive %}{% translate "Да" %}{% else %}{% translate "Нет" %}{% endif %}</strong>
                   </div>
 
                   <div>
-                    <span>Общий риск</span>
+                    <span>{% translate "Общий риск" %}</span>
                     <strong>{{ inspection.get_overall_risk_display|default:"—" }}</strong>
                   </div>
                 </div>
 
 
                 <div class="az-inspection-comment">
-                  <span>Комментарий мастера</span>
+                  <span>{% translate "Комментарий мастера" %}</span>
                   <p>{{ inspection.comment|default:"—" }}</p>
                 </div>
 
@@ -246,13 +248,13 @@
                       <table class="az-parts-table">
                         <thead>
                           <tr>
-                            <th>Деталь</th>
-                            <th>Износ</th>
-                            <th>Критичность</th>
-                            <th>Причина</th>
-                            <th>Признаки / замеры</th>
-                            <th>Каталожный номер</th>
-                            <th>Замена</th>
+                            <th>{% translate "Деталь" %}</th>
+                            <th>{% translate "Износ" %}</th>
+                            <th>{% translate "Критичность" %}</th>
+                            <th>{% translate "Причина" %}</th>
+                            <th>{% translate "Признаки / замеры" %}</th>
+                            <th>{% translate "Каталожный номер" %}</th>
+                            <th>{% translate "Замена" %}</th>
                           </tr>
                         </thead>
 
@@ -281,9 +283,9 @@
 
                               <td>
                                 {% if part.needs_replacement %}
-                                  <span class="az-replacement-yes">Да</span>
+                                  <span class="az-replacement-yes">{% translate "Да" %}</span>
                                 {% else %}
-                                  <span class="az-replacement-no">Нет</span>
+                                  <span class="az-replacement-no">{% translate "Нет" %}</span>
                                 {% endif %}
                               </td>
                             </tr>
@@ -293,9 +295,9 @@
                     </div>
                   {% else %}
                     <div class="az-empty-inline">
-                      <h3>Детали не добавлены</h3>
+                      <h3>{% translate "Детали не добавлены" %}</h3>
                       <p>
-                        В осмотре пока нет конкретных элементов ходовой части.
+                        {% translate "В осмотре пока нет конкретных элементов ходовой части." %}
                       </p>
                     </div>
                   {% endif %}
@@ -305,9 +307,9 @@
                 <div class="az-diagnostic-actions-row">
                   <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-dark">
                     {% if inspection.status == 'signed' %}
-                      Открыть осмотр
+                      {% translate "Открыть осмотр" %}
                     {% else %}
-                      Продолжить осмотр
+                      {% translate "Продолжить осмотр" %}
                     {% endif %}
                   </a>
                 </div>
@@ -315,13 +317,13 @@
               {% else %}
 
                 <div class="az-empty-inline">
-                  <h3>Данные осмотра не найдены</h3>
+                  <h3>{% translate "Данные осмотра не найдены" %}</h3>
                   <p>
-                    Сессия отмечена как требующая осмотра, но данные осмотра пока отсутствуют.
+                    {% translate "Сессия отмечена как требующая осмотра, но данные осмотра пока отсутствуют." %}
                   </p>
 
                   <a href="{% url 'suspension_inspection' session.id %}" class="az-btn az-btn-dark">
-                    Заполнить осмотр
+                    {% translate "Заполнить осмотр" %}
                   </a>
                 </div>
 
@@ -331,9 +333,9 @@
           {% else %}
 
             <div class="az-empty-inline">
-              <h3>Подвеска не в пайплайне этой сессии</h3>
+              <h3>{% translate "Подвеска не в пайплайне этой сессии" %}</h3>
               <p>
-                Для этой диагностической сессии не требуется отдельный осмотр ходовой части.
+                {% translate "Для этой диагностической сессии не требуется отдельный осмотр ходовой части." %}
               </p>
             </div>
 
@@ -346,8 +348,8 @@
       <aside class="az-diagnostic-sidebar">
 
         <div class="az-diagnostic-side-card">
-          <span class="az-section-kicker">Сессия</span>
-          <h3>Краткая сводка</h3>
+          <span class="az-section-kicker">{% translate "Сессия" %}</span>
+          <h3>{% translate "Краткая сводка" %}</h3>
 
           <ul>
             <li>
@@ -356,17 +358,17 @@
             </li>
 
             <li>
-              <span>Модель</span>
+              <span>{% translate "Модель" %}</span>
               <strong>{{ session.vehicle_model|default:"—" }}</strong>
             </li>
 
             <li>
-              <span>Ошибок</span>
+              <span>{% translate "Ошибок" %}</span>
               <strong>{{ codes|length }}</strong>
             </li>
 
             <li>
-              <span>Статус</span>
+              <span>{% translate "Статус" %}</span>
               <strong>{{ session.get_status_display|default:session.status }}</strong>
             </li>
           </ul>
@@ -374,28 +376,28 @@
 
 
         <div class="az-diagnostic-side-help">
-          <h3>Как читать отчёт</h3>
+          <h3>{% translate "Как читать отчёт" %}</h3>
 
           <ol>
-            <li>Коды ошибок показывают направление проверки, но не всегда точную причину.</li>
-            <li>Рекомендации системы являются предварительными.</li>
-            <li>Фактический осмотр мастера имеет приоритет над автоматическим анализом.</li>
-            <li>Решение по ремонту принимается после проверки симптомов и состояния узлов.</li>
+            <li>{% translate "Коды ошибок показывают направление проверки, но не всегда точную причину." %}</li>
+            <li>{% translate "Рекомендации системы являются предварительными." %}</li>
+            <li>{% translate "Фактический осмотр мастера имеет приоритет над автоматическим анализом." %}</li>
+            <li>{% translate "Решение по ремонту принимается после проверки симптомов и состояния узлов." %}</li>
           </ol>
         </div>
 
 
         <div class="az-diagnostic-side-cta">
-          <span class="az-section-kicker">Новая диагностика</span>
+          <span class="az-section-kicker">{% translate "Новая диагностика" %}</span>
 
-          <h3>Нужно проверить другой автомобиль?</h3>
+          <h3>{% translate "Нужно проверить другой автомобиль?" %}</h3>
 
           <p>
-            Загрузите новый отчёт диагностики, чтобы сформировать отдельную сессию анализа.
+            {% translate "Загрузите новый отчёт диагностики, чтобы сформировать отдельную сессию анализа." %}
           </p>
 
           <a href="{% url 'diagnostic_upload' %}" class="az-btn az-btn-primary">
-            Загрузить отчёт
+            {% translate "Загрузить отчёт" %}
           </a>
         </div>
 

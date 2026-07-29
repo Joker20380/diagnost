@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 from users.models import UserProfile
 
@@ -44,23 +46,23 @@ class DTCImportBatch(models.Model):
 
 class DTCReference(models.Model):
     class System(models.TextChoices):
-        POWERTRAIN = "P", "Двигатель / трансмиссия"
-        CHASSIS = "C", "Ходовая часть"
-        BODY = "B", "Кузовная электроника"
-        NETWORK = "U", "Сеть / CAN"
-        OEM = "O", "OEM / заводской код"
+        POWERTRAIN = "P", _("Двигатель / трансмиссия")
+        CHASSIS = "C", _("Ходовая часть")
+        BODY = "B", _("Кузовная электроника")
+        NETWORK = "U", _("Сеть / CAN")
+        OEM = "O", _("OEM / заводской код")
 
     class Scope(models.TextChoices):
-        GENERIC = "generic", "Универсальный OBD-II"
-        MANUFACTURER = "manufacturer", "Бренд-специфичный"
-        UNKNOWN = "unknown", "Неизвестно"
+        GENERIC = "generic", _("Универсальный OBD-II")
+        MANUFACTURER = "manufacturer", _("Бренд-специфичный")
+        UNKNOWN = "unknown", _("Неизвестно")
 
     class Severity(models.TextChoices):
-        INFO = "info", "Информационный"
-        LOW = "low", "Низкий"
-        MEDIUM = "medium", "Средний"
-        HIGH = "high", "Высокий"
-        CRITICAL = "critical", "Критический"
+        INFO = "info", _("Информационный")
+        LOW = "low", _("Низкий")
+        MEDIUM = "medium", _("Средний")
+        HIGH = "high", _("Высокий")
+        CRITICAL = "critical", _("Критический")
 
     code = models.CharField(max_length=32, db_index=True)
     system = models.CharField(max_length=1, choices=System.choices, db_index=True)
@@ -154,6 +156,18 @@ class DTCReference(models.Model):
             return f"{self.code} [{self.manufacturer}]"
         return self.code
 
+    @property
+    def localized_title(self):
+        if (get_language() or "ru").split("-", 1)[0] == "ru":
+            return self.title_ru or self.title_en
+        return self.title_en or self.title_ru
+
+    @property
+    def localized_description(self):
+        if (get_language() or "ru").split("-", 1)[0] == "ru":
+            return self.description_ru or self.description_en
+        return self.description_en or self.description_ru
+
 
 class OBDLiveDataPIDReference(models.Model):
     pid = models.CharField(max_length=20, unique=True)
@@ -207,9 +221,9 @@ class DiagnosticSession(models.Model):
 
     # --- Pipeline/статусы
     STATUS_CHOICES = [
-        ("engine_done", "Диагностика двигателя завершена"),
-        ("suspension_pending", "Ожидает осмотра подвески"),
-        ("suspension_done", "Диагностика подвески завершена"),
+        ("engine_done", _("Диагностика двигателя завершена")),
+        ("suspension_pending", _("Ожидает осмотра подвески")),
+        ("suspension_done", _("Диагностика подвески завершена")),
         # можно расширять: brakes_pending, brakes_done, transmission_done и т.д.
     ]
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="engine_done")
@@ -297,8 +311,8 @@ class SuspensionInspection(models.Model):
 
     # --- Подпись/аудит (чтобы “ИИ не рулит”: финальный факт = подпись мастера)
     STATUS_CHOICES = [
-        ("draft", "Черновик"),
-        ("signed", "Подписан мастером"),
+        ("draft", _("Черновик")),
+        ("signed", _("Подписан мастером")),
     ]
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="draft")
     signed_at = models.DateTimeField(null=True, blank=True)
@@ -309,9 +323,9 @@ class SuspensionInspection(models.Model):
     lift_used = models.BooleanField(default=True)
 
     OVERALL_RISK_CHOICES = [
-        ("low", "Низкий"),
-        ("medium", "Средний"),
-        ("high", "Высокий"),
+        ("low", _("Низкий")),
+        ("medium", _("Средний")),
+        ("high", _("Высокий")),
     ]
     overall_risk = models.CharField(
         max_length=10, choices=OVERALL_RISK_CHOICES, default="medium"
@@ -352,9 +366,9 @@ class SuspensionPart(models.Model):
 
     # --- Усиление фактологии: что именно не так и насколько критично
     SEVERITY_CHOICES = [
-        ("ok", "Ок"),
-        ("warn", "Внимание"),
-        ("crit", "Критично"),
+        ("ok", _("Ок")),
+        ("warn", _("Внимание")),
+        ("crit", _("Критично")),
     ]
     severity = models.CharField(max_length=8, choices=SEVERITY_CHOICES, default="warn")
 

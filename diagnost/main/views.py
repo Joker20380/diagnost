@@ -16,6 +16,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
 from django.db import transaction  # ✅ добавили
 
@@ -91,10 +92,10 @@ def _calc_replacement_hint(wear):
         w = 0
 
     if w >= 70:
-        return "Рекомендация: заменить", "badge bg-danger"
+        return _("Рекомендация: заменить"), "badge bg-danger"
     if w >= 40:
-        return "Рекомендация: наблюдать / перепроверить", "badge bg-warning text-dark"
-    return "Рекомендация: замена не требуется", "badge bg-success"
+        return _("Рекомендация: наблюдать / перепроверить"), "badge bg-warning text-dark"
+    return _("Рекомендация: замена не требуется"), "badge bg-success"
 
 
 def _annotate_formset_recommendations(formset):
@@ -153,7 +154,7 @@ class Index(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Домой")
+        c_def = self.get_user_context(title=_("Домой"))
         return dict(list(context.items()) + list(c_def.items()))
 
     @staticmethod
@@ -194,7 +195,7 @@ class About(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="О нас")
+        c_def = self.get_user_context(title=_("О нас"))
         return dict(list(context.items()) + list(c_def.items()))
 
 
@@ -317,7 +318,7 @@ class Projects(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Проекты")
+        c_def = self.get_user_context(title=_("Проекты"))
         return dict(list(context.items()) + list(c_def.items()))
 
     @staticmethod
@@ -338,7 +339,7 @@ class Blog(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Новости")
+        c_def = self.get_user_context(title=_("Новости"))
         return dict(list(context.items()) + list(c_def.items()))
 
     @staticmethod
@@ -353,10 +354,10 @@ def Subscribe(request):
             if form.cleaned_data.get('website'):
                 return redirect('index')
             if _is_rate_limited(request, 'subscribe'):
-                messages.error(request, 'Слишком много попыток. Повторите через минуту.')
+                messages.error(request, _('Слишком много попыток. Повторите через минуту.'))
                 return redirect('index')
             form.save()
-            messages.success(request, 'Вы успешно подписались на рассылку!')
+            messages.success(request, _('Вы успешно подписались на рассылку!'))
             return redirect('index')
     else:
         form = SubscriberForm()
@@ -377,15 +378,15 @@ def Unsubscribe(request):
                     f"/unsubscribe/confirm/{subscriber.unsubscribe_token}/"
                 )
                 send_mail(
-                    'Подтверждение отписки',
-                    f'Для подтверждения отписки перейдите по ссылке: {unsubscribe_url}',
+                    _('Подтверждение отписки'),
+                    _('Для подтверждения отписки перейдите по ссылке: %(url)s') % {"url": unsubscribe_url},
                     settings.DEFAULT_FROM_EMAIL,
                     [email],
                     fail_silently=False,
                 )
-                messages.success(request, 'На ваш email отправлено письмо с подтверждением отписки.')
+                messages.success(request, _('На ваш email отправлено письмо с подтверждением отписки.'))
             except Subscriber.DoesNotExist:
-                messages.error(request, 'Подписка с таким email не найдена.')
+                messages.error(request, _('Подписка с таким email не найдена.'))
             return redirect('unsubscribe_request')
     else:
         form = UnsubscriberForm()
@@ -397,7 +398,7 @@ def Unsubscribe_confirm(request, token):
     subscriber.is_active = False
     subscriber.unsubscribe_token = None
     subscriber.save()
-    messages.success(request, 'Вы успешно отписались от рассылки.')
+    messages.success(request, _('Вы успешно отписались от рассылки.'))
     return render(request, 'diagnost/unsubscribe_success.html')
 
 
@@ -424,18 +425,18 @@ class ContactsView(TemplateView):
     def post(self, request, *args, **kwargs):
         form = ContactRequestForm(request.POST)
         if not form.is_valid():
-            messages.error(request, 'Проверьте правильность заполнения формы.')
+            messages.error(request, _('Проверьте правильность заполнения формы.'))
             return self.get(request, *args, **kwargs)
 
         if form.cleaned_data.get('website'):
             return redirect('contacts')
 
         if _is_rate_limited(request, 'contact'):
-            messages.error(request, 'Сообщение уже отправлено. Повторите через минуту.')
+            messages.error(request, _('Сообщение уже отправлено. Повторите через минуту.'))
             return redirect('contacts')
 
         form.save()
-        messages.success(request, 'Ваше сообщение успешно отправлено!')
+        messages.success(request, _('Ваше сообщение успешно отправлено!'))
         return redirect('contacts')
 
 
@@ -452,7 +453,7 @@ def upload_diagnostic(request):
         if form.is_valid():
             if profile is None:
                 logger.error("Diagnostic upload rejected: user %s has no profile", request.user.pk)
-                messages.error(request, 'Профиль пользователя не найден. Обратитесь к администратору.')
+                messages.error(request, _('Профиль пользователя не найден. Обратитесь к администратору.'))
                 return render(request, 'diagnost/upload.html', {'form': form})
 
             session = form.save(commit=False)
@@ -475,7 +476,7 @@ def upload_diagnostic(request):
                 session.delete()
                 form.add_error(
                     'raw_file',
-                    'Не удалось прочитать отчёт Launch. Проверьте файл и попробуйте снова.',
+                    _('Не удалось прочитать отчёт Launch. Проверьте файл и попробуйте снова.'),
                 )
                 return render(request, 'diagnost/upload.html', {'form': form})
 
@@ -522,7 +523,7 @@ def suspension_inspection(request, session_id):
 
         # ✅ после подписи — только просмотр
         if inspection.status == 'signed':
-            messages.error(request, "Осмотр уже подписан и доступен только для просмотра.")
+            messages.error(request, _("Осмотр уже подписан и доступен только для просмотра."))
             return redirect('diagnostic_detail', session_id=session.id)
 
         form = SuspensionForm(request.POST, instance=inspection)
@@ -581,15 +582,15 @@ def suspension_inspection(request, session_id):
                     insp.status = 'signed'
                     insp.signed_at = timezone.now()
                     insp.save(update_fields=['inspector', 'status', 'signed_at'])
-                    messages.success(request, "Осмотр подписан. Редактирование заблокировано.")
+                    messages.success(request, _("Осмотр подписан. Редактирование заблокировано."))
                 else:
-                    messages.success(request, "Осмотр подвески сохранён (черновик).")
+                    messages.success(request, _("Осмотр подвески сохранён (черновик)."))
 
             return redirect('diagnostic_detail', session_id=session.id)
 
         # ❗️важно: даже при ошибках хотим показать рекомендации с сервера
         _annotate_formset_recommendations(formset)
-        messages.error(request, "Ошибка при сохранении. Проверьте данные.")
+        messages.error(request, _("Ошибка при сохранении. Проверьте данные."))
     else:
         form = SuspensionForm(instance=inspection)
         formset = SuspensionPartFormSet(instance=inspection, prefix='parts')

@@ -1,22 +1,23 @@
-{% if not request.COOKIES.cookies_accepted %}
-  <div class="az-cookie-banner" id="azCookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление об использовании cookies">
+
+{% load i18n %}{% if not request.COOKIES.cookies_accepted %}
+  <div class="az-cookie-banner" id="azCookieBanner" role="dialog" aria-live="polite" aria-label="{% translate "Уведомление об использовании cookies" %}">
     <div class="az-cookie-content">
       <div class="az-cookie-icon">
         <span class="ion ion-ios-information"></span>
       </div>
 
       <div class="az-cookie-text">
-        <strong>Мы используем cookies</strong>
+        <strong>{% translate "Мы используем cookies" %}</strong>
         <span>
-          Cookies помогают улучшать работу сайта и анализировать взаимодействие с ним.
-          Подробнее — в
-          <a href="{% url 'conf' %}">политике конфиденциальности</a>.
+          {% blocktranslate trimmed %}Cookies помогают улучшать работу сайта и анализировать взаимодействие с ним.
+          Подробнее — в{% endblocktranslate %}
+          <a href="{% url 'conf' %}">{% translate "политике конфиденциальности" %}</a>.
         </span>
       </div>
     </div>
 
     <button type="button" class="az-cookie-accept" id="azAcceptCookies">
-      Принять
+      {% translate "Принять" %}
     </button>
   </div>
 {% endif %}

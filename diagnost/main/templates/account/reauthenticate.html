@@ -2,11 +2,12 @@
 {% load i18n %}
 
 {% block reauthenticate_content %}
+  {% translate "Пароль" as password_label %}
 
   <div class="az-auth-info-box">
-    <strong>Введите пароль</strong>
+    <strong>{% translate "Введите пароль" %}</strong>
     <p>
-      Для продолжения подтвердите доступ к аккаунту текущим паролем.
+      {% translate "Для продолжения подтвердите доступ к аккаунту текущим паролем." %}
     </p>
   </div>
 
@@ -30,7 +31,7 @@
       {% else %}
         <div class="az-auth-field">
           <label for="{{ field.id_for_label }}">
-            {{ field.label|default:"Пароль" }}
+            {{ field.label|default:password_label }}
           </label>
 
           {{ field }}
@@ -52,11 +53,11 @@
 
     <div class="az-auth-actions-row">
       <button type="submit" class="az-btn az-btn-primary">
-        Подтвердить
+        {% translate "Подтвердить" %}
       </button>
 
       <a href="{% url 'account_reset_password' %}" class="az-btn az-btn-outline-dark">
-        Забыли пароль?
+        {% translate "Забыли пароль?" %}
       </a>
     </div>
   </form>

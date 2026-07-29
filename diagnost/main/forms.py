@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 from users.models import UserProfile
 from .models import ContactRequest, Subscriber
@@ -15,10 +16,10 @@ class CustomResetPasswordForm(ResetPasswordForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({
-    		'class': 'newsletter_input',
-    		'placeholder': 'Введите ваш email',
-    		'autocomplete': 'email'
-		})
+            'class': 'newsletter_input',
+            'placeholder': _('Введите ваш email'),
+            'autocomplete': 'email'
+        })
 
 
 class CustomLoginForm(LoginForm):
@@ -33,31 +34,31 @@ class UserProfileForm(forms.ModelForm):
     last_name = forms.CharField(
         max_length=30,
         required=False,
-        label='Фамилия',
-        widget=forms.TextInput(attrs={"placeholder": "Фамилия", "class": "newsletter_input"})
+        label=_('Фамилия'),
+        widget=forms.TextInput(attrs={"placeholder": _("Фамилия"), "class": "newsletter_input"})
     )
     first_name = forms.CharField(
         max_length=30,
         required=False,
-        label='Имя',
-        widget=forms.TextInput(attrs={"placeholder": "Имя", "class": "newsletter_input"})
+        label=_('Имя'),
+        widget=forms.TextInput(attrs={"placeholder": _("Имя"), "class": "newsletter_input"})
     )
     patronymic = forms.CharField(
         max_length=30,
         required=False,
-        label='Отчество',
-        widget=forms.TextInput(attrs={"placeholder": "Отчество", "class": "newsletter_input"})
+        label=_('Отчество'),
+        widget=forms.TextInput(attrs={"placeholder": _("Отчество"), "class": "newsletter_input"})
     )
     address = forms.CharField(
         max_length=30,
         required=False,
-        label='Адрес',
-        widget=forms.TextInput(attrs={"placeholder": "Адрес", "class": "newsletter_input"})
+        label=_('Адрес'),
+        widget=forms.TextInput(attrs={"placeholder": _("Адрес"), "class": "newsletter_input"})
     )
     phone_number = PhoneNumberField(
         region="RU",
-        label='Номер телефона',
-        widget=forms.TextInput(attrs={"placeholder": "Номер телефона", "class": "newsletter_input"})
+        label=_('Номер телефона'),
+        widget=forms.TextInput(attrs={"placeholder": _("Номер телефона"), "class": "newsletter_input"})
     )
 
     class Meta:
@@ -90,37 +91,37 @@ class PersonalAreaForm(forms.ModelForm):
     last_name = forms.CharField(
         max_length=30,
         required=False,
-        label='Фамилия',
-        widget=forms.TextInput(attrs={"placeholder": "Фамилия", "class": "newsletter_input"})
+        label=_('Фамилия'),
+        widget=forms.TextInput(attrs={"placeholder": _("Фамилия"), "class": "newsletter_input"})
     )
     first_name = forms.CharField(
         max_length=30,
         required=False,
-        label='Имя',
-        widget=forms.TextInput(attrs={"placeholder": "Имя", "class": "newsletter_input"})
+        label=_('Имя'),
+        widget=forms.TextInput(attrs={"placeholder": _("Имя"), "class": "newsletter_input"})
     )
     patronymic = forms.CharField(
         max_length=30,
         required=False,
-        label='Отчество',
-        widget=forms.TextInput(attrs={"placeholder": "Отчество", "class": "newsletter_input"})
+        label=_('Отчество'),
+        widget=forms.TextInput(attrs={"placeholder": _("Отчество"), "class": "newsletter_input"})
     )
     address = forms.CharField(
         max_length=30,
         required=False,
-        label='Адрес',
-        widget=forms.TextInput(attrs={"placeholder": "Адрес", "class": "newsletter_input"})
+        label=_('Адрес'),
+        widget=forms.TextInput(attrs={"placeholder": _("Адрес"), "class": "newsletter_input"})
     )
     phone_number = PhoneNumberField(
         region="RU",
-        label='Номер телефона',
-        widget=forms.TextInput(attrs={"placeholder": "Номер телефона", "class": "newsletter_input"})
+        label=_('Номер телефона'),
+        widget=forms.TextInput(attrs={"placeholder": _("Номер телефона"), "class": "newsletter_input"})
     )
     merit = forms.CharField(
         max_length=500,
         required=False,
-        label='О себе',
-        widget=forms.Textarea(attrs={"placeholder": "О себе", "class": "newsletter_input", "rows": 3})
+        label=_('О себе'),
+        widget=forms.Textarea(attrs={"placeholder": _("О себе"), "class": "newsletter_input", "rows": 3})
     )
 
 
@@ -158,7 +159,10 @@ class PersonalAreaForm(forms.ModelForm):
         if image:
             max_size_mb = 5
             if image.size > max_size_mb * 1024 * 1024:
-                raise forms.ValidationError(f"Размер изображения не должен превышать {max_size_mb} МБ.")
+                raise forms.ValidationError(
+                    _("Размер изображения не должен превышать %(size)s МБ.")
+                    % {"size": max_size_mb}
+                )
         return image
 
     def save(self, commit=True):
@@ -235,7 +239,7 @@ class SubscriberForm(forms.ModelForm):
         model = Subscriber
         fields = ['email']
         widgets = {
-            'email': forms.EmailInput(attrs={"placeholder": "Введите ваш email", "autocomplete": "email", "class": "newsletter_input"})
+            'email': forms.EmailInput(attrs={"placeholder": _("Введите ваш email"), "autocomplete": "email", "class": "newsletter_input"})
         }
 
     def clean_email(self):
@@ -281,9 +285,9 @@ class ContactRequestForm(forms.ModelForm):
 
 class UnsubscriberForm(forms.Form):
     email = forms.EmailField(
-        label="Ваш email",
+        label=_("Ваш email"),
         widget=forms.EmailInput(attrs={
-            "placeholder": "Введите ваш email",
+            "placeholder": _("Введите ваш email"),
             "autocomplete": "email",
             "class": "newsletter_input"
         })

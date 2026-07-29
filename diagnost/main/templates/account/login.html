@@ -3,8 +3,8 @@
 {% load i18n %}
 {% load allauth account %}
 
-{% block title %}Вход{% endblock title %}
-{% block description %}Вход в личный кабинет Автозвук Владикавказ{% endblock %}
+{% block title %}{% translate "Вход" %}{% endblock title %}
+{% block description %}{% translate "Вход в личный кабинет Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -13,10 +13,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Личный кабинет</span>
-      <h1>Вход</h1>
+      <span class="az-hero-kicker">{% translate "Личный кабинет" %}</span>
+      <h1>{% translate "Вход" %}</h1>
       <p>
-        Войдите в аккаунт, чтобы продолжить работу с диагностикой, заявками и сервисными данными.
+        {% translate "Войдите в аккаунт, чтобы продолжить работу с диагностикой, заявками и сервисными данными." %}
       </p>
     </div>
   </div>
@@ -29,8 +29,8 @@
     <div class="az-auth-layout">
 
       <div class="az-auth-card">
-        <span class="az-section-kicker">Авторизация</span>
-        <h2>Войти в аккаунт</h2>
+        <span class="az-section-kicker">{% translate "Авторизация" %}</span>
+        <h2>{% translate "Войти в аккаунт" %}</h2>
 
         {% if not SOCIALACCOUNT_ONLY %}
           {% url 'account_login' as login_url %}
@@ -66,17 +66,17 @@
             {{ redirect_field }}
 
             <button type="submit" class="az-btn az-btn-primary az-auth-submit">
-              Войти
+              {% translate "Войти" %}
             </button>
           </form>
 
           <div class="az-auth-links">
-            <a href="{% url 'account_reset_password' %}">Забыли пароль?</a>
+            <a href="{% url 'account_reset_password' %}">{% translate "Забыли пароль?" %}</a>
 
             {% if signup_url %}
-              <a href="{{ signup_url }}">Создать аккаунт</a>
+              <a href="{{ signup_url }}">{% translate "Создать аккаунт" %}</a>
             {% else %}
-              <a href="{% url 'account_signup' %}">Создать аккаунт</a>
+              <a href="{% url 'account_signup' %}">{% translate "Создать аккаунт" %}</a>
             {% endif %}
           </div>
         {% endif %}
@@ -84,7 +84,7 @@
 
         {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED or SOCIALACCOUNT_ENABLED %}
           <div class="az-auth-separator">
-            <span>или</span>
+            <span>{% translate "или" %}</span>
           </div>
         {% endif %}
 
@@ -96,13 +96,13 @@
                       form="mfa_login"
                       id="passkey_login"
                       class="az-auth-alt-btn">
-                Войти с passkey
+                {% translate "Войти с passkey" %}
               </button>
             {% endif %}
 
             {% if LOGIN_BY_CODE_ENABLED %}
               <a href="{{ request_login_code_url }}" class="az-auth-alt-btn">
-                Получить код входа на email
+                {% translate "Получить код входа на email" %}
               </a>
             {% endif %}
           </div>
@@ -119,23 +119,23 @@
 
       <aside class="az-auth-side">
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Автозвук</span>
-          <h3>Зачем нужен аккаунт</h3>
+          <span class="az-section-kicker">{% translate "Автозвук" %}</span>
+          <h3>{% translate "Зачем нужен аккаунт" %}</h3>
 
           <ul>
-            <li>Доступ к диагностическим данным.</li>
-            <li>Работа с сервисными заявками.</li>
-            <li>Просмотр результатов осмотра.</li>
-            <li>Сохранение истории обращений.</li>
+            <li>{% translate "Доступ к диагностическим данным." %}</li>
+            <li>{% translate "Работа с сервисными заявками." %}</li>
+            <li>{% translate "Просмотр результатов осмотра." %}</li>
+            <li>{% translate "Сохранение истории обращений." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Нужна помощь?</h3>
-          <p>Если не получается войти, свяжитесь с сервисом.</p>
+          <h3>{% translate "Нужна помощь?" %}</h3>
+          <p>{% translate "Если не получается войти, свяжитесь с сервисом." %}</p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
       </aside>

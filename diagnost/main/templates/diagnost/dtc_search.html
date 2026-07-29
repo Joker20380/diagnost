@@ -1,36 +1,38 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Поиск DTC и OBD-II кодов{% endblock %}
-{% block description %}Справочник DTC и OBD-II кодов неисправностей автомобиля: расшифровка, возможные причины, симптомы и план проверки во Владикавказе.{% endblock %}
+{% block title %}{% translate "Поиск DTC и OBD-II кодов" %}{% endblock %}
+{% block description %}{% translate "Справочник DTC и OBD-II кодов неисправностей автомобиля: расшифровка, возможные причины, симптомы и план проверки во Владикавказе." %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dtc-reference.css' %}">
 {% endblock %}
 
 {% block content %}
+{% translate "Описание пока не заполнено" as missing_title %}
+{% translate "Справка по этому коду пока дополняется." as pending_reference %}
 
 <section class="az-dtc-hero" style="background-image: url('{% static 'images/industrial_hero_3.jpg' %}');">
   <div class="az-dtc-hero-overlay"></div>
 
   <div class="container">
     <div class="az-dtc-hero-content">
-      <span class="az-hero-kicker">DTC / OBD-II справочник</span>
+      <span class="az-hero-kicker">{% translate "DTC / OBD-II справочник" %}</span>
 
-      <h1>Расшифровка кодов ошибок автомобиля</h1>
+      <h1>{% translate "Расшифровка кодов ошибок автомобиля" %}</h1>
 
       <p>
-        Введите код неисправности — например P0171, P0420 или U0100.
-        Справочник покажет описание, возможные причины и план проверки без замены деталей наугад.
+        {% blocktranslate trimmed %}Введите код неисправности — например P0171, P0420 или U0100.
+        Справочник покажет описание, возможные причины и план проверки без замены деталей наугад.{% endblocktranslate %}
       </p>
 
       <div class="az-hero-actions">
         <a href="/service/kompyuternaya-diagnostika-avtomobilya-vo-vladikavkaze/" class="az-btn az-btn-primary">
-          Компьютерная диагностика
+          {% translate "Компьютерная диагностика" %}
         </a>
 
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Связаться с мастером
+          {% translate "Связаться с мастером" %}
         </a>
       </div>
     </div>
@@ -44,21 +46,21 @@
     <section class="az-diagnostic-card az-dtc-search-card">
       <div class="az-diagnostic-card-head">
         <div>
-          <span class="az-section-kicker">Поиск по базе</span>
-          <h2>Введите DTC-код</h2>
+          <span class="az-section-kicker">{% translate "Поиск по базе" %}</span>
+          <h2>{% translate "Введите DTC-код" %}</h2>
         </div>
       </div>
 
       <form method="get" class="az-dtc-search-form">
         <input data-dtc-input name="q" value="{{ query }}" placeholder="P0171" autocomplete="off" autofocus>
         <button type="submit" class="az-btn az-btn-primary">
-          Найти код
+          {% translate "Найти код" %}
         </button>
       </form>
 
       <div class="az-dtc-mini-note">
-        Код ошибки — это направление проверки, а не готовый диагноз.
-        Для точного вывода нужны сопутствующие ошибки, freeze frame, live data и проверка автомобиля.
+        {% blocktranslate trimmed %}Код ошибки — это направление проверки, а не готовый диагноз.
+        Для точного вывода нужны сопутствующие ошибки, freeze frame, live data и проверка автомобиля.{% endblocktranslate %}
       </div>
     </section>
 
@@ -67,8 +69,8 @@
       <section class="az-diagnostic-card">
         <div class="az-diagnostic-card-head">
           <div>
-            <span class="az-section-kicker">Результаты</span>
-            <h2>По запросу: {{ query }}</h2>
+            <span class="az-section-kicker">{% translate "Результаты" %}</span>
+            <h2>{% blocktranslate trimmed with query=query %}По запросу: {{ query }}{% endblocktranslate %}</h2>
           </div>
 
           <span class="az-diagnostic-count">
@@ -85,10 +87,10 @@
                 </div>
 
                 <div class="az-dtc-result-body">
-                  <h3>{{ item.title_ru|default:item.title_en|default:"Описание пока не заполнено" }}</h3>
+                  <h3>{{ item.localized_title|default:missing_title }}</h3>
 
                   <p>
-                    {{ item.description_ru|default:item.description_en|truncatechars:220|default:"Справка по этому коду пока дополняется." }}
+                    {{ item.localized_description|truncatechars:220|default:pending_reference }}
                   </p>
 
                   <div class="az-dtc-pill-row">
@@ -105,9 +107,9 @@
           </div>
         {% else %}
           <div class="az-empty-inline">
-            <h3>Код не найден</h3>
+            <h3>{% translate "Код не найден" %}</h3>
             <p>
-              В справочнике пока нет такого кода. Его можно добавить через админку или CSV-импорт.
+              {% translate "В справочнике пока нет такого кода. Его можно добавить через админку или CSV-импорт." %}
             </p>
           </div>
         {% endif %}
@@ -118,8 +120,8 @@
     <section class="az-diagnostic-card">
       <div class="az-diagnostic-card-head">
         <div>
-          <span class="az-section-kicker">Частые коды</span>
-          <h2>Популярные ошибки</h2>
+          <span class="az-section-kicker">{% translate "Частые коды" %}</span>
+          <h2>{% translate "Популярные ошибки" %}</h2>
         </div>
       </div>
 

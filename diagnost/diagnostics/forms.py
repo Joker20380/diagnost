@@ -4,6 +4,7 @@ from pathlib import Path
 
 from django import forms
 from django.forms import inlineformset_factory
+from django.utils.translation import gettext_lazy as _
 
 from .models import DiagnosticSession, SuspensionInspection, SuspensionPart
 
@@ -19,9 +20,9 @@ class DiagnosticUploadForm(forms.ModelForm):
         model = DiagnosticSession
         fields = ["vin", "vehicle_model", "raw_file"]
         labels = {
-            "vin": "VIN автомобиля",
-            "vehicle_model": "Модель автомобиля",
-            "raw_file": "Файл отчёта",
+            "vin": _("VIN автомобиля"),
+            "vehicle_model": _("Модель автомобиля"),
+            "raw_file": _("Файл отчёта"),
         }
         widgets = {
             "vin": forms.TextInput(attrs={"class": "form-control"}),
@@ -34,23 +35,23 @@ class DiagnosticUploadForm(forms.ModelForm):
 
         if uploaded_file.size > self.max_upload_size:
             raise forms.ValidationError(
-                "Размер PDF-файла не должен превышать 10 МБ."
+                _("Размер PDF-файла не должен превышать 10 МБ.")
             )
 
         if Path(uploaded_file.name).suffix.lower() != ".pdf":
             raise forms.ValidationError(
-                "Поддерживаются только диагностические отчёты в формате PDF."
+                _("Поддерживаются только диагностические отчёты в формате PDF.")
             )
 
         content_type = getattr(uploaded_file, "content_type", "")
         if content_type not in self.allowed_content_types:
-            raise forms.ValidationError("Некорректный MIME-тип PDF-файла.")
+            raise forms.ValidationError(_("Некорректный MIME-тип PDF-файла."))
 
         signature = uploaded_file.read(5)
         uploaded_file.seek(0)
         if signature != b"%PDF-":
             raise forms.ValidationError(
-                "Файл не является корректным PDF-документом."
+                _("Файл не является корректным PDF-документом.")
             )
 
         return uploaded_file
@@ -81,12 +82,12 @@ class SuspensionForm(forms.ModelForm):
             "comment": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         }
         labels = {
-            "inspector": "Мастер",
-            "mileage_km": "Пробег (км)",
-            "lift_used": "Подъёмник использовался",
-            "test_drive": "Тест-драйв выполнялся",
-            "overall_risk": "Общий риск по подвеске",
-            "comment": "Комментарий",
+            "inspector": _("Мастер"),
+            "mileage_km": _("Пробег (км)"),
+            "lift_used": _("Подъёмник использовался"),
+            "test_drive": _("Тест-драйв выполнялся"),
+            "overall_risk": _("Общий риск по подвеске"),
+            "comment": _("Комментарий"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -119,19 +120,19 @@ class SuspensionPartForm(forms.ModelForm):
             "part_type": forms.Select(attrs={"class": "form-control"}),
             "wear_percent": forms.NumberInput(attrs={"class": "form-control", "min": 0, "max": 100}),
             "severity": forms.Select(attrs={"class": "form-control"}),
-            "reason": forms.TextInput(attrs={"class": "form-control", "placeholder": "люфт / трещины / потёк..."}),
-            "evidence": forms.Textarea(attrs={"class": "form-control", "rows": 2, "placeholder": "что увидели/услышали/померили"}),
+            "reason": forms.TextInput(attrs={"class": "form-control", "placeholder": _("люфт / трещины / потёк...")}),
+            "evidence": forms.Textarea(attrs={"class": "form-control", "rows": 2, "placeholder": _("что увидели/услышали/померили")}),
             "part_number": forms.TextInput(attrs={"class": "form-control"}),
             "needs_replacement": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
         labels = {
-            "part_type": "Деталь",
-            "wear_percent": "Износ (%)",
-            "severity": "Критичность",
-            "reason": "Причина",
-            "evidence": "Признаки/замеры",
-            "part_number": "Каталожный №",
-            "needs_replacement": "Замена",
+            "part_type": _("Деталь"),
+            "wear_percent": _("Износ (%)"),
+            "severity": _("Критичность"),
+            "reason": _("Причина"),
+            "evidence": _("Признаки/замеры"),
+            "part_number": _("Каталожный №"),
+            "needs_replacement": _("Замена"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -149,7 +150,7 @@ class SuspensionPartForm(forms.ModelForm):
         if v is None:
             return v
         if v < 0 or v > 100:
-            raise forms.ValidationError("Износ должен быть в диапазоне 0–100.")
+            raise forms.ValidationError(_("Износ должен быть в диапазоне 0–100."))
         return v
 
 

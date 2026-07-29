@@ -11,7 +11,6 @@ from django.views.i18n import set_language
 
 
 urlpatterns = [
-    path("", include("diagnostics.urls")),
     # Tech endpoints (keep without language prefix)
     path("ckeditor5/", include("django_ckeditor_5.urls")),
 
@@ -22,6 +21,7 @@ urlpatterns = [
 # Public + admin + auth under language prefix
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
+    path("", include("diagnostics.urls")),
     path("", include("main.urls")),
     path("accounts/", include("allauth.urls")),
     prefix_default_language=False,  # default language at "/" (no /en/)

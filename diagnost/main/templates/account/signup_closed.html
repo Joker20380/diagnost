@@ -2,9 +2,9 @@
 {% load static %}
 {% load i18n %}
 
-{% block head_title %}Регистрация закрыта{% endblock head_title %}
-{% block title %}Регистрация закрыта{% endblock %}
-{% block description %}Регистрация новых аккаунтов временно закрыта{% endblock %}
+{% block head_title %}{% translate "Регистрация закрыта" %}{% endblock head_title %}
+{% block title %}{% translate "Регистрация закрыта" %}{% endblock %}
+{% block description %}{% translate "Регистрация новых аккаунтов временно закрыта" %}{% endblock %}
 
 {% block content %}
 
@@ -13,10 +13,10 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Личный кабинет</span>
-      <h1>Регистрация закрыта</h1>
+      <span class="az-hero-kicker">{% translate "Личный кабинет" %}</span>
+      <h1>{% translate "Регистрация закрыта" %}</h1>
       <p>
-        Сейчас создание новых аккаунтов временно недоступно.
+        {% translate "Сейчас создание новых аккаунтов временно недоступно." %}
       </p>
     </div>
   </div>
@@ -31,32 +31,32 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Sign up closed</span>
 
-        <h2>Регистрация временно закрыта</h2>
+        <h2>{% translate "Регистрация временно закрыта" %}</h2>
 
         <div class="az-auth-info-box az-auth-warning-box">
-          <strong>Новые аккаунты сейчас не создаются</strong>
+          <strong>{% translate "Новые аккаунты сейчас не создаются" %}</strong>
           <p>
-            Мы временно ограничили регистрацию. Если вам нужен доступ к личному кабинету,
-            свяжитесь с сервисом — мы подскажем возможный вариант.
+            {% blocktranslate trimmed %}Мы временно ограничили регистрацию. Если вам нужен доступ к личному кабинету,
+            свяжитесь с сервисом — мы подскажем возможный вариант.{% endblocktranslate %}
           </p>
         </div>
 
         <p class="az-auth-card-text">
-          Если у вас уже есть аккаунт, вы можете войти обычным способом.
+          {% translate "Если у вас уже есть аккаунт, вы можете войти обычным способом." %}
         </p>
 
         <div class="az-auth-actions-row">
           <a href="{% url 'account_login' %}" class="az-btn az-btn-primary">
-            Войти
+            {% translate "Войти" %}
           </a>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-outline-dark">
-            Связаться с нами
+            {% translate "Связаться с нами" %}
           </a>
         </div>
 
         <div class="az-auth-links">
-          <a href="{% url 'index' %}">На главную</a>
+          <a href="{% url 'index' %}">{% translate "На главную" %}</a>
         </div>
       </div>
 
@@ -64,27 +64,27 @@
       <aside class="az-auth-side">
 
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Доступ</span>
+          <span class="az-section-kicker">{% translate "Доступ" %}</span>
 
-          <h3>Что можно сделать</h3>
+          <h3>{% translate "Что можно сделать" %}</h3>
 
           <ul>
-            <li>Войти, если аккаунт уже создан.</li>
-            <li>Связаться с сервисом для уточнения доступа.</li>
-            <li>Вернуться на главную страницу сайта.</li>
-            <li>Повторить попытку регистрации позже.</li>
+            <li>{% translate "Войти, если аккаунт уже создан." %}</li>
+            <li>{% translate "Связаться с сервисом для уточнения доступа." %}</li>
+            <li>{% translate "Вернуться на главную страницу сайта." %}</li>
+            <li>{% translate "Повторить попытку регистрации позже." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Нужен личный кабинет?</h3>
+          <h3>{% translate "Нужен личный кабинет?" %}</h3>
 
           <p>
-            Напишите нам через форму контактов или позвоните — подскажем, как лучше оформить доступ.
+            {% translate "Напишите нам через форму контактов или позвоните — подскажем, как лучше оформить доступ." %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
 

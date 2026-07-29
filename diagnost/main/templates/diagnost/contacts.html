@@ -1,12 +1,12 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 {% load static %}
 
 {% block description %}
-Контакты Автозвук Владикавказ: адрес, телефон, email, форма обратной связи, карта проезда и запись на диагностику автомобиля.
+{% translate "Контакты Автозвук Владикавказ: адрес, телефон, email, форма обратной связи, карта проезда и запись на диагностику автомобиля." %}
 {% endblock %}
 
-{% block title %}Контакты{% endblock %}
+{% block title %}{% translate "Контакты" %}{% endblock %}
 
 {% block content %}
 
@@ -15,26 +15,26 @@
 
   <div class="container">
     <div class="az-inner-hero-content">
-      <span class="az-hero-kicker">Связь с сервисом</span>
-      <h1>Контакты</h1>
+      <span class="az-hero-kicker">{% translate "Связь с сервисом" %}</span>
+      <h1>{% translate "Контакты" %}</h1>
       <p>
-        Позвоните, напишите или приезжайте в сервис. Поможем с диагностикой, ремонтом ходовой,
-        автоэлектрикой, шумоизоляцией и автозвуком.
+        {% blocktranslate trimmed %}Позвоните, напишите или приезжайте в сервис. Поможем с диагностикой, ремонтом ходовой,
+        автоэлектрикой, шумоизоляцией и автозвуком.{% endblocktranslate %}
       </p>
 
       <div class="az-hero-actions">
         {% if main_contact and main_contact.phone %}
           <a href="tel:{{ main_contact.phone }}" class="az-btn az-btn-primary">
-            Позвонить
+            {% translate "Позвонить" %}
           </a>
         {% else %}
           <a href="tel:+79188266181" class="az-btn az-btn-primary">
-            Позвонить
+            {% translate "Позвонить" %}
           </a>
         {% endif %}
 
         <a href="#azContactForm" class="az-btn az-btn-outline">
-          Написать сообщение
+          {% translate "Написать сообщение" %}
         </a>
       </div>
     </div>
@@ -50,12 +50,12 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="az-contact-quick-card">
           <span class="ion ion-ios-location"></span>
-          <h3>Адрес</h3>
+          <h3>{% translate "Адрес" %}</h3>
 
           {% if main_contact and main_contact.address %}
             <p>{{ main_contact.address }}</p>
           {% else %}
-            <p>РСО-Алания, г. Владикавказ, Архонское шоссе д. 11</p>
+            <p>{% translate "РСО-Алания, г. Владикавказ, Архонское шоссе д. 11" %}</p>
           {% endif %}
         </div>
       </div>
@@ -63,7 +63,7 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="az-contact-quick-card">
           <span class="ion ion-ios-telephone"></span>
-          <h3>Телефон</h3>
+          <h3>{% translate "Телефон" %}</h3>
 
           {% if main_contact and main_contact.phone %}
             <p>
@@ -106,11 +106,11 @@
     <div class="az-contacts-layout">
 
       <div class="az-contact-form-card" id="azContactForm">
-        <span class="az-section-kicker">Форма обратной связи</span>
-        <h2>Напишите нам</h2>
+        <span class="az-section-kicker">{% translate "Форма обратной связи" %}</span>
+        <h2>{% translate "Напишите нам" %}</h2>
         <p>
-          Опишите проблему автомобиля или задачу по установке оборудования.
-          Чем точнее симптомы, тем быстрее получится выбрать правильный сценарий.
+          {% blocktranslate trimmed %}Опишите проблему автомобиля или задачу по установке оборудования.
+          Чем точнее симптомы, тем быстрее получится выбрать правильный сценарий.{% endblocktranslate %}
         </p>
 
         <form method="post" id="contact_form" class="az-contact-form" novalidate>
@@ -120,21 +120,21 @@
 
           <div class="az-form-grid">
             <div class="az-form-group">
-              <label for="contact_form_name">Имя <span>*</span></label>
+              <label for="contact_form_name">{% translate "Имя" %} <span>*</span></label>
               <input type="text"
                      id="contact_form_name"
                      name="name"
-                     placeholder="Ваше имя"
+                     placeholder="{% translate "Ваше имя" %}"
                      required>
-              <div class="az-invalid-feedback">Укажите имя</div>
+              <div class="az-invalid-feedback">{% translate "Укажите имя" %}</div>
             </div>
 
             <div class="az-form-group">
-              <label for="contact_form_phone">Телефон</label>
+              <label for="contact_form_phone">{% translate "Телефон" %}</label>
               <input type="tel"
                      id="contact_form_phone"
                      name="phone"
-                     placeholder="Ваш телефон">
+                     placeholder="{% translate "Ваш телефон" %}">
             </div>
           </div>
 
@@ -143,19 +143,19 @@
             <input type="email"
                    id="contact_form_email"
                    name="email"
-                   placeholder="Ваш email"
+                   placeholder="{% translate "Ваш email" %}"
                    required>
-            <div class="az-invalid-feedback">Укажите корректный email</div>
+            <div class="az-invalid-feedback">{% translate "Укажите корректный email" %}</div>
           </div>
 
           <div class="az-form-group">
-            <label for="contact_form_contact">Получатель</label>
+            <label for="contact_form_contact">{% translate "Получатель" %}</label>
             <select id="contact_form_contact" name="contact">
-              <option value="">Выберите получателя, если нужно</option>
+              <option value="">{% translate "Выберите получателя, если нужно" %}</option>
 
               {% if main_contact %}
                 <option value="{{ main_contact.id }}">
-                  Основные контакты{% if main_contact.name %} — {{ main_contact.name }}{% endif %}
+                  {% translate "Основные контакты" %}{% if main_contact.name %} — {{ main_contact.name }}{% endif %}
                 </option>
               {% endif %}
 
@@ -170,17 +170,17 @@
           </div>
 
           <div class="az-form-group">
-            <label for="contact_form_message">Сообщение <span>*</span></label>
+            <label for="contact_form_message">{% translate "Сообщение" %} <span>*</span></label>
             <textarea id="contact_form_message"
                       name="message"
                       rows="6"
-                      placeholder="Например: загорелся Check Engine, появился стук в подвеске, нужна шумоизоляция дверей..."
+                      placeholder="{% translate "Например: загорелся Check Engine, появился стук в подвеске, нужна шумоизоляция дверей..." %}"
                       required></textarea>
-            <div class="az-invalid-feedback">Напишите сообщение</div>
+            <div class="az-invalid-feedback">{% translate "Напишите сообщение" %}</div>
           </div>
 
           <button type="submit" class="az-btn az-btn-primary az-contact-submit">
-            Отправить сообщение
+            {% translate "Отправить сообщение" %}
           </button>
         </form>
       </div>
@@ -189,17 +189,18 @@
       <aside class="az-contact-side">
 
         <div class="az-contact-side-card">
-          <span class="az-section-kicker">Основной контакт</span>
+          <span class="az-section-kicker">{% translate "Основной контакт" %}</span>
 
           {% if main_contact %}
-            <h3>{{ main_contact.name|default:"Автозвук Владикавказ" }}</h3>
+            {% translate "Автозвук Владикавказ" as default_contact_name %}
+            <h3>{{ main_contact.name|default:default_contact_name }}</h3>
 
             <ul class="az-contact-side-list">
               {% if main_contact.address %}
                 <li>
                   <span class="ion ion-ios-location"></span>
                   <div>
-                    <strong>Адрес</strong>
+                    <strong>{% translate "Адрес" %}</strong>
                     <p>{{ main_contact.address }}</p>
                   </div>
                 </li>
@@ -209,7 +210,7 @@
                 <li>
                   <span class="ion ion-ios-telephone"></span>
                   <div>
-                    <strong>Телефон</strong>
+                    <strong>{% translate "Телефон" %}</strong>
                     <p><a href="tel:{{ main_contact.phone }}">{{ main_contact.phone }}</a></p>
                   </div>
                 </li>
@@ -226,21 +227,21 @@
               {% endif %}
             </ul>
           {% else %}
-            <h3>Автозвук Владикавказ</h3>
+            <h3>{% translate "Автозвук Владикавказ" %}</h3>
 
             <ul class="az-contact-side-list">
               <li>
                 <span class="ion ion-ios-location"></span>
                 <div>
-                  <strong>Адрес</strong>
-                  <p>РСО-Алания, г. Владикавказ, Архонское шоссе д. 11</p>
+                  <strong>{% translate "Адрес" %}</strong>
+                  <p>{% translate "РСО-Алания, г. Владикавказ, Архонское шоссе д. 11" %}</p>
                 </div>
               </li>
 
               <li>
                 <span class="ion ion-ios-telephone"></span>
                 <div>
-                  <strong>Телефон</strong>
+                  <strong>{% translate "Телефон" %}</strong>
                   <p><a href="tel:+79188266181">+7 (918) 826-61-81</a></p>
                 </div>
               </li>
@@ -258,14 +259,14 @@
 
 
         <div class="az-contact-help-card">
-          <h3>Что написать в заявке?</h3>
+          <h3>{% translate "Что написать в заявке?" %}</h3>
 
           <ul>
-            <li>Марка, модель и год автомобиля</li>
-            <li>Какие симптомы появились</li>
-            <li>Когда проявляется проблема</li>
-            <li>Были ли ошибки на панели</li>
-            <li>Что уже проверяли или ремонтировали</li>
+            <li>{% translate "Марка, модель и год автомобиля" %}</li>
+            <li>{% translate "Какие симптомы появились" %}</li>
+            <li>{% translate "Когда проявляется проблема" %}</li>
+            <li>{% translate "Были ли ошибки на панели" %}</li>
+            <li>{% translate "Что уже проверяли или ремонтировали" %}</li>
           </ul>
         </div>
 
@@ -282,11 +283,11 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Кому написать</span>
-      <h2>Контакты по направлениям</h2>
+      <span class="az-section-kicker">{% translate "Кому написать" %}</span>
+      <h2>{% translate "Контакты по направлениям" %}</h2>
       <p>
-        Можно выбрать конкретного получателя в форме или нажать кнопку в карточке,
-        чтобы форма автоматически подставила нужный контакт.
+        {% blocktranslate trimmed %}Можно выбрать конкретного получателя в форме или нажать кнопку в карточке,
+        чтобы форма автоматически подставила нужный контакт.{% endblocktranslate %}
       </p>
     </div>
 
@@ -323,7 +324,7 @@
               <button type="button"
                       class="az-contact-select-btn"
                       data-contact-id="{{ contact.id }}">
-                Написать сюда
+                {% translate "Написать сюда" %}
               </button>
             </div>
           </div>
@@ -341,10 +342,10 @@
 
     <div class="az-map-head">
       <div>
-        <span class="az-section-kicker">Как нас найти</span>
-        <h2>Мы на карте</h2>
+        <span class="az-section-kicker">{% translate "Как нас найти" %}</span>
+        <h2>{% translate "Мы на карте" %}</h2>
         <p>
-          Приезжайте в сервис по адресу: РСО-Алания, г. Владикавказ, Архонское шоссе д. 11.
+          {% translate "Приезжайте в сервис по адресу: РСО-Алания, г. Владикавказ, Архонское шоссе д. 11." %}
         </p>
       </div>
     </div>
@@ -355,7 +356,7 @@
               height="520"
               frameborder="0"
               loading="lazy"
-              title="Автозвук Владикавказ на карте">
+              title="{% translate "Автозвук Владикавказ на карте" %}">
       </iframe>
     </div>
 
@@ -368,11 +369,11 @@
     <div class="az-contacts-bottom-card">
 
       <div>
-        <span class="az-section-kicker">Нужна диагностика?</span>
-        <h2>Лучше уточнить проблему до дорогого ремонта</h2>
+        <span class="az-section-kicker">{% translate "Нужна диагностика?" %}</span>
+        <h2>{% translate "Лучше уточнить проблему до дорогого ремонта" %}</h2>
         <p>
-          Позвоните или отправьте сообщение. Мы подскажем, с чего начать:
-          компьютерная диагностика, осмотр ходовой, автоэлектрика или консультация по автозвуку.
+          {% blocktranslate trimmed %}Позвоните или отправьте сообщение. Мы подскажем, с чего начать:
+          компьютерная диагностика, осмотр ходовой, автоэлектрика или консультация по автозвуку.{% endblocktranslate %}
         </p>
       </div>
 
@@ -388,7 +389,7 @@
         {% endif %}
 
         <a href="#azContactForm" class="az-btn az-btn-outline">
-          Написать
+          {% translate "Написать" %}
         </a>
       </div>
 

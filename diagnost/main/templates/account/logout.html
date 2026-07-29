@@ -3,8 +3,8 @@
 {% load i18n %}
 {% load allauth account %}
 
-{% block title %}Выход{% endblock title %}
-{% block description %}Выход из личного кабинета Автозвук Владикавказ{% endblock %}
+{% block title %}{% translate "Выход" %}{% endblock title %}
+{% block description %}{% translate "Выход из личного кабинета Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -13,9 +13,9 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Личный кабинет</span>
-      <h1>Выход</h1>
-      <p>Подтвердите выход из аккаунта.</p>
+      <span class="az-hero-kicker">{% translate "Личный кабинет" %}</span>
+      <h1>{% translate "Выход" %}</h1>
+      <p>{% translate "Подтвердите выход из аккаунта." %}</p>
     </div>
   </div>
 </section>
@@ -26,11 +26,11 @@
 
     <div class="az-auth-single">
       <div class="az-auth-card">
-        <span class="az-section-kicker">Завершение сессии</span>
-        <h2>Выйти из аккаунта?</h2>
+        <span class="az-section-kicker">{% translate "Завершение сессии" %}</span>
+        <h2>{% translate "Выйти из аккаунта?" %}</h2>
 
         <p class="az-auth-card-text">
-          После выхода потребуется снова авторизоваться для доступа к личному кабинету.
+          {% translate "После выхода потребуется снова авторизоваться для доступа к личному кабинету." %}
         </p>
 
         <form method="post" action="{% url 'account_logout' %}" class="az-auth-form">
@@ -39,11 +39,11 @@
 
           <div class="az-auth-actions-row">
             <button type="submit" class="az-btn az-btn-primary">
-              Выйти
+              {% translate "Выйти" %}
             </button>
 
             <a href="{% url 'index' %}" class="az-btn az-btn-outline-dark">
-              Остаться на сайте
+              {% translate "Остаться на сайте" %}
             </a>
           </div>
         </form>

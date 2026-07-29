@@ -2,8 +2,8 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Email-адреса{% endblock %}
-{% block description %}Управление email-адресами аккаунта Автозвук Владикавказ{% endblock %}
+{% block title %}{% translate "Email-адреса" %}{% endblock %}
+{% block description %}{% translate "Управление email-адресами аккаунта Автозвук Владикавказ" %}{% endblock %}
 
 {% block content %}
 
@@ -12,11 +12,11 @@
 
   <div class="container">
     <div class="az-auth-hero-content">
-      <span class="az-hero-kicker">Настройки аккаунта</span>
-      <h1>Email-адреса</h1>
+      <span class="az-hero-kicker">{% translate "Настройки аккаунта" %}</span>
+      <h1>{% translate "Email-адреса" %}</h1>
       <p>
-        Управляйте email-адресами аккаунта: добавляйте новый адрес, выбирайте основной
-        и повторно отправляйте письмо подтверждения.
+        {% blocktranslate trimmed %}Управляйте email-адресами аккаунта: добавляйте новый адрес, выбирайте основной
+        и повторно отправляйте письмо подтверждения.{% endblocktranslate %}
       </p>
     </div>
   </div>
@@ -31,12 +31,12 @@
       <div class="az-auth-card">
         <span class="az-section-kicker">Email</span>
 
-        <h2>Адреса аккаунта</h2>
+        <h2>{% translate "Адреса аккаунта" %}</h2>
 
         {% if emailaddresses %}
           <p class="az-auth-card-text">
-            Эти email-адреса связаны с вашим аккаунтом. Основной адрес используется для входа,
-            уведомлений и восстановления доступа.
+            {% blocktranslate trimmed %}Эти email-адреса связаны с вашим аккаунтом. Основной адрес используется для входа,
+            уведомлений и восстановления доступа.{% endblocktranslate %}
           </p>
 
           {% url 'account_email' as email_url %}
@@ -63,17 +63,17 @@
                       <span class="az-email-badges">
                         {% if emailaddress.verified %}
                           <span class="az-email-badge az-email-badge-success">
-                            Подтверждён
+                            {% translate "Подтверждён" %}
                           </span>
                         {% else %}
                           <span class="az-email-badge az-email-badge-warning">
-                            Не подтверждён
+                            {% translate "Не подтверждён" %}
                           </span>
                         {% endif %}
 
                         {% if emailaddress.primary %}
                           <span class="az-email-badge az-email-badge-primary">
-                            Основной
+                            {% translate "Основной" %}
                           </span>
                         {% endif %}
                       </span>
@@ -87,29 +87,29 @@
               <button type="submit"
                       name="action_primary"
                       class="az-btn az-btn-dark">
-                Сделать основным
+                {% translate "Сделать основным" %}
               </button>
 
               <button type="submit"
                       name="action_send"
                       class="az-btn az-btn-outline-dark">
-                Отправить подтверждение
+                {% translate "Отправить подтверждение" %}
               </button>
 
               <button type="submit"
                       name="action_remove"
                       class="az-btn az-btn-danger"
                       id="azRemoveEmailButton">
-                Удалить
+                {% translate "Удалить" %}
               </button>
             </div>
           </form>
         {% else %}
           <div class="az-auth-info-box">
-            <strong>Email-адрес не добавлен</strong>
+            <strong>{% translate "Email-адрес не добавлен" %}</strong>
             <p>
-              У аккаунта пока нет привязанного email-адреса. Добавьте email, чтобы использовать
-              восстановление доступа и уведомления.
+              {% blocktranslate trimmed %}У аккаунта пока нет привязанного email-адреса. Добавьте email, чтобы использовать
+              восстановление доступа и уведомления.{% endblocktranslate %}
             </p>
           </div>
         {% endif %}
@@ -117,11 +117,11 @@
 
         {% if can_add_email %}
           <div class="az-auth-separator">
-            <span>добавить</span>
+            <span>{% translate "добавить" %}</span>
           </div>
 
           <div class="az-auth-add-email">
-            <h3>Добавить email-адрес</h3>
+            <h3>{% translate "Добавить email-адрес" %}</h3>
 
             {% url 'account_email' as action_url %}
 
@@ -159,41 +159,41 @@
               <button type="submit"
                       name="action_add"
                       class="az-btn az-btn-primary az-auth-submit">
-                Добавить email
+                {% translate "Добавить email" %}
               </button>
             </form>
           </div>
         {% endif %}
 
         <div class="az-auth-links">
-          <a href="{% url 'index' %}">На главную</a>
-          <a href="{% url 'contacts' %}">Нужна помощь?</a>
+          <a href="{% url 'index' %}">{% translate "На главную" %}</a>
+          <a href="{% url 'contacts' %}">{% translate "Нужна помощь?" %}</a>
         </div>
       </div>
 
 
       <aside class="az-auth-side">
         <div class="az-auth-side-card">
-          <span class="az-section-kicker">Безопасность</span>
+          <span class="az-section-kicker">{% translate "Безопасность" %}</span>
 
-          <h3>Зачем нужен email</h3>
+          <h3>{% translate "Зачем нужен email" %}</h3>
 
           <ul>
-            <li>Для восстановления доступа к аккаунту.</li>
-            <li>Для подтверждения личности владельца.</li>
-            <li>Для получения важных уведомлений.</li>
-            <li>Для связи с сервисом по диагностике и заявкам.</li>
+            <li>{% translate "Для восстановления доступа к аккаунту." %}</li>
+            <li>{% translate "Для подтверждения личности владельца." %}</li>
+            <li>{% translate "Для получения важных уведомлений." %}</li>
+            <li>{% translate "Для связи с сервисом по диагностике и заявкам." %}</li>
           </ul>
         </div>
 
         <div class="az-auth-side-cta">
-          <h3>Проблема с email?</h3>
+          <h3>{% translate "Проблема с email?" %}</h3>
           <p>
-            Если письмо подтверждения не приходит, проверьте папку «Спам» или свяжитесь с нами.
+            {% translate "Если письмо подтверждения не приходит, проверьте папку «Спам» или свяжитесь с нами." %}
           </p>
 
           <a href="{% url 'contacts' %}" class="az-btn az-btn-primary">
-            Контакты
+            {% translate "Контакты" %}
           </a>
         </div>
       </aside>
@@ -208,10 +208,11 @@
 
 {% block extra_body %}
   {{ block.super }}
+  {% translate "Удалить выбранный email-адрес?" as remove_email_message %}
 
   <script>
     (function () {
-      var message = "Удалить выбранный email-адрес?";
+      var message = "{{ remove_email_message|escapejs }}";
       var removeButton = document.getElementById("azRemoveEmailButton");
 
       if (!removeButton) {

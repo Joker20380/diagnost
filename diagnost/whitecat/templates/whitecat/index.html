@@ -1,11 +1,11 @@
-{% load static %}
+{% load static i18n %}
 <!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>white_cat — разработка сложных web-систем</title>
-  <meta name="description" content="white_cat — разработка сложных web-систем, Django-платформ, CRM, личных кабинетов, интеграций, автоматизации и AI-assisted инструментов.">
+  <title>{% translate "white_cat — разработка сложных web-систем" %}</title>
+  <meta name="description" content="{% translate "white_cat — разработка сложных web-систем, Django-платформ, CRM, личных кабинетов, интеграций, автоматизации и AI-assisted инструментов." %}">
   <link rel="stylesheet" href="{% static 'whitecat/css/whitecat.css' %}">
 </head>
 <body>
@@ -16,49 +16,49 @@
           <span></span><span></span><span></span>
         </div>
 
-        <nav class="wc-menu" aria-label="Верхнее меню">
-          <a href="#home" data-i18n="menu.home">Главная</a>
-          <a href="#services" data-i18n="menu.services">Услуги</a>
-          <a href="#stack" data-i18n="menu.stack">Стек</a>
-          <a href="#cases" data-i18n="menu.projects">Направления</a>
-          <a href="#contact" data-i18n="menu.contact">Контакт</a>
+        <nav class="wc-menu" aria-label="{% translate "Верхнее меню" %}">
+          <a href="#home" data-i18n="menu.home">{% translate "Главная" %}</a>
+          <a href="#services" data-i18n="menu.services">{% translate "Услуги" %}</a>
+          <a href="#stack" data-i18n="menu.stack">{% translate "Стек" %}</a>
+          <a href="#cases" data-i18n="menu.projects">{% translate "Направления" %}</a>
+          <a href="#contact" data-i18n="menu.contact">{% translate "Контакт" %}</a>
         </nav>
 
         <div class="wc-run">
           <span class="wc-run-dot"></span>
-          <span data-i18n="status.production">white_cat: продакшен</span>
+          <span data-i18n="status.production">{% translate "white_cat: продакшен" %}</span>
         </div>
       </header>
 
       <div class="wc-layout">
         <aside class="wc-sidebar">
-          <div class="wc-panel-title" data-i18n="sidebar.project">Проект</div>
+          <div class="wc-panel-title" data-i18n="sidebar.project">{% translate "Проект" %}</div>
 
           <div class="wc-tree">
             <div class="wc-tree-item wc-tree-root">white_cat</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.backend">Серверная часть</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.architecture">архитектура.py</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.integrations">интеграции.py</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.frontend">Интерфейс</div>
-            <div class="wc-tree-item wc-file active" data-i18n="tree.page">страница_разработчика.html</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.styles">стили.css</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.automation">Автоматизация</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.ai">ai_инструменты.py</div>
+            <div class="wc-tree-item wc-folder" data-i18n="tree.backend">{% translate "Серверная часть" %}</div>
+            <div class="wc-tree-item wc-file" data-i18n="tree.architecture">{% translate "архитектура.py" %}</div>
+            <div class="wc-tree-item wc-file" data-i18n="tree.integrations">{% translate "интеграции.py" %}</div>
+            <div class="wc-tree-item wc-folder" data-i18n="tree.frontend">{% translate "Интерфейс" %}</div>
+            <div class="wc-tree-item wc-file active" data-i18n="tree.page">{% translate "страница_разработчика.html" %}</div>
+            <div class="wc-tree-item wc-file" data-i18n="tree.styles">{% translate "стили.css" %}</div>
+            <div class="wc-tree-item wc-folder" data-i18n="tree.automation">{% translate "Автоматизация" %}</div>
+            <div class="wc-tree-item wc-file" data-i18n="tree.ai">{% translate "ai_инструменты.py" %}</div>
           </div>
 
           <div class="wc-sidebar-card">
-            <span data-i18n="sidebar.status">Статус</span>
-            <strong data-i18n="sidebar.ready">Готов к сложным системам</strong>
+            <span data-i18n="sidebar.status">{% translate "Статус" %}</span>
+            <strong data-i18n="sidebar.ready">{% translate "Готов к сложным системам" %}</strong>
           </div>
         </aside>
 
         <section class="wc-main">
-          <nav class="wc-tabs" aria-label="Вкладки страницы">
-            <a class="wc-tab active" href="#home" data-i18n="tabs.home">Главная</a>
-            <a class="wc-tab" href="#services" data-i18n="tabs.services">Услуги</a>
-            <a class="wc-tab" href="#stack" data-i18n="tabs.stack">Стек</a>
-            <a class="wc-tab" href="#cases" data-i18n="tabs.projects">Направления</a>
-            <a class="wc-tab" href="#contact" data-i18n="tabs.contact">Контакт</a>
+          <nav class="wc-tabs" aria-label="{% translate "Вкладки страницы" %}">
+            <a class="wc-tab active" href="#home" data-i18n="tabs.home">{% translate "Главная" %}</a>
+            <a class="wc-tab" href="#services" data-i18n="tabs.services">{% translate "Услуги" %}</a>
+            <a class="wc-tab" href="#stack" data-i18n="tabs.stack">{% translate "Стек" %}</a>
+            <a class="wc-tab" href="#cases" data-i18n="tabs.projects">{% translate "Направления" %}</a>
+            <a class="wc-tab" href="#contact" data-i18n="tabs.contact">{% translate "Контакт" %}</a>
           </nav>
 
           <section id="home" class="wc-editor">
@@ -68,44 +68,44 @@
             </div>
 
             <div class="wc-code-hero">
-              <p class="wc-comment" data-i18n="hero.comment"># white_cat / сложные web-системы</p>
-              <h1><span data-i18n="hero.word">Разработка</span> сложных web-систем</h1>
+              <p class="wc-comment" data-i18n="hero.comment">{% translate "# white_cat / сложные web-системы" %}</p>
+              <h1><span data-i18n="hero.word">{% translate "Разработка" %}</span> {% translate "сложных web-систем" %}</h1>
               <p class="wc-lead" data-i18n="hero.lead">
-                Проектируем и разрабатываем web-платформы, которые закрывают реальные бизнес-процессы:
+                {% blocktranslate trimmed %}Проектируем и разрабатываем web-платформы, которые закрывают реальные бизнес-процессы:
                 личные кабинеты, CRM, интеграции, каталоги, аналитические панели, автоматизацию данных
-                и AI-assisted инструменты.
+                и AI-assisted инструменты.{% endblocktranslate %}
               </p>
 
               <div class="wc-code-block">
 <pre><code><span class="kw">class</span> <span class="cls">WhiteCat</span>:
-    <span class="var">фокус</span> = <span class="str">"сложные web-системы"</span>
-    <span class="var">стек</span> = [<span class="str">"Python"</span>, <span class="str">"Django"</span>, <span class="str">"C#"</span>, <span class="str">".NET"</span>]
+    <span class="var">{% translate "фокус" %}</span> = <span class="str">{% translate "\"сложные web-системы\"" %}</span>
+    <span class="var">{% translate "стек" %}</span> = [<span class="str">"Python"</span>, <span class="str">"Django"</span>, <span class="str">"C#"</span>, <span class="str">".NET"</span>]
 
-    <span class="kw">def</span> <span class="fn">создать</span>(<span class="arg">бизнес_процесс</span>):
-        <span class="kw">return</span> <span class="str">"архитектура + backend + автоматизация + deploy"</span></code></pre>
+    <span class="kw">def</span> <span class="fn">{% translate "создать" %}</span>(<span class="arg">{% translate "бизнес_процесс" %}</span>):
+        <span class="kw">return</span> <span class="str">{% translate "\"архитектура + backend + автоматизация + deploy\"" %}</span></code></pre>
               </div>
 
               <div class="wc-actions">
-                <a class="wc-btn wc-btn-primary" href="mailto:urutskoeva.madina@gmail.com?subject=Проект%20для%20white_cat" data-i18n="hero.cta">Обсудить проект</a>
-                <a class="wc-btn wc-btn-secondary" href="#services" data-i18n="hero.more">Посмотреть услуги</a>
+                <a class="wc-btn wc-btn-primary" href="mailto:urutskoeva.madina@gmail.com?subject=white_cat%20project" data-i18n="hero.cta">{% translate "Обсудить проект" %}</a>
+                <a class="wc-btn wc-btn-secondary" href="#services" data-i18n="hero.more">{% translate "Посмотреть услуги" %}</a>
               </div>
             </div>
           </section>
 
           <section id="services" class="wc-section">
             <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="services.file">услуги.py</p>
-              <h2 data-i18n="services.title">Что мы делаем</h2>
+              <p class="wc-kicker" data-i18n="services.file">{% translate "услуги.py" %}</p>
+              <h2 data-i18n="services.title">{% translate "Что мы делаем" %}</h2>
               <p data-i18n="services.text">
-                Собираем не витрину, а рабочую систему: backend, frontend, роли, права доступа,
-                база данных, интеграции, фоновые задачи, деплой и дальнейшее развитие.
+                {% blocktranslate trimmed %}Собираем не витрину, а рабочую систему: backend, frontend, роли, права доступа,
+                база данных, интеграции, фоновые задачи, деплой и дальнейшее развитие.{% endblocktranslate %}
               </p>
             </div>
 
             <div class="wc-cards">
               {% for service in services %}
                 <article class="wc-card">
-                  <div class="wc-card-tag" data-i18n="card.module">модуль</div>
+                  <div class="wc-card-tag" data-i18n="card.module">{% translate "модуль" %}</div>
                   <h3>{{ service.title }}</h3>
                   <p>{{ service.text }}</p>
                 </article>
@@ -115,8 +115,8 @@
 
           <section id="stack" class="wc-section wc-section-compact">
             <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="stack.file">стек.json</p>
-              <h2 data-i18n="stack.title">Технологический стек</h2>
+              <p class="wc-kicker" data-i18n="stack.file">{% translate "стек.json" %}</p>
+              <h2 data-i18n="stack.title">{% translate "Технологический стек" %}</h2>
             </div>
 
             <div class="wc-stack">
@@ -128,11 +128,11 @@
 
           <section id="cases" class="wc-section">
             <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="cases.file">направления.md</p>
-              <h2 data-i18n="cases.title">Направления</h2>
+              <p class="wc-kicker" data-i18n="cases.file">{% translate "направления.md" %}</p>
+              <h2 data-i18n="cases.title">{% translate "Направления" %}</h2>
               <p data-i18n="cases.text">
-                white_cat полезен там, где нужен не шаблон, а система с данными,
-                логикой, ролями, интеграциями и понятной дорожной картой развития.
+                {% blocktranslate trimmed %}white_cat полезен там, где нужен не шаблон, а система с данными,
+                логикой, ролями, интеграциями и понятной дорожной картой развития.{% endblocktranslate %}
               </p>
             </div>
 
@@ -148,21 +148,21 @@
         </section>
 
         <aside class="wc-inspector">
-          <div class="wc-panel-title" data-i18n="inspector.title">Инспектор</div>
+          <div class="wc-panel-title" data-i18n="inspector.title">{% translate "Инспектор" %}</div>
 
           <div class="wc-inspector-card">
-            <span data-i18n="inspector.brand">Бренд</span>
+            <span data-i18n="inspector.brand">{% translate "Бренд" %}</span>
             <strong>white_cat</strong>
           </div>
 
           <div class="wc-inspector-card">
-            <span data-i18n="inspector.mode">Режим</span>
-            <strong data-i18n="inspector.partner">Партнёр по разработке</strong>
+            <span data-i18n="inspector.mode">{% translate "Режим" %}</span>
+            <strong data-i18n="inspector.partner">{% translate "Партнёр по разработке" %}</strong>
           </div>
 
           <div class="wc-inspector-card">
-            <span data-i18n="inspector.delivery">Поставка</span>
-            <strong data-i18n="inspector.pipeline">Архитектура → MVP → Продакшен</strong>
+            <span data-i18n="inspector.delivery">{% translate "Поставка" %}</span>
+            <strong data-i18n="inspector.pipeline">{% translate "Архитектура → MVP → Продакшен" %}</strong>
           </div>
 
           <div class="wc-progress">
@@ -173,13 +173,13 @@
             <div class="wc-progress-line"><i style="width:95%"></i></div>
 
             <div>
-              <span data-i18n="progress.automation">Автоматизация</span>
+              <span data-i18n="progress.automation">{% translate "Автоматизация" %}</span>
               <b>88%</b>
             </div>
             <div class="wc-progress-line"><i style="width:88%"></i></div>
 
             <div>
-              <span data-i18n="progress.ui">UI-системы</span>
+              <span data-i18n="progress.ui">{% translate "UI-системы" %}</span>
               <b>82%</b>
             </div>
             <div class="wc-progress-line"><i style="width:82%"></i></div>
@@ -189,16 +189,16 @@
 
       <footer id="contact" class="wc-console">
         <div class="wc-console-tabs">
-          <span class="active" data-i18n="console.run">Запуск</span>
-          <span data-i18n="console.problems">Проблемы</span>
-          <span data-i18n="console.terminal">Терминал</span>
+          <span class="active" data-i18n="console.run">{% translate "Запуск" %}</span>
+          <span data-i18n="console.problems">{% translate "Проблемы" %}</span>
+          <span data-i18n="console.terminal">{% translate "Терминал" %}</span>
         </div>
 
         <div class="wc-console-body">
-          <p><span class="ok">✓</span> <span data-i18n="console.check">Проверка системы: ошибок нет</span></p>
-          <p><span class="ok">✓</span> <span data-i18n="console.target">Цель поставки: production-ready web-платформа</span></p>
-          <p><span class="cmd">$</span> white_cat --проект="сложная web-система"</p>
-          <a href="mailto:urutskoeva.madina@gmail.com?subject=Проект%20для%20white_cat" data-i18n="console.contact">Написать white_cat →</a>
+          <p><span class="ok">✓</span> <span data-i18n="console.check">{% translate "Проверка системы: ошибок нет" %}</span></p>
+          <p><span class="ok">✓</span> <span data-i18n="console.target">{% translate "Цель поставки: production-ready web-платформа" %}</span></p>
+          <p><span class="cmd">$</span> {% translate "white_cat --проект=\"сложная web-система\"" %}</p>
+          <a href="mailto:urutskoeva.madina@gmail.com?subject=white_cat%20project" data-i18n="console.contact">{% translate "Написать white_cat →" %}</a>
         </div>
       </footer>
     </section>

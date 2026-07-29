@@ -1,5 +1,5 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 {% load static %}
 
 {% block description %}
@@ -16,22 +16,22 @@
 
   <div class="container">
     <div class="az-service-detail-hero-content">
-      <span class="az-hero-kicker">Услуга Автозвук</span>
+      <span class="az-hero-kicker">{% translate "Услуга Автозвук" %}</span>
 
       <h1>{{ service.title }}</h1>
 
       <p>
-        Диагностика, ремонт и техническое обслуживание автомобиля с понятным объяснением причины,
-        этапов работ и ожидаемого результата.
+        {% blocktranslate trimmed %}Диагностика, ремонт и техническое обслуживание автомобиля с понятным объяснением причины,
+        этапов работ и ожидаемого результата.{% endblocktranslate %}
       </p>
 
       <div class="az-hero-actions">
         <a href="tel:+79188266181" class="az-btn az-btn-primary">
-          Записаться на услугу
+          {% translate "Записаться на услугу" %}
         </a>
 
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Контакты сервиса
+          {% translate "Контакты сервиса" %}
         </a>
       </div>
     </div>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="az-service-detail-prose">
-          <span class="az-section-kicker">Описание услуги</span>
+          <span class="az-section-kicker">{% translate "Описание услуги" %}</span>
 
           <h2>{{ service.title }}</h2>
 
@@ -70,60 +70,60 @@
       <aside class="az-service-detail-sidebar">
 
         <div class="az-service-booking-card">
-          <span class="az-section-kicker">Запись в сервис</span>
+          <span class="az-section-kicker">{% translate "Запись в сервис" %}</span>
 
-          <h3>Нужно проверить автомобиль?</h3>
+          <h3>{% translate "Нужно проверить автомобиль?" %}</h3>
 
           <p>
-            Позвоните нам, опишите симптомы и мы подскажем, с какого этапа лучше начать:
-            диагностика, осмотр, ремонт или консультация мастера.
+            {% blocktranslate trimmed %}Позвоните нам, опишите симптомы и мы подскажем, с какого этапа лучше начать:
+            диагностика, осмотр, ремонт или консультация мастера.{% endblocktranslate %}
           </p>
 
           <div class="az-service-booking-actions">
             <a href="tel:+79188266181" class="az-btn az-btn-primary">
-              Позвонить
+              {% translate "Позвонить" %}
             </a>
 
             <a href="{% url 'contacts' %}" class="az-btn az-btn-dark">
-              Как проехать
+              {% translate "Как проехать" %}
             </a>
           </div>
         </div>
 
 
         <div class="az-service-info-card">
-          <h3>Что вы получаете</h3>
+          <h3>{% translate "Что вы получаете" %}</h3>
 
           <ul>
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Понятную диагностику</strong>
-                <p>Проверяем симптомы и объясняем, где находится источник проблемы.</p>
+                <strong>{% translate "Понятную диагностику" %}</strong>
+                <p>{% translate "Проверяем симптомы и объясняем, где находится источник проблемы." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Честный сценарий работ</strong>
-                <p>Говорим, что нужно делать срочно, а что можно запланировать позже.</p>
+                <strong>{% translate "Честный сценарий работ" %}</strong>
+                <p>{% translate "Говорим, что нужно делать срочно, а что можно запланировать позже." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Подбор решения</strong>
-                <p>Помогаем выбрать оптимальный вариант по работам, деталям и бюджету.</p>
+                <strong>{% translate "Подбор решения" %}</strong>
+                <p>{% translate "Помогаем выбрать оптимальный вариант по работам, деталям и бюджету." %}</p>
               </div>
             </li>
 
             <li>
               <span class="ion ion-checkmark-circled"></span>
               <div>
-                <strong>Контроль результата</strong>
-                <p>После выполнения работ проверяем итог и даём рекомендации.</p>
+                <strong>{% translate "Контроль результата" %}</strong>
+                <p>{% translate "После выполнения работ проверяем итог и даём рекомендации." %}</p>
               </div>
             </li>
           </ul>
@@ -141,11 +141,11 @@
   <div class="container">
 
     <div class="az-home-section-head text-center">
-      <span class="az-section-kicker">Процесс</span>
-      <h2>Как проходит работа</h2>
+      <span class="az-section-kicker">{% translate "Процесс" %}</span>
+      <h2>{% translate "Как проходит работа" %}</h2>
       <p>
-        Мы не начинаем с хаотичной замены деталей. Сначала фиксируем симптомы,
-        потом проверяем причины и только после этого переходим к ремонту.
+        {% blocktranslate trimmed %}Мы не начинаем с хаотичной замены деталей. Сначала фиксируем симптомы,
+        потом проверяем причины и только после этого переходим к ремонту.{% endblocktranslate %}
       </p>
     </div>
 
@@ -153,35 +153,35 @@
 
       <div class="az-service-process-card">
         <span>01</span>
-        <h3>Приём автомобиля</h3>
+        <h3>{% translate "Приём автомобиля" %}</h3>
         <p>
-          Вы рассказываете, что происходит с автомобилем: звуки, ошибки, вибрации,
-          поведение на дороге или другие симптомы.
+          {% blocktranslate trimmed %}Вы рассказываете, что происходит с автомобилем: звуки, ошибки, вибрации,
+          поведение на дороге или другие симптомы.{% endblocktranslate %}
         </p>
       </div>
 
       <div class="az-service-process-card">
         <span>02</span>
-        <h3>Проверка и диагностика</h3>
+        <h3>{% translate "Проверка и диагностика" %}</h3>
         <p>
-          Мастер проводит осмотр, компьютерную диагностику или техническую проверку,
-          в зависимости от задачи.
+          {% blocktranslate trimmed %}Мастер проводит осмотр, компьютерную диагностику или техническую проверку,
+          в зависимости от задачи.{% endblocktranslate %}
         </p>
       </div>
 
       <div class="az-service-process-card">
         <span>03</span>
-        <h3>План работ</h3>
+        <h3>{% translate "План работ" %}</h3>
         <p>
-          Объясняем причину, согласовываем объём работ и подбираем оптимальное решение.
+          {% translate "Объясняем причину, согласовываем объём работ и подбираем оптимальное решение." %}
         </p>
       </div>
 
       <div class="az-service-process-card">
         <span>04</span>
-        <h3>Выполнение и контроль</h3>
+        <h3>{% translate "Выполнение и контроль" %}</h3>
         <p>
-          Выполняем работы, проверяем результат и даём рекомендации по дальнейшей эксплуатации.
+          {% translate "Выполняем работы, проверяем результат и даём рекомендации по дальнейшей эксплуатации." %}
         </p>
       </div>
 
@@ -199,9 +199,9 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="az-service-benefit-card">
           <span class="ion ion-easel"></span>
-          <h3>Современное оборудование</h3>
+          <h3>{% translate "Современное оборудование" %}</h3>
           <p>
-            Используем диагностические инструменты и технический опыт мастеров.
+            {% translate "Используем диагностические инструменты и технический опыт мастеров." %}
           </p>
         </div>
       </div>
@@ -209,9 +209,9 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="az-service-benefit-card">
           <span class="ion ion-hammer"></span>
-          <h3>Практический подход</h3>
+          <h3>{% translate "Практический подход" %}</h3>
           <p>
-            Смотрим не только на ошибку или симптом, а на реальное состояние автомобиля.
+            {% translate "Смотрим не только на ошибку или симптом, а на реальное состояние автомобиля." %}
           </p>
         </div>
       </div>
@@ -219,9 +219,9 @@
       <div class="col-md-6 col-lg-4 mb-4">
         <div class="az-service-benefit-card">
           <span class="ion ion-chatboxes"></span>
-          <h3>Понятное объяснение</h3>
+          <h3>{% translate "Понятное объяснение" %}</h3>
           <p>
-            Клиент получает нормальную картину: причина, риски, варианты решения и следующий шаг.
+            {% translate "Клиент получает нормальную картину: причина, риски, варианты решения и следующий шаг." %}
           </p>
         </div>
       </div>
@@ -237,10 +237,10 @@
     <div class="az-service-bottom-card">
 
       <div>
-        <span class="az-section-kicker">Готовы начать?</span>
-        <h2>Запишитесь на услугу или получите консультацию</h2>
+        <span class="az-section-kicker">{% translate "Готовы начать?" %}</span>
+        <h2>{% translate "Запишитесь на услугу или получите консультацию" %}</h2>
         <p>
-          Позвоните нам, расскажите симптомы автомобиля, и мы подскажем оптимальный формат проверки или ремонта.
+          {% translate "Позвоните нам, расскажите симптомы автомобиля, и мы подскажем оптимальный формат проверки или ремонта." %}
         </p>
       </div>
 
@@ -250,7 +250,7 @@
         </a>
 
         <a href="{% url 'contacts' %}" class="az-btn az-btn-outline">
-          Контакты
+          {% translate "Контакты" %}
         </a>
       </div>
 

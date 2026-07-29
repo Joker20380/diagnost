@@ -1,5 +1,5 @@
 
-{% load static %}
+{% load static i18n %}
 
 
 <link rel="stylesheet" type="text/css" href="{% static 'onetech/styles/404.css' %}">
@@ -12,8 +12,8 @@
 		<div class="side"></div>
 	</div>
 	<div class="oops">
-		<h2>Упс!</h2>
-		<p>Мы не можем найти страницу, которую вы ищете :(</p>
+		<h2>{% translate "Упс!" %}</h2>
+		<p>{% translate "Мы не можем найти страницу, которую вы ищете :(" %}</p>
 	</div>
 	<div class="center-line">
 		<div class="hole">
@@ -23,7 +23,7 @@
 		<div class="four">4</div>
 		<div class="four">4</div>
 		<div class="btn">
-			<a href="{% url 'index' %}">Обратно на главную</a>
+			<a href="{% url 'index' %}">{% translate "Обратно на главную" %}</a>
 		</div>
 	</div>
 </div>

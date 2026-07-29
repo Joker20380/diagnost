@@ -1,8 +1,8 @@
 {% extends 'diagnost/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Осмотр подвески{% endblock %}
-{% block description %}Форма мастера для оценки состояния подвески автомобиля{% endblock %}
+{% block title %}{% translate "Осмотр подвески" %}{% endblock %}
+{% block description %}{% translate "Форма мастера для оценки состояния подвески автомобиля" %}{% endblock %}
 
 {% block content %}
 
@@ -12,20 +12,20 @@
   <div class="container">
     <div class="az-suspension-hero-content">
       <span class="az-hero-kicker">Human evidence</span>
-      <h1>Осмотр подвески</h1>
+      <h1>{% translate "Осмотр подвески" %}</h1>
       <p>
-        Форма мастера для фиксации фактического состояния ходовой части:
-        износ, критичность, признаки, замеры и рекомендации по замене.
+        {% blocktranslate trimmed %}Форма мастера для фиксации фактического состояния ходовой части:
+        износ, критичность, признаки, замеры и рекомендации по замене.{% endblocktranslate %}
       </p>
 
       <div class="az-hero-actions">
         <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-primary">
-          Вернуться к диагностике
+          {% translate "Вернуться к диагностике" %}
         </a>
 
         {% if inspection.status != 'signed' %}
           <a href="#azSuspensionForm" class="az-btn az-btn-outline">
-            Заполнить осмотр
+            {% translate "Заполнить осмотр" %}
           </a>
         {% endif %}
       </div>
@@ -44,22 +44,22 @@
       </div>
 
       <div class="az-suspension-summary-card">
-        <span>Модель</span>
+        <span>{% translate "Модель" %}</span>
         <strong>{{ session.vehicle_model|default:"—" }}</strong>
       </div>
 
       <div class="az-suspension-summary-card">
-        <span>Сессия</span>
+        <span>{% translate "Сессия" %}</span>
         <strong>{{ session.created_at|date:"d.m.Y H:i" }}</strong>
       </div>
 
       <div class="az-suspension-summary-card">
-        <span>Статус</span>
+        <span>{% translate "Статус" %}</span>
         <strong>
           {% if inspection.status == 'signed' %}
-            Подписан
+            {% translate "Подписан" %}
           {% else %}
-            Черновик
+            {% translate "Черновик" %}
           {% endif %}
         </strong>
       </div>
@@ -68,17 +68,17 @@
 
     {% if inspection.status == 'signed' %}
       <div class="az-suspension-status az-suspension-status-signed">
-        <strong>Осмотр подписан</strong>
+        <strong>{% translate "Осмотр подписан" %}</strong>
         <p>
-          {% if inspection.inspector %}Мастер: {{ inspection.inspector }}.{% endif %}
-          {% if inspection.signed_at %} Дата: {{ inspection.signed_at|date:"d.m.Y H:i" }}.{% endif %}
+          {% if inspection.inspector %}{% blocktranslate trimmed with inspector=inspection.inspector %}Мастер: {{ inspector }}.{% endblocktranslate %}{% endif %}
+          {% if inspection.signed_at %} {% blocktranslate trimmed with signed_at=inspection.signed_at|date:"d.m.Y H:i" %}Дата: {{ signed_at }}.{% endblocktranslate %}{% endif %}
         </p>
-        <span>Редактирование заблокировано. Подписанный осмотр считается финальной фактологией.</span>
+        <span>{% translate "Редактирование заблокировано. Подписанный осмотр считается финальной фактологией." %}</span>
       </div>
     {% else %}
       <div class="az-suspension-status az-suspension-status-draft">
-        <strong>Черновик осмотра</strong>
-        <p>Можно редактировать данные, добавлять детали и подписать осмотр после проверки.</p>
+        <strong>{% translate "Черновик осмотра" %}</strong>
+        <p>{% translate "Можно редактировать данные, добавлять детали и подписать осмотр после проверки." %}</p>
       </div>
     {% endif %}
 
@@ -103,8 +103,8 @@
           <section class="az-suspension-card">
             <div class="az-suspension-card-head">
               <div>
-                <span class="az-section-kicker">Общие данные</span>
-                <h2>Информация об осмотре</h2>
+                <span class="az-section-kicker">{% translate "Общие данные" %}</span>
+                <h2>{% translate "Информация об осмотре" %}</h2>
               </div>
             </div>
 
@@ -139,7 +139,7 @@
                 {{ form.lift_used }}
                 <span>
                   <strong>{{ form.lift_used.label }}</strong>
-                  <small>Автомобиль проверялся на подъёмнике</small>
+                  <small>{% translate "Автомобиль проверялся на подъёмнике" %}</small>
                 </span>
               </label>
 
@@ -147,7 +147,7 @@
                 {{ form.test_drive }}
                 <span>
                   <strong>{{ form.test_drive.label }}</strong>
-                  <small>Проводилась проверка в движении</small>
+                  <small>{% translate "Проводилась проверка в движении" %}</small>
                 </span>
               </label>
             </div>
@@ -165,13 +165,13 @@
           <section class="az-suspension-card">
             <div class="az-suspension-card-head az-suspension-parts-head">
               <div>
-                <span class="az-section-kicker">Детали подвески</span>
-                <h2>Оценка элементов ходовой</h2>
+                <span class="az-section-kicker">{% translate "Детали подвески" %}</span>
+                <h2>{% translate "Оценка элементов ходовой" %}</h2>
               </div>
 
               {% if inspection.status != 'signed' %}
                 <button type="button" class="az-btn az-btn-dark az-add-part-row">
-                  Добавить деталь
+                  {% translate "Добавить деталь" %}
                 </button>
               {% endif %}
             </div>
@@ -190,8 +190,8 @@
 
                   <div class="az-part-card-top">
                     <div>
-                      <span class="az-part-index">Деталь #{{ forloop.counter }}</span>
-                      <h3>Элемент подвески</h3>
+                      <span class="az-part-index">{% blocktranslate trimmed with number=forloop.counter %}Деталь #{{ number }}{% endblocktranslate %}</span>
+                      <h3>{% translate "Элемент подвески" %}</h3>
                     </div>
 
                     {% if formset.can_delete %}
@@ -202,7 +202,7 @@
 
                         {% if inspection.status != 'signed' %}
                           <button type="button" class="az-row-delete-btn" data-remove-row>
-                            Удалить
+                            {% translate "Удалить" %}
                           </button>
                         {% endif %}
                       </div>
@@ -211,7 +211,7 @@
 
                   <div class="az-part-grid">
                     <div class="az-suspension-field">
-                      <label for="{{ subform.part_type.id_for_label }}">Деталь</label>
+                      <label for="{{ subform.part_type.id_for_label }}">{% translate "Деталь" %}</label>
                       {{ subform.part_type }}
                       {% if subform.part_type.errors %}
                         <div class="az-field-errors">{{ subform.part_type.errors }}</div>
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="az-suspension-field">
-                      <label for="{{ subform.severity.id_for_label }}">Критичность</label>
+                      <label for="{{ subform.severity.id_for_label }}">{% translate "Критичность" %}</label>
                       {{ subform.severity }}
                       {% if subform.severity.errors %}
                         <div class="az-field-errors">{{ subform.severity.errors }}</div>
@@ -227,7 +227,7 @@
                     </div>
 
                     <div class="az-suspension-field">
-                      <label for="{{ subform.part_number.id_for_label }}">Каталожный номер</label>
+                      <label for="{{ subform.part_number.id_for_label }}">{% translate "Каталожный номер" %}</label>
                       {{ subform.part_number }}
                       {% if subform.part_number.errors %}
                         <div class="az-field-errors">{{ subform.part_number.errors }}</div>
@@ -237,7 +237,7 @@
 
                   <div class="az-wear-panel">
                     <div class="az-wear-panel-head">
-                      <label for="{{ subform.wear_percent.id_for_label }}">Износ детали</label>
+                      <label for="{{ subform.wear_percent.id_for_label }}">{% translate "Износ детали" %}</label>
                       <span data-wear-value>{{ subform.wear_percent.value|default_if_none:0 }}%</span>
                     </div>
 
@@ -252,7 +252,7 @@
                            min="0"
                            max="100"
                            class="az-wear-slider"
-                           aria-label="Износ, проценты">
+                           aria-label="{% translate "Износ, проценты" %}">
 
                     <div class="az-wear-scale-line">
                       <small>0%</small>
@@ -264,7 +264,7 @@
 
                   <div class="az-part-grid az-part-grid-text">
                     <div class="az-suspension-field">
-                      <label for="{{ subform.reason.id_for_label }}">Причина</label>
+                      <label for="{{ subform.reason.id_for_label }}">{% translate "Причина" %}</label>
                       {{ subform.reason }}
                       {% if subform.reason.errors %}
                         <div class="az-field-errors">{{ subform.reason.errors }}</div>
@@ -272,7 +272,7 @@
                     </div>
 
                     <div class="az-suspension-field">
-                      <label for="{{ subform.evidence.id_for_label }}">Признаки / замеры</label>
+                      <label for="{{ subform.evidence.id_for_label }}">{% translate "Признаки / замеры" %}</label>
                       {{ subform.evidence }}
                       {% if subform.evidence.errors %}
                         <div class="az-field-errors">{{ subform.evidence.errors }}</div>
@@ -283,7 +283,7 @@
                   <div class="az-replacement-panel">
                     <label class="az-replacement-check">
                       {{ subform.needs_replacement }}
-                      <span>Нужна замена</span>
+                      <span>{% translate "Нужна замена" %}</span>
                     </label>
 
                     {% if subform.needs_replacement.errors %}
@@ -312,8 +312,8 @@
 
                 <div class="az-part-card-top">
                   <div>
-                    <span class="az-part-index">Новая деталь</span>
-                    <h3>Элемент подвески</h3>
+                    <span class="az-part-index">{% translate "Новая деталь" %}</span>
+                    <h3>{% translate "Элемент подвески" %}</h3>
                   </div>
 
                   {% if formset.can_delete %}
@@ -323,7 +323,7 @@
                       </span>
 
                       <button type="button" class="az-row-delete-btn" data-remove-row>
-                        Удалить
+                        {% translate "Удалить" %}
                       </button>
                     </div>
                   {% endif %}
@@ -331,24 +331,24 @@
 
                 <div class="az-part-grid">
                   <div class="az-suspension-field">
-                    <label for="{{ formset.empty_form.part_type.id_for_label }}">Деталь</label>
+                    <label for="{{ formset.empty_form.part_type.id_for_label }}">{% translate "Деталь" %}</label>
                     {{ formset.empty_form.part_type }}
                   </div>
 
                   <div class="az-suspension-field">
-                    <label for="{{ formset.empty_form.severity.id_for_label }}">Критичность</label>
+                    <label for="{{ formset.empty_form.severity.id_for_label }}">{% translate "Критичность" %}</label>
                     {{ formset.empty_form.severity }}
                   </div>
 
                   <div class="az-suspension-field">
-                    <label for="{{ formset.empty_form.part_number.id_for_label }}">Каталожный номер</label>
+                    <label for="{{ formset.empty_form.part_number.id_for_label }}">{% translate "Каталожный номер" %}</label>
                     {{ formset.empty_form.part_number }}
                   </div>
                 </div>
 
                 <div class="az-wear-panel">
                   <div class="az-wear-panel-head">
-                    <label for="{{ formset.empty_form.wear_percent.id_for_label }}">Износ детали</label>
+                    <label for="{{ formset.empty_form.wear_percent.id_for_label }}">{% translate "Износ детали" %}</label>
                     <span data-wear-value>0%</span>
                   </div>
 
@@ -359,7 +359,7 @@
                          min="0"
                          max="100"
                          class="az-wear-slider"
-                         aria-label="Износ, проценты">
+                         aria-label="{% translate "Износ, проценты" %}">
 
                   <div class="az-wear-scale-line">
                     <small>0%</small>
@@ -371,12 +371,12 @@
 
                 <div class="az-part-grid az-part-grid-text">
                   <div class="az-suspension-field">
-                    <label for="{{ formset.empty_form.reason.id_for_label }}">Причина</label>
+                    <label for="{{ formset.empty_form.reason.id_for_label }}">{% translate "Причина" %}</label>
                     {{ formset.empty_form.reason }}
                   </div>
 
                   <div class="az-suspension-field">
-                    <label for="{{ formset.empty_form.evidence.id_for_label }}">Признаки / замеры</label>
+                    <label for="{{ formset.empty_form.evidence.id_for_label }}">{% translate "Признаки / замеры" %}</label>
                     {{ formset.empty_form.evidence }}
                   </div>
                 </div>
@@ -384,7 +384,7 @@
                 <div class="az-replacement-panel">
                   <label class="az-replacement-check">
                     {{ formset.empty_form.needs_replacement }}
-                    <span>Нужна замена</span>
+                    <span>{% translate "Нужна замена" %}</span>
                   </label>
 
                   <small class="replacement-hint text-muted"></small>
@@ -402,16 +402,16 @@
           <div class="az-suspension-actions">
             {% if inspection.status != 'signed' %}
               <button type="submit" name="action" value="save" class="az-btn az-btn-dark">
-                Сохранить черновик
+                {% translate "Сохранить черновик" %}
               </button>
 
               <button type="submit" name="action" value="sign" class="az-btn az-btn-primary">
-                Подписать осмотр
+                {% translate "Подписать осмотр" %}
               </button>
             {% endif %}
 
             <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-outline-dark">
-              Назад к диагностике
+              {% translate "Назад к диагностике" %}
             </a>
           </div>
 
@@ -421,54 +421,54 @@
         <aside class="az-suspension-sidebar">
 
           <div class="az-suspension-side-card">
-            <span class="az-section-kicker">Правило работы</span>
-            <h3>Фактология важнее ИИ</h3>
+            <span class="az-section-kicker">{% translate "Правило работы" %}</span>
+            <h3>{% translate "Фактология важнее ИИ" %}</h3>
             <p>
-              Этот осмотр фиксирует реальные признаки: люфт, износ, стуки, замеры,
-              состояние деталей и комментарий мастера.
+              {% blocktranslate trimmed %}Этот осмотр фиксирует реальные признаки: люфт, износ, стуки, замеры,
+              состояние деталей и комментарий мастера.{% endblocktranslate %}
             </p>
 
             <ul>
-              <li>ИИ может подсказать направление.</li>
-              <li>Мастер фиксирует фактическое состояние.</li>
-              <li>Подписанный осмотр блокируется от редактирования.</li>
+              <li>{% translate "ИИ может подсказать направление." %}</li>
+              <li>{% translate "Мастер фиксирует фактическое состояние." %}</li>
+              <li>{% translate "Подписанный осмотр блокируется от редактирования." %}</li>
             </ul>
           </div>
 
           <div class="az-suspension-hint-card">
-            <h3>Шкала износа</h3>
+            <h3>{% translate "Шкала износа" %}</h3>
 
             <div class="az-wear-scale">
               <div>
                 <span class="az-scale-dot az-scale-ok"></span>
                 <strong>0–39%</strong>
-                <p>Рабочее состояние, замена обычно не требуется.</p>
+                <p>{% translate "Рабочее состояние, замена обычно не требуется." %}</p>
               </div>
 
               <div>
                 <span class="az-scale-dot az-scale-warn"></span>
                 <strong>40–69%</strong>
-                <p>Наблюдать, перепроверить, готовить замену.</p>
+                <p>{% translate "Наблюдать, перепроверить, готовить замену." %}</p>
               </div>
 
               <div>
                 <span class="az-scale-dot az-scale-danger"></span>
                 <strong>70–100%</strong>
-                <p>Высокий износ, рекомендуется замена.</p>
+                <p>{% translate "Высокий износ, рекомендуется замена." %}</p>
               </div>
             </div>
           </div>
 
           <div class="az-suspension-side-cta">
-            <span class="az-section-kicker">Навигация</span>
-            <h3>Вернуться к отчёту</h3>
+            <span class="az-section-kicker">{% translate "Навигация" %}</span>
+            <h3>{% translate "Вернуться к отчёту" %}</h3>
             <p>
-              После сохранения или подписи можно открыть общий диагностический отчёт
-              и увидеть осмотр в составе сессии.
+              {% blocktranslate trimmed %}После сохранения или подписи можно открыть общий диагностический отчёт
+              и увидеть осмотр в составе сессии.{% endblocktranslate %}
             </p>
 
             <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-primary">
-              Открыть отчёт
+              {% translate "Открыть отчёт" %}
             </a>
           </div>
 
