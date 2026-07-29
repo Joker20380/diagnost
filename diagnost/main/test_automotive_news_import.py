@@ -157,13 +157,15 @@ class AutomotiveNewsImportTests(TestCase):
 
         self.assertEqual(
             self.client.get(
-                imported.get_absolute_url()
+                imported.get_absolute_url(),
+                secure=True,
             ).status_code,
             404,
         )
 
         blog_response = self.client.get(
-            reverse("blog")
+            reverse("blog"),
+            secure=True,
         )
 
         self.assertNotContains(
@@ -215,13 +217,15 @@ class AutomotiveNewsImportTests(TestCase):
 
         self.assertEqual(
             self.client.get(
-                imported.get_absolute_url()
+                imported.get_absolute_url(),
+                secure=True,
             ).status_code,
             200,
         )
 
         published_blog = self.client.get(
-            reverse("blog")
+            reverse("blog"),
+            secure=True,
         )
 
         self.assertContains(

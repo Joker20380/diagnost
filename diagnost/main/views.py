@@ -2,6 +2,8 @@
 
 # Стандартные библиотеки
 import csv
+import hashlib
+import ipaddress
 import logging
 import os
 import random
@@ -19,6 +21,7 @@ from django.db import transaction  # ✅ добавили
 
 # Если используешь send_mail/settings в Unsubscribe — они должны быть импортированы
 from django.core.mail import send_mail
+from django.core.cache import cache
 from django.conf import settings
 
 from users.models import UserProfile
@@ -43,6 +46,33 @@ from .utils import *
 from .forms import *
 
 logger = logging.getLogger(__name__)
+
+
+def _client_ip(request):
+    forwarded = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    candidate = forwarded.split(',', 1)[0].strip() if forwarded else request.META.get('REMOTE_ADDR', '')
+    try:
+        return str(ipaddress.ip_address(candidate))
+    except ValueError:
+        return 'unknown'
+
+
+def _is_rate_limited(request, scope, timeout=60):
+    fingerprint = hashlib.sha256(f"{scope}:{_client_ip(request)}".encode()).hexdigest()
+    return not cache.add(f"public-form:{fingerprint}", True, timeout=timeout)
+
+
+def _diagnostic_sessions_for_user(user):
+    queryset = DiagnosticSession.objects.all()
+
+    if user.is_staff or user.is_superuser:
+        return queryset
+
+    profile = getattr(user, "userprofile", None)
+    if profile is None:
+        return queryset.none()
+
+    return queryset.filter(user_profile=profile)
 
 
 
@@ -320,6 +350,11 @@ def Subscribe(request):
     if request.method == 'POST':
         form = SubscriberForm(request.POST)
         if form.is_valid():
+            if form.cleaned_data.get('website'):
+                return redirect('index')
+            if _is_rate_limited(request, 'subscribe'):
+                messages.error(request, 'Слишком много попыток. Повторите через минуту.')
+                return redirect('index')
             form.save()
             messages.success(request, 'Вы успешно подписались на рассылку!')
             return redirect('index')
@@ -387,29 +422,19 @@ class ContactsView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        contact_id = request.POST.get('contact')
-
-        if not all([name, email, message]):
-            messages.error(request, 'Пожалуйста, заполните все обязательные поля')
+        form = ContactRequestForm(request.POST)
+        if not form.is_valid():
+            messages.error(request, 'Проверьте правильность заполнения формы.')
             return self.get(request, *args, **kwargs)
 
-        try:
-            contact = Contact.objects.get(id=contact_id) if contact_id else None
-        except Contact.DoesNotExist:
-            contact = None
+        if form.cleaned_data.get('website'):
+            return redirect('contacts')
 
-        ContactRequest.objects.create(
-            name=name,
-            email=email,
-            phone=phone,
-            message=message,
-            contact=contact
-        )
+        if _is_rate_limited(request, 'contact'):
+            messages.error(request, 'Сообщение уже отправлено. Повторите через минуту.')
+            return redirect('contacts')
 
+        form.save()
         messages.success(request, 'Ваше сообщение успешно отправлено!')
         return redirect('contacts')
 
@@ -451,7 +476,10 @@ def upload_diagnostic(request):
 
 @login_required
 def diagnostic_detail(request, session_id):
-    session = get_object_or_404(DiagnosticSession, id=session_id)
+    session = get_object_or_404(
+        _diagnostic_sessions_for_user(request.user),
+        id=session_id,
+    )
     codes = session.codes.all()
     readings = session.readings.all()
     inspection = getattr(session, 'suspension_inspection', None)
@@ -466,7 +494,10 @@ def diagnostic_detail(request, session_id):
 
 @login_required
 def suspension_inspection(request, session_id):
-    session = get_object_or_404(DiagnosticSession, id=session_id)
+    session = get_object_or_404(
+        _diagnostic_sessions_for_user(request.user),
+        id=session_id,
+    )
     profile = getattr(request.user, 'userprofile', None)
 
     inspection, _ = SuspensionInspection.objects.get_or_create(

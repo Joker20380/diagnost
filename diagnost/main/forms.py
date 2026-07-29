@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 from phonenumber_field.formfields import PhoneNumberField
 from users.models import UserProfile
-from .models import Subscriber
+from .models import ContactRequest, Subscriber
 from dal import autocomplete
 from allauth.account.forms import LoginForm, ResetPasswordForm
 from diagnostics.models import DiagnosticSession
@@ -229,12 +229,54 @@ class PersonalAreaForm(forms.ModelForm):
 
 
 class SubscriberForm(forms.ModelForm):
+    website = forms.CharField(required=False, widget=forms.HiddenInput)
+
     class Meta:
         model = Subscriber
         fields = ['email']
         widgets = {
             'email': forms.EmailInput(attrs={"placeholder": "Введите ваш email", "autocomplete": "email", "class": "newsletter_input"})
         }
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].strip().lower()
+        self._existing_subscriber = Subscriber.objects.filter(email__iexact=email).first()
+        return email
+
+    def validate_unique(self):
+        # Повторная подписка должна активировать существующую запись.
+        return
+
+    def save(self, commit=True):
+        existing = getattr(self, '_existing_subscriber', None)
+        if existing:
+            existing.email = self.cleaned_data['email']
+            existing.is_active = True
+            existing.unsubscribe_token = None
+            if commit:
+                existing.save(update_fields=['email', 'is_active', 'unsubscribe_token'])
+            return existing
+        return super().save(commit=commit)
+
+
+class ContactRequestForm(forms.ModelForm):
+    website = forms.CharField(required=False, widget=forms.HiddenInput)
+
+    class Meta:
+        model = ContactRequest
+        fields = ['name', 'email', 'phone', 'message', 'contact']
+
+    def clean_name(self):
+        return self.cleaned_data['name'].strip()
+
+    def clean_email(self):
+        return self.cleaned_data['email'].strip().lower()
+
+    def clean_phone(self):
+        return (self.cleaned_data.get('phone') or '').strip()
+
+    def clean_message(self):
+        return self.cleaned_data['message'].strip()
 
 
 class UnsubscriberForm(forms.Form):

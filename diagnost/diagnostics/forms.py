@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from django import forms
 from django.forms import inlineformset_factory
 
@@ -7,6 +9,12 @@ from .models import DiagnosticSession, SuspensionInspection, SuspensionPart
 
 
 class DiagnosticUploadForm(forms.ModelForm):
+    max_upload_size = 10 * 1024 * 1024
+    allowed_content_types = {
+        "application/pdf",
+        "application/x-pdf",
+    }
+
     class Meta:
         model = DiagnosticSession
         fields = ["vin", "vehicle_model", "raw_file"]
@@ -20,6 +28,32 @@ class DiagnosticUploadForm(forms.ModelForm):
             "vehicle_model": forms.TextInput(attrs={"class": "form-control"}),
             "raw_file": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }
+
+    def clean_raw_file(self):
+        uploaded_file = self.cleaned_data["raw_file"]
+
+        if uploaded_file.size > self.max_upload_size:
+            raise forms.ValidationError(
+                "Размер PDF-файла не должен превышать 10 МБ."
+            )
+
+        if Path(uploaded_file.name).suffix.lower() != ".pdf":
+            raise forms.ValidationError(
+                "Поддерживаются только диагностические отчёты в формате PDF."
+            )
+
+        content_type = getattr(uploaded_file, "content_type", "")
+        if content_type not in self.allowed_content_types:
+            raise forms.ValidationError("Некорректный MIME-тип PDF-файла.")
+
+        signature = uploaded_file.read(5)
+        uploaded_file.seek(0)
+        if signature != b"%PDF-":
+            raise forms.ValidationError(
+                "Файл не является корректным PDF-документом."
+            )
+
+        return uploaded_file
 
 
 class SuspensionForm(forms.ModelForm):

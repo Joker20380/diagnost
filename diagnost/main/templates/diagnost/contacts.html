@@ -115,6 +115,8 @@
 
         <form method="post" id="contact_form" class="az-contact-form" novalidate>
           {% csrf_token %}
+          <input type="text" name="website" tabindex="-1" autocomplete="off"
+                 aria-hidden="true" class="d-none">
 
           <div class="az-form-grid">
             <div class="az-form-group">

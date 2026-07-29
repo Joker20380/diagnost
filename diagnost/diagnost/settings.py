@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 from decouple import Config, Csv
 from decouple import config
 import os
@@ -23,12 +24,45 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'unsafe-dev-key-change-me')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('1', 'true', 'yes', 'on')
 
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'unsafe-development-only-key'
+    else:
+        raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG is False')
+
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+
+# Production security defaults. They remain environment-configurable for
+# local development and one-off maintenance commands.
+SECURE_SSL_REDIRECT = os.getenv(
+    'SECURE_SSL_REDIRECT',
+    'False' if DEBUG else 'True',
+).lower() in ('1', 'true', 'yes', 'on')
+SESSION_COOKIE_SECURE = os.getenv(
+    'SESSION_COOKIE_SECURE',
+    'False' if DEBUG else 'True',
+).lower() in ('1', 'true', 'yes', 'on')
+CSRF_COOKIE_SECURE = os.getenv(
+    'CSRF_COOKIE_SECURE',
+    'False' if DEBUG else 'True',
+).lower() in ('1', 'true', 'yes', 'on')
+SECURE_HSTS_SECONDS = int(os.getenv(
+    'SECURE_HSTS_SECONDS',
+    '0' if DEBUG else '31536000',
+))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv(
+    'SECURE_HSTS_INCLUDE_SUBDOMAINS',
+    'True',
+).lower() in ('1', 'true', 'yes', 'on')
+SECURE_HSTS_PRELOAD = os.getenv(
+    'SECURE_HSTS_PRELOAD',
+    'True',
+).lower() in ('1', 'true', 'yes', 'on')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 
@@ -84,7 +118,7 @@ ROOT_URLCONF = 'diagnost.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['main/templates', '/home/j/joker2038/diagnost/public_html/venv/lib/python3.10/site-packages/django_admin_geomap/templates'],
+        'DIRS': [BASE_DIR / 'main' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -186,19 +220,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Allauth settings (можно настроить, если нужно)
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-ACCOUNT_USERNAME_MIN_LENGHT = 4
+ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_FORMS = {
     'login': 'main.forms.CustomLoginForm',
     'reset_password': 'main.forms.CustomResetPasswordForm',
 }
-
-# CKEditor and other configurations can remain as is
-CKEDITOR_5_ALLOW_ALL_FILE_TYPES = True
-CKEDITOR_5_CONFIGS = {
-    # your CKEditor configuration remains unchanged
-}
-
 
 customColorPalette = [
     {"color": "hsl(4, 90%, 58%)", "label": "Red"},
@@ -208,7 +235,7 @@ customColorPalette = [
     {"color": "hsl(231, 48%, 48%)", "label": "Indigo"},
     {"color": "hsl(207, 90%, 54%)", "label": "Blue"},
 ]
-CKEDITOR_5_ALLOW_ALL_FILE_TYPES = True
+CKEDITOR_5_ALLOW_ALL_FILE_TYPES = False
 CKEDITOR_5_CONFIGS = {
     "default": {
         "removePlugins": ["WordCount"],
@@ -365,11 +392,6 @@ CKEDITOR_5_CONFIGS = {
             },
         },
         "link": {"defaultProtocol": "https://"},
-        "htmlSupport": {
-            "allow": [
-                {"name": "/.*/", "attributes": True, "classes": True, "styles": True},
-            ],
-        },
         "mention": {
             "feeds": [
                 {
