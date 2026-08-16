@@ -1,12 +1,23 @@
 from __future__ import annotations
 
+import hashlib
 import re
 from pathlib import Path
 from typing import Any
 
+from django.db import transaction
 from django.utils import timezone
 
-from diagnostics.models import DiagnosticCode, DTCReference
+from diagnostics.models import (
+    DiagnosticCode,
+    DiagnosticParseRun,
+    DiagnosticSession,
+    DTCReference,
+)
+
+
+PARSER_NAME = "launch_all_system_dtc_pdf"
+PARSER_VERSION = "2.0.0"
 
 
 STATUS_WORDS = {
@@ -234,127 +245,193 @@ def parse_launch_pdf(path: str | Path) -> dict[str, Any]:
     }
 
 
-def get_or_create_dtc_reference_from_launch_fault(fault: dict[str, str]) -> DTCReference:
-    code = normalize_code(fault.get("code"))
-    description = (fault.get("description") or "").strip()
-    module_code = (fault.get("module_code") or "").strip()
-    module_name = (fault.get("module_name") or "").strip()
+def calculate_file_sha256(path: str | Path) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
-    system = detect_system(code)
 
-    title = description[:500] if description else f"Код неисправности {code}"
+def find_dtc_reference(code: str, manufacturer: str = "") -> DTCReference | None:
+    """Resolve verified knowledge without promoting a case observation into it."""
+    code = normalize_code(code)
+    manufacturer = (manufacturer or "").strip()
+    if not code:
+        return None
 
-    ref, _ = DTCReference.objects.update_or_create(
+    if manufacturer:
+        reference = DTCReference.objects.filter(
+            code=code,
+            manufacturer__iexact=manufacturer,
+            is_active=True,
+        ).first()
+        if reference:
+            return reference
+
+    return DTCReference.objects.filter(
         code=code,
         manufacturer="",
-        defaults={
-            "system": system,
-            "scope": DTCReference.Scope.MANUFACTURER if system == "O" else DTCReference.Scope.GENERIC,
-            "title_ru": title,
-            "description_ru": (
-                f"Код {code} найден в отчёте Launch."
-                + (f" Модуль: {module_code} ({module_name})." if module_code or module_name else "")
-                + (f" Описание: {description}" if description else "")
-            ),
-            "diagnostic_notes": (
-                "Код получен из отчёта Launch AllSystemDTC. "
-                "Для точного вывода нужно учитывать модуль, статус ошибки, сопутствующие коды, "
-                "питание, массу, проводку, разъёмы и фактические симптомы автомобиля."
-            ),
-            "recommended_checks": (
-                "Проверить модуль, указанный в отчёте; считать сопутствующие блоки; "
-                "проверить питание, массу, разъёмы, проводку и условия появления ошибки. "
-                "Не менять блок или деталь только по одному коду."
-            ),
-            "severity": DTCReference.Severity.MEDIUM,
-            "source_name": "Launch diagnostic report",
-            "is_active": True,
-        },
-    )
-
-    return ref
+        is_active=True,
+    ).first()
 
 
-def apply_launch_parse_to_session(session, parsed: dict[str, Any]) -> int:
+def apply_launch_parse_to_session(
+    session: DiagnosticSession,
+    parsed: dict[str, Any],
+    parse_run: DiagnosticParseRun | None = None,
+) -> int:
     vehicle = parsed.get("vehicle") or {}
     faults = parsed.get("faults") or []
+    manufacturer = (vehicle.get("brand") or "").strip()
 
-    if vehicle.get("vin"):
-        session.vin = vehicle["vin"]
+    with transaction.atomic():
+        if vehicle.get("vin"):
+            session.vin = vehicle["vin"]
 
-    model_parts = []
-    if vehicle.get("brand"):
-        model_parts.append(vehicle["brand"])
-    if vehicle.get("model"):
-        model_parts.append(vehicle["model"])
+        model_parts = []
+        if manufacturer:
+            model_parts.append(manufacturer)
+        if vehicle.get("model"):
+            model_parts.append(vehicle["model"])
 
-    if model_parts:
-        session.vehicle_model = " ".join(model_parts)
+        if model_parts:
+            session.vehicle_model = " ".join(model_parts)
 
-    session.system_report = {
-        "source": "launch_pdf",
-        "vehicle": vehicle,
-        "abnormal_systems": parsed.get("abnormal_systems") or [],
-        "ok_systems": parsed.get("ok_systems") or [],
-    }
+        session.system_report = {
+            "source": "launch_pdf",
+            "parser": {
+                "name": PARSER_NAME,
+                "version": PARSER_VERSION,
+                "parse_run_id": parse_run.pk if parse_run else None,
+            },
+            "vehicle": vehicle,
+            "abnormal_systems": parsed.get("abnormal_systems") or [],
+            "ok_systems": parsed.get("ok_systems") or [],
+        }
 
-    DiagnosticCode.objects.filter(session=session).delete()
+        observations = DiagnosticCode.objects.filter(session=session)
+        if parse_run:
+            observations.filter(parse_run=parse_run).delete()
+        else:
+            observations.filter(parse_run__isnull=True).delete()
 
-    created = 0
-    recommendation_lines = []
+        created = 0
+        recommendation_lines = []
 
-    for fault in faults:
-        code = normalize_code(fault.get("code"))
-        description = (fault.get("description") or "").strip()
+        for fault in faults:
+            code = normalize_code(fault.get("code"))
+            description = (fault.get("description") or "").strip()
+            if not code:
+                continue
 
-        if not code:
-            continue
+            reference = find_dtc_reference(code, manufacturer)
+            display_description = description or (
+                reference.title_ru if reference else "Описание отсутствует"
+            )
 
-        ref = get_or_create_dtc_reference_from_launch_fault(fault)
+            DiagnosticCode.objects.create(
+                session=session,
+                code=code,
+                description=description[:500],
+                module_code=(fault.get("module_code") or "")[:64],
+                module_name=(fault.get("module_name") or "")[:255],
+                status_text=(fault.get("status") or "")[:64],
+                raw_text=description,
+                is_known=reference is not None,
+                reference=reference,
+                parse_run=parse_run,
+            )
+            created += 1
 
-        DiagnosticCode.objects.create(
-            session=session,
-            code=code,
-            description=description[:500],
-            module_code=(fault.get("module_code") or "")[:64],
-            module_name=(fault.get("module_name") or "")[:255],
-            status_text=(fault.get("status") or "")[:64],
-            raw_text=description,
-            reference=ref,
-        )
+            recommendation_lines.append(
+                f"{code} — {display_description}\n"
+                f"→ Модуль: {fault.get('module_code') or '—'} {fault.get('module_name') or ''}. "
+                f"Статус: {fault.get('status') or '—'}. "
+                "Сначала проверить питание, массу, разъёмы, проводку и сопутствующие ошибки."
+            )
 
-        created += 1
-
-        recommendation_lines.append(
-            f"{code} — {description or ref.title_ru}\n"
-            f"→ Модуль: {fault.get('module_code') or '—'} {fault.get('module_name') or ''}. "
-            f"Статус: {fault.get('status') or '—'}. "
-            f"Сначала проверить питание, массу, разъёмы, проводку и сопутствующие ошибки."
-        )
-
-    if recommendation_lines:
         session.recommendation = "\n\n".join(recommendation_lines)
-        session.ai_generated_at = timezone.now()
-
-    session.save(update_fields=[
-        "vin",
-        "vehicle_model",
-        "system_report",
-        "recommendation",
-        "ai_generated_at",
-    ])
+        session.analysis_method = DiagnosticSession.AnalysisMethod.RULES
+        session.analysis_engine = PARSER_NAME
+        session.analysis_version = PARSER_VERSION
+        session.analysis_generated_at = timezone.now()
+        session.ai_generated_at = None
+        session.save(update_fields=[
+            "vin",
+            "vehicle_model",
+            "system_report",
+            "recommendation",
+            "analysis_method",
+            "analysis_engine",
+            "analysis_version",
+            "analysis_generated_at",
+            "ai_generated_at",
+        ])
 
     return created
 
 
-def parse_and_apply_launch_pdf(session) -> int:
+def parse_and_apply_launch_pdf(session: DiagnosticSession) -> int:
     if not session.raw_file:
         return 0
 
     path = session.raw_file.path
-
     if not str(path).lower().endswith(".pdf"):
         return 0
 
-    parsed = parse_launch_pdf(path)
-    return apply_launch_parse_to_session(session, parsed)
+    content_sha256 = calculate_file_sha256(path)
+    parse_run, created = DiagnosticParseRun.objects.get_or_create(
+        session=session,
+        parser_name=PARSER_NAME,
+        parser_version=PARSER_VERSION,
+        content_sha256=content_sha256,
+        defaults={
+            "source_type": "launch_pdf",
+            "status": DiagnosticParseRun.Status.PENDING,
+        },
+    )
+
+    if not created and parse_run.status == DiagnosticParseRun.Status.SUCCEEDED:
+        return parse_run.code_observations.count()
+
+    if not created:
+        parse_run.status = DiagnosticParseRun.Status.PENDING
+        parse_run.error_message = ""
+        parse_run.completed_at = None
+        parse_run.save(update_fields=["status", "error_message", "completed_at"])
+
+    try:
+        parsed = parse_launch_pdf(path)
+        fault_count = apply_launch_parse_to_session(session, parsed, parse_run=parse_run)
+    except Exception as exc:
+        parse_run.status = DiagnosticParseRun.Status.FAILED
+        parse_run.error_message = str(exc)[:2000]
+        parse_run.completed_at = timezone.now()
+        parse_run.save(update_fields=["status", "error_message", "completed_at"])
+        raise
+
+    with transaction.atomic():
+        DiagnosticParseRun.objects.filter(
+            session=session,
+            is_current=True,
+        ).exclude(pk=parse_run.pk).update(is_current=False)
+        parse_run.status = DiagnosticParseRun.Status.SUCCEEDED
+        parse_run.is_current = True
+        parse_run.fault_count = fault_count
+        parse_run.completed_at = timezone.now()
+        parse_run.metadata = {
+            "vehicle_fields_present": sorted(
+                key for key, value in (parsed.get("vehicle") or {}).items() if value
+            ),
+            "abnormal_system_count": len(parsed.get("abnormal_systems") or []),
+            "ok_system_count": len(parsed.get("ok_systems") or []),
+        }
+        parse_run.save(update_fields=[
+            "status",
+            "is_current",
+            "fault_count",
+            "completed_at",
+            "metadata",
+        ])
+    return fault_count

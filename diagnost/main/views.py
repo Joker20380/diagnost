@@ -493,7 +493,14 @@ def diagnostic_detail(request, session_id):
         _diagnostic_sessions_for_user(request.user),
         id=session_id,
     )
-    codes = session.codes.all()
+    current_parse_run = session.parse_runs.filter(
+        status="succeeded",
+        is_current=True,
+    ).first()
+    if current_parse_run:
+        codes = session.codes.filter(parse_run=current_parse_run)
+    else:
+        codes = session.codes.filter(parse_run__isnull=True)
     readings = session.readings.all()
     inspection = getattr(session, 'suspension_inspection', None)
 

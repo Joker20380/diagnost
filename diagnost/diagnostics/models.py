@@ -195,6 +195,12 @@ class OBDLiveDataPIDReference(models.Model):
 
 
 class DiagnosticSession(models.Model):
+    class AnalysisMethod(models.TextChoices):
+        RULES = "rules", _("Правила")
+        KNOWLEDGE_BASE = "knowledge_base", _("База знаний")
+        LLM = "llm", _("Языковая модель")
+        HYBRID = "hybrid", _("Гибридный анализ")
+
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -213,6 +219,15 @@ class DiagnosticSession(models.Model):
     # --- Прозрачность генерации подсказок (если используешь ИИ/правила)
     ai_generated_at = models.DateTimeField(null=True, blank=True)
     ai_disclaimer_version = models.CharField(max_length=32, blank=True, default="v1")
+    analysis_method = models.CharField(
+        max_length=32,
+        choices=AnalysisMethod.choices,
+        blank=True,
+        default="",
+    )
+    analysis_engine = models.CharField(max_length=64, blank=True, default="")
+    analysis_version = models.CharField(max_length=32, blank=True, default="")
+    analysis_generated_at = models.DateTimeField(null=True, blank=True)
 
     # --- Финальное решение специалиста (human-in-the-loop)
     expert_conclusion = models.TextField(blank=True)
@@ -250,6 +265,58 @@ class DiagnosticSession(models.Model):
         self.save(update_fields=["expert_name", "expert_conclusion", "expert_signed_at"])
 
 
+class DiagnosticParseRun(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", _("В обработке")
+        SUCCEEDED = "succeeded", _("Успешно")
+        FAILED = "failed", _("Ошибка")
+
+    session = models.ForeignKey(
+        DiagnosticSession,
+        on_delete=models.CASCADE,
+        related_name="parse_runs",
+    )
+    source_type = models.CharField(max_length=32, default="launch_pdf")
+    parser_name = models.CharField(max_length=64)
+    parser_version = models.CharField(max_length=32)
+    content_sha256 = models.CharField(max_length=64, db_index=True)
+    status = models.CharField(
+        max_length=16,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True,
+    )
+    is_current = models.BooleanField(default=False, db_index=True)
+    parsed_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    fault_count = models.PositiveIntegerField(default=0)
+    metadata = models.JSONField(default=dict, blank=True)
+    error_message = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-parsed_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "parser_name", "parser_version", "content_sha256"],
+                name="unique_parse_run_per_session_parser_content",
+            ),
+            models.UniqueConstraint(
+                fields=["session"],
+                condition=models.Q(is_current=True),
+                name="unique_current_parse_run_per_session",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["session", "status"]),
+            models.Index(fields=["parser_name", "parser_version"]),
+        ]
+        verbose_name = "Запуск парсера диагностики"
+        verbose_name_plural = "Запуски парсера диагностики"
+
+    def __str__(self):
+        return f"{self.parser_name} {self.parser_version} — session {self.session_id}"
+
+
 class DiagnosticCode(models.Model):
     session = models.ForeignKey(
         DiagnosticSession, on_delete=models.CASCADE, related_name="codes"
@@ -270,6 +337,14 @@ class DiagnosticCode(models.Model):
         blank=True,
         related_name="session_codes",
         help_text="Связь с глобальным справочником DTC.",
+    )
+    parse_run = models.ForeignKey(
+        DiagnosticParseRun,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="code_observations",
+        help_text="Запуск парсера, создавший это наблюдение.",
     )
 
     def save(self, *args, **kwargs):
