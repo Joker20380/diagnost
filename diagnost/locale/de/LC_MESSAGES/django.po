@@ -5061,3 +5061,1397 @@ msgstr "White_cat schreiben →"
 
 #~ msgid "by"
 #~ msgstr "von"
+
+# Automatically completed admin/domain translations.
+
+msgid "% износа)"
+msgstr "% Verschleiß)"
+
+msgid ". Сначала проверить питание, массу, разъёмы, проводку и сопутствующие ошибки."
+msgstr ". Überprüfen Sie zunächst die Stromversorgung, die Erdung, die Anschlüsse, die Verkabelung und die damit verbundenen Fehler."
+
+msgid ". Статус:"
+msgstr ". Status:"
+
+msgid "42 000 км"
+msgstr "42.000 km"
+
+msgid "<h2>Диагностика подвески</h2>"
+msgstr "<h2>Fahrwerksdiagnose</h2>"
+
+msgid "<p>Ручной материал</p>"
+msgstr "<p>Handgefertigtes Material</p>"
+
+msgid "ID материала у провайдера"
+msgstr "Material-ID des Anbieters"
+
+msgid "URL-идентификатор"
+msgstr "URL-ID"
+
+msgid "^([A-Z0-9/\\-]+)\\s+\\((.+?)\\)\\s+(\\d+)\\s+Существуют проблемы"
+msgstr "^([A-Z0-9/\\-]+)\\s+\\((.+?)\\)\\s+(\\d+)\\s+Es gibt Probleme"
+
+msgid "Авто диагностика"
+msgstr "Autodiagnose"
+
+msgid "Авто электрик"
+msgstr "Autoelektriker"
+
+msgid "Автоматически"
+msgstr "Automatisch"
+
+msgid "Автомобиль"
+msgstr "Auto"
+
+msgid "Автосервис"
+msgstr "Autoservice"
+
+msgid "Администрирование сайта"
+msgstr "Site-Administration"
+
+msgid "Активно"
+msgstr "Aktiv"
+
+msgid "Анализ сформирован"
+msgstr "Analyse gebildet"
+
+msgid "Аппаратная версия ЭБУ"
+msgstr "ECU-Hardwareversion"
+
+msgid "Архив"
+msgstr "Archiv"
+
+msgid "Архивная"
+msgstr "Archiv"
+
+msgid "Блокирующая"
+msgstr "Blockieren"
+
+msgid "В обработке"
+msgstr "In Bearbeitung"
+
+msgid "В работе"
+msgstr "In Bearbeitung"
+
+msgid "Вариант / комплектация"
+msgstr "Option/Ausstattung"
+
+msgid "Вернуть на доработку"
+msgstr "Zurück zur Überarbeitung"
+
+msgid "Версия"
+msgstr "Version"
+
+msgid "Версия ПО а/м"
+msgstr "Fahrzeugsoftwareversion"
+
+msgid "Версия анализа"
+msgstr "Analyseversion"
+
+msgid "Версия диагностической прикладной программы"
+msgstr "Version der Diagnoseanwendung"
+
+msgid "Версия предупреждения AI"
+msgstr "AI-Warnversion"
+
+msgid "Версия процедуры"
+msgstr "Verfahrensversion"
+
+msgid "Видео"
+msgstr "Video"
+
+msgid "Внешний"
+msgstr "Extern"
+
+msgid "Возвращает координаты в формате GeoJSON"
+msgstr "Gibt Koordinaten im GeoJSON-Format zurück"
+
+msgid "Возможные причины"
+msgstr "Mögliche Gründe"
+
+msgid "Время"
+msgstr "Zeit"
+
+msgid "Время в секундах от начала записи"
+msgstr "Zeit in Sekunden ab Aufnahmebeginn"
+
+msgid "Время испытания"
+msgstr "Testzeit"
+
+msgid "Время обновления"
+msgstr "Aktualisierungszeit"
+
+msgid "Время передачи"
+msgstr "Transferzeit"
+
+msgid "Время последнего импорта"
+msgstr "Letzter Importzeitpunkt"
+
+msgid "Время события"
+msgstr "Veranstaltungszeit"
+
+msgid "Время создания"
+msgstr "Schöpfungszeit"
+
+msgid "Вручную"
+msgstr "Manuell"
+
+msgid "Всего строк"
+msgstr "Gesamtzeilen"
+
+msgid "Встраиваемое видео YouTube"
+msgstr "Eingebettetes YouTube-Video"
+
+msgid "Выполнение операции"
+msgstr "Durchführen einer Operation"
+
+msgid "Высокая"
+msgstr "Hoch"
+
+msgid "Гибридный анализ"
+msgstr "Hybridanalyse"
+
+msgid "Год"
+msgstr "Jahr"
+
+msgid "Год выпуска"
+msgstr "Ausgabejahr"
+
+msgid "Группа"
+msgstr "Gruppe"
+
+msgid "Группа контактов"
+msgstr "Kontaktgruppe"
+
+msgid "Группа контактов (например, Администрация, Филиал)"
+msgstr "Kontaktgruppe (z. B. Verwaltung, Zweigstelle)"
+
+msgid "Группы контактов"
+msgstr "Kontaktgruppen"
+
+msgid "Данные автомобиля подтверждены."
+msgstr "Fahrzeugdetails wurden bestätigt."
+
+msgid "Данные приёмки сохранены."
+msgstr "Die Abnahmedaten wurden gespeichert."
+
+msgid "Данные события"
+msgstr "Ereignisdaten"
+
+msgid "Дата и время начала проекта"
+msgstr "Datum und Uhrzeit des Projektstarts"
+
+msgid "Дата и время обновления"
+msgstr "Datum und Uhrzeit aktualisieren"
+
+msgid "Дата и время окончания проекта"
+msgstr "Datum und Uhrzeit des Projektendes"
+
+msgid "Дата и время создания"
+msgstr "Erstellungsdatum und -uhrzeit"
+
+msgid "Дата подписки"
+msgstr "Abonnementdatum"
+
+msgid "Дата рождения"
+msgstr "Geburtsdatum"
+
+msgid "Дата создания"
+msgstr "Erstellungsdatum"
+
+msgid "Действие"
+msgstr "Aktion"
+
+msgid "Диагностика и автомобили"
+msgstr "Diagnose und Autos"
+
+msgid "Диагностический путь"
+msgstr "Diagnosepfad"
+
+msgid "Диагностический скан"
+msgstr "Diagnosescan"
+
+msgid "Диагностическое значение"
+msgstr "Diagnosewert"
+
+msgid "Добавил"
+msgstr "Hinzugefügt"
+
+msgid "Добавлено"
+msgstr "Hinzugefügt"
+
+msgid "Доказательство"
+msgstr "Beweis"
+
+msgid "Документы"
+msgstr "Dokumente"
+
+msgid "Долгота"
+msgstr "Längengrad"
+
+msgid "Должность"
+msgstr "Position"
+
+msgid "Доп. информация"
+msgstr "Hinzufügen. Informationen"
+
+msgid "Дорожный тест"
+msgstr "Straßentest"
+
+msgid "Доступна"
+msgstr "Verfügbar"
+
+msgid "Доступно"
+msgstr "Verfügbar"
+
+msgid "Единица измерения"
+msgstr "Maßeinheit"
+
+msgid "Жалоба"
+msgstr "Beschwerde"
+
+msgid "Жалоба клиента"
+msgstr "Kundenbeschwerde"
+
+msgid "Заблокирован"
+msgstr "Blockiert"
+
+msgid "Заблокировано"
+msgstr "Blockiert"
+
+msgid "Завершено"
+msgstr "Abgeschlossen"
+
+msgid "Завершил"
+msgstr "Abgeschlossen"
+
+msgid "Завершён"
+msgstr "Abgeschlossen"
+
+msgid "Зависит от"
+msgstr "Hängt davon ab"
+
+msgid "Заголовок"
+msgstr "Überschrift"
+
+msgid "Заключение эксперта"
+msgstr "Expertenmeinung"
+
+msgid "Закрыто"
+msgstr "Geschlossen"
+
+msgid "Заменяет"
+msgstr "Ersetzt"
+
+msgid "Заменяет доказательство"
+msgstr "Ersetzt den Beweis"
+
+msgid "Заметки"
+msgstr "Notizen"
+
+msgid "Записал"
+msgstr "Aufgezeichnet"
+
+msgid "Записано"
+msgstr "Aufgezeichnet"
+
+msgid "Запись"
+msgstr "Aufnahme"
+
+msgid "Запрос на контакт"
+msgstr "Kontaktanfrage"
+
+msgid "Запросы на контакт"
+msgstr "Kontaktanfragen"
+
+msgid "Запуск парсера диагностики"
+msgstr "Starten des Diagnoseparsers"
+
+msgid "Запуск парсера, создавший это наблюдение."
+msgstr "Führen Sie den Parser aus, der diese Beobachtung erstellt hat."
+
+msgid "Запуск распознавания"
+msgstr "Beginnen Sie mit der Erkennung"
+
+msgid "Запуски парсера диагностики"
+msgstr "Der Diagnoseparser wird gestartet"
+
+msgid "Заслуги"
+msgstr "Verdienste"
+
+msgid "Зафиксировано"
+msgstr "Aufgezeichnet"
+
+msgid "Значение"
+msgstr "Bedeutung"
+
+msgid "Идентификатор внешнего материала"
+msgstr "Externe Material-ID"
+
+msgid "Известно"
+msgstr "Bekannt"
+
+msgid "Измерение"
+msgstr "Messung"
+
+msgid "Износ, %"
+msgstr "Verschleiß, %"
+
+msgid "Имя PDF файла"
+msgstr "PDF-Dateiname"
+
+msgid "Имя файла"
+msgstr "Dateiname"
+
+msgid "Имя эксперта"
+msgstr "Expertenname"
+
+msgid "Инструкция"
+msgstr "Anweisungen"
+
+msgid "Исполнитель"
+msgstr "Darsteller"
+
+msgid "Использован подъёмник"
+msgstr "Aufzug gebraucht"
+
+msgid "Исправления"
+msgstr "Korrekturen"
+
+msgid "Источник"
+msgstr "Quelle"
+
+msgid "Исходное состояние"
+msgstr "Ausgangszustand"
+
+msgid "Исходные данные"
+msgstr "Ausgangsdaten"
+
+msgid "Исходный текст"
+msgstr "Quelltext"
+
+msgid "Исходный файл"
+msgstr "Quelldatei"
+
+msgid "Как вовремя обнаружить неисправности подвески."
+msgstr "So erkennen Sie Fahrwerksfehler rechtzeitig."
+
+msgid "Калибровка"
+msgstr "Kalibrierung"
+
+msgid "Категории лекций"
+msgstr "Vorlesungskategorien"
+
+msgid "Категории новостей"
+msgstr "Nachrichtenkategorien"
+
+msgid "Категории проектов"
+msgstr "Projektkategorien"
+
+msgid "Категория"
+msgstr "Kategorie"
+
+msgid "Категория лекции"
+msgstr "Vorlesungskategorie"
+
+msgid "Категория новости"
+msgstr "Kategorie „Nachrichten“."
+
+msgid "Категория проектов"
+msgstr "Projektkategorie"
+
+msgid "Ключ"
+msgstr "Schlüssel"
+
+msgid "Когда началось"
+msgstr "Wann hat es angefangen?"
+
+msgid "Код двигателя"
+msgstr "Motorcode"
+
+msgid "Код модуля"
+msgstr "Modulcode"
+
+msgid "Кол-во контактов"
+msgstr "Anzahl der Kontakte"
+
+msgid "Количество сотрудников"
+msgstr "Anzahl der Mitarbeiter"
+
+msgid "Комментарий по подвеске"
+msgstr "Kommentar zur Suspendierung"
+
+msgid "Компетенция"
+msgstr "Kompetenz"
+
+msgid "Конкретный контакт"
+msgstr "Spezifischer Kontakt"
+
+msgid "Контактная информация"
+msgstr "Kontaktinformationen"
+
+msgid "Контактное лицо"
+msgstr "Ansprechpartner"
+
+msgid "Контроль и подтверждение ремонта"
+msgstr "Überwachung und Bestätigung von Reparaturen"
+
+msgid "Контроль качества"
+msgstr "Qualitätskontrolle"
+
+msgid "Контрольная сумма SHA-256"
+msgstr "SHA-256-Prüfsumme"
+
+msgid "Конфигурация автомобиля"
+msgstr "Fahrzeugkonfiguration"
+
+msgid "Критическая"
+msgstr "Kritisch"
+
+msgid "Лекции"
+msgstr "Vorträge"
+
+msgid "Лицензированный"
+msgstr "Lizenziert"
+
+msgid "Максимальный уровень"
+msgstr "Maximales Niveau"
+
+msgid "Максимум"
+msgstr "Maximal"
+
+msgid "Марка автомобиля"
+msgstr "Automarke"
+
+msgid "Марки автомобилей"
+msgstr "Automarken"
+
+msgid "Материал автосервиса"
+msgstr "Autoservice-Material"
+
+msgid "Материал подготовлен по открытым источникам."
+msgstr "Das Material wurde aus offenen Quellen erstellt."
+
+msgid "Местоположение"
+msgstr "Standort"
+
+msgid "Метаданные"
+msgstr "Metadaten"
+
+msgid "Метод анализа"
+msgstr "Analysemethode"
+
+msgid "Механизм анализа"
+msgstr "Analysemechanismus"
+
+msgid "Минимальная роль"
+msgstr "Mindestrolle"
+
+msgid "Минимальное количество"
+msgstr "Mindestmenge"
+
+msgid "Минимум"
+msgstr "Mindestens"
+
+msgid "Модификация"
+msgstr "Änderung"
+
+msgid "Мы используем cookies для улучшения сайта. Подробнее в политике конфиденциальности."
+msgstr "Wir verwenden Cookies, um die Website zu verbessern. Weitere Details in der Datenschutzerklärung."
+
+msgid "На доработку"
+msgstr "Zur Überarbeitung"
+
+msgid "На проверке"
+msgstr "Wird überprüft"
+
+msgid "Наблюдаемые симптомы"
+msgstr "Beobachtbare Symptome"
+
+msgid "Наблюдения/замеры: что именно увидели/услышали/померили"
+msgstr "Beobachtungen/Messungen: Was genau sie gesehen/gehört/gemessen haben"
+
+msgid "Нагрузка двигателя"
+msgstr "Motorlast"
+
+msgid "Название"
+msgstr "Titel"
+
+msgid "Название группы"
+msgstr "Gruppenname"
+
+msgid "Название источника"
+msgstr "Quellenname"
+
+msgid "Название категории"
+msgstr "Kategoriename"
+
+msgid "Название модуля"
+msgstr "Modulname"
+
+msgid "Название на английском"
+msgstr "Titel auf Englisch"
+
+msgid "Название на русском"
+msgstr "Titel auf Russisch"
+
+msgid "Название проекта"
+msgstr "Projektname"
+
+msgid "Назначено"
+msgstr "Zugewiesen"
+
+msgid "Назначено исполнителю"
+msgstr "Dem Künstler zugeordnet"
+
+msgid "Назначил"
+msgstr "Ernennung"
+
+msgid "Налоговый номер"
+msgstr "Steuernummer"
+
+msgid "Начало проявления"
+msgstr "Beginn der Manifestation"
+
+msgid "Начало, сек."
+msgstr "Start, Sek."
+
+msgid "Начато"
+msgstr "Begonnen"
+
+msgid "Не едет в гору"
+msgstr "Es geht nicht bergauf"
+
+msgid "Не завершено"
+msgstr "Nicht abgeschlossen"
+
+msgid "Не завершён"
+msgstr "Nicht abgeschlossen"
+
+msgid "Не запускалась"
+msgstr "Nicht gestartet"
+
+msgid "Не пройден"
+msgstr "Fehlgeschlagen"
+
+msgid "Не пройдено"
+msgstr "Fehlgeschlagen"
+
+msgid "Не требуется"
+msgstr "Nicht erforderlich"
+
+msgid "Не удалось прочитать отчёт Launch"
+msgstr "Der Startbericht konnte nicht gelesen werden"
+
+msgid "Недавние ремонты"
+msgstr "Kürzliche Renovierungen"
+
+msgid "Недостающие поля"
+msgstr "Fehlende Felder"
+
+msgid "Недоступна"
+msgstr "Nicht verfügbar"
+
+msgid "Недоступно"
+msgstr "Nicht verfügbar"
+
+msgid "Неисправность плавающая"
+msgstr "Schwebender Fehler"
+
+msgid "Необходимые инструменты"
+msgstr "Erforderliche Werkzeuge"
+
+msgid "Низкая"
+msgstr "Niedrig"
+
+msgid "Новость"
+msgstr "Nachrichten"
+
+msgid "Новый пост:"
+msgstr "Neuer Beitrag:"
+
+msgid "Новый?"
+msgstr "Neu?"
+
+msgid "Номер детали"
+msgstr "Teilenummer"
+
+msgid "Нормализованный VIN"
+msgstr "Normalisierte VIN"
+
+msgid "Область применения"
+msgstr "Anwendungsbereich"
+
+msgid "Обновлено"
+msgstr "Aktualisiert"
+
+msgid "Обновлено строк"
+msgstr "Zeilen aktualisiert"
+
+msgid "Обновлённая автоновость"
+msgstr "Aktualisierte Autonachrichten"
+
+msgid "Обоснование"
+msgstr "Begründung"
+
+msgid "Общий запрос"
+msgstr "Allgemeine Anfrage"
+
+msgid "Обязательная"
+msgstr "Obligatorisch"
+
+msgid "Обязательно"
+msgstr "Erforderlich"
+
+msgid "Один ремонт на строку."
+msgstr "Eine Reparatur pro Zeile."
+
+msgid "Один симптом на строку."
+msgstr "Ein Symptom pro Zeile."
+
+msgid "Одобрить"
+msgstr "Genehmigen"
+
+msgid "Ожидаемый результат"
+msgstr "Erwartetes Ergebnis"
+
+msgid "Ожидает"
+msgstr "Warten"
+
+msgid "Окончание, сек."
+msgstr "Ende, Sek."
+
+msgid "Операция"
+msgstr "Betrieb"
+
+msgid "Описание изменений"
+msgstr "Beschreibung der Änderungen"
+
+msgid "Описание на английском"
+msgstr "Beschreibung auf Englisch"
+
+msgid "Описание на русском"
+msgstr "Beschreibung auf Russisch"
+
+msgid "Описание статуса"
+msgstr "Beschreibung des Status"
+
+msgid "Опубликована"
+msgstr "Veröffentlicht"
+
+msgid "Опубликовано"
+msgstr "Veröffentlicht"
+
+msgid "Опубликовано версий:"
+msgstr "Veröffentlichte Versionen:"
+
+msgid "Опубликовать"
+msgstr "Veröffentlichen"
+
+msgid "Опубликовать выбранные черновые версии"
+msgstr "Veröffentlichen Sie ausgewählte Entwürfe"
+
+msgid "Организации и сотрудники"
+msgstr "Organisationen und Mitarbeiter"
+
+msgid "Организация"
+msgstr "Organisation"
+
+msgid "Осмотр"
+msgstr "Inspektion"
+
+msgid "Осмотр подвески для сессии"
+msgstr "Inspektion der Sitzungsunterbrechung"
+
+msgid "Основание: люфт, трещины, потёк, стук, коррозия, деформация и т.п."
+msgstr "Untergrund: Spiel, Risse, Undichtigkeiten, Stöße, Korrosion, Verformung usw."
+
+msgid "Отзыв"
+msgstr "Rezension"
+
+msgid "Отзыв от {} на {}"
+msgstr "Rezension von {} am {}"
+
+msgid "Отклонено"
+msgstr "Abgelehnt"
+
+msgid "Отклонить"
+msgstr "Ablehnen"
+
+msgid "Открыто"
+msgstr "Offen"
+
+msgid "Отменено"
+msgstr "Abgesagt"
+
+msgid "Отменён"
+msgstr "Abgesagt"
+
+msgid "Ошибка"
+msgstr "Fehler"
+
+msgid "Ошибка обработки изображения:"
+msgstr "Bildverarbeitungsfehler:"
+
+msgid "Ошибка обработки отчёта"
+msgstr "Fehlerverarbeitungsbericht"
+
+msgid "Пакет импорта"
+msgstr "Paket importieren"
+
+msgid "Пакет импорта DTC"
+msgstr "DTC-Importpaket"
+
+msgid "Пакеты импорта DTC"
+msgstr "DTC-Importpakete"
+
+msgid "Первая автоновость"
+msgstr "Erste Autonachrichten"
+
+msgid "Передать эксперту"
+msgstr "Geben Sie es an einen Experten weiter"
+
+msgid "Периодическая неисправность"
+msgstr "Intermittierender Fehler"
+
+msgid "Подписано"
+msgstr "Signiert"
+
+msgid "Подписано экспертом"
+msgstr "Von einem Experten unterzeichnet"
+
+msgid "Подписать осмотр: после этого запись должна стать read-only на уровне UI."
+msgstr "Signieren Sie die Inspektion: Danach sollte der Eintrag auf UI-Ebene schreibgeschützt werden."
+
+msgid "Подписчика"
+msgstr "Abonnent"
+
+msgid "Подписчики"
+msgstr "Abonnenten"
+
+msgid "Подробности"
+msgstr "Einzelheiten"
+
+msgid "Подтвердил"
+msgstr "Bestätigt"
+
+msgid "Подтверждение"
+msgstr "Bestätigung"
+
+msgid "Подтверждено"
+msgstr "Bestätigt"
+
+msgid "Подтверждённая причина"
+msgstr "Bestätigter Grund"
+
+msgid "Поколение"
+msgstr "Generation"
+
+msgid "Полнота данных"
+msgstr "Datenvollständigkeit"
+
+msgid "Положение о проекте"
+msgstr "Projektbestimmungen"
+
+msgid "Положение о проекте 2 абзац"
+msgstr "Projektreglement 2 Absatz"
+
+msgid "Пользователь"
+msgstr "Benutzer"
+
+msgid "Порядок"
+msgstr "Bestellen"
+
+msgid "Порядок сортировки"
+msgstr "Sortierreihenfolge"
+
+msgid "Пост:"
+msgstr "Beitrag:"
+
+msgid "Правила"
+msgstr "Regeln"
+
+msgid "Предыдущая редакция"
+msgstr "Vorherige Ausgabe"
+
+msgid "Применимость к автомобилям"
+msgstr "Anwendbarkeit auf Automobile"
+
+msgid "Примечание об источниках"
+msgstr "Hinweis zu Quellen"
+
+msgid "Примечания по безопасности"
+msgstr "Sicherheitshinweise"
+
+msgid "Причины проверки"
+msgstr "Gründe für die Überprüfung"
+
+msgid "Пробег, км"
+msgstr "Kilometerstand, km"
+
+msgid "Провайдер"
+msgstr "Anbieter"
+
+msgid "Проверено"
+msgstr "Verifiziert"
+
+msgid "Проверил"
+msgstr "Geprüft"
+
+msgid "Проверяющий"
+msgstr "Inspektor"
+
+msgid "Программа"
+msgstr "Programm"
+
+msgid "Программная версия ЭБУ"
+msgstr "ECU-Softwareversion"
+
+msgid "Производитель"
+msgstr "Hersteller"
+
+msgid "Пропущена"
+msgstr "Verpasst"
+
+msgid "Пропущено"
+msgstr "Verpasst"
+
+msgid "Пропущено строк"
+msgstr "Zeilen fehlen"
+
+msgid "Профили"
+msgstr "Profile"
+
+msgid "Профиль"
+msgstr "Profil"
+
+msgid "Профиль #"
+msgstr "Profilnummer"
+
+msgid "Профиль пользователя"
+msgstr "Benutzerprofil"
+
+msgid "Процедура"
+msgstr "Vorgehensweise"
+
+msgid "Публикация"
+msgstr "Veröffentlichung"
+
+msgid "Пусто для generic OBD-II. Для бренд-специфичных кодов — Toyota, BMW, Hyundai и т.п."
+msgstr "Leer für generisches OBD-II. Für markenspezifische Codes – Toyota, BMW, Hyundai usw."
+
+msgid "Раздел сайта"
+msgstr "Site-Bereich"
+
+msgid "Разделы сайта"
+msgstr "Abschnitte der Website"
+
+msgid "Разрешена эскалация"
+msgstr "Eskalation erlaubt"
+
+msgid "Разрешённые следующие операции"
+msgstr "Die folgenden Operationen sind zulässig"
+
+msgid "Редакция"
+msgstr "Leitartikel"
+
+msgid "Резюме"
+msgstr "Zusammenfassung"
+
+msgid "Рекомендация"
+msgstr "Empfehlung"
+
+msgid "Рекомендуемые проверки"
+msgstr "Empfohlene Schecks"
+
+msgid "Рекомендуемые работы"
+msgstr "Empfohlene Werke"
+
+msgid "Ремонтный кейс"
+msgstr "Reparaturfall"
+
+msgid "Решено"
+msgstr "Gelöst"
+
+msgid "Роль"
+msgstr "Rolle"
+
+msgid "Роль согласующего"
+msgstr "Rolle des Genehmigers"
+
+msgid "Руководитель"
+msgstr "Kopf"
+
+msgid "Ручная новость"
+msgstr "Manuelle Nachrichten"
+
+msgid "Ручные новости"
+msgstr "Manuelle Nachrichten"
+
+msgid "Рынок"
+msgstr "Markt"
+
+msgid "Сайт и контент"
+msgstr "Website und Inhalt"
+
+msgid "Связь с глобальным справочником DTC."
+msgstr "Link zum globalen DTC-Verzeichnis."
+
+msgid "Серии а/м"
+msgstr "Autoserie"
+
+msgid "Серийный номер"
+msgstr "Seriennummer"
+
+msgid "Системный отчёт"
+msgstr "Systembericht"
+
+msgid "Скорость автомобиля"
+msgstr "Fahrzeuggeschwindigkeit"
+
+msgid "Следующие системы в порядке:"
+msgstr "Die folgenden Systeme sind in Ordnung:"
+
+msgid "Слова клиента"
+msgstr "Worte des Kunden"
+
+msgid "Случай"
+msgstr "Fall"
+
+msgid "Снимок ремонта"
+msgstr "Momentaufnahme der Renovierung"
+
+msgid "Собственный"
+msgstr "Eigen"
+
+msgid "Согласовано"
+msgstr "Einverstanden"
+
+msgid "Создал"
+msgstr "Erstellt"
+
+msgid "Создано"
+msgstr "Erstellt"
+
+msgid "Создано строк"
+msgstr "Linien erstellt"
+
+msgid "Специалист"
+msgstr "Spezialist"
+
+msgid "Спецификация"
+msgstr "Spezifikation"
+
+msgid "Справочник DTC"
+msgstr "DTC-Verzeichnis"
+
+msgid "Справочник PID Live Data"
+msgstr "PID-Live-Datenreferenz"
+
+msgid "Справочное значение"
+msgstr "Referenzwert"
+
+msgid "Средняя"
+msgstr "Durchschnittlich"
+
+msgid "Ссылка"
+msgstr "Link"
+
+msgid "Ссылка на видео"
+msgstr "Videolink"
+
+msgid "Ссылка на источник"
+msgstr "Quelllink"
+
+msgid "Ссылки на источники"
+msgstr "Links zu Quellen"
+
+msgid "Статус до"
+msgstr "Stand vorher"
+
+msgid "Статус после"
+msgstr "Status danach"
+
+msgid "Статус проверки"
+msgstr "Verifizierungsstatus"
+
+msgid "Сформировано AI"
+msgstr "Von KI geformt"
+
+msgid "Схема метаданных"
+msgstr "Metadatenschema"
+
+msgid "Табельный номер"
+msgstr "Personalnummer"
+
+msgid "Текст"
+msgstr "Text"
+
+msgid "Текст2"
+msgstr "Text2"
+
+msgid "Текст3"
+msgstr "Text3"
+
+msgid "Текст4"
+msgstr "Text4"
+
+msgid "Текущая"
+msgstr "Aktuell"
+
+msgid "Тема изображения"
+msgstr "Bildthema"
+
+msgid "Температура воздуха, °C"
+msgstr "Lufttemperatur, °C"
+
+msgid "Температура двигателя"
+msgstr "Motortemperatur"
+
+msgid "Тестовая поездка"
+msgstr "Probefahrt"
+
+msgid "Технические требования"
+msgstr "Technische Anforderungen"
+
+msgid "Тип детали"
+msgstr "Teiletyp"
+
+msgid "Тип доказательства"
+msgstr "Art des Beweismittels"
+
+msgid "Тип операции"
+msgstr "Operationstyp"
+
+msgid "Тип топлива"
+msgstr "Kraftstoffart"
+
+msgid "Токен отписки"
+msgstr "Abmeldetoken"
+
+msgid "Точка решения"
+msgstr "Entscheidungspunkt"
+
+msgid "Трансмиссия"
+msgstr "Übertragung"
+
+msgid "Требование"
+msgstr "Anforderung"
+
+msgid "Требуемый уровень"
+msgstr "Erforderliches Niveau"
+
+msgid "Требует проверки"
+msgstr "Erfordert eine Verifizierung"
+
+msgid "Требуется замена"
+msgstr "Austausch erforderlich"
+
+msgid "Требуется согласование"
+msgstr "Genehmigung erforderlich"
+
+msgid "Уровень"
+msgstr "Ebene"
+
+msgid "Условия проявления"
+msgstr "Bedingungen der Manifestation"
+
+msgid "Услуга"
+msgstr "Service"
+
+msgid "Успешно"
+msgstr "Erfolgreich"
+
+msgid "Устранено"
+msgstr "Eliminiert"
+
+msgid "Устранил"
+msgstr "Eliminiert"
+
+msgid "Участники проекта"
+msgstr "Projektteilnehmer"
+
+msgid "Файл"
+msgstr "Datei"
+
+msgid "Фиксация финального решения специалиста."
+msgstr "Protokollierung der endgültigen Entscheidung des Facharztes."
+
+msgid "Формулировка клиента"
+msgstr "Formulierung des Kunden"
+
+msgid "Фото"
+msgstr "Foto"
+
+msgid "Фото/файлы как доказательная база осмотра (опционально, но полезно)."
+msgstr "Fotos/Dateien als Nachweis der Inspektion (optional, aber nützlich)."
+
+msgid "Фото2"
+msgstr "Foto2"
+
+msgid "Фото3"
+msgstr "Foto3"
+
+msgid "Фото4"
+msgstr "Foto4"
+
+msgid "Фото5"
+msgstr "Foto5"
+
+msgid "Фото6"
+msgstr "Foto6"
+
+msgid "Фото№3"
+msgstr "Foto Nr. 3"
+
+msgid "Фото№4"
+msgstr "Foto Nr. 4"
+
+msgid "Фото№5"
+msgstr "Foto Nr. 5"
+
+msgid "Цена"
+msgstr "Preis"
+
+msgid "Частота"
+msgstr "Häufigkeit"
+
+msgid "Частота проявления"
+msgstr "Häufigkeit des Auftretens"
+
+msgid "Чем этот PID полезен при диагностике."
+msgstr "Welchen Nutzen hat diese PID für die Diagnose?"
+
+msgid "Широта"
+msgstr "Breitengrad"
+
+msgid "Эксперт"
+msgstr "Experte"
+
+msgid "Эскалировать"
+msgstr "Eskalieren"
+
+msgid "Юридическое название"
+msgstr "Offizieller Name"
+
+msgid "Языковая модель"
+msgstr "Sprachmodell"
+
+msgid "автомобили"
+msgstr "Autos"
+
+msgid "автомобиль"
+msgstr "Auto"
+
+msgid "автосервис"
+msgstr "Autoservice"
+
+msgid "автосервисы"
+msgstr "Autodienstleistungen"
+
+msgid "версии процедур"
+msgstr "Verfahrensversionen"
+
+msgid "версия процедуры"
+msgstr "Verfahrensversion"
+
+msgid "выполнение операции"
+msgstr "eine Operation durchführen"
+
+msgid "выполнение операций"
+msgstr "Durchführung von Operationen"
+
+msgid "диагностическая запись"
+msgstr "Diagnoseprotokoll"
+
+msgid "диагностическая сессия"
+msgstr "Diagnosesitzung"
+
+msgid "диагностические записи"
+msgstr "Diagnoseaufzeichnungen"
+
+msgid "диагностические коды"
+msgstr "Diagnosecodes"
+
+msgid "диагностические сессии"
+msgstr "Diagnosesitzungen"
+
+msgid "диагностические случаи"
+msgstr "diagnostische Fälle"
+
+msgid "диагностический код"
+msgstr "Diagnosecode"
+
+msgid "диагностический случай"
+msgstr "diagnostischer Fall"
+
+msgid "доказательства"
+msgstr "Beweise"
+
+msgid "доказательство"
+msgstr "Beweis"
+
+msgid "жалоба клиента"
+msgstr "Kundenbeschwerde"
+
+msgid "жалобы клиентов"
+msgstr "Kundenbeschwerden"
+
+msgid "женский"
+msgstr "weiblich"
+
+msgid "зависимости операций"
+msgstr "Betriebsabhängigkeiten"
+
+msgid "зависимость операции"
+msgstr "Betriebsabhängigkeit"
+
+msgid "компетенции"
+msgstr "Kompetenzen"
+
+msgid "компетенции специалистов"
+msgstr "Kompetenzen von Spezialisten"
+
+msgid "компетенция"
+msgstr "Kompetenz"
+
+msgid "компетенция специалиста"
+msgstr "Fachkompetenz"
+
+msgid "конфигурации автомобилей"
+msgstr "Fahrzeugkonfigurationen"
+
+msgid "конфигурация автомобиля"
+msgstr "Fahrzeugkonfiguration"
+
+msgid "местоположение"
+msgstr "Standort"
+
+msgid "местоположения"
+msgstr "Standorte"
+
+msgid "мужской"
+msgstr "männlich"
+
+msgid "наблюдение идентификации"
+msgstr "Überwachungsidentifikation"
+
+msgid "наблюдения идентификации"
+msgstr "Überwachungsidentifikation"
+
+msgid "не выбран"
+msgstr "nicht ausgewählt"
+
+msgid "не является"
+msgstr "ist nicht"
+
+msgid "операции"
+msgstr "Operationen"
+
+msgid "операция"
+msgstr "Betrieb"
+
+msgid "организации"
+msgstr "Organisationen"
+
+msgid "организация"
+msgstr "Organisation"
+
+msgid "осмотр подвески"
+msgstr "Inspektion der Aufhängung"
+
+msgid "осмотры подвески"
+msgstr "Fahrwerksinspektionen"
+
+msgid "подтверждённая запись ремонта"
+msgstr "verifiziertes Reparaturprotokoll"
+
+msgid "подтверждённые записи ремонта"
+msgstr "verifizierte Reparaturaufzeichnungen"
+
+msgid "показание датчика"
+msgstr "Sensorablesung"
+
+msgid "показания датчиков"
+msgstr "Sensorwerte"
+
+msgid "проверка ремонта"
+msgstr "Reparaturcheck"
+
+msgid "проверки ремонта"
+msgstr "Reparaturkontrollen"
+
+msgid "профили специалистов"
+msgstr "Fachprofile"
+
+msgid "профиль специалиста"
+msgstr "Fachprofil"
+
+msgid "ремонтная процедура"
+msgstr "Reparaturverfahren"
+
+msgid "ремонтные кейсы"
+msgstr "Reparaturfälle"
+
+msgid "ремонтные процедуры"
+msgstr "Reparaturverfahren"
+
+msgid "ремонтный кейс"
+msgstr "Reparaturfall"
+
+msgid "решение эксперта"
+msgstr "Expertenentscheidung"
+
+msgid "решения экспертов"
+msgstr "Expertenentscheidungen"
+
+msgid "событие аудита"
+msgstr "Audit-Ereignis"
+
+msgid "событие контроля качества"
+msgstr "Qualitätskontrollveranstaltung"
+
+msgid "события аудита"
+msgstr "Audit-Ereignisse"
+
+msgid "события контроля качества"
+msgstr "Qualitätskontrollveranstaltungen"
+
+msgid "справочные материалы"
+msgstr "Referenzmaterialien"
+
+msgid "справочный материал"
+msgstr "Referenzmaterial"
+
+msgid "тип элемента подвески"
+msgstr "Art des Aufhängungselements"
+
+msgid "типы элементов подвески"
+msgstr "Arten von Aufhängungselementen"
+
+msgid "требование к доказательству"
+msgstr "Nachweispflicht"
+
+msgid "требования к доказательствам"
+msgstr "Beweisanforderungen"
+
+msgid "условия эксплуатации"
+msgstr "Betriebsbedingungen"
+
+msgid "формате PDF"
+msgstr "PDF-Format"
+
+msgid "фото 633x550px"
+msgstr "Foto 633x550px"
+
+msgid "фото2"
+msgstr "Foto2"
+
+msgid "элемент подвески"
+msgstr "Aufhängungselement"
+
+msgid "элементы подвески"
+msgstr "Aufhängungselemente"
+
+msgid "→ Модуль:"
+msgstr "→ Modul:"

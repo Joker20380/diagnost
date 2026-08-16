@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 
 from .models import (
@@ -107,7 +108,7 @@ class NewsAdmin(ImportExportModelAdmin):
             )
         return None
 
-    get_photo.short_description = "Фото"
+    get_photo.short_description = _("Фото")
 
 
 @admin.register(CategoryLecture)
@@ -150,7 +151,7 @@ class ProgAdmin(ImportExportModelAdmin):
         if obj.photo:
             return mark_safe(f"<img src='{obj.photo.url}' width=50>")
         return None
-    get_photo.short_description = 'Фото'
+    get_photo.short_description = _("Фото")
 
 
 @admin.register(Documents)
@@ -175,7 +176,7 @@ class ServiceAdmin(ImportExportModelAdmin):
         if obj.photo:
             return mark_safe(f"<img src='{obj.photo.url}' width=50>")
         return None
-    get_photo.short_description = 'Фото'
+    get_photo.short_description = _("Фото")
 
 
 @admin.register(Subscriber)
@@ -193,7 +194,7 @@ class ContactGroupAdmin(admin.ModelAdmin):
 
     def contacts_count(self, obj):
         return obj.contacts.count()
-    contacts_count.short_description = "Кол-во контактов"
+    contacts_count.short_description = _("Кол-во контактов")
 
 
 @admin.register(Contact)
@@ -206,7 +207,7 @@ class ContactAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('group', 'name', 'is_main', 'order', 'location')
         }),
-        ('Контактная информация', {
+        (_("Контактная информация"), {
             'fields': ('phone', 'email', 'address', 'description')
         }),
     )
@@ -224,12 +225,12 @@ class ContactRequestAdmin(admin.ModelAdmin):
         if obj.contact:
             return format_html('<a href="/admin/contacts/contact/{}/change/">{}</a>', obj.contact.id, obj.contact.name)
         return "-"
-    contact_link.short_description = "Контакт"
+    contact_link.short_description = _("Контакт")
 
     def is_new(self, obj):
         return obj.created_at.date() == timezone.now().date()
     is_new.boolean = True
-    is_new.short_description = "Новый?"
+    is_new.short_description = _("Новый?")
 
 
 @admin.register(Review)
@@ -239,7 +240,7 @@ class ReviewAdmin(admin.ModelAdmin):
     def get_photo(self, object):
         if object.photo:
             return mark_safe(f"<img src='{object.photo.url}' width=50>")
-    get_photo.short_description = 'Фото'
+    get_photo.short_description = _("Фото")
 
 
 @admin.register(DiagnosticSession)

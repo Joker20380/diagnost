@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from .models import UserProfile
 
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from import_export.admin import ImportExportModelAdmin
 from django_admin_geomap import ModelAdmin
 
@@ -49,8 +51,8 @@ class UserAdmin(ImportExportModelAdmin, UserAdmin, admin.ModelAdmin):
         if obj.userprofile.image:
             return mark_safe(f"<img src='{obj.userprofile.image.url}' width=50>")
 
-    get_image.short_description = 'Фото'
-    get_patronymic.short_description = 'Отчество'
+    get_image.short_description = _("Фото")
+    get_patronymic.short_description = _("Отчество")
 
 
 # Перерегистрируем модель User

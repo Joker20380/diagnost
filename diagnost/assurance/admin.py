@@ -117,7 +117,7 @@ class ProcedureVersionAdmin(RussianAdminMixin, admin.ModelAdmin):
     readonly_fields = ("status", "content_sha256", "published_at")
     actions = ("publish_selected_versions",)
 
-    @admin.action(description="Опубликовать выбранные черновые версии")
+    @admin.action(description=_("Опубликовать выбранные черновые версии"))
     def publish_selected_versions(self, request, queryset):
         published = 0
         for version in queryset:
@@ -158,8 +158,10 @@ MODEL_NAMES = {
     RepairAuditEvent: ("событие аудита", "события аудита"),
 }
 for model, (singular, plural) in MODEL_NAMES.items():
-    model._meta.verbose_name = singular
-    model._meta.verbose_name_plural = plural
+    # Keep model captions lazy so they follow the language selected for the
+    # current admin request instead of being frozen in Russian at import time.
+    model._meta.verbose_name = _(singular)
+    model._meta.verbose_name_plural = _(plural)
     for field in model._meta.fields:
         if field.name in FIELD_LABELS:
             field.verbose_name = FIELD_LABELS[field.name]
