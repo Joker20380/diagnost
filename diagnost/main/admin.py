@@ -271,5 +271,5 @@ class SuspensionInspectionAdmin(admin.ModelAdmin):
 
 
 
-admin.site.site_title = 'Администрирование сайта'
-admin.site.site_header = 'Администрирование сайта'
+admin.site.site_title = _("Администрирование сайта")
+admin.site.site_header = _("Администрирование сайта")
