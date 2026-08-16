@@ -97,7 +97,7 @@ Implementation commits:
 
 ## Iteration 2 — pilot hardening
 
-- [ ] prepare and review production DB backup and migration rollout;
+- [x] prepare and review production DB backup and migration rollout;
 - [ ] add a curated steering rack demo seed with explicit non-OEM disclaimer;
 - [ ] improve procedure authoring UX and dependency validation;
 - [ ] add evidence file size, MIME, malware scanning, and storage policy;

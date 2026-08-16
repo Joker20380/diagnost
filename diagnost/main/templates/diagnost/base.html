@@ -78,6 +78,15 @@
                   </a>
                 </li>
 
+                {% if user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.namespace == 'assurance' %}active{% endif %}"
+                       href="{% url 'assurance:case_list' %}">
+                      {% trans "Контроль ремонта" %}
+                    </a>
+                  </li>
+                {% endif %}
+
                 <li class="nav-item">
                   <a class="nav-link {% if current == 'about' %}active{% endif %}"
                      href="{% url 'about' %}">
