@@ -280,7 +280,7 @@ stop_conditions
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
-Статус: **в работе**. Первые три среза завершены 16 августа 2026 года.
+Статус: **в работе**. Первые четыре среза завершены 16 августа 2026 года.
 
 Задачи:
 
@@ -299,6 +299,7 @@ stop_conditions
   - [x] старт диагностики запрещён до готовности приёмки и идентификации;
   - [x] lifecycle хранит время старта, разрешения и закрытия;
 - [x] добавить complaint, symptoms, recent repairs и operating conditions:
+  - [x] анализ публикуется только после подтверждения идентичности и фактов приёмки;
   - [x] факты приёмки хранятся в отдельных доменных сущностях;
   - [x] обязательны жалоба и минимум один наблюдаемый симптом;
   - [x] экран приёмки защищён tenant boundary;
@@ -310,17 +311,18 @@ stop_conditions
   - [x] tenant scope вычисляется централизованным queryset;
   - [ ] реализовать permission policies, skills и полный audit log.
 
-Реализующий коммит первого среза:
+Реализующие коммиты:
 
 - `c7a834a feat: add tenant-aware workshop foundation`.
 - `c048419 feat: add confirmed vehicle identity workflow`.
-
 - `64d5a7b feat: add diagnostic case intake lifecycle`.
 Критерий выхода:
+- `0e8dd1a feat: gate analysis on confirmed case facts`.
+
 
 - [x] два сервиса не видят данные друг друга в диагностических workflow;
 - [ ] автомобиль определён до variant/engine level либо явно помечен incomplete;
-- [ ] мастер подтверждает факты до начала анализа;
+- [x] мастер подтверждает факты до начала анализа;
 - [-] критичные диагностические изменения имеют автора и время, но общий
   tenant-wide audit log ещё не реализован.
 
