@@ -8,20 +8,20 @@ import uuid
 
 def image_folder(instance, filename):
     return "photos/{}.webp".format(uuid.uuid4().hex)
-    
-    
+
+
 class Location(models.Model, GeoItem):
 	name = models.CharField(max_length=255)
 	lon = models.FloatField(null=True, blank=True)
 	lat = models.FloatField(null=True, blank=True)
-	
+
 	def __str__(self):
 		return self.name
-	
+
 	@property
 	def geomap_longitude(self):
 		return '' if self.lon is None else str(self.lon)
-		
+
 	@property
 	def geomap_latitude(self):
 		return '' if self.lat is None else str(self.lat)
@@ -29,19 +29,19 @@ class Location(models.Model, GeoItem):
 	@property
 	def geomap_popup_view(self):
 		return str(self)
-		
+
 	@property
 	def geomap_popup_edit(self):
 		return self.geomap_popup_view
-		
+
 	@property
 	def geomap_popup_common(self):
 		return self.geomap_popup_view
-		
+
 	@property
 	def geomap_icon(self):
 		return self.default_icon
-		
+
 	    # Свойство для возвращения координат в формате GeoJSON
 	@property
 	def geojson_coordinates(self):
@@ -50,7 +50,7 @@ class Location(models.Model, GeoItem):
 			return {
 				"type": "Point",
 				"coordinates": [self.lon, self.lat]
-				
+
 			}
 			return None
 
@@ -69,10 +69,10 @@ class UserProfile(models.Model):
 	patronymic = models.CharField(max_length=255, null=True, blank=True, verbose_name="Отчество")
 	birth = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
 	merit = models.TextField(blank=True, verbose_name="Заслуги", null=True)
-	
+
 	def __unicode__(self):
 		return self.user
-		
+
 	class Meta:
 		verbose_name = 'Профиль'
 		verbose_name_plural = 'Профили'
@@ -89,7 +89,110 @@ class UserProfile(models.Model):
 			pass
 		return f"Профиль #{self.pk}"
 
-            	
-            	
-            	
-            	
+
+
+
+
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
+    legal_name = models.CharField(max_length=255, blank=True)
+    tax_id = models.CharField(max_length=64, blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Workshop(models.Model):
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.PROTECT,
+        related_name="workshops",
+    )
+    name = models.CharField(max_length=255)
+    code = models.SlugField(max_length=64)
+    address = models.CharField(max_length=500, blank=True)
+    phone = PhoneNumberField(null=True, blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["organization_id", "name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "code"],
+                name="unique_workshop_code_per_organization",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.organization.name} / {self.name}"
+
+
+class TechnicianProfile(models.Model):
+    class Role(models.TextChoices):
+        SERVICE_ADVISOR = "service_advisor", "L0 Service Advisor"
+        JUNIOR_TECHNICIAN = "junior_technician", "L1 Junior Technician"
+        DIAGNOSTIC_TECHNICIAN = "diagnostic_technician", "L2 Diagnostic Technician"
+        SENIOR_EXPERT = "senior_expert", "L3 Senior / Expert"
+        TECHNICAL_MANAGER = "technical_manager", "Technical Manager"
+        AUDITOR = "auditor", "Auditor / Partner"
+
+    user_profile = models.OneToOneField(
+        UserProfile,
+        on_delete=models.PROTECT,
+        related_name="technician_profile",
+    )
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.PROTECT,
+        related_name="technicians",
+    )
+    workshop = models.ForeignKey(
+        Workshop,
+        on_delete=models.PROTECT,
+        related_name="technicians",
+        null=True,
+        blank=True,
+    )
+    role = models.CharField(
+        max_length=32,
+        choices=Role.choices,
+        default=Role.JUNIOR_TECHNICIAN,
+        db_index=True,
+    )
+    employee_id = models.CharField(max_length=64, blank=True)
+    job_title = models.CharField(max_length=255, blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["organization_id", "user_profile_id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "employee_id"],
+                condition=~models.Q(employee_id=""),
+                name="unique_employee_id_per_organization",
+            )
+        ]
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if self.workshop_id and self.workshop.organization_id != self.organization_id:
+            raise ValidationError(
+                {"workshop": "Workshop must belong to the technician organization."}
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user_profile} - {self.organization}"

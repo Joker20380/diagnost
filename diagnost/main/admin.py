@@ -244,8 +244,9 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(DiagnosticSession)
 class DiagnosticSessionAdmin(admin.ModelAdmin):
-    list_display = ('vin', 'created_at', 'status')
-    search_fields = ('vin',)
+    list_display = ('vin', 'organization', 'workshop', 'created_at', 'status')
+    list_filter = ('organization', 'workshop', 'status')
+    search_fields = ('vin', 'organization__name', 'workshop__name')
     inlines = [SuspensionInline]
 
 

@@ -65,16 +65,7 @@ def _is_rate_limited(request, scope, timeout=60):
 
 
 def _diagnostic_sessions_for_user(user):
-    queryset = DiagnosticSession.objects.all()
-
-    if user.is_staff or user.is_superuser:
-        return queryset
-
-    profile = getattr(user, "userprofile", None)
-    if profile is None:
-        return queryset.none()
-
-    return queryset.filter(user_profile=profile)
+    return DiagnosticSession.objects.visible_to(user)
 
 
 
@@ -458,6 +449,10 @@ def upload_diagnostic(request):
                 return render(request, 'diagnost/upload.html', {'form': form})
 
             session = form.save(commit=False)
+            technician = getattr(profile, "technician_profile", None)
+            if technician is not None and technician.is_active:
+                session.organization = technician.organization
+                session.workshop = technician.workshop
             session.user_profile = profile
             session.status = 'suspension_pending'
             session.handover_time = timezone.now()

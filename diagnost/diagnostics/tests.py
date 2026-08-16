@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch
 
-from users.models import UserProfile
+from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 
 from .forms import DiagnosticUploadForm
 from .launch_pdf_parser import (
@@ -47,6 +47,11 @@ class DiagnosticSessionAccessTests(TestCase):
             password="test-pass",
             is_staff=True,
         )
+        self.superuser = User.objects.create_superuser(
+            "superuser",
+            password="test-pass",
+            email="root@example.com",
+        )
         self.owner_profile, _ = UserProfile.objects.get_or_create(user=self.owner)
         UserProfile.objects.get_or_create(user=self.other)
         UserProfile.objects.get_or_create(user=self.staff)
@@ -83,13 +88,21 @@ class DiagnosticSessionAccessTests(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
-    def test_staff_can_open_any_session(self):
+    def test_staff_cannot_bypass_tenant_access(self):
         self.client.force_login(self.staff)
         response = self.client.get(
             reverse("diagnostic_detail", args=[self.session.pk]),
             secure=True,
         )
+        self.assertEqual(response.status_code, 404)
+    def test_superuser_can_open_any_session(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(
+            reverse("diagnostic_detail", args=[self.session.pk]),
+            secure=True,
+        )
         self.assertEqual(response.status_code, 200)
+
 
 
 class DiagnosticUploadValidationTests(TestCase):
@@ -438,6 +451,150 @@ class SignedSuspensionInspectionTests(TestCase):
             inspection=self.inspection,
             file=SimpleUploadedFile("evidence.txt", b"evidence"),
         )
-
         with self.assertRaises(ValidationError):
             attachment.save()
+
+class DiagnosticTenantIsolationTests(TestCase):
+    def setUp(self):
+        self.org_a = Organization.objects.create(name="Service A", slug="service-a")
+        self.org_b = Organization.objects.create(name="Service B", slug="service-b")
+        self.workshop_a = Workshop.objects.create(
+            organization=self.org_a,
+            name="A Main",
+            code="main",
+        )
+        self.workshop_b = Workshop.objects.create(
+            organization=self.org_b,
+            name="B Main",
+            code="main",
+        )
+        self.user_a = User.objects.create_user("tenant-a", password="test-pass")
+        self.colleague_a = User.objects.create_user(
+            "tenant-a-colleague", password="test-pass"
+        )
+        self.user_b = User.objects.create_user("tenant-b", password="test-pass")
+        self.profile_a, _ = UserProfile.objects.get_or_create(user=self.user_a)
+        self.colleague_profile_a, _ = UserProfile.objects.get_or_create(
+            user=self.colleague_a
+        )
+        self.profile_b, _ = UserProfile.objects.get_or_create(user=self.user_b)
+        TechnicianProfile.objects.create(
+            user_profile=self.profile_a,
+            organization=self.org_a,
+            workshop=self.workshop_a,
+            role=TechnicianProfile.Role.JUNIOR_TECHNICIAN,
+        )
+        TechnicianProfile.objects.create(
+            user_profile=self.colleague_profile_a,
+            organization=self.org_a,
+            workshop=self.workshop_a,
+            role=TechnicianProfile.Role.DIAGNOSTIC_TECHNICIAN,
+        )
+        TechnicianProfile.objects.create(
+            user_profile=self.profile_b,
+            organization=self.org_b,
+            workshop=self.workshop_b,
+            role=TechnicianProfile.Role.SENIOR_EXPERT,
+        )
+        self.session_a = self.create_session(
+            self.colleague_profile_a,
+            self.org_a,
+            self.workshop_a,
+            "TENANT-A-VIN",
+        )
+        self.session_b = self.create_session(
+            self.profile_b,
+            self.org_b,
+            self.workshop_b,
+            "TENANT-B-VIN",
+        )
+
+    def create_session(self, profile, organization, workshop, vin):
+        return DiagnosticSession.objects.create(
+            user_profile=profile,
+            organization=organization,
+            workshop=workshop,
+            vin=vin,
+            raw_file=SimpleUploadedFile(
+                f"{vin}.pdf",
+                b"%PDF-1.4\n%%EOF",
+                content_type="application/pdf",
+            ),
+        )
+
+    def test_technician_can_open_colleague_session_in_same_organization(self):
+        self.client.force_login(self.user_a)
+
+        response = self.client.get(
+            reverse("diagnostic_detail", args=[self.session_a.pk]),
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_technician_cannot_open_other_organization_session(self):
+        self.client.force_login(self.user_a)
+
+        detail = self.client.get(
+            reverse("diagnostic_detail", args=[self.session_b.pk]),
+            secure=True,
+        )
+        suspension = self.client.get(
+            reverse("suspension_inspection", args=[self.session_b.pk]),
+            secure=True,
+        )
+
+        self.assertEqual(detail.status_code, 404)
+        self.assertEqual(suspension.status_code, 404)
+
+    def test_visible_to_queryset_contains_only_current_tenant(self):
+        visible_ids = set(
+            DiagnosticSession.objects.visible_to(self.user_a).values_list(
+                "id", flat=True
+            )
+        )
+
+        self.assertEqual(visible_ids, {self.session_a.pk})
+
+    @patch("diagnostics.launch_pdf_parser.parse_and_apply_launch_pdf", return_value=0)
+    def test_upload_is_assigned_to_technician_tenant(self, _parse_mock):
+        self.client.force_login(self.user_a)
+
+        response = self.client.post(
+            reverse("diagnostic_upload"),
+            {
+                "vin": "UPLOADED-VIN",
+                "vehicle_model": "Test vehicle",
+                "raw_file": SimpleUploadedFile(
+                    "upload.pdf",
+                    b"%PDF-1.4\n%%EOF",
+                    content_type="application/pdf",
+                ),
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 302)
+        uploaded = DiagnosticSession.objects.get(vin="UPLOADED-VIN")
+        self.assertEqual(uploaded.organization, self.org_a)
+        self.assertEqual(uploaded.workshop, self.workshop_a)
+
+    def test_technician_rejects_workshop_from_another_organization(self):
+        another_user = User.objects.create_user("invalid-tenant-technician")
+        profile, _ = UserProfile.objects.get_or_create(user=another_user)
+
+        with self.assertRaises(ValidationError):
+            TechnicianProfile.objects.create(
+                user_profile=profile,
+                organization=self.org_a,
+                workshop=self.workshop_b,
+            )
+
+    def test_session_rejects_workshop_from_another_organization(self):
+        with self.assertRaises(ValidationError):
+            self.create_session(
+                self.profile_a,
+                self.org_a,
+                self.workshop_b,
+                "INVALID-TENANT-VIN",
+            )

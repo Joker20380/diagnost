@@ -57,3 +57,43 @@ class UserAdmin(ImportExportModelAdmin, UserAdmin, admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Location, Admin)
+
+class WorkshopInline(admin.TabularInline):
+    model = Workshop
+    extra = 0
+
+
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "tax_id", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("name", "legal_name", "tax_id")
+    prepopulated_fields = {"slug": ("name",)}
+    inlines = (WorkshopInline,)
+
+
+@admin.register(Workshop)
+class WorkshopAdmin(admin.ModelAdmin):
+    list_display = ("name", "organization", "code", "is_active")
+    list_filter = ("organization", "is_active")
+    search_fields = ("name", "code", "address")
+
+
+@admin.register(TechnicianProfile)
+class TechnicianProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "user_profile",
+        "organization",
+        "workshop",
+        "role",
+        "employee_id",
+        "is_active",
+    )
+    list_filter = ("organization", "workshop", "role", "is_active")
+    search_fields = (
+        "user_profile__user__username",
+        "user_profile__user__first_name",
+        "user_profile__user__last_name",
+        "employee_id",
+        "job_title",
+    )

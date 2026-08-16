@@ -195,6 +195,30 @@ class OBDLiveDataPIDReference(models.Model):
 
 
 
+
+class DiagnosticSessionQuerySet(models.QuerySet):
+    def visible_to(self, user):
+        if not getattr(user, "is_authenticated", False):
+            return self.none()
+        if user.is_superuser:
+            return self
+
+        profile = getattr(user, "userprofile", None)
+        if profile is None:
+            return self.none()
+
+        technician = getattr(profile, "technician_profile", None)
+        if (
+            technician is not None
+            and technician.is_active
+            and technician.organization.is_active
+        ):
+            return self.filter(
+                models.Q(organization=technician.organization)
+                | models.Q(organization__isnull=True, user_profile=profile)
+            )
+        return self.filter(organization__isnull=True, user_profile=profile)
+
 class DiagnosticSession(models.Model):
     class AnalysisMethod(models.TextChoices):
         RULES = "rules", _("Правила")
@@ -205,6 +229,21 @@ class DiagnosticSession(models.Model):
     user_profile = models.ForeignKey(
         UserProfile, on_delete=models.SET_NULL, null=True, blank=True
     )
+    organization = models.ForeignKey(
+        "users.Organization",
+        on_delete=models.PROTECT,
+        related_name="diagnostic_sessions",
+        null=True,
+        blank=True,
+    )
+    workshop = models.ForeignKey(
+        "users.Workshop",
+        on_delete=models.PROTECT,
+        related_name="diagnostic_sessions",
+        null=True,
+        blank=True,
+    )
+    objects = DiagnosticSessionQuerySet.as_manager()
     created_at = models.DateTimeField(auto_now_add=True)
 
     vin = models.CharField(max_length=64, blank=True)
@@ -246,6 +285,27 @@ class DiagnosticSession(models.Model):
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="engine_done")
 
     handover_time = models.DateTimeField(null=True, blank=True)
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if self.workshop_id and self.organization_id is None:
+            raise ValidationError(
+                {"organization": "Organization is required when workshop is set."}
+            )
+        if (
+            self.workshop_id
+            and self.organization_id
+            and self.workshop.organization_id != self.organization_id
+        ):
+            raise ValidationError(
+                {"workshop": "Workshop must belong to the diagnostic organization."}
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
 
     # ⚠️ У тебя есть SuspensionInspection.comment — это поле можно считать legacy,
     # но оставляем ради совместимости, чтобы не ломать код/миграции.
