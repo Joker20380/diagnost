@@ -2263,6 +2263,10 @@ msgstr "Recherche sur le site"
 msgid "Выбор языка"
 msgstr "Choix de la langue"
 
+#: main/templates/admin/base_site.html:28
+msgid "Язык"
+msgstr "Langue"
+
 #: main/templates/diagnost/base.html:175
 msgid "Позвонить в Автозвук"
 msgstr "Appeler Avtozvuk"
