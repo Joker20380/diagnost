@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from .services import publish_procedure_version
 
 from .models import (
@@ -73,6 +74,9 @@ CHOICE_LABELS.update({
     "external": "Внешний", "verification": "На проверке", "not_run": "Не запускалась",
     "skipped": "Пропущена",
 })
+
+FIELD_LABELS = {key: _(value) for key, value in FIELD_LABELS.items()}
+CHOICE_LABELS = {key: _(value) for key, value in CHOICE_LABELS.items()}
 
 
 class RussianAdminMixin:

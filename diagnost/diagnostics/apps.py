@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.utils.translation import gettext_lazy as _
 
 
 MODEL_NAMES = {
@@ -22,10 +23,10 @@ MODEL_NAMES = {
 class DiagnosticsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'diagnostics'
-    verbose_name = 'Диагностика и автомобили'
+    verbose_name = _('Диагностика и автомобили')
 
     def ready(self):
         for model_name, (singular, plural) in MODEL_NAMES.items():
             model = self.get_model(model_name)
-            model._meta.verbose_name = singular
-            model._meta.verbose_name_plural = plural
+            model._meta.verbose_name = _(singular)
+            model._meta.verbose_name_plural = _(plural)
