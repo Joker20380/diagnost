@@ -280,7 +280,7 @@ stop_conditions
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
-Статус: **в работе**. Первый и второй срезы завершены 16 августа 2026 года.
+Статус: **в работе**. Первые три среза завершены 16 августа 2026 года.
 
 Задачи:
 
@@ -294,8 +294,14 @@ stop_conditions
   - [x] VIN уникален в пределах организации;
   - [x] конфигурация хранит двигатель, трансмиссию, топливо, ECU, пробег и рынок;
   - [x] подтверждённая конфигурация имеет автора и время;
-- [ ] создать новый `DiagnosticCase` с lifecycle;
-- [ ] добавить complaint, symptoms, recent repairs и operating conditions;
+- [x] создать новый `DiagnosticCase` с lifecycle:
+  - [x] реализованы контролируемые переходы от intake до closed/cancelled;
+  - [x] старт диагностики запрещён до готовности приёмки и идентификации;
+  - [x] lifecycle хранит время старта, разрешения и закрытия;
+- [x] добавить complaint, symptoms, recent repairs и operating conditions:
+  - [x] факты приёмки хранятся в отдельных доменных сущностях;
+  - [x] обязательны жалоба и минимум один наблюдаемый симптом;
+  - [x] экран приёмки защищён tenant boundary;
 - [x] создать экран подтверждения распознанных из PDF данных;
 - [x] хранить original observation и исправление пользователя отдельно;
 - [x] запретить повторному парсингу перезаписывать подтверждённую идентичность;
@@ -309,6 +315,7 @@ stop_conditions
 - `c7a834a feat: add tenant-aware workshop foundation`.
 - `c048419 feat: add confirmed vehicle identity workflow`.
 
+- `64d5a7b feat: add diagnostic case intake lifecycle`.
 Критерий выхода:
 
 - [x] два сервиса не видят данные друг друга в диагностических workflow;
