@@ -98,6 +98,25 @@ Implementation commits:
 ## Iteration 2 — pilot hardening
 
 - [x] prepare and review production DB backup and migration rollout;
+
+### Production rollout and admin usability
+
+- [x] deploy the assurance domain core to production without removing legacy data;
+- [x] expose the repair-control section to authorized staff without the previous 403;
+- [x] localize registered project admin models, fields, choices, columns, and actions;
+- [x] add an admin language selector for RU / EN / NL / FR / DE;
+- [x] preserve the current admin path, query string, and fragment when switching language;
+- [x] localize the admin site heading and the language-selector label;
+- [x] compile all gettext catalogs during the production image build;
+- [x] verify zero Cyrillic model/field/choice captions in EN / NL / FR / DE;
+- [x] deploy the localized admin image and confirm a healthy production container.
+
+Evidence:
+
+- commits `08b44c3`, `a4ca4d5`, `e3eb0cb`, `bea0a41`, `f61ade5`,
+  `2c9fe0f`, `a7258fd`, and `bb8841b`;
+- assurance test suite: 8/8 passing;
+- runtime localization audit: 0 untranslated Cyrillic domain captions for each non-Russian locale.
 - [ ] add a curated steering rack demo seed with explicit non-OEM disclaimer;
 - [ ] improve procedure authoring UX and dependency validation;
 - [ ] add evidence file size, MIME, malware scanning, and storage policy;
@@ -107,6 +126,16 @@ Implementation commits:
 - [ ] add richer audit screens and export;
 - [ ] add external Repair Certificate projection;
 - [ ] conduct one real workshop walkthrough and record UX failures.
+
+### Current position
+
+- Active phase: **Iteration 2 — pilot hardening**.
+- Completed: safe rollout plus production admin access and localization.
+- Next planned deliverable: **curated steering-rack demo seed with an explicit
+  non-OEM / demonstration-only disclaimer**.
+- After the demo seed: improve procedure authoring and dependency validation,
+  then harden evidence upload and retention.
+- Iteration 3 has not started.
 
 ## Iteration 3 — competency and procedure library
 
