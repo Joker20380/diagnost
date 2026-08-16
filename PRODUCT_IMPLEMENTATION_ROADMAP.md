@@ -280,7 +280,7 @@ stop_conditions
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
-Статус: **в работе**. Первый срез завершён 16 августа 2026 года.
+Статус: **в работе**. Первый и второй срезы завершены 16 августа 2026 года.
 
 Задачи:
 
@@ -290,11 +290,15 @@ stop_conditions
   - [x] чужая организация получает 404;
   - [x] обычный `staff` не обходит tenant boundary;
   - [x] legacy-сессии без tenant доступны только владельцу;
-- [ ] нормализовать `Vehicle` и `VehicleConfiguration`;
+- [x] нормализовать `Vehicle` и `VehicleConfiguration`:
+  - [x] VIN уникален в пределах организации;
+  - [x] конфигурация хранит двигатель, трансмиссию, топливо, ECU, пробег и рынок;
+  - [x] подтверждённая конфигурация имеет автора и время;
 - [ ] создать новый `DiagnosticCase` с lifecycle;
 - [ ] добавить complaint, symptoms, recent repairs и operating conditions;
-- [ ] создать экран подтверждения распознанных из PDF данных;
-- [ ] хранить original observation и исправление пользователя отдельно;
+- [x] создать экран подтверждения распознанных из PDF данных;
+- [x] хранить original observation и исправление пользователя отдельно;
+- [x] запретить повторному парсингу перезаписывать подтверждённую идентичность;
 - [-] определить RBAC и audit log:
   - [x] добавлена начальная ролевая шкала L0–L3, manager и auditor;
   - [x] tenant scope вычисляется централизованным queryset;
@@ -303,6 +307,7 @@ stop_conditions
 Реализующий коммит первого среза:
 
 - `c7a834a feat: add tenant-aware workshop foundation`.
+- `c048419 feat: add confirmed vehicle identity workflow`.
 
 Критерий выхода:
 
