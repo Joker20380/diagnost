@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Администрирование') }}{% endblock %}
+
+{% block branding %}
+  <div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Администрирование сайта') }}</a></div>
+  {% if user.is_anonymous %}
+    {% include "admin/color_theme_toggle.html" %}
+  {% endif %}
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    #admin-language-switcher { display:flex; align-items:center; gap:.5rem; margin:0 1rem; color:var(--header-link-color); }
+    #admin-language-switcher label { font-size:.75rem; letter-spacing:.04em; text-transform:uppercase; }
+    #admin-language-switcher select { min-width:8.5rem; padding:.35rem 1.8rem .35rem .55rem; border:1px solid var(--hairline-color); border-radius:4px; background:var(--body-bg); color:var(--body-fg); }
+    @media (max-width: 767px) { #admin-language-switcher { margin:.5rem 0 0; } }
+  </style>
+{% endblock %}
+
+{% block nav-global %}
+  {% get_current_language as CURRENT_LANGUAGE %}
+  {% get_available_languages as AVAILABLE_LANGUAGES %}
+  {% get_language_info_list for AVAILABLE_LANGUAGES as LANGUAGES %}
+  <div id="admin-language-switcher">
+    <label for="adminLanguageSelect">{% translate "Язык" %}</label>
+    <select id="adminLanguageSelect" aria-label="{% translate 'Выбор языка' %}">
+      {% for language in LANGUAGES %}
+        <option value="{{ language.code }}"{% if language.code == CURRENT_LANGUAGE %} selected{% endif %}>{{ language.name_local }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endblock %}
+
+{% block extrabody %}
+  {{ block.super }}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const select = document.getElementById('adminLanguageSelect');
+      if (!select) return;
+      select.addEventListener('change', function () {
+        const supported = Array.from(this.options).map(option => option.value);
+        const parts = (window.location.pathname || '/').split('/').filter(Boolean);
+        if (parts.length && supported.includes(parts[0])) parts.shift();
+        let cleanPath = '/' + parts.join('/');
+        if (cleanPath !== '/' && window.location.pathname.endsWith('/')) cleanPath += '/';
+        const nextPath = this.value === 'ru' ? cleanPath : '/' + this.value + (cleanPath === '/' ? '/' : cleanPath);
+        window.location.href = nextPath + (window.location.search || '') + (window.location.hash || '');
+      });
+    });
+  </script>
+{% endblock %}
