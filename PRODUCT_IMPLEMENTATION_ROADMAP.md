@@ -280,23 +280,37 @@ stop_conditions
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
+Статус: **в работе**. Первый срез завершён 16 августа 2026 года.
+
 Задачи:
 
-- реализовать Organization, Workshop, TechnicianProfile;
-- обеспечить строгую tenant isolation;
-- нормализовать Vehicle и VehicleConfiguration;
-- создать новый DiagnosticCase с lifecycle;
-- добавить complaint, symptoms, recent repairs и operating conditions;
-- создать экран подтверждения распознанных из PDF данных;
-- хранить original observation и исправление пользователя отдельно;
-- определить RBAC и audit log.
+- [x] реализовать `Organization`, `Workshop`, `TechnicianProfile`;
+- [x] обеспечить tenant isolation для диагностических сессий и осмотров:
+  - [x] сотрудники видят кейсы своей организации;
+  - [x] чужая организация получает 404;
+  - [x] обычный `staff` не обходит tenant boundary;
+  - [x] legacy-сессии без tenant доступны только владельцу;
+- [ ] нормализовать `Vehicle` и `VehicleConfiguration`;
+- [ ] создать новый `DiagnosticCase` с lifecycle;
+- [ ] добавить complaint, symptoms, recent repairs и operating conditions;
+- [ ] создать экран подтверждения распознанных из PDF данных;
+- [ ] хранить original observation и исправление пользователя отдельно;
+- [-] определить RBAC и audit log:
+  - [x] добавлена начальная ролевая шкала L0–L3, manager и auditor;
+  - [x] tenant scope вычисляется централизованным queryset;
+  - [ ] реализовать permission policies, skills и полный audit log.
+
+Реализующий коммит первого среза:
+
+- `c7a834a feat: add tenant-aware workshop foundation`.
 
 Критерий выхода:
 
-- два сервиса не видят данные друг друга;
-- автомобиль определён до variant/engine level либо явно помечен incomplete;
-- мастер подтверждает факты до начала анализа;
-- каждое изменение имеет автора и время.
+- [x] два сервиса не видят данные друг друга в диагностических workflow;
+- [ ] автомобиль определён до variant/engine level либо явно помечен incomplete;
+- [ ] мастер подтверждает факты до начала анализа;
+- [-] критичные диагностические изменения имеют автора и время, но общий
+  tenant-wide audit log ещё не реализован.
 
 ### Phase 3 — исполнимые диагностические процедуры
 
