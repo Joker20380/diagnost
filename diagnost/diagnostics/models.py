@@ -237,6 +237,7 @@ class DiagnosticSession(models.Model):
 
     # --- Pipeline/статусы
     STATUS_CHOICES = [
+        ("parse_failed", _("Ошибка обработки отчёта")),
         ("engine_done", _("Диагностика двигателя завершена")),
         ("suspension_pending", _("Ожидает осмотра подвески")),
         ("suspension_done", _("Диагностика подвески завершена")),
@@ -595,6 +596,22 @@ class SuspensionInspection(models.Model):
         self.signed_at = timezone.now()
         self.save(update_fields=["inspector", "status", "signed_at"])
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            stored_status = (
+                type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
+            )
+            if stored_status == "signed":
+                raise ValidationError(
+                    "Signed suspension inspections are immutable."
+                )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_signed:
+            raise ValidationError("Signed suspension inspections cannot be deleted.")
+        return super().delete(*args, **kwargs)
+
 
 class SuspensionPartType(models.Model):
     name = models.CharField(max_length=128)
@@ -635,6 +652,18 @@ class SuspensionPart(models.Model):
         pt = self.part_type.name if self.part_type else "Деталь"
         return f"{pt} ({self.wear_percent}% износа)"
 
+    def save(self, *args, **kwargs):
+        if self.inspection_id and self.inspection.is_signed:
+            raise ValidationError("Parts of a signed inspection are immutable.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.inspection.is_signed:
+            raise ValidationError(
+                "Parts of a signed inspection cannot be deleted."
+            )
+        return super().delete(*args, **kwargs)
+
 
 class SuspensionAttachment(models.Model):
     """Фото/файлы как доказательная база осмотра (опционально, но полезно)."""
@@ -647,3 +676,15 @@ class SuspensionAttachment(models.Model):
 
     def __str__(self):
         return self.caption or f"Attachment #{self.id}"
+
+    def save(self, *args, **kwargs):
+        if self.inspection_id and self.inspection.is_signed:
+            raise ValidationError("Attachments of a signed inspection are immutable.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.inspection.is_signed:
+            raise ValidationError(
+                "Attachments of a signed inspection cannot be deleted."
+            )
+        return super().delete(*args, **kwargs)

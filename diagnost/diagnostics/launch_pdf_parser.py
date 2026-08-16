@@ -12,6 +12,7 @@ from diagnostics.models import (
     DiagnosticCode,
     DiagnosticParseRun,
     DiagnosticSession,
+    QAEvent,
     DTCReference,
 )
 
@@ -409,6 +410,20 @@ def parse_and_apply_launch_pdf(session: DiagnosticSession) -> int:
         parse_run.error_message = str(exc)[:2000]
         parse_run.completed_at = timezone.now()
         parse_run.save(update_fields=["status", "error_message", "completed_at"])
+        QAEvent.objects.create(
+            session=session,
+            code="LAUNCH_PDF_PARSE_FAILED",
+            severity=QAEvent.Severity.ERROR,
+            message="Launch PDF parsing failed.",
+            details={
+                "parse_run_id": parse_run.pk,
+                "parser_name": PARSER_NAME,
+                "parser_version": PARSER_VERSION,
+                "content_sha256": content_sha256,
+                "error_class": type(exc).__name__,
+                "error_message": str(exc)[:2000],
+            },
+        )
         raise
 
     with transaction.atomic():

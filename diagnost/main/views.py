@@ -39,6 +39,7 @@ from diagnostics.models import (
     DiagnosticCode,
     SensorReading,
     SuspensionInspection,
+    QAEvent,
 )
 
 # Локальные импорты main (оставляю как у тебя)
@@ -465,15 +466,28 @@ def upload_diagnostic(request):
             try:
                 from diagnostics.launch_pdf_parser import parse_and_apply_launch_pdf
                 parse_and_apply_launch_pdf(session)
-            except Exception:
+            except Exception as exc:
                 logger.exception(
                     "Launch PDF parsing failed for session_id=%s user_id=%s",
                     session.pk,
                     request.user.pk,
                 )
-                if session.raw_file:
-                    session.raw_file.delete(save=False)
-                session.delete()
+                session.status = "parse_failed"
+                session.save(update_fields=["status"])
+                if not session.qa_events.filter(
+                    code="LAUNCH_PDF_PARSE_FAILED"
+                ).exists():
+                    QAEvent.objects.create(
+                        session=session,
+                        code="LAUNCH_PDF_PARSE_FAILED",
+                        severity=QAEvent.Severity.ERROR,
+                        message="Launch PDF parsing failed.",
+                        details={
+                            "error_class": type(exc).__name__,
+                            "error_message": str(exc)[:2000],
+                            "user_id": request.user.pk,
+                        },
+                    )
                 form.add_error(
                     'raw_file',
                     _('Не удалось прочитать отчёт Launch. Проверьте файл и попробуйте снова.'),
@@ -520,7 +534,7 @@ def suspension_inspection(request, session_id):
     )
     profile = getattr(request.user, 'userprofile', None)
 
-    inspection, _ = SuspensionInspection.objects.get_or_create(
+    inspection, _inspection_created = SuspensionInspection.objects.get_or_create(
         session=session,
         defaults={'inspector': profile}
     )
@@ -554,21 +568,22 @@ def suspension_inspection(request, session_id):
                         else:
                             p.severity = 'ok'
 
-                    # ✅ QA FLAG: конфликт "рекомендация заменить" vs решение мастера
-                    # Ничего не блокируем, только фиксируем в лог.
-                    try:
-                        if int(wear) >= 70 and not bool(p.needs_replacement):
-                            logger.warning(
-                                "QA_FLAG: replacement mismatch | session_id=%s inspection_id=%s part_type=%s wear=%s severity=%s user_id=%s",
-                                getattr(session, "id", None),
-                                getattr(insp, "id", None),
-                                getattr(p, "part_type", None),
-                                wear,
-                                getattr(p, "severity", None),
-                                getattr(getattr(request, "user", None), "id", None),
-                            )
-                    except Exception:
-                        logger.exception("QA_FLAG: failed to log mismatch")
+                    if int(wear) >= 70 and not bool(p.needs_replacement):
+                        QAEvent.objects.create(
+                            session=session,
+                            code="SUSPENSION_REPLACEMENT_MISMATCH",
+                            severity=QAEvent.Severity.WARNING,
+                            message=(
+                                "High wear was recorded without a replacement decision."
+                            ),
+                            details={
+                                "inspection_id": insp.pk,
+                                "part_type_id": p.part_type_id,
+                                "wear_percent": int(wear),
+                                "severity": p.severity,
+                                "user_id": request.user.pk,
+                            },
+                        )
 
                     # ✅ КЛЮЧЕВОЕ: needs_replacement не ставим автоматически
                     p.save()

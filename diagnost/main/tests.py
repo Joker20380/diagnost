@@ -6,7 +6,7 @@ from django.urls import reverse
 from unittest.mock import patch
 
 from .models import ContactRequest, Subscriber
-from diagnostics.models import DiagnosticSession
+from diagnostics.models import DiagnosticSession, QAEvent, SuspensionPartType
 from users.models import UserProfile
 
 
@@ -69,7 +69,7 @@ class DiagnosticUploadFailureTests(TestCase):
         'diagnostics.launch_pdf_parser.parse_and_apply_launch_pdf',
         side_effect=ValueError('broken report'),
     )
-    def test_parser_failure_does_not_leave_session(self, mocked_parser):
+    def test_parser_failure_preserves_auditable_session(self, mocked_parser):
         report = SimpleUploadedFile(
             'launch.pdf',
             b'%PDF-1.4\n%%EOF\n',
@@ -86,5 +86,55 @@ class DiagnosticUploadFailureTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Не удалось прочитать отчёт Launch')
-        self.assertFalse(DiagnosticSession.objects.exists())
+        session = DiagnosticSession.objects.get()
+        self.assertEqual(session.status, "parse_failed")
+        event = QAEvent.objects.get(session=session)
+        self.assertEqual(event.code, "LAUNCH_PDF_PARSE_FAILED")
+        self.assertEqual(event.details["error_class"], "ValueError")
         mocked_parser.assert_called_once()
+
+class SuspensionQAEventTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user("qa-inspector")
+        self.profile, _ = UserProfile.objects.get_or_create(user=self.user)
+        self.client.force_login(self.user)
+        self.session = DiagnosticSession.objects.create(
+            user_profile=self.profile,
+            raw_file=SimpleUploadedFile(
+                "qa.pdf", b"%PDF-1.4\n%%EOF", content_type="application/pdf"
+            ),
+        )
+        self.part_type = SuspensionPartType.objects.create(name="Ball joint")
+
+    def test_high_wear_without_replacement_creates_qa_event(self):
+        response = self.client.post(
+            reverse("suspension_inspection", args=[self.session.pk]),
+            {
+                "inspector": self.profile.pk,
+                "mileage_km": 100000,
+                "lift_used": "on",
+                "overall_risk": "high",
+                "comment": "Play detected",
+                "parts-TOTAL_FORMS": "1",
+                "parts-INITIAL_FORMS": "0",
+                "parts-MIN_NUM_FORMS": "0",
+                "parts-MAX_NUM_FORMS": "1000",
+                "parts-0-part_type": self.part_type.pk,
+                "parts-0-wear_percent": "70",
+                "parts-0-severity": "crit",
+                "parts-0-reason": "play",
+                "parts-0-evidence": "Measured play",
+                "parts-0-part_number": "",
+                "action": "save",
+            },
+            secure=True,
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("diagnostic_detail", args=[self.session.pk]),
+            fetch_redirect_response=False,
+        )
+        event = QAEvent.objects.get(session=self.session)
+        self.assertEqual(event.code, "SUSPENSION_REPLACEMENT_MISMATCH")
+        self.assertEqual(event.details["wear_percent"], 70)

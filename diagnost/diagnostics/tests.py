@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -13,6 +15,7 @@ from .launch_pdf_parser import (
     PARSER_VERSION,
     apply_launch_parse_to_session,
     parse_and_apply_launch_pdf,
+    parse_launch_pdf,
 )
 from .models import (
     DiagnosticApproval,
@@ -23,6 +26,10 @@ from .models import (
     DiagnosticSession,
     DTCReference,
     QAEvent,
+    SuspensionAttachment,
+    SuspensionInspection,
+    SuspensionPart,
+    SuspensionPartType,
 )
 from .services import (
     create_diagnostic_record_revision,
@@ -115,6 +122,31 @@ class DiagnosticUploadValidationTests(TestCase):
             "application/pdf",
         )
         self.assertTrue(form.is_valid(), form.errors)
+
+
+class LaunchPdfFixtureRegressionTests(TestCase):
+    fixture_path = (
+        Path(__file__).with_name("test_fixtures") / "launch_anonymized_report.pdf"
+    )
+
+    def test_anonymized_launch_pdf_extracts_expected_structure(self):
+        self.assertGreater(self.fixture_path.stat().st_size, 1000)
+
+        parsed = parse_launch_pdf(self.fixture_path)
+
+        self.assertEqual(parsed["vehicle"]["vin"], "TESTVIN1234567890")
+        self.assertEqual(parsed["vehicle"]["brand"], "BMW")
+        self.assertEqual(parsed["vehicle"]["model"], "X3")
+        self.assertEqual(
+            [fault["code"] for fault in parsed["faults"]],
+            ["P0300", "930AB2"],
+        )
+        self.assertEqual(
+            [fault["status"] for fault in parsed["faults"]],
+            ["Current", "Intermittent"],
+        )
+        self.assertEqual(parsed["faults"][0]["module_code"], "DME")
+        self.assertEqual(parsed["ok_systems"][0]["module_code"], "ABS")
 
 
 class LaunchObservationProvenanceTests(TestCase):
@@ -240,6 +272,10 @@ class LaunchObservationProvenanceTests(TestCase):
         self.assertEqual(parse_run.status, DiagnosticParseRun.Status.FAILED)
         self.assertIn("broken parser input", parse_run.error_message)
         self.assertIsNotNone(parse_run.completed_at)
+        event = QAEvent.objects.get(session=session)
+        self.assertEqual(event.code, "LAUNCH_PDF_PARSE_FAILED")
+        self.assertEqual(event.details["parse_run_id"], parse_run.pk)
+        self.assertEqual(event.details["error_class"], "ValueError")
 
 class VerifiedDiagnosticRecordTests(TestCase):
     def setUp(self):
@@ -360,3 +396,48 @@ class VerifiedDiagnosticRecordTests(TestCase):
             code="DIAGNOSTIC_RECORD_CHECKSUM_MISMATCH",
         )
         self.assertEqual(event.severity, QAEvent.Severity.CRITICAL)
+
+class SignedSuspensionInspectionTests(TestCase):
+    def setUp(self):
+        user = User.objects.create_user("suspension-inspector")
+        self.profile, _ = UserProfile.objects.get_or_create(user=user)
+        self.session = DiagnosticSession.objects.create(
+            raw_file=SimpleUploadedFile(
+                "suspension.pdf", b"%PDF-1.4\n%%EOF", content_type="application/pdf"
+            )
+        )
+        self.inspection = SuspensionInspection.objects.create(
+            session=self.session,
+            inspector=self.profile,
+            comment="Initial inspection",
+        )
+        part_type = SuspensionPartType.objects.create(name="Control arm")
+        self.part = SuspensionPart.objects.create(
+            inspection=self.inspection,
+            part_type=part_type,
+            wear_percent=70,
+            severity="crit",
+        )
+        self.inspection.sign()
+
+    def test_signed_inspection_and_parts_are_immutable(self):
+        self.inspection.comment = "Changed"
+        with self.assertRaises(ValidationError):
+            self.inspection.save()
+
+        self.part.wear_percent = 10
+        with self.assertRaises(ValidationError):
+            self.part.save()
+        with self.assertRaises(ValidationError):
+            self.part.delete()
+        with self.assertRaises(ValidationError):
+            self.inspection.delete()
+
+    def test_signed_inspection_rejects_new_attachment(self):
+        attachment = SuspensionAttachment(
+            inspection=self.inspection,
+            file=SimpleUploadedFile("evidence.txt", b"evidence"),
+        )
+
+        with self.assertRaises(ValidationError):
+            attachment.save()
