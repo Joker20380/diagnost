@@ -179,6 +179,16 @@ class RepairAssuranceExecutionTests(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_superuser_without_technician_profile_can_open_case_list(self):
+        admin = User.objects.create_superuser(
+            username="assurance-admin",
+            email="admin@example.com",
+            password="test-password",
+        )
+        self.client.force_login(admin)
+        response = self.client.get(reverse("assurance:case_list"), secure=True)
+        self.assertEqual(response.status_code, 200)
+
     def test_published_specification_is_immutable(self):
         self.scan.title = "Changed after publication"
         with self.assertRaises(ValidationError):

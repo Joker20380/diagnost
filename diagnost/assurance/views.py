@@ -25,6 +25,8 @@ def _technician(request):
 
 
 def _visible_cases(request):
+    if request.user.is_superuser:
+        return RepairCase.objects.all()
     technician = _technician(request)
     queryset = RepairCase.objects.filter(organization=technician.organization)
     if technician.role not in {
@@ -41,7 +43,6 @@ def case_list(request):
     return render(request, "assurance/case_list.html", {"cases": cases})
 
 
-@login_required
 @login_required
 def case_create(request):
     technician = _technician(request)
@@ -73,6 +74,7 @@ def case_create(request):
     return render(request, "assurance/case_create.html", {"form": form})
 
 
+@login_required
 def case_detail(request, case_id):
     repair_case = get_object_or_404(
         _visible_cases(request).select_related("vehicle", "procedure_version__procedure"),
