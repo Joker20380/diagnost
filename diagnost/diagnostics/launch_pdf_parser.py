@@ -8,6 +8,7 @@ from typing import Any
 from django.db import transaction
 from django.utils import timezone
 
+from diagnostics.analysis_gate import session_facts_are_confirmed, sync_session_analysis_gate
 from diagnostics.models import (
     DiagnosticCode,
     DiagnosticParseRun,
@@ -370,11 +371,16 @@ def apply_launch_parse_to_session(
                 "Сначала проверить питание, массу, разъёмы, проводку и сопутствующие ошибки."
             )
 
-        session.recommendation = "\n\n".join(recommendation_lines)
-        session.analysis_method = DiagnosticSession.AnalysisMethod.RULES
-        session.analysis_engine = PARSER_NAME
-        session.analysis_version = PARSER_VERSION
-        session.analysis_generated_at = timezone.now()
+        analysis_allowed = session_facts_are_confirmed(session)
+        session.recommendation = (
+            "\n\n".join(recommendation_lines) if analysis_allowed else ""
+        )
+        session.analysis_method = (
+            DiagnosticSession.AnalysisMethod.RULES if analysis_allowed else ""
+        )
+        session.analysis_engine = PARSER_NAME if analysis_allowed else ""
+        session.analysis_version = PARSER_VERSION if analysis_allowed else ""
+        session.analysis_generated_at = timezone.now() if analysis_allowed else None
         session.ai_generated_at = None
         session.save(update_fields=[
             "vin",
@@ -467,4 +473,5 @@ def parse_and_apply_launch_pdf(session: DiagnosticSession) -> int:
             "completed_at",
             "metadata",
         ])
+    sync_session_analysis_gate(session)
     return fault_count

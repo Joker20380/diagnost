@@ -107,6 +107,11 @@
           {% else %}
             <p>{% translate "Приёмка ещё не заполнена." %}</p>
           {% endif %}
+          {% if not session.analysis_generated_at %}
+            <div class="az-suspension-state az-suspension-warning">
+              {% translate "Анализ заблокирован: подтвердите автомобиль, жалобу и наблюдаемые симптомы." %}
+            </div>
+          {% endif %}
           <a href="{% url 'diagnostic_case_intake' session.id %}" class="az-btn az-btn-primary">
             {% translate "Открыть приёмку" %}
           </a>

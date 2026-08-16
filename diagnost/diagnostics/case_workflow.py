@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
 
+from .analysis_gate import sync_session_analysis_gate
 from .models import (
     CustomerComplaint,
     DiagnosticCase,
@@ -147,6 +148,7 @@ def update_case_intake(
         else DiagnosticCase.Status.IDENTITY_PENDING
     )
     case.save(update_fields=["status", "updated_at"])
+    sync_session_analysis_gate(case.session)
     return case
 
 
@@ -181,4 +183,5 @@ def transition_diagnostic_case(
         case.closed_at = now
         update_fields.append("closed_at")
     case.save(update_fields=update_fields)
+    sync_session_analysis_gate(case.session)
     return case

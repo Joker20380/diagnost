@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
 
+from .analysis_gate import sync_session_analysis_gate
 from .models import (
     DiagnosticCase,
     DiagnosticSession,
@@ -143,4 +144,5 @@ def confirm_vehicle_identity(
     session.save(
         update_fields=["vehicle", "vehicle_configuration", "vin", "vehicle_model"]
     )
+    sync_session_analysis_gate(session)
     return ConfirmedVehicleIdentity(vehicle, configuration)

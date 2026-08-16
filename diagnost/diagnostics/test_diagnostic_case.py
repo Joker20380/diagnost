@@ -44,6 +44,7 @@ class DiagnosticCaseWorkflowTests(TestCase):
             workshop=self.workshop_a,
             raw_file=SimpleUploadedFile("case.pdf", b"%PDF-1.4\n%%EOF"),
         )
+        self.case = ensure_diagnostic_case(self.session, self.user_a)
         apply_launch_parse_to_session(
             self.session,
             {
@@ -53,10 +54,17 @@ class DiagnosticCaseWorkflowTests(TestCase):
                     "model": "Golf",
                     "year": "2021",
                 },
-                "faults": [],
+                "faults": [
+                    {
+                        "code": "P0100",
+                        "description": "Mass air flow circuit",
+                        "module_code": "ECM",
+                        "module_name": "Engine",
+                        "status": "Current",
+                    }
+                ],
             },
         )
-        self.case = ensure_diagnostic_case(self.session, self.user_a)
 
     def test_intake_creates_structured_facts_and_waits_for_identity(self):
         self.client.force_login(self.user_a)
@@ -83,6 +91,9 @@ class DiagnosticCaseWorkflowTests(TestCase):
             self.case.customer_complaint.description, "Engine loses power"
         )
         self.assertTrue(self.case.operating_conditions.intermittent)
+        self.session.refresh_from_db()
+        self.assertEqual(self.session.recommendation, "")
+        self.assertIsNone(self.session.analysis_generated_at)
 
     def test_confirmed_identity_promotes_completed_intake_to_ready(self):
         self.client.force_login(self.user_a)
@@ -103,6 +114,10 @@ class DiagnosticCaseWorkflowTests(TestCase):
         )
         self.case.refresh_from_db()
         self.assertEqual(self.case.status, DiagnosticCase.Status.READY)
+        self.session.refresh_from_db()
+        self.assertIn("P0100", self.session.recommendation)
+        self.assertIsNotNone(self.session.analysis_generated_at)
+        self.assertEqual(self.session.analysis_method, "rules")
 
     def test_cannot_start_before_intake_and_identity_are_ready(self):
         with self.assertRaises(ValidationError):
