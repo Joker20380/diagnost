@@ -1,0 +1,1 @@
+"""Automotive Repair Assurance domain."""

@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'main',
     'users',
     'diagnostics',
+    'assurance',
     'import_export',
     'phonenumber_field',
     'allauth',
