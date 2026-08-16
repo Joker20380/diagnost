@@ -280,7 +280,7 @@ stop_conditions
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
-Статус: **в работе**. Первые четыре среза завершены 16 августа 2026 года.
+Статус: **в работе**. Первые пять срезов завершены 16 августа 2026 года.
 
 Задачи:
 
@@ -294,6 +294,9 @@ stop_conditions
   - [x] VIN уникален в пределах организации;
   - [x] конфигурация хранит двигатель, трансмиссию, топливо, ECU, пробег и рынок;
   - [x] подтверждённая конфигурация имеет автора и время;
+  - [x] полнота имеет статус complete, incomplete или needs review;
+  - [x] отсутствующие и сомнительные поля перечислены явно;
+  - [x] needs review не разблокирует диагностический анализ;
 - [x] создать новый `DiagnosticCase` с lifecycle:
   - [x] реализованы контролируемые переходы от intake до closed/cancelled;
   - [x] старт диагностики запрещён до готовности приёмки и идентификации;
@@ -316,12 +319,12 @@ stop_conditions
 - `c7a834a feat: add tenant-aware workshop foundation`.
 - `c048419 feat: add confirmed vehicle identity workflow`.
 - `64d5a7b feat: add diagnostic case intake lifecycle`.
-Критерий выхода:
 - `0e8dd1a feat: gate analysis on confirmed case facts`.
+- `c528ca7 feat: assess vehicle configuration completeness`.
 
-
+Критерий выхода:
 - [x] два сервиса не видят данные друг друга в диагностических workflow;
-- [ ] автомобиль определён до variant/engine level либо явно помечен incomplete;
+- [x] автомобиль определён до variant/engine level либо явно помечен incomplete;
 - [x] мастер подтверждает факты до начала анализа;
 - [-] критичные диагностические изменения имеют автора и время, но общий
   tenant-wide audit log ещё не реализован.
