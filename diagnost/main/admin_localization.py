@@ -89,6 +89,8 @@ CHOICES = {
 def apply_admin_localization():
     for app_label in ("main", "users", "diagnostics", "assurance"):
         for model in apps.get_app_config(app_label).get_models():
+            model._meta.verbose_name = _(str(model._meta.verbose_name))
+            model._meta.verbose_name_plural = _(str(model._meta.verbose_name_plural))
             for field in model._meta.fields:
                 if field.name in LABELS:
                     field.verbose_name = _(LABELS[field.name])
