@@ -1,207 +1,226 @@
 {% load static i18n %}
 <!doctype html>
-<html lang="ru">
+<html lang="{{ LANGUAGE_CODE|default:'ru' }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{% translate "white_cat — разработка сложных web-систем" %}</title>
-  <meta name="description" content="{% translate "white_cat — разработка сложных web-систем, Django-платформ, CRM, личных кабинетов, интеграций, автоматизации и AI-assisted инструментов." %}">
+  <title>{% translate "white_cat — системы поддержки диагностических решений" %}</title>
+  <meta name="description" content="{% translate "Проектирование decision-support systems: причинные гипотезы, оценка свидетельств и выбор следующего наиболее информативного шага." %}">
+  <meta name="theme-color" content="#07110d">
+  <link rel="canonical" href="https://white--cat.ru/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:title" content="{% translate 'white_cat — diagnostic decision systems' %}">
+  <meta property="og:description" content="{% translate 'Снижаем неопределённость в сложных системах и определяем следующий наиболее полезный шаг.' %}">
+  <meta property="og:url" content="https://white--cat.ru/">
+  <meta property="og:site_name" content="white_cat">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%2307110d%22/><text x=%2210%22 y=%2244%22 font-size=%2239%22 fill=%22%2300f58a%22>猫</text></svg>">
   <link rel="stylesheet" href="{% static 'whitecat/css/whitecat.css' %}">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"white_cat","url":"https://white--cat.ru/","email":"jvov2038@gmail.com","description":"Проектирование и разработка систем поддержки решений для сложных диагностических задач."}</script>
 </head>
 <body>
-  <main class="wc-ide">
+  <a class="wc-skip" href="#content">{% translate "Перейти к содержанию" %}</a>
+  <main class="wc-ide" id="content">
     <section class="wc-window">
       <header class="wc-topbar">
-        <div class="wc-window-controls" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-
-        <nav class="wc-menu" aria-label="{% translate "Верхнее меню" %}">
-          <a href="#home" data-i18n="menu.home">{% translate "Главная" %}</a>
-          <a href="#services" data-i18n="menu.services">{% translate "Услуги" %}</a>
-          <a href="#stack" data-i18n="menu.stack">{% translate "Стек" %}</a>
-          <a href="#cases" data-i18n="menu.projects">{% translate "Направления" %}</a>
-          <a href="#contact" data-i18n="menu.contact">{% translate "Контакт" %}</a>
+        <a class="wc-brand" href="#home" aria-label="white_cat — {% translate 'на главную' %}"><span>&gt;_</span> white_cat</a>
+        <nav class="wc-menu" aria-label="{% translate 'Основная навигация' %}">
+          <a href="#services">{% translate "Ядро" %}</a>
+          <a href="#cases">{% translate "Архитектура" %}</a>
+          <a href="#process">{% translate "Логика" %}</a>
+          <a href="#stack">{% translate "Стек" %}</a>
+          <a href="#contact">{% translate "Контакт" %}</a>
         </nav>
-
-        <div class="wc-run">
-          <span class="wc-run-dot"></span>
-          <span data-i18n="status.production">{% translate "white_cat: продакшен" %}</span>
-        </div>
+        <div class="wc-run"><span class="wc-run-dot"></span>{% translate "принимаем новые задачи" %}</div>
       </header>
 
       <div class="wc-layout">
-        <aside class="wc-sidebar">
-          <div class="wc-panel-title" data-i18n="sidebar.project">{% translate "Проект" %}</div>
-
+        <aside class="wc-sidebar" aria-label="{% translate 'Структура проекта' %}">
+          <div class="wc-panel-title">explorer</div>
           <div class="wc-tree">
-            <div class="wc-tree-item wc-tree-root">white_cat</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.backend">{% translate "Серверная часть" %}</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.architecture">{% translate "архитектура.py" %}</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.integrations">{% translate "интеграции.py" %}</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.frontend">{% translate "Интерфейс" %}</div>
-            <div class="wc-tree-item wc-file active" data-i18n="tree.page">{% translate "страница_разработчика.html" %}</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.styles">{% translate "стили.css" %}</div>
-            <div class="wc-tree-item wc-folder" data-i18n="tree.automation">{% translate "Автоматизация" %}</div>
-            <div class="wc-tree-item wc-file" data-i18n="tree.ai">{% translate "ai_инструменты.py" %}</div>
+            <div class="wc-tree-item wc-tree-root">⌄ WHITE_CAT</div>
+            <a class="wc-tree-item wc-file active" href="#home">README.md</a>
+            <a class="wc-tree-item wc-file" href="#services">engine.py</a>
+            <a class="wc-tree-item wc-file" href="#cases">architecture.json</a>
+            <a class="wc-tree-item wc-file" href="#process">reasoning.yml</a>
+            <a class="wc-tree-item wc-file" href="#stack">stack.lock</a>
           </div>
-
-          <div class="wc-sidebar-card">
-            <span data-i18n="sidebar.status">{% translate "Статус" %}</span>
-            <strong data-i18n="sidebar.ready">{% translate "Готов к сложным системам" %}</strong>
-          </div>
+          <div class="wc-sidebar-card"><span>{% translate "Задача" %}</span><strong>{% translate "Снижать неопределённость в сложных системах" %}</strong></div>
+          <div class="wc-sidebar-card"><span>{% translate "Результат" %}</span><strong>{% translate "Объяснимый следующий наиболее полезный шаг" %}</strong></div>
         </aside>
 
         <section class="wc-main">
-          <nav class="wc-tabs" aria-label="{% translate "Вкладки страницы" %}">
-            <a class="wc-tab active" href="#home" data-i18n="tabs.home">{% translate "Главная" %}</a>
-            <a class="wc-tab" href="#services" data-i18n="tabs.services">{% translate "Услуги" %}</a>
-            <a class="wc-tab" href="#stack" data-i18n="tabs.stack">{% translate "Стек" %}</a>
-            <a class="wc-tab" href="#cases" data-i18n="tabs.projects">{% translate "Направления" %}</a>
-            <a class="wc-tab" href="#contact" data-i18n="tabs.contact">{% translate "Контакт" %}</a>
+          <nav class="wc-tabs" aria-label="{% translate 'Разделы страницы' %}">
+            <a class="wc-tab active" href="#home">README.md</a>
+            <a class="wc-tab" href="#services">engine.py</a>
+            <a class="wc-tab" href="#cases">architecture.json</a>
+            <a class="wc-tab" href="#process">reasoning.yml</a>
           </nav>
 
-          <section id="home" class="wc-editor">
-            <div class="wc-line-numbers" aria-hidden="true">
-              <span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span>
-              <span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span>
-            </div>
-
+          <section id="home" class="wc-editor wc-observe">
+            <div class="wc-line-numbers" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span></div>
             <div class="wc-code-hero">
-              <p class="wc-comment" data-i18n="hero.comment">{% translate "# white_cat / сложные web-системы" %}</p>
-              <h1><span data-i18n="hero.word">{% translate "Разработка" %}</span> {% translate "сложных web-систем" %}</h1>
-              <p class="wc-lead" data-i18n="hero.lead">
-                {% blocktranslate trimmed %}Проектируем и разрабатываем web-платформы, которые закрывают реальные бизнес-процессы:
-                личные кабинеты, CRM, интеграции, каталоги, аналитические панели, автоматизацию данных
-                и AI-assisted инструменты.{% endblocktranslate %}
-              </p>
-
-              <div class="wc-code-block">
-<pre><code><span class="kw">class</span> <span class="cls">WhiteCat</span>:
-    <span class="var">{% translate "фокус" %}</span> = <span class="str">{% translate "\"сложные web-системы\"" %}</span>
-    <span class="var">{% translate "стек" %}</span> = [<span class="str">"Python"</span>, <span class="str">"Django"</span>, <span class="str">"C#"</span>, <span class="str">".NET"</span>]
-
-    <span class="kw">def</span> <span class="fn">{% translate "создать" %}</span>(<span class="arg">{% translate "бизнес_процесс" %}</span>):
-        <span class="kw">return</span> <span class="str">{% translate "\"архитектура + backend + автоматизация + deploy\"" %}</span></code></pre>
-              </div>
-
-              <div class="wc-actions">
-                <a class="wc-btn wc-btn-primary" href="mailto:urutskoeva.madina@gmail.com?subject=white_cat%20project" data-i18n="hero.cta">{% translate "Обсудить проект" %}</a>
-                <a class="wc-btn wc-btn-secondary" href="#services" data-i18n="hero.more">{% translate "Посмотреть услуги" %}</a>
-              </div>
-            </div>
-          </section>
-
-          <section id="services" class="wc-section">
-            <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="services.file">{% translate "услуги.py" %}</p>
-              <h2 data-i18n="services.title">{% translate "Что мы делаем" %}</h2>
-              <p data-i18n="services.text">
-                {% blocktranslate trimmed %}Собираем не витрину, а рабочую систему: backend, frontend, роли, права доступа,
-                база данных, интеграции, фоновые задачи, деплой и дальнейшее развитие.{% endblocktranslate %}
-              </p>
-            </div>
-
-            <div class="wc-cards">
-              {% for service in services %}
-                <article class="wc-card">
-                  <div class="wc-card-tag" data-i18n="card.module">{% translate "модуль" %}</div>
-                  <h3>{{ service.title }}</h3>
-                  <p>{{ service.text }}</p>
-                </article>
-              {% endfor %}
-            </div>
-          </section>
-
-          <section id="stack" class="wc-section wc-section-compact">
-            <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="stack.file">{% translate "стек.json" %}</p>
-              <h2 data-i18n="stack.title">{% translate "Технологический стек" %}</h2>
-            </div>
-
-            <div class="wc-stack">
-              {% for item in stack %}
-                <span>{{ item }}</span>
-              {% endfor %}
-            </div>
-          </section>
-
-          <section id="cases" class="wc-section">
-            <div class="wc-section-head">
-              <p class="wc-kicker" data-i18n="cases.file">{% translate "направления.md" %}</p>
-              <h2 data-i18n="cases.title">{% translate "Направления" %}</h2>
-              <p data-i18n="cases.text">
-                {% blocktranslate trimmed %}white_cat полезен там, где нужен не шаблон, а система с данными,
-                логикой, ролями, интеграциями и понятной дорожной картой развития.{% endblocktranslate %}
-              </p>
-            </div>
-
-            <div class="wc-project-list">
-              {% for direction in directions %}
-                <div class="wc-project-row">
-                  <span class="wc-project-icon">✓</span>
-                  <span>{{ direction }}</span>
+              <p class="wc-comment">// diagnostic systems · decision support · explainable reasoning</p>
+              <div class="wc-title-row">
+                <h1><span class="wc-matrix" data-text="Decision">Decision</span>-support systems</h1>
+                <div class="wc-matrix-screen" aria-hidden="true">
+                  <canvas id="wc-matrix-rain"></canvas>
                 </div>
-              {% endfor %}
+              </div>
+              <p class="wc-lead">{% blocktranslate trimmed %}Строю системы для сложных диагностических задач: они соединяют разрозненные сигналы с контекстом, формируют проверяемые гипотезы и предлагают следующий шаг, который лучше всего снижает неопределённость.{% endblocktranslate %}</p>
+              <ul class="wc-proof" aria-label="{% translate 'Ключевые преимущества' %}">
+                <li><b>01</b> {% translate "Контекст вместо ответа по одному сигналу" %}</li>
+                <li><b>02</b> {% translate "Гипотезы вместо ложной уверенности" %}</li>
+                <li><b>03</b> {% translate "Объяснимый следующий тест" %}</li>
+              </ul>
+              <div class="wc-code-block" aria-label="{% translate 'Пример подхода' %}"><pre><code><span class="kw">class</span> <span class="cls">DiagnosticEngine</span>:
+    inputs = [<span class="str">"signal"</span>, <span class="str">"context"</span>, <span class="str">"history"</span>, <span class="str">"evidence"</span>]
+    domains = [<span class="str">"automotive"</span>, <span class="str">"health"</span>]
+
+    <span class="kw">def</span> <span class="fn">reason</span>(observations):
+        hypotheses = rank(causal_model, observations)
+        <span class="kw">return</span> next_best_test(hypotheses)</code></pre></div>
+              <div class="wc-actions">
+                <a class="wc-btn wc-btn-primary" href="mailto:jvov2038@gmail.com?subject=Задача%20для%20white_cat">{% translate "Обсудить задачу" %} <span>↗</span></a>
+                <button class="wc-btn wc-btn-secondary wc-copy" type="button" data-email="jvov2038@gmail.com"><span class="wc-copy-label">{% translate "Скопировать email" %}</span></button>
+              </div>
             </div>
+          </section>
+
+          <section id="services" class="wc-section wc-observe">
+            <div class="wc-section-head"><p class="wc-kicker">engine.py</p><h2>{% translate "Как устроено ядро" %}</h2><p>{% blocktranslate trimmed %}Плохая диагностическая система превращает один сигнал в готовый ответ. Хорошая учитывает контекст, историю и зависимости, сравнивает гипотезы и выбирает наиболее информативную следующую проверку.{% endblocktranslate %}</p></div>
+            <div class="wc-cards">{% for service in services %}<article class="wc-card"><div class="wc-card-tag">module_{{ service.number }}</div><h3>{{ service.title }}</h3><p>{{ service.text }}</p></article>{% endfor %}</div>
+          </section>
+
+          <section id="cases" class="wc-section wc-observe">
+            <div class="wc-section-head"><p class="wc-kicker">architecture.json</p><h2>{% translate "Одно ядро — разные домены" %}</h2><p>{% translate "Автомобиль и человек не объединяются в один продукт. Их объединяет инженерная компетенция: построение систем поддержки решений при неполных и неоднозначных данных." %}</p></div>
+            <div class="wc-cases">{% for case in cases %}<article class="wc-case"><span class="wc-case-type">{{ case.type }}</span><h3>{{ case.title }}</h3><p>{{ case.text }}</p><div class="wc-case-tags">{% for tag in case.tags %}<span>{{ tag }}</span>{% endfor %}</div></article>{% endfor %}</div>
+          </section>
+
+          <section id="process" class="wc-section wc-observe">
+            <div class="wc-section-head"><p class="wc-kicker">reasoning.yml</p><h2>{% translate "Цикл диагностического решения" %}</h2><p>{% translate "Система не выдаёт окончательную истину: каждый новый результат уточняет причинную модель и меняет следующий рекомендуемый шаг." %}</p></div>
+            <ol class="wc-steps">{% for title, text in steps %}<li><span>0{{ forloop.counter }}</span><div><h3>{{ title }}</h3><p>{{ text }}</p></div></li>{% endfor %}</ol>
+          </section>
+
+          <section id="stack" class="wc-section wc-section-compact wc-observe">
+            <div class="wc-section-head"><p class="wc-kicker">stack.lock</p><h2>{% translate "Методы и технологии" %}</h2><p>{% translate "Инженерный стек дополняется предметными моделями, графами знаний, правилами, вероятностной оценкой и объяснимыми рекомендациями." %}</p></div>
+            <div class="wc-stack">{% for item in stack %}<span>{{ item }}</span>{% endfor %}</div>
           </section>
         </section>
 
         <aside class="wc-inspector">
-          <div class="wc-panel-title" data-i18n="inspector.title">{% translate "Инспектор" %}</div>
-
-          <div class="wc-inspector-card">
-            <span data-i18n="inspector.brand">{% translate "Бренд" %}</span>
-            <strong>white_cat</strong>
-          </div>
-
-          <div class="wc-inspector-card">
-            <span data-i18n="inspector.mode">{% translate "Режим" %}</span>
-            <strong data-i18n="inspector.partner">{% translate "Партнёр по разработке" %}</strong>
-          </div>
-
-          <div class="wc-inspector-card">
-            <span data-i18n="inspector.delivery">{% translate "Поставка" %}</span>
-            <strong data-i18n="inspector.pipeline">{% translate "Архитектура → MVP → Продакшен" %}</strong>
-          </div>
-
-          <div class="wc-progress">
-            <div>
-              <span>Backend</span>
-              <b>95%</b>
-            </div>
-            <div class="wc-progress-line"><i style="width:95%"></i></div>
-
-            <div>
-              <span data-i18n="progress.automation">{% translate "Автоматизация" %}</span>
-              <b>88%</b>
-            </div>
-            <div class="wc-progress-line"><i style="width:88%"></i></div>
-
-            <div>
-              <span data-i18n="progress.ui">{% translate "UI-системы" %}</span>
-              <b>82%</b>
-            </div>
-            <div class="wc-progress-line"><i style="width:82%"></i></div>
-          </div>
+          <div class="wc-panel-title">project info</div>
+          <div class="wc-inspector-card"><span>{% translate "Специализация" %}</span><strong>{% translate "Decision-support systems для диагностических задач" %}</strong></div>
+          <div class="wc-inspector-card"><span>{% translate "Домены" %}</span><strong>Automotive · Health</strong></div>
+          <div class="wc-inspector-card"><span>{% translate "Принцип" %}</span><strong>{% translate "Не диагноз по сигналу, а проверяемый следующий шаг" %}</strong></div>
+          <div class="wc-status-list"><p><i></i>Context Model</p><p><i></i>Hypothesis Ranking</p><p><i></i>Evidence Scoring</p><p><i></i>Next Best Test</p></div>
         </aside>
       </div>
 
-      <footer id="contact" class="wc-console">
-        <div class="wc-console-tabs">
-          <span class="active" data-i18n="console.run">{% translate "Запуск" %}</span>
-          <span data-i18n="console.problems">{% translate "Проблемы" %}</span>
-          <span data-i18n="console.terminal">{% translate "Терминал" %}</span>
+      <footer id="contact" class="wc-console wc-observe">
+        <div class="wc-console-tabs"><span class="active">terminal</span><span>output</span></div>
+        <div class="wc-contact">
+          <div><p class="wc-kicker">contact.sh</p><h2>{% translate "Есть сложная диагностическая задача?" %}</h2><p>{% translate "Опишите предметную область, доступные сигналы и решение, которое сегодня приходится принимать в условиях неопределённости. Разберём, какой следующий шаг можно сделать вычислимым и объяснимым." %}</p></div>
+          <div class="wc-contact-actions"><a class="wc-btn wc-btn-primary" href="mailto:jvov2038@gmail.com?subject=Задача%20для%20white_cat">jvov2038@gmail.com</a><button class="wc-copy-link wc-copy" type="button" data-email="jvov2038@gmail.com"><span class="wc-copy-label">{% translate "копировать адрес" %}</span></button></div>
         </div>
-
-        <div class="wc-console-body">
-          <p><span class="ok">✓</span> <span data-i18n="console.check">{% translate "Проверка системы: ошибок нет" %}</span></p>
-          <p><span class="ok">✓</span> <span data-i18n="console.target">{% translate "Цель поставки: production-ready web-платформа" %}</span></p>
-          <p><span class="cmd">$</span> {% translate "white_cat --проект=\"сложная web-система\"" %}</p>
-          <a href="mailto:urutskoeva.madina@gmail.com?subject=white_cat%20project" data-i18n="console.contact">{% translate "Написать white_cat →" %}</a>
-        </div>
+        <div class="wc-console-line"><span class="ok">✓</span> white_cat <span class="muted">— diagnostic engines · decision support</span><span class="wc-year">© <span id="wc-year"></span></span></div>
       </footer>
     </section>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const links = Array.from(document.querySelectorAll('.wc-tab, .wc-tree a, .wc-menu a'));
+      const sections = Array.from(document.querySelectorAll('.wc-observe'));
+      const activate = function (id) {
+        links.forEach(function (link) {
+          const active = link.getAttribute('href') === '#' + id;
+          link.classList.toggle('active', active);
+          if (link.classList.contains('wc-tab')) link.setAttribute('aria-current', active ? 'true' : 'false');
+        });
+      };
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function (entries) {
+          const visible = entries.filter(function (entry) { return entry.isIntersecting; }).sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+          if (visible) activate(visible.target.id);
+        }, { rootMargin: '-20% 0px -60%', threshold: [0, .2, .5] });
+        sections.forEach(function (section) { observer.observe(section); });
+      }
+      document.querySelectorAll('.wc-copy').forEach(function (button) {
+        button.addEventListener('click', async function () {
+          const label = button.querySelector('.wc-copy-label');
+          const initial = label.textContent;
+          try { await navigator.clipboard.writeText(button.dataset.email); label.textContent = '{% translate "Email скопирован" %} ✓'; }
+          catch (error) { window.location.href = 'mailto:' + button.dataset.email; }
+          window.setTimeout(function () { label.textContent = initial; }, 2200);
+        });
+      });
+      document.querySelector('#wc-year').textContent = new Date().getFullYear();
+
+      const canvas = document.querySelector('#wc-matrix-rain');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (canvas) {
+        const context = canvas.getContext('2d');
+        const glyphs = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜ0123456789';
+        let columns = [];
+        let width = 0;
+        let height = 0;
+        let fontSize = 9;
+        let columnWidth = 6;
+        let frame = 0;
+
+        const resizeRain = function () {
+          const ratio = Math.min(window.devicePixelRatio || 1, 2);
+          const bounds = canvas.parentElement.getBoundingClientRect();
+          width = Math.max(1, Math.round(bounds.width));
+          height = Math.max(1, Math.round(bounds.height));
+          canvas.width = Math.round(width * ratio);
+          canvas.height = Math.round(height * ratio);
+          canvas.style.width = width + 'px';
+          canvas.style.height = height + 'px';
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          fontSize = width < 90 ? 7 : 9;
+          columnWidth = width < 90 ? 4 : 5;
+          const count = Math.ceil(width / columnWidth);
+          columns = Array.from({ length: count }, function () {
+            return { y: Math.random() * -height, speed: .08 + Math.random() * .16, length: 6 + Math.floor(Math.random() * 12) };
+          });
+          context.fillStyle = '#020805';
+          context.fillRect(0, 0, width, height);
+        };
+
+        const drawRain = function () {
+          context.fillStyle = 'rgba(2, 8, 5, .16)';
+          context.fillRect(0, 0, width, height);
+          context.font = '700 ' + fontSize + 'px "Courier New", monospace';
+          context.textAlign = 'center';
+          columns.forEach(function (drop, index) {
+            for (let tail = drop.length; tail >= 0; tail -= 1) {
+              const y = drop.y - tail * fontSize;
+              if (y < -fontSize || y > height + fontSize) continue;
+              const alpha = Math.max(.08, 1 - tail / (drop.length + 1));
+              context.fillStyle = tail === 0 ? '#e8fff2' : 'rgba(0, 245, 138, ' + alpha.toFixed(2) + ')';
+              const char = glyphs[Math.floor(Math.random() * glyphs.length)];
+              context.fillText(char, index * columnWidth + columnWidth / 2, y);
+            }
+            drop.y += fontSize * drop.speed;
+            if (drop.y - drop.length * fontSize > height && Math.random() > .965) {
+              drop.y = -Math.random() * height * .8;
+              drop.speed = .08 + Math.random() * .16;
+              drop.length = 6 + Math.floor(Math.random() * 12);
+            }
+          });
+          if (!reducedMotion) frame = window.requestAnimationFrame(drawRain);
+        };
+
+        resizeRain();
+        if (reducedMotion) drawRain(); else frame = window.requestAnimationFrame(drawRain);
+        window.addEventListener('resize', resizeRain, { passive: true });
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden) window.cancelAnimationFrame(frame);
+          else if (!reducedMotion) frame = window.requestAnimationFrame(drawRain);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
