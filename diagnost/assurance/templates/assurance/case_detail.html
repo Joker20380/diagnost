@@ -1,0 +1,38 @@
+{% extends 'diagnost/base.html' %}
+{% block content %}
+<section class="az-diagnostic-page"><div class="container">
+  <h1>{{ repair_case.vehicle }} — {{ repair_case.title }}</h1>
+  <p>{{ repair_case.procedure_version }} · {{ repair_case.get_status_display }} · {{ repair_case.get_verification_status_display }}</p>
+  {% for execution in operations %}
+    <section class="az-diagnostic-card">
+      <span>Step {{ execution.operation.sequence }}</span>
+      <h2>{{ execution.operation.title }}</h2>
+      <p>{{ execution.operation.description }}</p>
+      <p><strong>Status:</strong> {{ execution.get_status_display }}</p>
+      {% for media in execution.operation.reference_media.all %}
+        <p>Reference: {% if media.source_url %}<a href="{{ media.source_url }}">{{ media.title|default:media.source_url }}</a>{% else %}{{ media.title }}{% endif %}</p>
+      {% endfor %}
+      {% if execution.status == 'available' or execution.status == 'in_progress' %}
+        {% if execution.operation.evidence_requirements.exists %}
+          <a class="az-btn az-btn-outline" href="{% url 'assurance:submit_evidence' execution.id %}">Add evidence</a>
+        {% endif %}
+        <form method="post" action="{% url 'assurance:complete_operation' execution.id %}">
+          {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Complete</button>
+        </form>
+      {% elif execution.status == 'requires_review' %}
+        <form method="post" action="{% url 'assurance:review_operation' execution.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="decision" value="approve">
+          <textarea name="rationale" required placeholder="Expert rationale"></textarea>
+          <button class="az-btn az-btn-primary" type="submit">Approve</button>
+        </form>
+      {% elif execution.status == 'locked' %}
+        <p><strong>BLOCKED</strong> — complete prerequisite operations.</p>
+      {% endif %}
+    </section>
+  {% endfor %}
+  <form method="post" action="{% url 'assurance:verify_case' repair_case.id %}">
+    {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Run verification</button>
+  </form>
+</div></section>
+{% endblock %}

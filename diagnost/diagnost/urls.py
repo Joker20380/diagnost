@@ -21,6 +21,7 @@ urlpatterns = [
 # Public + admin + auth under language prefix
 urlpatterns += i18n_patterns(
     path("admin/", admin.site.urls),
+    path("assurance/", include("assurance.urls")),
     path("", include("diagnostics.urls")),
     path("", include("main.urls")),
     path("accounts/", include("allauth.urls")),

@@ -1,0 +1,12 @@
+{% extends 'diagnost/base.html' %}
+{% block content %}
+<section class="az-diagnostic-page"><div class="container">
+  <div class="az-diagnostic-card">
+    <h1>Evidence — {{ execution.operation.title }}</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}{{ form.as_p }}
+      <button class="az-btn az-btn-primary" type="submit">Record evidence</button>
+    </form>
+  </div>
+</div></section>
+{% endblock %}
