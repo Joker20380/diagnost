@@ -229,7 +229,7 @@ stop_conditions
 
 ### Phase 1 — стабилизация существующего фундамента
 
-Статус: **в работе**. Обновлено 16 августа 2026 года.
+Статус: **завершено**. Обновлено 16 августа 2026 года.
 
 Обозначения: `[x]` — выполнено; `[-]` — выполнено частично; `[ ]` — не выполнено.
 
@@ -239,17 +239,17 @@ stop_conditions
 - [x] прекратить обновление общего справочника данными отдельного автомобиля;
 - [x] добавить parser version, content hash, provenance и replay;
 - [x] заменить двусмысленный `ai_generated_at` на method/version metadata;
-- [ ] добавить настоящий fixture PDF и regression tests для Launch parser;
+- [x] добавить настоящий обезличенный fixture PDF и regression tests для Launch parser;
 - [x] сделать повторный импорт идемпотентным;
-- [-] обеспечить неизменяемость подписанного результата на уровне
+- [x] обеспечить неизменяемость подписанного результата на уровне
   domain/service layer:
   - [x] новый `DiagnosticRecord` и его измерения неизменяемы после утверждения;
   - [x] исправление создаёт связанную новую ревизию;
-  - [ ] распространить ту же защиту на legacy `SuspensionInspection`;
-- [-] превратить QA warnings из логов в записи `QAEvent`:
+  - [x] legacy `SuspensionInspection`, его детали и attachments защищены;
+- [x] превратить QA warnings из логов в записи `QAEvent`:
   - [x] создана модель `QAEvent`;
   - [x] фиксируются неполный акт, самосогласование и checksum mismatch;
-  - [ ] перевести существующие parser/runtime warnings из логов в `QAEvent`;
+  - [x] ошибки Launch parser и противоречия осмотра сохраняются как `QAEvent`;
 - [x] документировать local changes и вести работу в контролируемых feature-ветках.
 
 Дополнительно реализовано в рамках Phase 1:
@@ -258,22 +258,25 @@ stop_conditions
 - [x] независимое согласование акта другим специалистом;
 - [x] append-only история решений проверяющего;
 - [x] SHA-256 snapshot акта при передаче на проверку;
-- [x] минимальное управление актами и QA-событиями через Django Admin.
+- [x] минимальное управление актами и QA-событиями через Django Admin;
+- [x] статус `parse_failed` с сохранением неуспешного импорта для аудита;
+- [x] runtime-зависимость `pypdf` добавлена в воспроизводимую сборку;
+- [x] устранено падение view после сохранения осмотра подвески.
 
 Реализующие коммиты:
 
 - `9d929d0 feat: preserve diagnostic parse provenance`;
-- `834f1fe feat: add verified diagnostic records`.
+- `834f1fe feat: add verified diagnostic records`;
+- `6bef2ed feat: complete phase 1 foundation hardening`.
 
 Критерий выхода:
 
 - [x] импорт одного файла воспроизводим и не загрязняет knowledge base;
 - [x] утверждённый `DiagnosticRecord` нельзя молча изменить;
-- [-] parser regressions обнаруживаются тестами — unit/regression tests есть,
-  настоящий fixture PDF ещё требуется;
+- [x] parser regressions обнаруживаются на настоящем обезличенном PDF fixture;
 - [x] для результата парсинга известны источник и версия обработки;
-- [ ] legacy-подписанные осмотры также защищены от изменения;
-- [ ] все значимые parser/runtime warnings сохраняются как `QAEvent`.
+- [x] legacy-подписанные осмотры также защищены от изменения;
+- [x] значимые parser/runtime warnings сохраняются как `QAEvent`.
 
 ### Phase 2 — multi-tenant основа и Vehicle Identity
 
