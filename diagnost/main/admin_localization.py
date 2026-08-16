@@ -94,5 +94,6 @@ def apply_admin_localization():
             for field in model._meta.fields:
                 if field.name in LABELS:
                     field.verbose_name = _(LABELS[field.name])
+                field.verbose_name = _(str(field.verbose_name))
                 if field.choices:
                     field.choices = [(value, _(CHOICES.get(str(value), label))) for value, label in field.choices]
