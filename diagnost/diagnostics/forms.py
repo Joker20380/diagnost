@@ -9,6 +9,28 @@ from django.utils.translation import gettext_lazy as _
 from .models import DiagnosticSession, SuspensionInspection, SuspensionPart
 
 
+class VehicleIdentityConfirmationForm(forms.Form):
+    vin = forms.CharField(label=_("VIN"), max_length=64)
+    brand = forms.CharField(label=_("Марка"), max_length=120, required=False)
+    model = forms.CharField(label=_("Модель"), max_length=120, required=False)
+    generation = forms.CharField(label=_("Поколение"), max_length=120, required=False)
+    year = forms.IntegerField(label=_("Год"), min_value=1886, max_value=2200, required=False)
+    engine_code = forms.CharField(label=_("Код двигателя"), max_length=120, required=False)
+    transmission = forms.CharField(label=_("Трансмиссия"), max_length=120, required=False)
+    fuel_type = forms.CharField(label=_("Тип топлива"), max_length=64, required=False)
+    ecu_hardware = forms.CharField(label=_("ECU hardware"), max_length=255, required=False)
+    ecu_software = forms.CharField(label=_("ECU software"), max_length=255, required=False)
+    mileage = forms.IntegerField(label=_("Пробег, км"), min_value=0, required=False)
+    market = forms.CharField(label=_("Рынок"), max_length=64, required=False)
+
+    def __init__(self, *args, observation=None, **kwargs):
+        if observation is not None and "initial" not in kwargs:
+            kwargs["initial"] = observation.effective_data
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
 class DiagnosticUploadForm(forms.ModelForm):
     max_upload_size = 10 * 1024 * 1024
     allowed_content_types = {

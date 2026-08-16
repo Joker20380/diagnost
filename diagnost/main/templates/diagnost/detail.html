@@ -67,6 +67,28 @@
 
     </div>
 
+    {% with identity=session.vehicle_identity_observation %}
+      {% if identity %}
+        <section class="az-diagnostic-card">
+          <span class="az-section-kicker">{% translate "Идентификация автомобиля" %}</span>
+          {% if identity.status == 'confirmed' %}
+            <h2>{% translate "Данные подтверждены мастером" %}</h2>
+            <p>
+              {{ session.vehicle.make }} {{ session.vehicle.model }}
+              {% if session.vehicle_configuration.engine_code %}
+                · {% translate "двигатель" %} {{ session.vehicle_configuration.engine_code }}
+              {% endif %}
+            </p>
+          {% else %}
+            <h2>{% translate "Требуется подтверждение" %}</h2>
+            <p>{% translate "Проверьте распознанные из PDF данные до использования их в диагностическом анализе." %}</p>
+            <a href="{% url 'vehicle_identity_confirm' session.id %}" class="az-btn az-btn-primary">
+              {% translate "Проверить данные автомобиля" %}
+            </a>
+          {% endif %}
+        </section>
+      {% endif %}
+    {% endwith %}
 
     <div class="az-diagnostic-layout">
 

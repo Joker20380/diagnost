@@ -12,6 +12,7 @@ from diagnostics.models import (
     DiagnosticCode,
     DiagnosticParseRun,
     DiagnosticSession,
+    VehicleIdentityObservation,
     QAEvent,
     DTCReference,
 )
@@ -287,7 +288,24 @@ def apply_launch_parse_to_session(
     manufacturer = (vehicle.get("brand") or "").strip()
 
     with transaction.atomic():
-        if vehicle.get("vin"):
+        observation, created = VehicleIdentityObservation.objects.get_or_create(
+            session=session,
+            defaults={
+                "parse_run": parse_run,
+                "original_data": vehicle,
+            },
+        )
+        if not created and observation.status == VehicleIdentityObservation.Status.PENDING:
+            observation.parse_run = parse_run
+            observation.original_data = vehicle
+            observation.save(
+                update_fields=["parse_run", "original_data"]
+            )
+        identity_confirmed = (
+            observation.status == VehicleIdentityObservation.Status.CONFIRMED
+        )
+
+        if not identity_confirmed and vehicle.get("vin"):
             session.vin = vehicle["vin"]
 
         model_parts = []
@@ -296,7 +314,7 @@ def apply_launch_parse_to_session(
         if vehicle.get("model"):
             model_parts.append(vehicle["model"])
 
-        if model_parts:
+        if not identity_confirmed and model_parts:
             session.vehicle_model = " ".join(model_parts)
 
         session.system_report = {

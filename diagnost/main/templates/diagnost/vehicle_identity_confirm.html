@@ -1,0 +1,29 @@
+{% extends 'diagnost/base.html' %}
+{% load i18n %}
+
+{% block title %}{% translate "Подтверждение автомобиля" %}{% endblock %}
+
+{% block content %}
+<section class="az-diagnostic-page">
+  <div class="container">
+    <div class="az-diagnostic-card">
+      <span class="az-section-kicker">{% translate "Контроль мастера" %}</span>
+      <h1>{% translate "Подтвердите данные автомобиля" %}</h1>
+      <p>{% translate "Значения извлечены из отчёта. Исправления сохраняются отдельно от исходных данных." %}</p>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          <div class="mb-3">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+        <button type="submit" class="az-btn az-btn-primary">{% translate "Подтвердить автомобиль" %}</button>
+        <a href="{% url 'diagnostic_detail' session.id %}" class="az-btn az-btn-outline">{% translate "Назад" %}</a>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

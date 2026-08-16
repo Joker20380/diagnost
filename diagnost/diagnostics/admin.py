@@ -11,6 +11,9 @@ from .models import (
     OBDLiveDataPIDReference,
     QAEvent,
     VehicleBrand,
+    Vehicle,
+    VehicleConfiguration,
+    VehicleIdentityObservation,
 )
 
 
@@ -18,6 +21,26 @@ from .models import (
 class VehicleBrandAdmin(admin.ModelAdmin):
     list_display = ("name", "slug")
     search_fields = ("name", "slug")
+
+
+@admin.register(Vehicle)
+class VehicleAdmin(admin.ModelAdmin):
+    list_display = ("vin_normalized", "make", "model", "year", "organization")
+    search_fields = ("vin_normalized", "make", "model")
+    list_filter = ("organization", "make")
+
+
+@admin.register(VehicleConfiguration)
+class VehicleConfigurationAdmin(admin.ModelAdmin):
+    list_display = ("vehicle", "engine_code", "mileage_km", "is_current", "confirmed_at")
+    list_filter = ("is_current", "fuel_type")
+
+
+@admin.register(VehicleIdentityObservation)
+class VehicleIdentityObservationAdmin(admin.ModelAdmin):
+    list_display = ("session", "status", "confirmed_by", "confirmed_at")
+    list_filter = ("status",)
+    readonly_fields = ("original_data", "observed_at")
 
 
 @admin.register(DTCImportBatch)

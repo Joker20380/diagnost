@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from django.core.exceptions import ValidationError
 from django.db import models
+import re
 from django.utils import timezone
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
@@ -196,6 +197,71 @@ class OBDLiveDataPIDReference(models.Model):
 
 
 
+
+class Vehicle(models.Model):
+    organization = models.ForeignKey(
+        "users.Organization", on_delete=models.PROTECT, related_name="vehicles"
+    )
+    vin = models.CharField(max_length=64, blank=True)
+    vin_normalized = models.CharField(max_length=64, blank=True, db_index=True)
+    make = models.CharField(max_length=120, blank=True)
+    model = models.CharField(max_length=120, blank=True)
+    generation = models.CharField(max_length=120, blank=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["make", "model", "vin_normalized"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "vin_normalized"],
+                condition=~models.Q(vin_normalized=""),
+                name="unique_vehicle_vin_per_organization",
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        self.vin = (self.vin or "").strip().upper()
+        self.vin_normalized = re.sub(r"[^A-Z0-9]", "", self.vin)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.vin_normalized or f"{self.make} {self.model}".strip() or f"Vehicle #{self.pk}"
+
+
+class VehicleConfiguration(models.Model):
+    vehicle = models.ForeignKey(
+        Vehicle, on_delete=models.PROTECT, related_name="configurations"
+    )
+    engine_code = models.CharField(max_length=120, blank=True)
+    transmission = models.CharField(max_length=120, blank=True)
+    fuel_type = models.CharField(max_length=64, blank=True)
+    ecu_hardware = models.CharField(max_length=255, blank=True)
+    ecu_software = models.CharField(max_length=255, blank=True)
+    mileage_km = models.PositiveIntegerField(null=True, blank=True)
+    market = models.CharField(max_length=64, blank=True)
+    is_current = models.BooleanField(default=True, db_index=True)
+    confirmed_by = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        related_name="confirmed_vehicle_configurations",
+    )
+    confirmed_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-confirmed_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["vehicle"],
+                condition=models.Q(is_current=True),
+                name="unique_current_configuration_per_vehicle",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.vehicle} configuration"
+
 class DiagnosticSessionQuerySet(models.QuerySet):
     def visible_to(self, user):
         if not getattr(user, "is_authenticated", False):
@@ -238,6 +304,20 @@ class DiagnosticSession(models.Model):
     )
     workshop = models.ForeignKey(
         "users.Workshop",
+        on_delete=models.PROTECT,
+        related_name="diagnostic_sessions",
+        null=True,
+        blank=True,
+    )
+    vehicle = models.ForeignKey(
+        Vehicle,
+        on_delete=models.PROTECT,
+        related_name="diagnostic_sessions",
+        null=True,
+        blank=True,
+    )
+    vehicle_configuration = models.ForeignKey(
+        VehicleConfiguration,
         on_delete=models.PROTECT,
         related_name="diagnostic_sessions",
         null=True,
@@ -301,6 +381,17 @@ class DiagnosticSession(models.Model):
             raise ValidationError(
                 {"workshop": "Workshop must belong to the diagnostic organization."}
             )
+        if self.vehicle_id and self.organization_id != self.vehicle.organization_id:
+            raise ValidationError(
+                {"vehicle": "Vehicle must belong to the diagnostic organization."}
+            )
+        if (
+            self.vehicle_configuration_id
+            and self.vehicle_configuration.vehicle_id != self.vehicle_id
+        ):
+            raise ValidationError(
+                {"vehicle_configuration": "Configuration must belong to the selected vehicle."}
+            )
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -325,6 +416,46 @@ class DiagnosticSession(models.Model):
         self.expert_conclusion = conclusion or self.expert_conclusion
         self.expert_signed_at = timezone.now()
         self.save(update_fields=["expert_name", "expert_conclusion", "expert_signed_at"])
+
+class VehicleIdentityObservation(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending confirmation")
+        CONFIRMED = "confirmed", _("Confirmed")
+        REJECTED = "rejected", _("Rejected")
+
+    session = models.OneToOneField(
+        DiagnosticSession,
+        on_delete=models.PROTECT,
+        related_name="vehicle_identity_observation",
+    )
+    parse_run = models.ForeignKey(
+        "DiagnosticParseRun",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="vehicle_identity_observations",
+    )
+    original_data = models.JSONField(default=dict)
+    corrections = models.JSONField(default=dict, blank=True)
+    status = models.CharField(
+        max_length=16, choices=Status.choices, default=Status.PENDING, db_index=True
+    )
+    observed_at = models.DateTimeField(auto_now_add=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    confirmed_by = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="confirmed_vehicle_identities",
+    )
+
+    @property
+    def effective_data(self):
+        return {**(self.original_data or {}), **(self.corrections or {})}
+
+    def __str__(self):
+        return f"Vehicle identity for session {self.session_id}"
 
 
 class DiagnosticRecord(models.Model):

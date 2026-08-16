@@ -31,7 +31,13 @@ from users.models import UserProfile
 from diagnostics.analyzer import analyze_dtc
 
 # ✅ формы только формы (без моделей!)
-from diagnostics.forms import DiagnosticUploadForm, SuspensionForm, SuspensionPartFormSet
+from diagnostics.forms import (
+    DiagnosticUploadForm,
+    SuspensionForm,
+    SuspensionPartFormSet,
+    VehicleIdentityConfirmationForm,
+)
+from diagnostics.vehicle_identity import confirm_vehicle_identity
 
 # ✅ модели только из diagnostics.models
 from diagnostics.models import (
@@ -40,6 +46,7 @@ from diagnostics.models import (
     SensorReading,
     SuspensionInspection,
     QAEvent,
+    VehicleIdentityObservation,
 )
 
 # Локальные импорты main (оставляю как у тебя)
@@ -519,6 +526,39 @@ def diagnostic_detail(request, session_id):
         'readings': readings,
         'inspection': inspection,
     })
+
+
+@login_required
+def vehicle_identity_confirm(request, session_id):
+    session = get_object_or_404(
+        _diagnostic_sessions_for_user(request.user).select_related(
+            "organization", "vehicle", "vehicle_configuration"
+        ),
+        id=session_id,
+    )
+    observation = get_object_or_404(
+        VehicleIdentityObservation,
+        session=session,
+    )
+    if request.method == "POST":
+        form = VehicleIdentityConfirmationForm(
+            request.POST, observation=observation
+        )
+        if form.is_valid():
+            confirm_vehicle_identity(
+                session=session,
+                user=request.user,
+                submitted_data=form.cleaned_data,
+            )
+            messages.success(request, _("Данные автомобиля подтверждены."))
+            return redirect("diagnostic_detail", session_id=session.pk)
+    else:
+        form = VehicleIdentityConfirmationForm(observation=observation)
+    return render(
+        request,
+        "diagnost/vehicle_identity_confirm.html",
+        {"session": session, "observation": observation, "form": form},
+    )
 
 
 @login_required
