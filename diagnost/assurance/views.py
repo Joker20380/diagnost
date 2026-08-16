@@ -5,11 +5,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from users.models import TechnicianProfile
 
-from .forms import CompletionForm, EvidenceSubmissionForm, ExpertDecisionForm
+from .forms import CompletionForm, EvidenceSubmissionForm, ExpertDecisionForm, RepairCaseCreateForm
 from .models import CaseOperation, RepairCase
 from .services import (
     complete_operation,
     decide_operation,
+    create_repair_case,
     submit_evidence,
     verify_repair_case,
 )
@@ -41,6 +42,37 @@ def case_list(request):
 
 
 @login_required
+@login_required
+def case_create(request):
+    technician = _technician(request)
+    if technician.role not in {
+        TechnicianProfile.Role.SENIOR_EXPERT,
+        TechnicianProfile.Role.TECHNICAL_MANAGER,
+    }:
+        raise PermissionDenied
+    if request.method == "POST":
+        form = RepairCaseCreateForm(request.POST, technician=technician)
+        if form.is_valid():
+            try:
+                repair_case = create_repair_case(
+                    vehicle=form.cleaned_data["vehicle"],
+                    procedure_version=form.cleaned_data["procedure_version"],
+                    title=form.cleaned_data["title"],
+                    complaint=form.cleaned_data["complaint"],
+                    user=request.user,
+                    workshop=technician.workshop,
+                    technicians=form.cleaned_data["technicians"] or [technician],
+                )
+            except (ValidationError, PermissionDenied) as exc:
+                form.add_error(None, str(exc))
+            else:
+                messages.success(request, "Repair case created.")
+                return redirect("assurance:case_detail", case_id=repair_case.pk)
+    else:
+        form = RepairCaseCreateForm(technician=technician)
+    return render(request, "assurance/case_create.html", {"form": form})
+
+
 def case_detail(request, case_id):
     repair_case = get_object_or_404(
         _visible_cases(request).select_related("vehicle", "procedure_version__procedure"),

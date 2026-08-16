@@ -184,6 +184,25 @@ class RepairAssuranceExecutionTests(TestCase):
         with self.assertRaises(ValidationError):
             self.scan.save()
 
+    def test_case_creation_screen_is_manager_only(self):
+        self.client.force_login(self.senior_user)
+        response = self.client.get(reverse("assurance:case_create"), secure=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.client.force_login(self.junior_user)
+        response = self.client.get(reverse("assurance:case_create"), secure=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_direct_status_change_cannot_bypass_publication_service(self):
+        draft = ProcedureVersion.objects.create(
+            procedure=self.procedure,
+            version=2,
+            created_by=self.senior_profile,
+        )
+        draft.status = ProcedureVersion.Status.PUBLISHED
+        with self.assertRaises(ValidationError):
+            draft.save()
+
     def test_unassigned_technician_is_rejected_server_side(self):
         with self.assertRaises(PermissionDenied):
             submit_evidence(

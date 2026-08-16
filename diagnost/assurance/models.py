@@ -85,6 +85,8 @@ class ProcedureVersion(models.Model):
             old = type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
             if old in {self.Status.PUBLISHED, self.Status.RETIRED}:
                 raise ValidationError("Published procedure versions are immutable.")
+            if old == self.Status.DRAFT and self.status != self.Status.DRAFT:
+                raise ValidationError("Publish procedure versions through the publication service.")
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -303,6 +305,10 @@ class RepairCaseTechnician(models.Model):
     def clean(self):
         if self.technician.organization_id != self.repair_case.organization_id:
             raise ValidationError("Technician belongs to another organization.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
 
 class CaseOperation(models.Model):
