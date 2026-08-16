@@ -1,5 +1,10 @@
 # AI-Diagnostics: план превращения в рабочий продукт для автосервисов
 
+> **Superseded product roadmap.** The active product direction is Automotive
+> Repair Assurance Platform. Continue implementation using
+> `REPAIR_ASSURANCE_IMPLEMENTATION_ROADMAP.md`. This document is retained as
+> historical context for the legacy diagnostics capability.
+
 Статус документа: основной исполнимый roadmap продукта  
 Версия: 1.0  
 Дата: 16 августа 2026 года

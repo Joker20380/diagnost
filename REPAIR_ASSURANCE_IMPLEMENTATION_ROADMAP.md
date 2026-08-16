@@ -1,0 +1,128 @@
+# Automotive Repair Assurance Platform — implementation roadmap
+
+Status: active product roadmap
+Date: 2026-08-16
+
+## Product outcome
+
+Turn repair specifications into controlled execution with attributable evidence
+and a verifiable immutable repair record.
+
+```text
+Specification → Execution → Evidence → Verification
+Skills → Roles → Gates → Escalation
+```
+
+AI is a later support layer and is not required by the core workflow.
+
+## Iteration 0 — transition and safety
+
+- [x] create a dedicated branch from a pushed safe point;
+- [x] inventory existing diagnostics models, services, UI, infrastructure, and migrations;
+- [x] classify reuse / modify / new / later components;
+- [x] preserve existing data and legacy diagnostic workflows;
+- [x] document the production migration gap;
+- [x] avoid applying new migrations to the current production database.
+
+Evidence:
+
+- `AUTOMOTIVE_REPAIR_ASSURANCE_ARCHITECTURE.md`;
+- commit `4b21fee docs: define repair assurance architecture pivot`.
+
+## Iteration 1 — minimal executable domain core
+
+### Specification
+
+- [x] reuse the normalized, organization-scoped `Vehicle`;
+- [x] add `RepairProcedure`;
+- [x] add immutable published `ProcedureVersion`;
+- [x] pin every `RepairCase` to one published version;
+- [x] add ordered atomic `Operation`;
+- [x] add operation dependencies;
+- [x] add technical requirements, tools, expected result, skill, role, and QC metadata;
+- [x] add extensible `EvidenceRequirement` types;
+- [x] separate `ReferenceMedia` from captured `Evidence`;
+- [x] model external YouTube references without downloading media.
+
+### Execution
+
+- [x] add `RepairCase` and technician assignments;
+- [x] instantiate `CaseOperation` states from a published version;
+- [x] expose only dependency-unlocked operations;
+- [x] enforce role and verified skill checks in backend services;
+- [x] reject unassigned technicians on the backend;
+- [x] block completion when mandatory evidence is missing;
+- [x] validate measurement units and allowed ranges;
+- [x] block downstream steps while approval is pending;
+- [x] support senior approve/rework/reject/escalate decisions;
+- [x] store evidence used by a decision;
+- [x] store operation keys explicitly authorized by a decision.
+
+### Verification and audit
+
+- [x] verify mandatory operations;
+- [x] verify mandatory evidence through execution gates;
+- [x] verify mandatory approvals through execution states;
+- [x] include QC operations in verification;
+- [x] return VERIFIED / FAILED / INCOMPLETE / REQUIRES_REVIEW;
+- [x] keep Evidence, ExpertDecision, Verification, RepairAuditEvent, and RepairRecord append-only;
+- [x] create an immutable checksummed `RepairRecord` snapshot;
+- [x] retain user, operation, status transition, and timestamp audit data.
+
+### Minimum UI
+
+- [x] author procedures with Django admin;
+- [x] publish versions only through the validated admin action;
+- [x] prevent direct admin case creation that bypasses execution initialization;
+- [x] create RepairCase through a protected server-side form;
+- [x] show mechanics the current operation and blocked operations;
+- [x] submit evidence, complete operations, review gates, and run verification;
+- [x] enforce tenant and assignment visibility on the server.
+
+### Demonstration proof
+
+- [x] automated steering-rack-style scenario;
+- [x] diagnostic scan evidence;
+- [x] dependency unlock;
+- [x] 105 Nm measurement evidence;
+- [x] junior execution and senior approval;
+- [x] QC road-test confirmation;
+- [x] final VERIFIED result;
+- [x] immutable record and audit trail.
+
+Implementation commits:
+
+- `72d800a feat: add repair assurance domain schema`;
+- `b7d2824 feat: implement gated repair execution engine`.
+
+## Iteration 2 — pilot hardening
+
+- [ ] prepare and review production DB backup and migration rollout;
+- [ ] add a curated steering rack demo seed with explicit non-OEM disclaimer;
+- [ ] improve procedure authoring UX and dependency validation;
+- [ ] add evidence file size, MIME, malware scanning, and storage policy;
+- [ ] implement an explicit evidence supersession workflow;
+- [ ] add case cancellation and controlled exception/skip workflow;
+- [ ] add notification queue for remote expert review;
+- [ ] add richer audit screens and export;
+- [ ] add external Repair Certificate projection;
+- [ ] conduct one real workshop walkthrough and record UX failures.
+
+## Iteration 3 — competency and procedure library
+
+- [ ] evidence-based competency review;
+- [ ] certification validity and vehicle scope;
+- [ ] moderated Evidence → ReferenceMedia promotion;
+- [ ] procedure revision cloning and comparison;
+- [ ] external DMS/GMS adapter interface;
+- [ ] procedure import provenance and licensing controls.
+
+## AI support layer — later
+
+- [ ] procedure parsing into a reviewable draft;
+- [ ] vehicle-specific adaptation suggestions;
+- [ ] evidence quality assistance;
+- [ ] anomaly detection and QC prioritization.
+
+AI output must never silently publish specifications, grant competency, bypass a
+gate, approve evidence, or rewrite a completed repair record.
