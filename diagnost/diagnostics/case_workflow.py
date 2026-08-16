@@ -15,6 +15,7 @@ from .models import (
     RecentRepair,
     Symptom,
     VehicleIdentityObservation,
+    VehicleConfiguration,
 )
 
 
@@ -78,6 +79,20 @@ def _nonempty_lines(value: str) -> Iterable[str]:
     return (line.strip() for line in (value or "").splitlines() if line.strip())
 
 
+def vehicle_identity_is_usable(session: DiagnosticSession) -> bool:
+    if not VehicleIdentityObservation.objects.filter(
+        session=session,
+        status=VehicleIdentityObservation.Status.CONFIRMED,
+    ).exists():
+        return False
+    configuration = session.vehicle_configuration
+    return bool(
+        configuration
+        and configuration.completeness_status
+        != VehicleConfiguration.CompletenessStatus.NEEDS_REVIEW
+    )
+
+
 @transaction.atomic
 def update_case_intake(
     *,
@@ -138,10 +153,7 @@ def update_case_intake(
             "recorded_by": profile,
         },
     )
-    identity_confirmed = VehicleIdentityObservation.objects.filter(
-        session=case.session,
-        status=VehicleIdentityObservation.Status.CONFIRMED,
-    ).exists()
+    identity_confirmed = vehicle_identity_is_usable(case.session)
     case.status = (
         DiagnosticCase.Status.READY
         if identity_confirmed
@@ -165,10 +177,7 @@ def transition_diagnostic_case(
     if target_status == DiagnosticCase.Status.READY:
         if not case.intake_complete:
             raise ValidationError("Complaint and at least one symptom are required.")
-        if not VehicleIdentityObservation.objects.filter(
-            session=case.session,
-            status=VehicleIdentityObservation.Status.CONFIRMED,
-        ).exists():
+        if not vehicle_identity_is_usable(case.session):
             raise ValidationError("Vehicle identity must be confirmed.")
     now = timezone.now()
     case.status = target_status

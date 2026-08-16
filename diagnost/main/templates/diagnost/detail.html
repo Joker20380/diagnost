@@ -79,6 +79,22 @@
                 · {% translate "двигатель" %} {{ session.vehicle_configuration.engine_code }}
               {% endif %}
             </p>
+            <p>
+              <strong>{% translate "Полнота конфигурации:" %}</strong>
+              {{ session.vehicle_configuration.get_completeness_status_display }}
+            </p>
+            {% if session.vehicle_configuration.missing_fields %}
+              <p>
+                <strong>{% translate "Не хватает:" %}</strong>
+                {{ session.vehicle_configuration.missing_fields|join:", " }}
+              </p>
+            {% endif %}
+            {% if session.vehicle_configuration.review_reasons %}
+              <p>
+                <strong>{% translate "Требуется проверка:" %}</strong>
+                {{ session.vehicle_configuration.review_reasons|join:", " }}
+              </p>
+            {% endif %}
           {% else %}
             <h2>{% translate "Требуется подтверждение" %}</h2>
             <p>{% translate "Проверьте распознанные из PDF данные до использования их в диагностическом анализе." %}</p>

@@ -23,6 +23,7 @@ IDENTITY_FIELDS = {
     "brand",
     "model",
     "generation",
+    "variant",
     "year",
     "engine_code",
     "transmission",
@@ -38,6 +39,38 @@ IDENTITY_FIELDS = {
 class ConfirmedVehicleIdentity:
     vehicle: Vehicle
     configuration: VehicleConfiguration
+
+
+@dataclass(frozen=True)
+class VehicleCompletenessAssessment:
+    status: str
+    missing_fields: list[str]
+    review_reasons: list[str]
+
+
+def assess_vehicle_completeness(
+    effective: dict[str, Any],
+) -> VehicleCompletenessAssessment:
+    missing_fields = [
+        field
+        for field in ("brand", "model", "year", "engine_code")
+        if not effective.get(field)
+    ]
+    if not (effective.get("variant") or effective.get("generation")):
+        missing_fields.append("variant_or_generation")
+
+    vin = re.sub(r"[^A-Z0-9]", "", str(effective.get("vin", "")).upper())
+    review_reasons = []
+    if len(vin) != 17 or re.search(r"[IOQ]", vin):
+        review_reasons.append("vin_format_requires_review")
+
+    if review_reasons:
+        status = VehicleConfiguration.CompletenessStatus.NEEDS_REVIEW
+    elif missing_fields:
+        status = VehicleConfiguration.CompletenessStatus.INCOMPLETE
+    else:
+        status = VehicleConfiguration.CompletenessStatus.COMPLETE
+    return VehicleCompletenessAssessment(status, missing_fields, review_reasons)
 
 
 def _optional_int(value: Any, field_name: str) -> int | None:
@@ -95,6 +128,7 @@ def confirm_vehicle_identity(
         vin_normalized=vin_normalized,
         defaults={
             "vin": vin,
+            "variant": effective.get("variant", ""),
             "make": effective.get("brand", ""),
             "model": effective.get("model", ""),
             "generation": effective.get("generation", ""),
@@ -102,12 +136,16 @@ def confirm_vehicle_identity(
         },
     )
     vehicle.configurations.filter(is_current=True).update(is_current=False)
+    completeness = assess_vehicle_completeness(effective)
     configuration = VehicleConfiguration.objects.create(
         vehicle=vehicle,
         engine_code=effective.get("engine_code", ""),
         transmission=effective.get("transmission", ""),
         fuel_type=effective.get("fuel_type", ""),
         ecu_hardware=effective.get("ecu_hardware", ""),
+        completeness_status=completeness.status,
+        missing_fields=completeness.missing_fields,
+        review_reasons=completeness.review_reasons,
         ecu_software=effective.get("ecu_software", ""),
         mileage_km=mileage_km,
         market=effective.get("market", ""),
@@ -131,6 +169,8 @@ def confirm_vehicle_identity(
         case
         and case.status == DiagnosticCase.Status.IDENTITY_PENDING
         and case.intake_complete
+        and configuration.completeness_status
+        != VehicleConfiguration.CompletenessStatus.NEEDS_REVIEW
     ):
         case.status = DiagnosticCase.Status.READY
         case.save(update_fields=["status", "updated_at"])

@@ -6,9 +6,11 @@ from django.urls import reverse
 from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 
 from .launch_pdf_parser import apply_launch_parse_to_session
+from .vehicle_identity import assess_vehicle_completeness
 from .models import (
     DiagnosticSession,
     Vehicle,
+    VehicleConfiguration,
     VehicleIdentityObservation,
 )
 
@@ -86,6 +88,45 @@ class VehicleIdentityWorkflowTests(TestCase):
         self.assertEqual(observation.status, VehicleIdentityObservation.Status.CONFIRMED)
         self.assertEqual(self.session.vehicle.organization, self.org_a)
         self.assertEqual(self.session.vehicle_configuration.engine_code, "DACA")
+        self.assertEqual(
+            self.session.vehicle_configuration.completeness_status,
+            VehicleConfiguration.CompletenessStatus.INCOMPLETE,
+        )
+        self.assertIn("variant_or_generation", self.session.vehicle_configuration.missing_fields)
+
+    def test_complete_configuration_is_explicit(self):
+        assessment = assess_vehicle_completeness(
+            {
+                "vin": "WVWZZZ1JZXW000001",
+                "brand": "Volkswagen",
+                "model": "Golf",
+                "year": "2021",
+                "engine_code": "DACA",
+                "variant": "GTI",
+            }
+        )
+        self.assertEqual(
+            assessment.status, VehicleConfiguration.CompletenessStatus.COMPLETE
+        )
+        self.assertEqual(assessment.missing_fields, [])
+        self.assertEqual(assessment.review_reasons, [])
+
+    def test_invalid_vin_requires_review(self):
+        assessment = assess_vehicle_completeness(
+            {
+                "vin": "INVALID",
+                "brand": "Volkswagen",
+                "model": "Golf",
+                "year": "2021",
+                "engine_code": "DACA",
+                "generation": "VIII",
+            }
+        )
+        self.assertEqual(
+            assessment.status,
+            VehicleConfiguration.CompletenessStatus.NEEDS_REVIEW,
+        )
+        self.assertEqual(assessment.review_reasons, ["vin_format_requires_review"])
 
     def test_other_tenant_cannot_open_confirmation(self):
         self.client.force_login(self.user_b)

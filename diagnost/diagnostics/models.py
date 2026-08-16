@@ -207,6 +207,7 @@ class Vehicle(models.Model):
     make = models.CharField(max_length=120, blank=True)
     model = models.CharField(max_length=120, blank=True)
     generation = models.CharField(max_length=120, blank=True)
+    variant = models.CharField(max_length=120, blank=True)
     year = models.PositiveSmallIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -231,6 +232,11 @@ class Vehicle(models.Model):
 
 
 class VehicleConfiguration(models.Model):
+    class CompletenessStatus(models.TextChoices):
+        COMPLETE = "complete", _("Complete")
+        INCOMPLETE = "incomplete", _("Incomplete")
+        NEEDS_REVIEW = "needs_review", _("Needs review")
+
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.PROTECT, related_name="configurations"
     )
@@ -241,6 +247,14 @@ class VehicleConfiguration(models.Model):
     ecu_software = models.CharField(max_length=255, blank=True)
     mileage_km = models.PositiveIntegerField(null=True, blank=True)
     market = models.CharField(max_length=64, blank=True)
+    completeness_status = models.CharField(
+        max_length=24,
+        choices=CompletenessStatus.choices,
+        default=CompletenessStatus.INCOMPLETE,
+        db_index=True,
+    )
+    missing_fields = models.JSONField(default=list, blank=True)
+    review_reasons = models.JSONField(default=list, blank=True)
     is_current = models.BooleanField(default=True, db_index=True)
     confirmed_by = models.ForeignKey(
         UserProfile,
@@ -261,6 +275,11 @@ class VehicleConfiguration(models.Model):
 
     def __str__(self):
         return f"{self.vehicle} configuration"
+    @property
+    def is_complete(self):
+        return self.completeness_status == self.CompletenessStatus.COMPLETE
+
+
 
 class DiagnosticSessionQuerySet(models.QuerySet):
     def visible_to(self, user):

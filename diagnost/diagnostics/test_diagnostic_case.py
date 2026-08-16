@@ -160,3 +160,28 @@ class DiagnosticCaseWorkflowTests(TestCase):
             secure=True,
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_identity_needing_review_does_not_unlock_analysis(self):
+        self.client.force_login(self.user_a)
+        self.client.post(
+            reverse("diagnostic_case_intake", args=[self.session.pk]),
+            {"complaint": "No start", "symptoms": "Starter turns"},
+            secure=True,
+        )
+        self.client.post(
+            reverse("vehicle_identity_confirm", args=[self.session.pk]),
+            {
+                "vin": "INVALID",
+                "brand": "Volkswagen",
+                "model": "Golf",
+                "year": 2021,
+                "engine_code": "DACA",
+                "generation": "VIII",
+            },
+            secure=True,
+        )
+        self.case.refresh_from_db()
+        self.session.refresh_from_db()
+        self.assertEqual(self.case.status, DiagnosticCase.Status.IDENTITY_PENDING)
+        self.assertEqual(self.session.recommendation, "")
+        self.assertIsNone(self.session.analysis_generated_at)

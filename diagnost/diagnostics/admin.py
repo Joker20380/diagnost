@@ -59,8 +59,16 @@ class VehicleAdmin(admin.ModelAdmin):
 
 @admin.register(VehicleConfiguration)
 class VehicleConfigurationAdmin(admin.ModelAdmin):
-    list_display = ("vehicle", "engine_code", "mileage_km", "is_current", "confirmed_at")
-    list_filter = ("is_current", "fuel_type")
+    list_display = (
+        "vehicle",
+        "engine_code",
+        "completeness_status",
+        "mileage_km",
+        "is_current",
+        "confirmed_at",
+    )
+    list_filter = ("completeness_status", "is_current", "fuel_type")
+    readonly_fields = ("missing_fields", "review_reasons")
 
 
 @admin.register(VehicleIdentityObservation)

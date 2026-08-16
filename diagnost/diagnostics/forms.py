@@ -54,6 +54,7 @@ class VehicleIdentityConfirmationForm(forms.Form):
     year = forms.IntegerField(label=_("Год"), min_value=1886, max_value=2200, required=False)
     engine_code = forms.CharField(label=_("Код двигателя"), max_length=120, required=False)
     transmission = forms.CharField(label=_("Трансмиссия"), max_length=120, required=False)
+    variant = forms.CharField(label=_("Вариант / комплектация"), max_length=120, required=False)
     fuel_type = forms.CharField(label=_("Тип топлива"), max_length=64, required=False)
     ecu_hardware = forms.CharField(label=_("ECU hardware"), max_length=255, required=False)
     ecu_software = forms.CharField(label=_("ECU software"), max_length=255, required=False)

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from django.utils import timezone
 
-from .models import DiagnosticCase, DiagnosticSession, VehicleIdentityObservation
+from .models import (
+    DiagnosticCase,
+    DiagnosticSession,
+    VehicleConfiguration,
+    VehicleIdentityObservation,
+)
 
 
 ANALYSIS_READY_STATUSES = {
@@ -21,6 +26,12 @@ def session_facts_are_confirmed(session: DiagnosticSession) -> bool:
         return True  # Compatibility for legacy sessions created before DiagnosticCase.
 
     if case.status not in ANALYSIS_READY_STATUSES or not case.intake_complete:
+        return False
+    if (
+        not session.vehicle_configuration_id
+        or session.vehicle_configuration.completeness_status
+        == VehicleConfiguration.CompletenessStatus.NEEDS_REVIEW
+    ):
         return False
     return VehicleIdentityObservation.objects.filter(
         session=session,
