@@ -22,6 +22,7 @@ urlpatterns = [
     			path('conf/', Conf.as_view(), name='conf'),
     			path('upload/', upload_diagnostic, name='diagnostic_upload'),
     			path('session/<int:session_id>/', diagnostic_detail, name='diagnostic_detail'),
+			path('session/<int:session_id>/intake/', diagnostic_case_intake, name='diagnostic_case_intake'),
 			path('session/<int:session_id>/vehicle/confirm/', vehicle_identity_confirm, name='vehicle_identity_confirm'),
     			path('suspension/<int:session_id>/', suspension_inspection, name='suspension_inspection'),
 

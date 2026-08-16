@@ -32,11 +32,13 @@ from diagnostics.analyzer import analyze_dtc
 
 # ✅ формы только формы (без моделей!)
 from diagnostics.forms import (
+    DiagnosticCaseIntakeForm,
     DiagnosticUploadForm,
     SuspensionForm,
     SuspensionPartFormSet,
     VehicleIdentityConfirmationForm,
 )
+from diagnostics.case_workflow import ensure_diagnostic_case, update_case_intake
 from diagnostics.vehicle_identity import confirm_vehicle_identity
 
 # ✅ модели только из diagnostics.models
@@ -464,6 +466,8 @@ def upload_diagnostic(request):
             session.status = 'suspension_pending'
             session.handover_time = timezone.now()
             session.save()
+            if session.organization_id:
+                ensure_diagnostic_case(session, request.user)
 
             try:
                 from diagnostics.launch_pdf_parser import parse_and_apply_launch_pdf
@@ -526,6 +530,55 @@ def diagnostic_detail(request, session_id):
         'readings': readings,
         'inspection': inspection,
     })
+
+
+@login_required
+def diagnostic_case_intake(request, session_id):
+    session = get_object_or_404(
+        _diagnostic_sessions_for_user(request.user),
+        id=session_id,
+    )
+    case = ensure_diagnostic_case(session, request.user)
+    complaint = getattr(case, "customer_complaint", None)
+    conditions = getattr(case, "operating_conditions", None)
+    initial = {
+        "complaint": complaint.description if complaint else "",
+        "customer_words": complaint.customer_words if complaint else "",
+        "onset": complaint.onset if complaint else "",
+        "frequency": complaint.frequency if complaint else "",
+        "symptoms": "\n".join(
+            case.symptoms.values_list("description", flat=True)
+        ),
+        "recent_repairs": "\n".join(
+            case.recent_repairs.values_list("description", flat=True)
+        ),
+        "operating_conditions": conditions.description if conditions else "",
+        "intermittent": conditions.intermittent if conditions else False,
+    }
+    if request.method == "POST":
+        form = DiagnosticCaseIntakeForm(request.POST)
+        if form.is_valid():
+            update_case_intake(
+                case=case,
+                user=request.user,
+                complaint=form.cleaned_data["complaint"],
+                customer_words=form.cleaned_data["customer_words"],
+                onset=form.cleaned_data["onset"],
+                frequency=form.cleaned_data["frequency"],
+                symptoms=form.cleaned_data["symptoms"],
+                recent_repairs=form.cleaned_data["recent_repairs"],
+                operating_conditions=form.cleaned_data["operating_conditions"],
+                intermittent=form.cleaned_data["intermittent"],
+            )
+            messages.success(request, _("Данные приёмки сохранены."))
+            return redirect("diagnostic_detail", session_id=session.pk)
+    else:
+        form = DiagnosticCaseIntakeForm(initial=initial)
+    return render(
+        request,
+        "diagnost/diagnostic_case_intake.html",
+        {"session": session, "case": case, "form": form},
+    )
 
 
 @login_required

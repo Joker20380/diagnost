@@ -5,16 +5,43 @@ from django.contrib import admin
 from .models import (
     DTCImportBatch,
     DTCReference,
+    CustomerComplaint,
+    DiagnosticCase,
     DiagnosticApproval,
     DiagnosticMeasurement,
     DiagnosticRecord,
     OBDLiveDataPIDReference,
     QAEvent,
+    OperatingConditions,
+    RecentRepair,
+    Symptom,
     VehicleBrand,
     Vehicle,
     VehicleConfiguration,
     VehicleIdentityObservation,
 )
+
+
+class SymptomInline(admin.TabularInline):
+    model = Symptom
+    extra = 0
+
+
+class RecentRepairInline(admin.TabularInline):
+    model = RecentRepair
+    extra = 0
+
+
+@admin.register(DiagnosticCase)
+class DiagnosticCaseAdmin(admin.ModelAdmin):
+    list_display = ("id", "session", "organization", "workshop", "status", "assigned_to")
+    list_filter = ("status", "organization", "workshop")
+    search_fields = ("session__vin", "customer_complaint__description")
+    inlines = (SymptomInline, RecentRepairInline)
+
+
+admin.site.register(CustomerComplaint)
+admin.site.register(OperatingConditions)
 
 
 @admin.register(VehicleBrand)

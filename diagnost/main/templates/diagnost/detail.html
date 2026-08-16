@@ -90,6 +90,30 @@
       {% endif %}
     {% endwith %}
 
+    {% with case=session.diagnostic_case %}
+      {% if case %}
+        <section class="az-diagnostic-card">
+          <span class="az-section-kicker">{% translate "Диагностический случай" %}</span>
+          <h2>{{ case.get_status_display }}</h2>
+          {% if case.customer_complaint %}
+            <p><strong>{% translate "Жалоба:" %}</strong> {{ case.customer_complaint.description }}</p>
+            <p>
+              {% blocktranslate count count=case.symptoms.count %}
+                Зафиксирован {{ count }} симптом
+              {% plural %}
+                Зафиксировано {{ count }} симптомов
+              {% endblocktranslate %}
+            </p>
+          {% else %}
+            <p>{% translate "Приёмка ещё не заполнена." %}</p>
+          {% endif %}
+          <a href="{% url 'diagnostic_case_intake' session.id %}" class="az-btn az-btn-primary">
+            {% translate "Открыть приёмку" %}
+          </a>
+        </section>
+      {% endif %}
+    {% endwith %}
+
     <div class="az-diagnostic-layout">
 
       <main class="az-diagnostic-main">

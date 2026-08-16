@@ -458,6 +458,132 @@ class VehicleIdentityObservation(models.Model):
         return f"Vehicle identity for session {self.session_id}"
 
 
+class DiagnosticCaseQuerySet(models.QuerySet):
+    def visible_to(self, user):
+        session_ids = DiagnosticSession.objects.visible_to(user).values("pk")
+        return self.filter(session_id__in=session_ids)
+
+
+class DiagnosticCase(models.Model):
+    class Status(models.TextChoices):
+        INTAKE = "intake", _("Intake")
+        IDENTITY_PENDING = "identity_pending", _("Vehicle identity pending")
+        READY = "ready", _("Ready for diagnostics")
+        IN_PROGRESS = "in_progress", _("Diagnostics in progress")
+        ESCALATED = "escalated", _("Escalated")
+        RESOLVED = "resolved", _("Resolved")
+        CLOSED = "closed", _("Closed")
+        CANCELLED = "cancelled", _("Cancelled")
+
+    session = models.OneToOneField(
+        DiagnosticSession, on_delete=models.PROTECT, related_name="diagnostic_case"
+    )
+    organization = models.ForeignKey(
+        "users.Organization", on_delete=models.PROTECT, related_name="diagnostic_cases"
+    )
+    workshop = models.ForeignKey(
+        "users.Workshop", on_delete=models.PROTECT, related_name="diagnostic_cases",
+        null=True, blank=True,
+    )
+    status = models.CharField(
+        max_length=24, choices=Status.choices, default=Status.INTAKE, db_index=True
+    )
+    created_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="created_diagnostic_cases"
+    )
+    assigned_to = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="assigned_diagnostic_cases",
+        null=True, blank=True,
+    )
+    opened_at = models.DateTimeField(default=timezone.now)
+    started_at = models.DateTimeField(null=True, blank=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = DiagnosticCaseQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["-opened_at"]
+
+    def clean(self):
+        if self.session.organization_id != self.organization_id:
+            raise ValidationError("Case and session must belong to the same organization.")
+        if self.workshop_id and self.workshop.organization_id != self.organization_id:
+            raise ValidationError("Case workshop must belong to the case organization.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    @property
+    def intake_complete(self):
+        complaint = getattr(self, "customer_complaint", None)
+        return bool(complaint and complaint.description.strip() and self.symptoms.exists())
+
+    def __str__(self):
+        return f"Diagnostic case #{self.pk or 'new'}"
+
+
+class CustomerComplaint(models.Model):
+    case = models.OneToOneField(
+        DiagnosticCase, on_delete=models.PROTECT, related_name="customer_complaint"
+    )
+    description = models.TextField()
+    customer_words = models.TextField(blank=True)
+    onset = models.CharField(max_length=255, blank=True)
+    frequency = models.CharField(max_length=120, blank=True)
+    recorded_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="recorded_complaints"
+    )
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+
+class Symptom(models.Model):
+    case = models.ForeignKey(
+        DiagnosticCase, on_delete=models.PROTECT, related_name="symptoms"
+    )
+    description = models.TextField()
+    subsystem = models.CharField(max_length=120, blank=True)
+    occurrence_conditions = models.TextField(blank=True)
+    severity = models.CharField(max_length=32, blank=True)
+    recorded_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="recorded_symptoms"
+    )
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+
+class RecentRepair(models.Model):
+    case = models.ForeignKey(
+        DiagnosticCase, on_delete=models.PROTECT, related_name="recent_repairs"
+    )
+    description = models.TextField()
+    performed_at = models.DateField(null=True, blank=True)
+    mileage_km = models.PositiveIntegerField(null=True, blank=True)
+    recorded_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="recorded_recent_repairs"
+    )
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+
+class OperatingConditions(models.Model):
+    case = models.OneToOneField(
+        DiagnosticCase, on_delete=models.PROTECT, related_name="operating_conditions"
+    )
+    description = models.TextField(blank=True)
+    ambient_temperature_c = models.DecimalField(
+        max_digits=5, decimal_places=1, null=True, blank=True
+    )
+    engine_temperature = models.CharField(max_length=64, blank=True)
+    vehicle_speed = models.CharField(max_length=64, blank=True)
+    engine_load = models.CharField(max_length=64, blank=True)
+    intermittent = models.BooleanField(default=False)
+    recorded_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="recorded_operating_conditions"
+    )
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+
 class DiagnosticRecord(models.Model):
     """Versioned diagnostic act. Approved revisions are immutable."""
 

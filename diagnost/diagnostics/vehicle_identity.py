@@ -9,6 +9,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from .models import (
+    DiagnosticCase,
     DiagnosticSession,
     Vehicle,
     VehicleConfiguration,
@@ -124,6 +125,14 @@ def confirm_vehicle_identity(
     observation.save(
         update_fields=["corrections", "status", "confirmed_by", "confirmed_at"]
     )
+    case = getattr(session, "diagnostic_case", None)
+    if (
+        case
+        and case.status == DiagnosticCase.Status.IDENTITY_PENDING
+        and case.intake_complete
+    ):
+        case.status = DiagnosticCase.Status.READY
+        case.save(update_fields=["status", "updated_at"])
 
     session.vehicle = vehicle
     session.vehicle_configuration = configuration

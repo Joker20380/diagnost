@@ -9,6 +9,43 @@ from django.utils.translation import gettext_lazy as _
 from .models import DiagnosticSession, SuspensionInspection, SuspensionPart
 
 
+class DiagnosticCaseIntakeForm(forms.Form):
+    complaint = forms.CharField(
+        label=_("Жалоба клиента"), widget=forms.Textarea(attrs={"rows": 3})
+    )
+    customer_words = forms.CharField(
+        label=_("Формулировка клиента"),
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 2}),
+    )
+    onset = forms.CharField(label=_("Когда началось"), max_length=255, required=False)
+    frequency = forms.CharField(
+        label=_("Частота проявления"), max_length=120, required=False
+    )
+    symptoms = forms.CharField(
+        label=_("Наблюдаемые симптомы"),
+        help_text=_("Один симптом на строку."),
+        widget=forms.Textarea(attrs={"rows": 4}),
+    )
+    recent_repairs = forms.CharField(
+        label=_("Недавние ремонты"),
+        required=False,
+        help_text=_("Один ремонт на строку."),
+        widget=forms.Textarea(attrs={"rows": 3}),
+    )
+    operating_conditions = forms.CharField(
+        label=_("Условия проявления"),
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+    )
+    intermittent = forms.BooleanField(label=_("Неисправность плавающая"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
 class VehicleIdentityConfirmationForm(forms.Form):
     vin = forms.CharField(label=_("VIN"), max_length=64)
     brand = forms.CharField(label=_("Марка"), max_length=120, required=False)
