@@ -1,6 +1,7 @@
 # main/models.py
 from __future__ import annotations
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import get_language
@@ -263,6 +264,179 @@ class DiagnosticSession(models.Model):
         self.expert_conclusion = conclusion or self.expert_conclusion
         self.expert_signed_at = timezone.now()
         self.save(update_fields=["expert_name", "expert_conclusion", "expert_signed_at"])
+
+
+class DiagnosticRecord(models.Model):
+    """Versioned diagnostic act. Approved revisions are immutable."""
+
+    class Status(models.TextChoices):
+        DRAFT = "draft", _("Draft")
+        IN_REVIEW = "in_review", _("In review")
+        APPROVED = "approved", _("Approved")
+        REJECTED = "rejected", _("Rejected")
+
+    session = models.ForeignKey(DiagnosticSession, on_delete=models.PROTECT, related_name="records")
+    revision = models.PositiveIntegerField(default=1)
+    previous_revision = models.ForeignKey(
+        "self", on_delete=models.PROTECT, null=True, blank=True, related_name="corrections"
+    )
+    status = models.CharField(
+        max_length=16, choices=Status.choices, default=Status.DRAFT, db_index=True
+    )
+    created_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="created_diagnostic_records"
+    )
+    summary = models.TextField(blank=True)
+    confirmed_cause = models.TextField(blank=True)
+    recommended_work = models.TextField(blank=True)
+    safety_notes = models.TextField(blank=True)
+    content_sha256 = models.CharField(max_length=64, blank=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    submitted_at = models.DateTimeField(null=True, blank=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["session_id", "-revision"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "revision"], name="unique_diagnostic_record_revision"
+            )
+        ]
+
+    def __str__(self):
+        return f"Diagnostic act #{self.session_id}/r{self.revision}"
+
+    @property
+    def is_locked(self) -> bool:
+        return self.status == self.Status.APPROVED
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            stored = type(self).objects.filter(pk=self.pk).values("status").first()
+            if stored and stored["status"] == self.Status.APPROVED:
+                raise ValidationError(
+                    "Approved diagnostic records are immutable; create a new revision."
+                )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_locked:
+            raise ValidationError("Approved diagnostic records cannot be deleted.")
+        return super().delete(*args, **kwargs)
+
+
+class DiagnosticMeasurement(models.Model):
+    class Result(models.TextChoices):
+        NORMAL = "normal", _("Normal")
+        OUT_OF_RANGE = "out_of_range", _("Out of range")
+        NOT_EVALUATED = "not_evaluated", _("Not evaluated")
+
+    record = models.ForeignKey(
+        DiagnosticRecord, on_delete=models.PROTECT, related_name="measurements"
+    )
+    parameter = models.CharField(max_length=255)
+    value_text = models.CharField(max_length=255, blank=True)
+    numeric_value = models.DecimalField(max_digits=16, decimal_places=4, null=True, blank=True)
+    unit = models.CharField(max_length=32, blank=True)
+    reference_min = models.DecimalField(max_digits=16, decimal_places=4, null=True, blank=True)
+    reference_max = models.DecimalField(max_digits=16, decimal_places=4, null=True, blank=True)
+    result = models.CharField(
+        max_length=20, choices=Result.choices, default=Result.NOT_EVALUATED
+    )
+    method = models.CharField(max_length=255, blank=True)
+    tool_name = models.CharField(max_length=255, blank=True)
+    evidence_note = models.TextField(blank=True)
+    measured_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="diagnostic_measurements"
+    )
+    measured_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["measured_at", "id"]
+
+    def clean(self):
+        if self.numeric_value is None and not self.value_text.strip():
+            raise ValidationError("A numeric or text measurement value is required.")
+
+    def save(self, *args, **kwargs):
+        if self.record_id and self.record.is_locked:
+            raise ValidationError("Measurements of an approved record are immutable.")
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.record.is_locked:
+            raise ValidationError("Measurements of an approved record cannot be deleted.")
+        return super().delete(*args, **kwargs)
+
+
+class DiagnosticApproval(models.Model):
+    class Decision(models.TextChoices):
+        APPROVE = "approve", _("Approve")
+        REJECT = "reject", _("Reject")
+        REQUEST_CHANGES = "request_changes", _("Request changes")
+
+    record = models.ForeignKey(
+        DiagnosticRecord, on_delete=models.PROTECT, related_name="approvals"
+    )
+    reviewer = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="diagnostic_approvals"
+    )
+    decision = models.CharField(max_length=24, choices=Decision.choices)
+    comment = models.TextField(blank=True)
+    snapshot_sha256 = models.CharField(max_length=64)
+    decided_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["decided_at", "id"]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Approval decisions are append-only.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Approval decisions are append-only.")
+
+
+class QAEvent(models.Model):
+    class Severity(models.TextChoices):
+        INFO = "info", _("Information")
+        WARNING = "warning", _("Warning")
+        ERROR = "error", _("Error")
+        CRITICAL = "critical", _("Critical")
+
+    session = models.ForeignKey(
+        DiagnosticSession, on_delete=models.PROTECT, related_name="qa_events"
+    )
+    record = models.ForeignKey(
+        DiagnosticRecord,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="qa_events",
+    )
+    code = models.CharField(max_length=64, db_index=True)
+    severity = models.CharField(
+        max_length=16, choices=Severity.choices, default=Severity.WARNING, db_index=True
+    )
+    message = models.TextField()
+    details = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    resolved_by = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="resolved_qa_events",
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["session", "severity", "resolved_at"])]
 
 
 class DiagnosticParseRun(models.Model):

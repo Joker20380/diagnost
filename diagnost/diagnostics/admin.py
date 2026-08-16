@@ -2,7 +2,16 @@ from django.contrib import admin
 
 # --- DTC / OBD reference admin ---
 
-from .models import DTCImportBatch, DTCReference, OBDLiveDataPIDReference, VehicleBrand
+from .models import (
+    DTCImportBatch,
+    DTCReference,
+    DiagnosticApproval,
+    DiagnosticMeasurement,
+    DiagnosticRecord,
+    OBDLiveDataPIDReference,
+    QAEvent,
+    VehicleBrand,
+)
 
 
 @admin.register(VehicleBrand)
@@ -60,3 +69,41 @@ class OBDLiveDataPIDReferenceAdmin(admin.ModelAdmin):
     list_display = ("pid", "name_ru", "name_en", "unit", "is_active")
     list_filter = ("is_active",)
     search_fields = ("pid", "name_ru", "name_en", "description_ru", "description_en", "diagnostic_value")
+
+class DiagnosticMeasurementInline(admin.TabularInline):
+    model = DiagnosticMeasurement
+    extra = 0
+
+
+class DiagnosticApprovalInline(admin.TabularInline):
+    model = DiagnosticApproval
+    extra = 0
+    can_delete = False
+    readonly_fields = ("reviewer", "decision", "comment", "snapshot_sha256", "decided_at")
+
+
+@admin.register(DiagnosticRecord)
+class DiagnosticRecordAdmin(admin.ModelAdmin):
+    list_display = ("session", "revision", "status", "created_by", "submitted_at", "approved_at")
+    list_filter = ("status", "created_at", "approved_at")
+    search_fields = ("session__vin", "summary", "confirmed_cause")
+    readonly_fields = ("content_sha256", "created_at", "updated_at", "submitted_at", "approved_at")
+    inlines = (DiagnosticMeasurementInline, DiagnosticApprovalInline)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.is_locked:
+            return False
+        return super().has_delete_permission(request, obj)
+
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.is_locked:
+            return False
+        return super().has_change_permission(request, obj)
+
+
+@admin.register(QAEvent)
+class QAEventAdmin(admin.ModelAdmin):
+    list_display = ("code", "severity", "session", "record", "created_at", "resolved_at")
+    list_filter = ("severity", "code", "created_at", "resolved_at")
+    search_fields = ("session__vin", "code", "message")
+    readonly_fields = ("created_at",)

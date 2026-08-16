@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -13,7 +14,21 @@ from .launch_pdf_parser import (
     apply_launch_parse_to_session,
     parse_and_apply_launch_pdf,
 )
-from .models import DiagnosticCode, DiagnosticParseRun, DiagnosticSession, DTCReference
+from .models import (
+    DiagnosticApproval,
+    DiagnosticCode,
+    DiagnosticMeasurement,
+    DiagnosticParseRun,
+    DiagnosticRecord,
+    DiagnosticSession,
+    DTCReference,
+    QAEvent,
+)
+from .services import (
+    create_diagnostic_record_revision,
+    review_diagnostic_record,
+    submit_diagnostic_record,
+)
 
 
 class DiagnosticSessionAccessTests(TestCase):
@@ -225,3 +240,123 @@ class LaunchObservationProvenanceTests(TestCase):
         self.assertEqual(parse_run.status, DiagnosticParseRun.Status.FAILED)
         self.assertIn("broken parser input", parse_run.error_message)
         self.assertIsNotNone(parse_run.completed_at)
+
+class VerifiedDiagnosticRecordTests(TestCase):
+    def setUp(self):
+        author_user = User.objects.create_user("junior")
+        reviewer_user = User.objects.create_user("senior")
+        self.author, _ = UserProfile.objects.get_or_create(user=author_user)
+        self.reviewer, _ = UserProfile.objects.get_or_create(user=reviewer_user)
+        self.session = DiagnosticSession.objects.create(
+            raw_file=SimpleUploadedFile(
+                "record.pdf", b"%PDF-1.4\n%%EOF", content_type="application/pdf"
+            )
+        )
+        self.record = DiagnosticRecord.objects.create(
+            session=self.session,
+            created_by=self.author,
+            summary="Engine does not start.",
+            confirmed_cause="No fuel pressure.",
+            recommended_work="Test pump supply and replace failed pump.",
+        )
+        DiagnosticMeasurement.objects.create(
+            record=self.record,
+            parameter="Fuel rail pressure",
+            numeric_value="0.4000",
+            unit="bar",
+            reference_min="3.0000",
+            result=DiagnosticMeasurement.Result.OUT_OF_RANGE,
+            method="Cranking test",
+            tool_name="Pressure gauge",
+            measured_by=self.author,
+        )
+
+    def test_submit_and_independent_approval_lock_record(self):
+        submit_diagnostic_record(self.record)
+        approval = review_diagnostic_record(
+            self.record,
+            self.reviewer,
+            DiagnosticApproval.Decision.APPROVE,
+            "Evidence verified.",
+        )
+
+        self.record.refresh_from_db()
+        self.assertEqual(self.record.status, DiagnosticRecord.Status.APPROVED)
+        self.assertEqual(approval.snapshot_sha256, self.record.content_sha256)
+        self.assertEqual(len(self.record.content_sha256), 64)
+
+        self.record.summary = "Changed after approval"
+        with self.assertRaises(ValidationError):
+            self.record.save()
+        measurement = self.record.measurements.get()
+        measurement.value_text = "changed"
+        with self.assertRaises(ValidationError):
+            measurement.save()
+        with self.assertRaises(ValidationError):
+            approval.delete()
+
+    def test_approved_record_correction_creates_revision(self):
+        submit_diagnostic_record(self.record)
+        review_diagnostic_record(
+            self.record,
+            self.reviewer,
+            DiagnosticApproval.Decision.APPROVE,
+        )
+
+        revision = create_diagnostic_record_revision(self.record, self.author)
+
+        self.assertEqual(revision.revision, 2)
+        self.assertEqual(revision.previous_revision, self.record)
+        self.assertEqual(revision.status, DiagnosticRecord.Status.DRAFT)
+        self.assertEqual(revision.measurements.count(), 1)
+        self.record.refresh_from_db()
+        self.assertEqual(self.record.status, DiagnosticRecord.Status.APPROVED)
+
+    def test_incomplete_submission_creates_qa_event(self):
+        incomplete = DiagnosticRecord.objects.create(
+            session=self.session,
+            revision=2,
+            created_by=self.author,
+        )
+
+        with self.assertRaises(ValidationError):
+            submit_diagnostic_record(incomplete)
+
+        event = QAEvent.objects.get(record=incomplete)
+        self.assertEqual(event.code, "DIAGNOSTIC_RECORD_INCOMPLETE")
+
+    def test_self_approval_is_blocked_and_audited(self):
+        submit_diagnostic_record(self.record)
+
+        with self.assertRaises(ValidationError):
+            review_diagnostic_record(
+                self.record,
+                self.author,
+                DiagnosticApproval.Decision.APPROVE,
+            )
+
+        self.assertTrue(
+            QAEvent.objects.filter(
+                record=self.record,
+                code="DIAGNOSTIC_SELF_APPROVAL_BLOCKED",
+            ).exists()
+        )
+
+    def test_checksum_detects_changes_during_review(self):
+        submit_diagnostic_record(self.record)
+        DiagnosticRecord.objects.filter(pk=self.record.pk).update(
+            summary="Tampered while in review"
+        )
+
+        with self.assertRaises(ValidationError):
+            review_diagnostic_record(
+                self.record,
+                self.reviewer,
+                DiagnosticApproval.Decision.APPROVE,
+            )
+
+        event = QAEvent.objects.get(
+            record=self.record,
+            code="DIAGNOSTIC_RECORD_CHECKSUM_MISMATCH",
+        )
+        self.assertEqual(event.severity, QAEvent.Severity.CRITICAL)
