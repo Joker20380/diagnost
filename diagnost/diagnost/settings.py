@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'django_webp',
     'django.contrib.sites',
     'django_ckeditor_5',
-    'main',
+    'main.apps.MainConfig',
     'users',
     'diagnostics',
     'assurance',

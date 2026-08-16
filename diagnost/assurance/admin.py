@@ -57,6 +57,23 @@ CHOICE_LABELS = {
     "approve": "Одобрить", "reject": "Отклонить", "rework": "На доработку", "escalate": "Эскалировать",
 }
 
+FIELD_LABELS.update({
+    "id": "ID", "key": "Ключ", "max_level": "Максимальный уровень", "is_active": "Активно",
+    "vehicle_scope": "Применимость к автомобилям", "content_sha256": "Контрольная сумма SHA-256",
+    "escalation_allowed": "Разрешена эскалация", "metadata_schema": "Схема метаданных",
+    "provider_asset_id": "ID материала у провайдера", "start_seconds": "Начало, сек.",
+    "end_seconds": "Окончание, сек.", "metadata": "Метаданные", "initial_state": "Исходное состояние",
+    "assigned_by": "Назначил", "assigned_at": "Назначено", "completed_by": "Завершил",
+    "supersedes": "Заменяет доказательство", "authorized_operation_keys": "Разрешённые следующие операции",
+    "evidence": "Доказательство", "payload": "Данные события", "file": "Файл",
+})
+CHOICE_LABELS.update({
+    "none": "Не требуется", "own": "Собственный", "service_capture": "Материал автосервиса",
+    "youtube_embed": "Встраиваемое видео YouTube", "licensed": "Лицензированный", "oem": "OEM",
+    "external": "Внешний", "verification": "На проверке", "not_run": "Не запускалась",
+    "skipped": "Пропущена",
+})
+
 
 class RussianAdminMixin:
     def formfield_for_dbfield(self, db_field, request, **kwargs):
@@ -139,6 +156,9 @@ MODEL_NAMES = {
 for model, (singular, plural) in MODEL_NAMES.items():
     model._meta.verbose_name = singular
     model._meta.verbose_name_plural = plural
+    for field in model._meta.fields:
+        if field.name in FIELD_LABELS:
+            field.verbose_name = FIELD_LABELS[field.name]
 
 
 class RussianDefaultAdmin(RussianAdminMixin, admin.ModelAdmin):
