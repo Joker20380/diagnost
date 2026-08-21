@@ -119,7 +119,7 @@ Evidence:
 - runtime localization audit: 0 untranslated Cyrillic domain captions for each non-Russian locale.
 - [x] add a curated steering rack demo seed with explicit non-OEM disclaimer;
 - [x] improve procedure authoring UX and dependency validation;
-- [ ] add evidence file size, MIME, malware scanning, and storage policy;
+- [x] add evidence file size, MIME, malware scanning, and storage policy;
 - [ ] implement an explicit evidence supersession workflow;
 - [ ] add case cancellation and controlled exception/skip workflow;
 - [ ] add notification queue for remote expert review;
@@ -131,10 +131,9 @@ Evidence:
 
 - Active phase: **Iteration 2 — pilot hardening**.
 - Completed: safe rollout plus production admin access and localization.
-- Completed in the current hardening pass: curated non-OEM demo seed and
-  procedure authoring/dependency validation.
-- Next planned deliverable: **evidence upload and retention hardening** (size,
-  MIME type, malware scanning, and storage policy).
+- Completed in the current hardening pass: curated non-OEM demo seed, procedure
+  authoring validation, and fail-closed evidence upload hardening.
+- Next planned deliverable: **explicit evidence supersession workflow**.
 - Iteration 3 has not started.
 
 ## Iteration 3 — competency and procedure library

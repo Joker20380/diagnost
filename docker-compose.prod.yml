@@ -17,6 +17,21 @@ services:
     networks:
       - diagnost_net
 
+  clamav:
+    image: clamav/clamav:stable
+    container_name: diagnost_clamav
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "clamdscan --ping 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    volumes:
+      - diagnost_clamav_data:/var/lib/clamav
+    networks:
+      - diagnost_net
+
   web:
     build:
       context: .
@@ -53,6 +68,7 @@ services:
 
 volumes:
   diagnost_pgdata:
+  diagnost_clamav_data:
 
 networks:
   diagnost_net:

@@ -446,3 +446,16 @@ WEBP_CHECK_URLS = False
 
 # django.contrib.sites / django-allauth
 SITE_ID = 1
+
+# Repair Assurance evidence uploads are scanned before storage.
+ASSURANCE_EVIDENCE_MAX_FILE_SIZE = int(
+    os.getenv("ASSURANCE_EVIDENCE_MAX_FILE_SIZE", str(25 * 1024 * 1024))
+)
+ASSURANCE_EVIDENCE_RETENTION_DAYS = int(
+    os.getenv("ASSURANCE_EVIDENCE_RETENTION_DAYS", "2555")
+)
+ASSURANCE_CLAMD_HOST = os.getenv("ASSURANCE_CLAMD_HOST", "clamav")
+ASSURANCE_CLAMD_PORT = int(os.getenv("ASSURANCE_CLAMD_PORT", "3310"))
+ASSURANCE_CLAMD_TIMEOUT_SECONDS = float(
+    os.getenv("ASSURANCE_CLAMD_TIMEOUT_SECONDS", "10")
+)

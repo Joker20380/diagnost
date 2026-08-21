@@ -131,6 +131,30 @@ The seed is idempotent and creates fictional demonstration data carrying an
 explicit non-OEM disclaimer. It must not be treated as repair information or
 loaded into production without a separate deployment decision.
 
+## Evidence file security and retention
+
+Evidence files are validated synchronously before Django writes them to media
+storage. The acceptance pipeline is fail-closed:
+
+1. reject files above `ASSURANCE_EVIDENCE_MAX_FILE_SIZE` (25 MB by default);
+2. identify PDF, JPEG, PNG, MP4, or UTF-8 text from content bytes;
+3. enforce the format allowlist for the selected evidence type;
+4. reject a mismatch between declared and detected MIME type;
+5. stream the file to ClamAV over its `INSTREAM` protocol;
+6. store the SHA-256 digest and security result in immutable evidence metadata.
+
+An unavailable scanner, malware finding, or ambiguous scanner response rejects
+the upload. The production Compose definition provides an isolated ClamAV
+service and persistent signature database; it does not expose ClamAV publicly.
+
+Evidence is append-only and retained for the configured policy period (2,555
+days / seven years by default). The retention value is copied into each file's
+security metadata so later policy changes remain auditable. Automated deletion
+is intentionally not enabled: legal hold, completed repair records, and future
+supersession rules must be evaluated before any purge workflow is introduced.
+Uploaded evidence remains under `runtime/media/assurance/evidence/`; production
+backup and restore must cover that volume together with PostgreSQL.
+
 ## First implementation slice
 
 The first slice will:

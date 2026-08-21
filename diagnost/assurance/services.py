@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from users.models import TechnicianProfile, UserProfile
 
+from .file_security import inspect_evidence_file
 from .models import (
     CaseOperation,
     Evidence,
@@ -271,6 +272,11 @@ def submit_evidence(
     if requirement and requirement.operation_id != case_operation.operation_id:
         raise ValidationError("Evidence requirement belongs to another operation.")
     _validate_evidence_payload(requirement, evidence_type, file, text, numeric_value, unit)
+    evidence_metadata = dict(metadata or {})
+    if file:
+        evidence_metadata["file_security"] = inspect_evidence_file(
+            file, evidence_type
+        )
     digest = ""
     if file:
         position = file.tell()
@@ -286,7 +292,7 @@ def submit_evidence(
         text=text,
         numeric_value=numeric_value,
         unit=unit,
-        metadata=metadata or {},
+        metadata=evidence_metadata,
         content_sha256=digest,
         submitted_by=technician.user_profile,
     )
