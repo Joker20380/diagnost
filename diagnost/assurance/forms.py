@@ -3,7 +3,7 @@ from django import forms
 from diagnostics.models import Vehicle
 from users.models import TechnicianProfile
 
-from .models import EvidenceRequirement, ExpertDecision, ProcedureVersion
+from .models import CaseOperation, EvidenceRequirement, ExpertDecision, ProcedureVersion, WorkshopWalkthroughObservation
 
 
 class RepairCaseCreateForm(forms.Form):
@@ -76,3 +76,23 @@ class ExpertDecisionForm(forms.Form):
 
 class CompletionForm(forms.Form):
     result_note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
+
+
+class WorkshopWalkthroughObservationForm(forms.ModelForm):
+    class Meta:
+        model = WorkshopWalkthroughObservation
+        fields = ("case_operation", "category", "severity", "description", "expected_behavior")
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 3}),
+            "expected_behavior": forms.Textarea(attrs={"rows": 2}),
+        }
+
+    def __init__(self, *args, repair_case, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.instance.repair_case = repair_case
+        self.fields["case_operation"].queryset = CaseOperation.objects.filter(
+            repair_case=repair_case
+        ).select_related("operation")
+        self.fields["case_operation"].required = False
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")

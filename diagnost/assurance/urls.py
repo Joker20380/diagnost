@@ -13,6 +13,11 @@ urlpatterns = [
     path("cases/", views.case_list, name="case_list"),
     path("cases/new/", views.case_create, name="case_create"),
     path("cases/<int:case_id>/", views.case_detail, name="case_detail"),
+    path(
+        "cases/<int:case_id>/walkthrough-observations/",
+        views.record_walkthrough_observation,
+        name="record_walkthrough_observation",
+    ),
     path("cases/<int:case_id>/audit/", views.case_audit, name="case_audit"),
     path(
         "cases/<int:case_id>/audit.<str:export_format>",

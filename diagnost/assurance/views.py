@@ -18,6 +18,7 @@ from .forms import (
     ExpertDecisionForm,
     ReasonForm,
     RepairCaseCreateForm,
+    WorkshopWalkthroughObservationForm,
 )
 from .models import CaseOperation, Evidence, RepairCase, RepairRecord
 from .services import (
@@ -232,11 +233,32 @@ def case_detail(request, case_id):
             "operations": operations,
             "can_control": can_control,
             "can_audit": can_audit,
+            "walkthrough_observations": repair_case.walkthrough_observations.select_related(
+                "case_operation__operation", "recorded_by__user"
+            ).order_by("-recorded_at", "-id"),
+            "walkthrough_form": WorkshopWalkthroughObservationForm(repair_case=repair_case),
         },
     )
 
 
 @login_required
+
+@login_required
+def record_walkthrough_observation(request, case_id):
+    repair_case = get_object_or_404(_visible_cases(request), pk=case_id)
+    if request.method != "POST":
+        return redirect("assurance:case_detail", case_id=repair_case.pk)
+    form = WorkshopWalkthroughObservationForm(request.POST, repair_case=repair_case)
+    if form.is_valid():
+        observation = form.save(commit=False)
+        observation.repair_case = repair_case
+        observation.recorded_by = request.user.userprofile
+        observation.save()
+        messages.success(request, "Workshop observation recorded.")
+    else:
+        messages.error(request, "Workshop observation was not recorded. Check the fields.")
+    return redirect("assurance:case_detail", case_id=repair_case.pk)
+
 def case_audit(request, case_id):
     repair_case = get_object_or_404(
         _auditable_cases(request).select_related(

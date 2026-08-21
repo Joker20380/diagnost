@@ -277,3 +277,16 @@ The first slice will:
 6. expose procedure authoring through Django admin and a minimal mechanic view.
 
 This is intentionally not a CRM, DMS, AI engine, content scraper, or HR system.
+## Workshop walkthrough observations
+
+The pilot UI stores structured observations against a repair case and,
+optionally, the operation where friction occurred. Category and severity make
+blockers, safety concerns, workflow gaps, unclear content, and usability
+failures sortable without changing the controlled repair record.
+
+Observations record the reporter and timestamp and are append-only. They remain
+behind existing tenant- and assignment-scoped case access. They are separate
+from `RepairAuditEvent`: an observation is product research, not proof of a
+controlled repair transition. Completing the roadmap walkthrough still
+requires a real workshop session; the capture tool alone is not completion
+evidence.

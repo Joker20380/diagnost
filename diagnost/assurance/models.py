@@ -544,3 +544,43 @@ class RepairAuditEvent(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Audit events are append-only.")
+
+class WorkshopWalkthroughObservation(models.Model):
+    class Category(models.TextChoices):
+        USABILITY = "usability", "Usability"
+        WORKFLOW = "workflow", "Workflow"
+        CONTENT = "content", "Procedure content"
+        PERFORMANCE = "performance", "Performance"
+        SAFETY = "safety", "Safety"
+        OTHER = "other", "Other"
+
+    class Severity(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        BLOCKER = "blocker", "Blocker"
+
+    repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="walkthrough_observations")
+    case_operation = models.ForeignKey(CaseOperation, on_delete=models.PROTECT, null=True, blank=True, related_name="walkthrough_observations")
+    category = models.CharField(max_length=20, choices=Category.choices)
+    severity = models.CharField(max_length=12, choices=Severity.choices)
+    description = models.TextField()
+    expected_behavior = models.TextField(blank=True)
+    recorded_by = models.ForeignKey(UserProfile, on_delete=models.PROTECT, related_name="walkthrough_observations")
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["recorded_at", "id"]
+
+    def clean(self):
+        if self.case_operation_id and self.case_operation.repair_case_id != self.repair_case_id:
+            raise ValidationError("Walkthrough operation belongs to another repair case.")
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Walkthrough observations are append-only.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Walkthrough observations are append-only.")

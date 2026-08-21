@@ -121,6 +121,7 @@ Evidence:
 - [x] improve procedure authoring UX and dependency validation;
 - [x] add evidence file size, MIME, malware scanning, and storage policy;
 - [x] implement an explicit evidence supersession workflow;
+- [x] add an append-only workshop walkthrough UX observation log;
 - [x] add case cancellation and controlled exception/skip workflow;
 - [x] add notification queue for remote expert review;
 - [x] add richer audit screens and export;

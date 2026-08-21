@@ -56,6 +56,25 @@
           {% csrf_token %}
           <input type="hidden" name="decision" value="approve">
           <textarea name="rationale" required placeholder="Expert rationale"></textarea>
+  <section class="az-diagnostic-card">
+    <h2>Workshop walkthrough log</h2>
+    <p>Record friction, ambiguity, delays, and safety concerns observed during a real repair walkthrough.</p>
+    <form method="post" action="{% url 'assurance:record_walkthrough_observation' repair_case.id %}">
+      {% csrf_token %}
+      {{ walkthrough_form.as_p }}
+      <button class="az-btn az-btn-primary" type="submit">Record observation</button>
+    </form>
+    {% if walkthrough_observations %}
+      <h3>Recorded observations</h3>
+      <ul>
+        {% for observation in walkthrough_observations %}
+          <li><strong>{{ observation.get_severity_display }}</strong> · {{ observation.get_category_display }}
+            {% if observation.case_operation %} · Step {{ observation.case_operation.operation.sequence }}{% endif %}
+            · {{ observation.description }} · {{ observation.recorded_at }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </section>
           <button class="az-btn az-btn-primary" type="submit">Approve</button>
         </form>
       {% elif execution.status == 'locked' %}

@@ -22,6 +22,7 @@ from .models import (
     RepairProcedure,
     Skill,
     TechnicianSkill,
+    WorkshopWalkthroughObservation,
 )
 from .notifications import dispatch_expert_review_notifications
 from .services import (
@@ -188,6 +189,54 @@ class RepairAssuranceExecutionTests(TestCase):
             secure=True,
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_assigned_mechanic_records_workshop_observation(self):
+        self.client.force_login(self.junior_user)
+        response = self.client.post(
+            reverse("assurance:record_walkthrough_observation", args=[self.case.pk]),
+            {
+                "case_operation": self.execution(self.scan).pk,
+                "category": WorkshopWalkthroughObservation.Category.USABILITY,
+                "severity": WorkshopWalkthroughObservation.Severity.HIGH,
+                "description": "Evidence button was difficult to find on a tablet.",
+                "expected_behavior": "Primary action remains visible while scrolling.",
+            },
+            secure=True,
+        )
+        self.assertRedirects(
+            response,
+            reverse("assurance:case_detail", args=[self.case.pk]),
+            fetch_redirect_response=False,
+        )
+        observation = self.case.walkthrough_observations.get()
+        self.assertEqual(observation.recorded_by, self.junior_profile)
+        self.assertEqual(observation.case_operation, self.execution(self.scan))
+
+    def test_outsider_cannot_record_workshop_observation(self):
+        self.client.force_login(self.outsider_user)
+        response = self.client.post(
+            reverse("assurance:record_walkthrough_observation", args=[self.case.pk]),
+            {
+                "category": WorkshopWalkthroughObservation.Category.WORKFLOW,
+                "severity": WorkshopWalkthroughObservation.Severity.LOW,
+                "description": "Should not be accepted.",
+            },
+            secure=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(self.case.walkthrough_observations.exists())
+
+    def test_walkthrough_observation_is_append_only(self):
+        observation = WorkshopWalkthroughObservation.objects.create(
+            repair_case=self.case,
+            category=WorkshopWalkthroughObservation.Category.SAFETY,
+            severity=WorkshopWalkthroughObservation.Severity.BLOCKER,
+            description="Safety instruction was ambiguous.",
+            recorded_by=self.senior_profile,
+        )
+        observation.description = "Changed"
+        with self.assertRaises(ValidationError):
+            observation.save()
 
     def test_superuser_without_technician_profile_can_open_case_list(self):
         admin = User.objects.create_superuser(
