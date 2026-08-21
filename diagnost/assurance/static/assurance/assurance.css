@@ -1,0 +1,221 @@
+.az-diagnostic-page {
+  --assurance-ink: #151515;
+  --assurance-muted: #6f7278;
+  --assurance-line: rgba(20, 20, 20, .1);
+  --assurance-soft: #f5f5f3;
+  --assurance-accent: #f2c318;
+  min-height: 70vh;
+  padding: clamp(48px, 7vw, 96px) 0;
+  color: var(--assurance-ink);
+  font-family: "Oxygen", sans-serif;
+  background:
+    radial-gradient(circle at 88% 4%, rgba(242, 195, 24, .14), transparent 28rem),
+    linear-gradient(180deg, #fafafa 0%, #f1f1ef 100%);
+}
+
+.az-diagnostic-page > .container {
+  max-width: 1180px;
+}
+
+.az-diagnostic-page h1,
+.az-diagnostic-page h2,
+.az-diagnostic-page h3 {
+  color: var(--assurance-ink);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: -.03em;
+}
+
+.az-diagnostic-page h1 {
+  max-width: 920px;
+  margin: 0 0 12px;
+  font-size: clamp(32px, 5vw, 58px);
+  line-height: 1.05;
+}
+
+.az-diagnostic-page h2 {
+  margin: 0 0 12px;
+  font-size: clamp(21px, 3vw, 30px);
+}
+
+.az-diagnostic-page h3 {
+  margin: 24px 0 12px;
+  font-size: 18px;
+}
+
+.az-diagnostic-page p,
+.az-diagnostic-page li {
+  line-height: 1.7;
+}
+
+.az-diagnostic-page > .container > p:first-of-type {
+  color: var(--assurance-muted);
+  font-size: 17px;
+}
+
+.az-diagnostic-page a:not(.az-btn) {
+  color: #886d00;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(136, 109, 0, .3);
+  text-underline-offset: 3px;
+}
+
+.az-diagnostic-page .az-diagnostic-card {
+  position: relative;
+  margin: 22px 0;
+  padding: clamp(22px, 4vw, 38px);
+  overflow: hidden;
+  border: 1px solid var(--assurance-line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 18px 48px rgba(20, 20, 20, .07);
+}
+
+.az-diagnostic-page .az-diagnostic-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  content: "";
+  background: var(--assurance-accent);
+}
+
+.az-diagnostic-page .az-diagnostic-card > :last-child {
+  margin-bottom: 0;
+}
+
+.az-diagnostic-page form:not([class]) {
+  margin: 18px 0;
+}
+
+.az-diagnostic-page form p {
+  margin: 0 0 18px;
+}
+
+.az-diagnostic-page label {
+  display: block;
+  margin: 0 0 7px;
+  color: #353535;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.az-diagnostic-page input:not([type="checkbox"]):not([type="radio"]),
+.az-diagnostic-page select,
+.az-diagnostic-page textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  color: var(--assurance-ink);
+  border: 1px solid #d7d8da;
+  border-radius: 12px;
+  outline: none;
+  background: #fff;
+  font: 500 15px/1.45 "Oxygen", sans-serif;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.az-diagnostic-page textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.az-diagnostic-page input:focus,
+.az-diagnostic-page select:focus,
+.az-diagnostic-page textarea:focus {
+  border-color: #c69d00;
+  box-shadow: 0 0 0 4px rgba(242, 195, 24, .18);
+}
+
+.az-diagnostic-page input[type="checkbox"],
+.az-diagnostic-page input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  accent-color: #d8ad00;
+}
+
+.az-diagnostic-page .helptext {
+  display: block;
+  margin-top: 6px;
+  color: var(--assurance-muted);
+  font-size: 13px;
+}
+
+.az-diagnostic-page .errorlist {
+  margin: 0 0 18px;
+  padding: 12px 16px 12px 34px;
+  color: #8a241f;
+  border: 1px solid #edc8c5;
+  border-radius: 12px;
+  background: #fff3f2;
+}
+
+.az-diagnostic-page .az-btn {
+  margin: 4px 8px 4px 0;
+  border-radius: 999px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+.az-diagnostic-page code {
+  padding: 3px 7px;
+  overflow-wrap: anywhere;
+  color: #2c2c2c;
+  border-radius: 7px;
+  background: #eee;
+}
+
+.az-diagnostic-page ul,
+.az-diagnostic-page ol {
+  padding-left: 22px;
+}
+
+.az-diagnostic-page li + li {
+  margin-top: 8px;
+}
+
+.az-diagnostic-page table {
+  width: 100%;
+  margin: 18px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--assurance-line);
+  border-radius: 14px;
+}
+
+.az-diagnostic-page th,
+.az-diagnostic-page td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--assurance-line);
+  text-align: left;
+}
+
+.az-diagnostic-page th {
+  background: var(--assurance-soft);
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .az-diagnostic-page {
+    padding: 36px 0 64px;
+  }
+
+  .az-diagnostic-page .az-diagnostic-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .az-diagnostic-page .az-btn {
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+}
