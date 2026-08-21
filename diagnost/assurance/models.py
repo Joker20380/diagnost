@@ -184,7 +184,13 @@ class OperationDependency(DraftSpecification):
 
     def clean(self):
         if self.operation.version_id != self.depends_on.version_id:
-            raise ValidationError("Dependencies must use one procedure version.")
+            raise ValidationError(
+                {"depends_on": "Dependency must use the same procedure version."}
+            )
+        if self.depends_on.sequence >= self.operation.sequence:
+            raise ValidationError(
+                {"depends_on": "Dependency must point to an earlier operation."}
+            )
 
 
 class EvidenceRequirement(DraftSpecification):

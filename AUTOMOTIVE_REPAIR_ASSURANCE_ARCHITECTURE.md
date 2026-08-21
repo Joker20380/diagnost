@@ -102,6 +102,35 @@ be generated and tested against a disposable test database, but must not be
 applied to the current production database until a reviewed rollout and backup
 are prepared.
 
+## Procedure authoring contract
+
+The first authoring interface remains Django admin. Authors create a procedure
+version, then its ordered operations. Each operation page owns three inline
+collections: predecessor dependencies, evidence requirements, and reference
+media.
+
+Dependency rules are deliberately stricter than a generic directed graph:
+
+- both operations must belong to the same procedure version;
+- a dependency may point only to a lower sequence number;
+- the admin selector shows only eligible predecessors;
+- model validation rejects invalid interactive or programmatic writes;
+- publication revalidates the complete stored graph so bulk/import paths cannot
+  bypass the invariant.
+
+This ordering rule makes cycles impossible and keeps the mechanic workflow
+deterministic. Published versions remain immutable.
+
+For a safe local walkthrough, run:
+
+```bash
+python manage.py seed_assurance_demo
+```
+
+The seed is idempotent and creates fictional demonstration data carrying an
+explicit non-OEM disclaimer. It must not be treated as repair information or
+loaded into production without a separate deployment decision.
+
 ## First implementation slice
 
 The first slice will:

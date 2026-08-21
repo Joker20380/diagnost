@@ -91,6 +91,23 @@ class RussianAdminMixin:
 
 
 
+class OperationDependencyInline(RussianAdminMixin, admin.TabularInline):
+    model = OperationDependency
+    fk_name = "operation"
+    fields = ("depends_on",)
+    extra = 0
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        queryset = Operation.objects.none()
+        if obj and obj.version_id:
+            queryset = Operation.objects.filter(
+                version_id=obj.version_id, sequence__lt=obj.sequence
+            )
+        formset.form.base_fields["depends_on"].queryset = queryset
+        return formset
+
+
 class EvidenceRequirementInline(RussianAdminMixin, admin.TabularInline):
     model = EvidenceRequirement
     extra = 0
@@ -106,16 +123,32 @@ class ReferenceMediaInline(RussianAdminMixin, admin.TabularInline):
 @admin.register(Operation)
 class OperationAdmin(RussianAdminMixin, admin.ModelAdmin):
     list_display = ("version", "sequence", "title", "operation_type", "blocking", "approval_required")
-    list_filter = ("operation_type", "blocking", "qc_operation", "approval_required")
-    inlines = (EvidenceRequirementInline, ReferenceMediaInline)
+    list_filter = (
+        "version__procedure", "version", "operation_type", "blocking",
+        "qc_operation", "approval_required",
+    )
+    list_select_related = ("version", "version__procedure", "required_skill")
+    search_fields = ("key", "title", "description", "version__procedure__name")
+    ordering = ("version", "sequence")
+    inlines = (
+        OperationDependencyInline,
+        EvidenceRequirementInline,
+        ReferenceMediaInline,
+    )
 
 
 @admin.register(ProcedureVersion)
 class ProcedureVersionAdmin(RussianAdminMixin, admin.ModelAdmin):
-    list_display = ("procedure", "version", "status", "published_at")
+    list_display = ("procedure", "version", "status", "operation_count", "published_at")
     list_filter = ("status",)
+    search_fields = ("procedure__code", "procedure__name", "change_summary")
+    list_select_related = ("procedure",)
     readonly_fields = ("status", "content_sha256", "published_at")
     actions = ("publish_selected_versions",)
+
+    @admin.display(description=_("операции"))
+    def operation_count(self, obj):
+        return obj.operations.count()
 
     @admin.action(description=_("Опубликовать выбранные черновые версии"))
     def publish_selected_versions(self, request, queryset):
