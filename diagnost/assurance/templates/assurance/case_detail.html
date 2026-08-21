@@ -6,6 +6,9 @@
   {% if can_audit %}
     <p><a class="az-btn az-btn-outline" href="{% url 'assurance:case_audit' repair_case.id %}">Audit trail and export</a></p>
   {% endif %}
+  {% if repair_case.repair_record %}
+    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:repair_certificate' repair_case.repair_record.public_id %}">Public Repair Certificate</a></p>
+  {% endif %}
   {% for execution in operations %}
     <section class="az-diagnostic-card">
       <span>Step {{ execution.operation.sequence }}</span>

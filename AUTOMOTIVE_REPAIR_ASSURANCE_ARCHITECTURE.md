@@ -241,6 +241,29 @@ attachment filename tied to the repair case and set `nosniff`. Exports are
 audit projections only: they do not mutate the case, evidence, decisions, or
 the immutable repair record.
 
+## External Repair Certificate
+
+Every immutable `RepairRecord` receives a random UUID public identifier. The
+certificate route resolves only that identifier; sequential case and record
+IDs are never accepted. Existing records receive independent UUID values
+during migration.
+
+The certificate is generated exclusively from the immutable repair-record
+snapshot and checksum. It shows the vehicle make, model, year, masked VIN,
+procedure name and pinned version, verification result, operation status and
+completion time, active evidence count, approved-exception indicator, record
+timestamp, and SHA-256 integrity value.
+
+The projection deliberately excludes the full VIN, database identifiers,
+technician and reviewer identities, evidence files and hashes, measurements,
+free-text results, internal rationales, and audit payloads. It also states that
+the certificate is neither a warranty nor an OEM endorsement.
+
+The URL is publicly shareable but treated as an unlisted capability link.
+Responses set `noindex, nofollow, noarchive`, `no-referrer`, and `nosniff`
+headers. Unknown UUIDs return 404. The internal case screen exposes the link
+only after the verified repair record exists.
+
 ## First implementation slice
 
 The first slice will:

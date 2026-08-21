@@ -1,3 +1,5 @@
+import uuid
+
 from decimal import Decimal
 
 from django.contrib.auth.models import User
@@ -278,6 +280,14 @@ class RepairAssuranceExecutionTests(TestCase):
         self.assertEqual(self.client.get(audit_url, secure=True).status_code, 403)
         self.assertEqual(self.client.get(export_url, secure=True).status_code, 403)
 
+    def test_unknown_repair_certificate_is_not_disclosed(self):
+        response = self.client.get(
+            reverse("assurance:repair_certificate", args=[uuid.uuid4()]),
+            secure=True,
+        )
+        self.assertEqual(response.status_code, 404)
+
+
     def test_evidence_supersession_preserves_history_and_active_count(self):
         execution = self.execution(self.scan)
         original = submit_evidence(
@@ -474,6 +484,22 @@ class RepairAssuranceExecutionTests(TestCase):
             self.case.repair_record.snapshot["procedure"]["version"], 1
         )
         self.assertGreaterEqual(self.case.audit_events.count(), 10)
+
+        self.client.logout()
+        certificate_response = self.client.get(
+            reverse(
+                "assurance:repair_certificate",
+                args=[self.case.repair_record.public_id],
+            ),
+            secure=True,
+        )
+        self.assertEqual(certificate_response.status_code, 200)
+        self.assertContains(certificate_response, "Repair Certificate")
+        self.assertContains(certificate_response, "***********123456")
+        self.assertNotContains(certificate_response, "WBAJR71010B123456")
+        self.assertNotContains(
+            certificate_response, "Torque evidence is within specification."
+        )
 
         scan_evidence.text = "mutated"
         with self.assertRaises(ValidationError):

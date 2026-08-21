@@ -19,7 +19,7 @@ from .forms import (
     ReasonForm,
     RepairCaseCreateForm,
 )
-from .models import CaseOperation, Evidence, RepairCase
+from .models import CaseOperation, Evidence, RepairCase, RepairRecord
 from .services import (
     cancel_repair_case,
     complete_operation,
@@ -94,10 +94,65 @@ def _audit_event_payload(event):
     }
 
 
+def _repair_certificate_projection(record):
+    snapshot = record.snapshot
+    vehicle = snapshot["vehicle"]
+    vin = vehicle.get("vin", "")
+    public_vin = f"{'*' * max(len(vin) - 6, 0)}{vin[-6:]}" if vin else ""
+    definitions = {
+        item["key"]: item for item in snapshot["procedure"]["operations"]
+    }
+    operations = []
+    for execution in snapshot["operations"]:
+        definition = definitions[execution["operation_key"]]
+        operations.append(
+            {
+                "sequence": definition["sequence"],
+                "title": definition["title"],
+                "status": execution["status"],
+                "completed_at": execution["completed_at"],
+                "evidence_count": sum(
+                    not evidence["is_superseded"]
+                    for evidence in execution["evidence"]
+                ),
+                "approved_exception": execution.get("approved_exception") is not None,
+            }
+        )
+    return {
+        "public_id": record.public_id,
+        "created_at": record.created_at,
+        "content_sha256": record.content_sha256,
+        "vehicle": {
+            "make": vehicle.get("make", ""),
+            "model": vehicle.get("model", ""),
+            "year": vehicle.get("year"),
+            "vin": public_vin,
+        },
+        "procedure_name": snapshot["procedure"]["procedure_name"],
+        "procedure_version": snapshot["procedure"]["version"],
+        "verification_status": snapshot["verification_status"],
+        "operations": operations,
+    }
+
+
 @login_required
 def case_list(request):
     cases = _visible_cases(request).select_related("vehicle", "procedure_version__procedure")
     return render(request, "assurance/case_list.html", {"cases": cases})
+
+def repair_certificate(request, public_id):
+    record = get_object_or_404(RepairRecord, public_id=public_id)
+    response = render(
+        request,
+        "assurance/repair_certificate.html",
+        {"certificate": _repair_certificate_projection(record)},
+    )
+    response["Cache-Control"] = "public, max-age=300"
+    response["Referrer-Policy"] = "no-referrer"
+    response["X-Content-Type-Options"] = "nosniff"
+    response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
+    return response
+
 
 
 @login_required
@@ -134,7 +189,9 @@ def case_create(request):
 @login_required
 def case_detail(request, case_id):
     repair_case = get_object_or_404(
-        _visible_cases(request).select_related("vehicle", "procedure_version__procedure"),
+        _visible_cases(request).select_related(
+            "vehicle", "procedure_version__procedure", "repair_record"
+        ),
         pk=case_id,
     )
     operations = repair_case.case_operations.select_related(

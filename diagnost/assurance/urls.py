@@ -5,6 +5,11 @@ from . import views
 app_name = "assurance"
 
 urlpatterns = [
+    path(
+        "certificates/<uuid:public_id>/",
+        views.repair_certificate,
+        name="repair_certificate",
+    ),
     path("cases/", views.case_list, name="case_list"),
     path("cases/new/", views.case_create, name="case_create"),
     path("cases/<int:case_id>/", views.case_detail, name="case_detail"),

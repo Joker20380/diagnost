@@ -124,7 +124,7 @@ Evidence:
 - [x] add case cancellation and controlled exception/skip workflow;
 - [x] add notification queue for remote expert review;
 - [x] add richer audit screens and export;
-- [ ] add external Repair Certificate projection;
+- [x] add external Repair Certificate projection;
 - [ ] conduct one real workshop walkthrough and record UX failures.
 
 ### Current position
@@ -135,8 +135,9 @@ Evidence:
   procedure authoring validation, fail-closed evidence upload hardening, and
   append-only evidence supersession, plus controlled case cancellation and
   operation exceptions, a durable remote expert-review notification queue, and
-  role-restricted audit screens with filtered CSV/JSON export.
-- Next planned deliverable: **external Repair Certificate projection**.
+  role-restricted audit screens with filtered CSV/JSON export, plus a
+  privacy-minimized external Repair Certificate.
+- Next planned deliverable: **real workshop walkthrough and UX failure log**.
 - Iteration 3 has not started.
 
 ## Iteration 3 — competency and procedure library

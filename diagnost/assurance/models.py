@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import uuid
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -508,6 +510,7 @@ class Verification(models.Model):
 
 class RepairRecord(models.Model):
     repair_case = models.OneToOneField(RepairCase, on_delete=models.PROTECT, related_name="repair_record")
+    public_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     snapshot = models.JSONField()
     content_sha256 = models.CharField(max_length=64, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
