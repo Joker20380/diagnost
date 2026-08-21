@@ -8,6 +8,12 @@ urlpatterns = [
     path("cases/", views.case_list, name="case_list"),
     path("cases/new/", views.case_create, name="case_create"),
     path("cases/<int:case_id>/", views.case_detail, name="case_detail"),
+    path("cases/<int:case_id>/audit/", views.case_audit, name="case_audit"),
+    path(
+        "cases/<int:case_id>/audit.<str:export_format>",
+        views.case_audit_export,
+        name="case_audit_export",
+    ),
     path("cases/<int:case_id>/cancel/", views.cancel_case, name="cancel_case"),
     path("operations/<int:execution_id>/evidence/", views.submit_operation_evidence, name="submit_evidence"),
     path("evidence/<int:evidence_id>/supersede/", views.supersede_operation_evidence, name="supersede_evidence"),

@@ -231,6 +231,53 @@ class RepairAssuranceExecutionTests(TestCase):
                 text="scan",
             )
 
+    def test_senior_can_filter_and_export_case_audit(self):
+        self.client.force_login(self.senior_user)
+        response = self.client.get(
+            reverse("assurance:case_audit", args=[self.case.pk]),
+            {"action": "case_created"},
+            secure=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Audit trail")
+        self.assertContains(response, "case_created")
+
+        json_response = self.client.get(
+            reverse(
+                "assurance:case_audit_export",
+                args=[self.case.pk, "json"],
+            ),
+            {"action": "case_created"},
+            secure=True,
+        )
+        self.assertEqual(json_response.status_code, 200)
+        self.assertEqual(
+            [event["action"] for event in json_response.json()["events"]],
+            ["case_created"],
+        )
+        self.assertIn("attachment;", json_response["Content-Disposition"])
+
+        csv_response = self.client.get(
+            reverse(
+                "assurance:case_audit_export",
+                args=[self.case.pk, "csv"],
+            ),
+            secure=True,
+        )
+        self.assertEqual(csv_response.status_code, 200)
+        self.assertIn("case_created", csv_response.content.decode())
+        self.assertEqual(csv_response["X-Content-Type-Options"], "nosniff")
+
+    def test_junior_cannot_view_or_export_case_audit(self):
+        self.client.force_login(self.junior_user)
+        audit_url = reverse("assurance:case_audit", args=[self.case.pk])
+        export_url = reverse(
+            "assurance:case_audit_export",
+            args=[self.case.pk, "csv"],
+        )
+        self.assertEqual(self.client.get(audit_url, secure=True).status_code, 403)
+        self.assertEqual(self.client.get(export_url, secure=True).status_code, 403)
+
     def test_evidence_supersession_preserves_history_and_active_count(self):
         execution = self.execution(self.scan)
         original = submit_evidence(

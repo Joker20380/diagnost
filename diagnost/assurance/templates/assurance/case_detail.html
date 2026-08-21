@@ -3,6 +3,9 @@
 <section class="az-diagnostic-page"><div class="container">
   <h1>{{ repair_case.vehicle }} — {{ repair_case.title }}</h1>
   <p>{{ repair_case.procedure_version }} · {{ repair_case.get_status_display }} · {{ repair_case.get_verification_status_display }}</p>
+  {% if can_audit %}
+    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:case_audit' repair_case.id %}">Audit trail and export</a></p>
+  {% endif %}
   {% for execution in operations %}
     <section class="az-diagnostic-card">
       <span>Step {{ execution.operation.sequence }}</span>

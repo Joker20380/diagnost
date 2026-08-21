@@ -220,6 +220,27 @@ Email delivery uses the existing Django email configuration.
 must be set in production together with the SMTP variables. No email is sent
 inside the repair operation transaction.
 
+## Audit inspection and export
+
+The case audit screen is a read-only projection of append-only
+`RepairAuditEvent` rows. It presents newest events first, resolves the actor
+and operation for human review, shows status transitions and payload details,
+and paginates at 50 events. Reviewers can filter by exact event action and by
+case-operation execution.
+
+Access is limited to active senior experts, technical managers, and auditors
+inside the case organization; superusers retain operational access. Junior
+technicians cannot open the screen or export its data. Organization scoping is
+applied before resolving the requested case, preventing identifiers from being
+used to cross tenant boundaries.
+
+CSV and JSON downloads contain the same filtered event selection. Each record
+includes the immutable event identifier and timestamp, action, operation key,
+actor identity, before/after states, and structured payload. Downloads use an
+attachment filename tied to the repair case and set `nosniff`. Exports are
+audit projections only: they do not mutate the case, evidence, decisions, or
+the immutable repair record.
+
 ## First implementation slice
 
 The first slice will:

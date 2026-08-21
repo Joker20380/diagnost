@@ -1,6 +1,12 @@
+import csv
+import json
+from io import StringIO
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.paginator import Paginator
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from users.models import TechnicianProfile
@@ -40,11 +46,52 @@ def _visible_cases(request):
     technician = _technician(request)
     queryset = RepairCase.objects.filter(organization=technician.organization)
     if technician.role not in {
+        TechnicianProfile.Role.AUDITOR,
         TechnicianProfile.Role.SENIOR_EXPERT,
         TechnicianProfile.Role.TECHNICAL_MANAGER,
     }:
         queryset = queryset.filter(technician_assignments__technician=technician)
     return queryset.distinct()
+
+
+def _auditable_cases(request):
+    if request.user.is_superuser:
+        return RepairCase.objects.all()
+    technician = _technician(request)
+    if technician.role not in {
+        TechnicianProfile.Role.AUDITOR,
+        TechnicianProfile.Role.SENIOR_EXPERT,
+        TechnicianProfile.Role.TECHNICAL_MANAGER,
+    }:
+        raise PermissionDenied
+    return RepairCase.objects.filter(organization=technician.organization)
+
+
+def _filtered_audit_events(request, repair_case):
+    events = repair_case.audit_events.select_related(
+        "actor__user", "case_operation__operation"
+    )
+    action = request.GET.get("action", "").strip()
+    operation_id = request.GET.get("operation", "").strip()
+    if action:
+        events = events.filter(action=action)
+    if operation_id.isdigit():
+        events = events.filter(case_operation_id=int(operation_id))
+    return events.order_by("-occurred_at", "-id"), action, operation_id
+
+
+def _audit_event_payload(event):
+    return {
+        "id": event.pk,
+        "occurred_at": event.occurred_at.isoformat(),
+        "action": event.action,
+        "operation_key": event.case_operation.operation.key if event.case_operation_id else None,
+        "actor_id": event.actor_id,
+        "actor": str(event.actor),
+        "before_status": event.before_status,
+        "after_status": event.after_status,
+        "payload": event.payload,
+    }
 
 
 @login_required
@@ -109,11 +156,91 @@ def case_detail(request, case_id):
             TechnicianProfile.Role.TECHNICAL_MANAGER,
         }
     )
+    can_audit = bool(
+        request.user.is_superuser
+        or technician
+        and technician.is_active
+        and technician.role
+        in {
+            TechnicianProfile.Role.AUDITOR,
+            TechnicianProfile.Role.SENIOR_EXPERT,
+            TechnicianProfile.Role.TECHNICAL_MANAGER,
+        }
+    )
     return render(
         request,
         "assurance/case_detail.html",
-        {"repair_case": repair_case, "operations": operations, "can_control": can_control},
+        {
+            "repair_case": repair_case,
+            "operations": operations,
+            "can_control": can_control,
+            "can_audit": can_audit,
+        },
     )
+
+
+@login_required
+def case_audit(request, case_id):
+    repair_case = get_object_or_404(
+        _auditable_cases(request).select_related(
+            "vehicle", "procedure_version__procedure"
+        ),
+        pk=case_id,
+    )
+    events, selected_action, selected_operation = _filtered_audit_events(
+        request, repair_case
+    )
+    action_choices = (
+        repair_case.audit_events.order_by("action")
+        .values_list("action", flat=True)
+        .distinct()
+    )
+    operations = repair_case.case_operations.select_related("operation").order_by(
+        "operation__sequence"
+    )
+    page = Paginator(events, 50).get_page(request.GET.get("page"))
+    return render(
+        request,
+        "assurance/case_audit.html",
+        {
+            "repair_case": repair_case,
+            "page": page,
+            "action_choices": action_choices,
+            "operations": operations,
+            "selected_action": selected_action,
+            "selected_operation": selected_operation,
+        },
+    )
+
+
+@login_required
+def case_audit_export(request, case_id, export_format):
+    repair_case = get_object_or_404(_auditable_cases(request), pk=case_id)
+    events, _, _ = _filtered_audit_events(request, repair_case)
+    filename = f"repair-case-{repair_case.pk}-audit.{export_format}"
+    if export_format == "json":
+        response = JsonResponse(
+            {
+                "repair_case_id": repair_case.pk,
+                "events": [_audit_event_payload(event) for event in events],
+            },
+            json_dumps_params={"indent": 2},
+        )
+    elif export_format == "csv":
+        output = StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["id", "occurred_at", "action", "operation_key", "actor_id", "actor", "before_status", "after_status", "payload"])
+        for event in events:
+            item = _audit_event_payload(event)
+            writer.writerow([item["id"], item["occurred_at"], item["action"], item["operation_key"], item["actor_id"], item["actor"], item["before_status"], item["after_status"], json.dumps(item["payload"], sort_keys=True)])
+        response = HttpResponse(
+            output.getvalue(), content_type="text/csv; charset=utf-8"
+        )
+    else:
+        raise PermissionDenied
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 @login_required

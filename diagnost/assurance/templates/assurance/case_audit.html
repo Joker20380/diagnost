@@ -1,0 +1,72 @@
+{% extends 'diagnost/base.html' %}
+{% block content %}
+<section class="az-diagnostic-page"><div class="container">
+  <p><a href="{% url 'assurance:case_detail' repair_case.id %}">← Back to repair case</a></p>
+  <h1>Audit trail — case #{{ repair_case.id }}</h1>
+  <p>{{ repair_case.vehicle }} · {{ repair_case.procedure_version }}</p>
+
+  <section class="az-diagnostic-card">
+    <form method="get">
+      <label for="audit-action">Event</label>
+      <select id="audit-action" name="action">
+        <option value="">All events</option>
+        {% for action in action_choices %}
+          <option value="{{ action }}"{% if selected_action == action %} selected{% endif %}>{{ action }}</option>
+        {% endfor %}
+      </select>
+      <label for="audit-operation">Operation</label>
+      <select id="audit-operation" name="operation">
+        <option value="">All operations</option>
+        {% for execution in operations %}
+          <option value="{{ execution.id }}"{% if selected_operation == execution.id|stringformat:"s" %} selected{% endif %}>
+            {{ execution.operation.sequence }}. {{ execution.operation.title }}
+          </option>
+        {% endfor %}
+      </select>
+      <button class="az-btn az-btn-primary" type="submit">Apply filters</button>
+    </form>
+    <p>
+      Export current selection:
+      <a href="{% url 'assurance:case_audit_export' repair_case.id 'csv' %}?action={{ selected_action|urlencode }}&operation={{ selected_operation|urlencode }}">CSV</a>
+      ·
+      <a href="{% url 'assurance:case_audit_export' repair_case.id 'json' %}?action={{ selected_action|urlencode }}&operation={{ selected_operation|urlencode }}">JSON</a>
+    </p>
+  </section>
+
+  {% for event in page %}
+    <article class="az-diagnostic-card">
+      <p><strong>{{ event.occurred_at }}</strong> · #{{ event.id }}</p>
+      <h2>{{ event.action }}</h2>
+      <p>
+        Actor: {{ event.actor }}
+        {% if event.case_operation_id %}
+          · Operation: {{ event.case_operation.operation.key }}
+        {% endif %}
+      </p>
+      {% if event.before_status or event.after_status %}
+        <p>Status: {{ event.before_status|default:"—" }} → {{ event.after_status|default:"—" }}</p>
+      {% endif %}
+      {% if event.payload %}
+        <details>
+          <summary>Event data</summary>
+          <pre>{{ event.payload }}</pre>
+        </details>
+      {% endif %}
+    </article>
+  {% empty %}
+    <p>No audit events match these filters.</p>
+  {% endfor %}
+
+  {% if page.has_other_pages %}
+    <nav aria-label="Audit pages">
+      {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}&action={{ selected_action|urlencode }}&operation={{ selected_operation|urlencode }}">Previous</a>
+      {% endif %}
+      <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}&action={{ selected_action|urlencode }}&operation={{ selected_operation|urlencode }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</div></section>
+{% endblock %}
