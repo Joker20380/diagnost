@@ -117,7 +117,7 @@ Evidence:
   `2c9fe0f`, `a7258fd`, and `bb8841b`;
 - assurance test suite: 8/8 passing;
 - runtime localization audit: 0 untranslated Cyrillic domain captions for each non-Russian locale.
-- [ ] add a curated steering rack demo seed with explicit non-OEM disclaimer;
+- [x] add a curated steering rack demo seed with explicit non-OEM disclaimer;
 - [ ] improve procedure authoring UX and dependency validation;
 - [ ] add evidence file size, MIME, malware scanning, and storage policy;
 - [ ] implement an explicit evidence supersession workflow;
