@@ -7,12 +7,15 @@ from typing import Any
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
+from django.utils.text import slugify
 
 from .analysis_gate import sync_session_analysis_gate
 from .models import (
     DiagnosticCase,
     DiagnosticSession,
     Vehicle,
+    VehicleBrand,
+    VehicleModel,
     VehicleConfiguration,
     VehicleIdentityObservation,
 )
@@ -123,14 +126,40 @@ def confirm_vehicle_identity(
 
     year = _optional_int(effective.get("year"), "year")
     mileage_km = _optional_int(effective.get("mileage"), "mileage")
+    make_name = effective.get("brand", "").strip()
+    model_name = effective.get("model", "").strip()
+    brand = None
+    vehicle_model = None
+    if make_name:
+        brand = VehicleBrand.objects.filter(name__iexact=make_name).first()
+        if brand is None:
+            brand = VehicleBrand.objects.create(
+                name=make_name, slug=slugify(make_name) or "brand"
+            )
+        if model_name:
+            vehicle_model = VehicleModel.objects.filter(
+                brand=brand, name__iexact=model_name
+            ).first()
+            if vehicle_model is None:
+                base_slug = slugify(model_name) or "model"
+                model_slug = base_slug
+                suffix = 2
+                while VehicleModel.objects.filter(brand=brand, slug=model_slug).exists():
+                    model_slug = f"{base_slug}-{suffix}"
+                    suffix += 1
+                vehicle_model = VehicleModel.objects.create(
+                    brand=brand, name=model_name, slug=model_slug
+                )
     vehicle, _ = Vehicle.objects.update_or_create(
         organization=session.organization,
         vin_normalized=vin_normalized,
         defaults={
             "vin": vin,
             "variant": effective.get("variant", ""),
-            "make": effective.get("brand", ""),
-            "model": effective.get("model", ""),
+            "brand": brand,
+            "vehicle_model": vehicle_model,
+            "make": make_name,
+            "model": model_name,
             "generation": effective.get("generation", ""),
             "year": year,
         },

@@ -16,6 +16,7 @@ from .models import (
     RecentRepair,
     Symptom,
     VehicleBrand,
+    VehicleModel,
     Vehicle,
     VehicleConfiguration,
     VehicleIdentityObservation,
@@ -50,11 +51,31 @@ class VehicleBrandAdmin(admin.ModelAdmin):
     search_fields = ("name", "slug")
 
 
+@admin.register(VehicleModel)
+class VehicleModelAdmin(admin.ModelAdmin):
+    list_display = ("name", "brand", "slug")
+    list_filter = ("brand",)
+    search_fields = ("name", "brand__name", "slug")
+
+
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ("vin_normalized", "make", "model", "year", "organization")
-    search_fields = ("vin_normalized", "make", "model")
-    list_filter = ("organization", "make")
+    list_display = ("vin_normalized", "brand", "vehicle_model", "year", "organization")
+    search_fields = ("vin_normalized", "make", "model", "brand__name", "vehicle_model__name")
+    list_filter = ("organization", "brand")
+    readonly_fields = ("vin_normalized", "make", "model")
+    fields = (
+        "organization",
+        "vin",
+        "vin_normalized",
+        "brand",
+        "vehicle_model",
+        "make",
+        "model",
+        "generation",
+        "variant",
+        "year",
+    )
 
 
 @admin.register(VehicleConfiguration)

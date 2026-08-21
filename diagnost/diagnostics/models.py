@@ -198,12 +198,50 @@ class OBDLiveDataPIDReference(models.Model):
 
 
 
+class VehicleModel(models.Model):
+    brand = models.ForeignKey(
+        VehicleBrand, on_delete=models.PROTECT, related_name="models"
+    )
+    name = models.CharField(max_length=120)
+    slug = models.SlugField(max_length=140)
+
+    class Meta:
+        ordering = ["brand__name", "name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["brand", "name"], name="unique_vehicle_model_name_per_brand"
+            ),
+            models.UniqueConstraint(
+                fields=["brand", "slug"], name="unique_vehicle_model_slug_per_brand"
+            ),
+        ]
+        verbose_name = "Модель автомобиля"
+        verbose_name_plural = "Модели автомобилей"
+
+    def __str__(self):
+        return f"{self.brand.name} {self.name}"
+
+
 class Vehicle(models.Model):
     organization = models.ForeignKey(
         "users.Organization", on_delete=models.PROTECT, related_name="vehicles"
     )
     vin = models.CharField(max_length=64, blank=True)
     vin_normalized = models.CharField(max_length=64, blank=True, db_index=True)
+    brand = models.ForeignKey(
+        VehicleBrand,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="vehicles",
+    )
+    vehicle_model = models.ForeignKey(
+        VehicleModel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="vehicles",
+    )
     make = models.CharField(max_length=120, blank=True)
     model = models.CharField(max_length=120, blank=True)
     generation = models.CharField(max_length=120, blank=True)
@@ -222,9 +260,24 @@ class Vehicle(models.Model):
             )
         ]
 
+    def clean(self):
+        if (
+            self.vehicle_model_id
+            and self.brand_id
+            and self.vehicle_model.brand_id != self.brand_id
+        ):
+            raise ValidationError(
+                {"vehicle_model": _("The selected model belongs to another brand.")}
+            )
+
     def save(self, *args, **kwargs):
         self.vin = (self.vin or "").strip().upper()
         self.vin_normalized = re.sub(r"[^A-Z0-9]", "", self.vin)
+        if self.vehicle_model_id:
+            self.brand_id = self.vehicle_model.brand_id
+            self.model = self.vehicle_model.name
+        if self.brand_id:
+            self.make = self.brand.name
         super().save(*args, **kwargs)
 
     def __str__(self):

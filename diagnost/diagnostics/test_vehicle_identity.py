@@ -10,6 +10,8 @@ from .vehicle_identity import assess_vehicle_completeness
 from .models import (
     DiagnosticSession,
     Vehicle,
+    VehicleBrand,
+    VehicleModel,
     VehicleConfiguration,
     VehicleIdentityObservation,
 )
@@ -87,6 +89,11 @@ class VehicleIdentityWorkflowTests(TestCase):
         self.assertEqual(observation.corrections["model"], "Golf VIII")
         self.assertEqual(observation.status, VehicleIdentityObservation.Status.CONFIRMED)
         self.assertEqual(self.session.vehicle.organization, self.org_a)
+        self.assertEqual(self.session.vehicle.brand.name, "Volkswagen")
+        self.assertEqual(self.session.vehicle.vehicle_model.name, "Golf VIII")
+        self.assertEqual(self.session.vehicle.vehicle_model.brand, self.session.vehicle.brand)
+        self.assertEqual(VehicleBrand.objects.filter(name="Volkswagen").count(), 1)
+        self.assertEqual(VehicleModel.objects.filter(name="Golf VIII").count(), 1)
         self.assertEqual(self.session.vehicle_configuration.engine_code, "DACA")
         self.assertEqual(
             self.session.vehicle_configuration.completeness_status,
