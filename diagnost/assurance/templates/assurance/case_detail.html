@@ -56,6 +56,14 @@
           {% csrf_token %}
           <input type="hidden" name="decision" value="approve">
           <textarea name="rationale" required placeholder="Expert rationale"></textarea>
+          <button class="az-btn az-btn-primary" type="submit">Approve</button>
+        </form>
+      {% elif execution.status == 'locked' %}
+        <p><strong>BLOCKED</strong> — complete prerequisite operations.</p>
+      {% endif %}
+    </section>
+  {% endfor %}
+
   <section class="az-diagnostic-card">
     <h2>Workshop walkthrough log</h2>
     <p>Record friction, ambiguity, delays, and safety concerns observed during a real repair walkthrough.</p>
@@ -75,22 +83,24 @@
       </ul>
     {% endif %}
   </section>
-          <button class="az-btn az-btn-primary" type="submit">Approve</button>
-        </form>
-      {% elif execution.status == 'locked' %}
-        <p><strong>BLOCKED</strong> — complete prerequisite operations.</p>
-      {% endif %}
-    </section>
-  {% endfor %}
-  <form method="post" action="{% url 'assurance:verify_case' repair_case.id %}">
-    {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Run verification</button>
-  </form>
-</div></section>
-  {% if can_control and repair_case.status != 'completed' and repair_case.status != 'cancelled' %}
-    <form method="post" action="{% url 'assurance:cancel_case' repair_case.id %}">
-      {% csrf_token %}
-      <textarea name="rationale" minlength="5" required placeholder="Cancellation rationale"></textarea>
-      <button class="az-btn az-btn-outline" type="submit">Cancel repair case</button>
+
+  <section class="az-diagnostic-card">
+    <h2>Case verification</h2>
+    <form method="post" action="{% url 'assurance:verify_case' repair_case.id %}">
+      {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Run verification</button>
     </form>
+  </section>
+
+  {% if can_control and repair_case.status != 'completed' and repair_case.status != 'cancelled' %}
+    <section class="az-diagnostic-card">
+      <h2>Cancel repair case</h2>
+      <p>Use this action only when the repair case must be stopped. The rationale is retained in the audit trail.</p>
+      <form method="post" action="{% url 'assurance:cancel_case' repair_case.id %}">
+        {% csrf_token %}
+        <textarea name="rationale" minlength="5" required placeholder="Cancellation rationale"></textarea>
+        <button class="az-btn az-btn-outline" type="submit">Cancel repair case</button>
+      </form>
+    </section>
   {% endif %}
+</div></section>
 {% endblock %}
