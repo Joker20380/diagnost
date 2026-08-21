@@ -345,6 +345,30 @@ class CaseOperation(models.Model):
             raise ValidationError("Operation is outside the pinned procedure version.")
 
 
+class CaseOperationException(models.Model):
+    case_operation = models.OneToOneField(
+        CaseOperation,
+        on_delete=models.PROTECT,
+        related_name="approved_exception",
+    )
+    rationale = models.TextField()
+    authorized_by = models.ForeignKey(
+        UserProfile,
+        on_delete=models.PROTECT,
+        related_name="authorized_assurance_exceptions",
+    )
+    authorized_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Operation exceptions are append-only.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Operation exceptions are append-only.")
+
+
 class Evidence(models.Model):
     repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="evidence")
     case_operation = models.ForeignKey(CaseOperation, on_delete=models.PROTECT, related_name="evidence")

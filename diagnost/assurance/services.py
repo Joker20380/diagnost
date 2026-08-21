@@ -13,6 +13,7 @@ from users.models import TechnicianProfile, UserProfile
 from .file_security import inspect_evidence_file
 from .models import (
     CaseOperation,
+    CaseOperationException,
     Evidence,
     EvidenceRequirement,
     ExpertDecision,
@@ -54,6 +55,21 @@ def _technician(user, organization_id) -> TechnicianProfile:
     ):
         raise PermissionDenied("Active technician in this organization is required.")
     return technician
+
+
+def _manager_technician(user, organization_id) -> TechnicianProfile:
+    technician = _technician(user, organization_id)
+    if ROLE_LEVEL.get(technician.role, -1) < 3:
+        raise PermissionDenied("Senior or technical manager role is required.")
+    return technician
+
+
+def _assert_case_open(case: RepairCase):
+    if case.status in {
+        RepairCase.Status.COMPLETED,
+        RepairCase.Status.CANCELLED,
+    }:
+        raise ValidationError("The repair case is closed.")
 
 
 def _audit(case, actor, action, *, case_operation=None, before="", after="", payload=None):
@@ -269,6 +285,7 @@ def submit_evidence(
         "repair_case", "operation"
     ).get(pk=case_operation.pk)
     technician = assert_operation_authorized(case_operation, user)
+    _assert_case_open(case_operation.repair_case)
     if case_operation.status not in {CaseOperation.Status.AVAILABLE, CaseOperation.Status.IN_PROGRESS}:
         raise ValidationError("Evidence can only be submitted for an available operation.")
     if requirement and requirement.operation_id != case_operation.operation_id:
@@ -406,11 +423,97 @@ def _unlock_dependents(case_operation, actor):
             continue
         if not case.case_operations.filter(
             operation_id__in=dependency_ids
-        ).exclude(status=CaseOperation.Status.COMPLETED).exists():
+        ).exclude(status__in=[CaseOperation.Status.COMPLETED, CaseOperation.Status.SKIPPED]).exists():
             before = candidate.status
             candidate.status = CaseOperation.Status.AVAILABLE
             candidate.save(update_fields=["status"])
             _audit(case, actor, "operation_unlocked", case_operation=candidate, before=before, after=candidate.status)
+
+
+@transaction.atomic
+def skip_case_operation(
+    *, case_operation: CaseOperation, user, rationale: str
+) -> CaseOperationException:
+    case_operation = CaseOperation.objects.select_for_update().select_related(
+        "repair_case", "operation"
+    ).get(pk=case_operation.pk)
+    authorizer = _manager_technician(
+        user, case_operation.repair_case.organization_id
+    )
+    _assert_case_open(case_operation.repair_case)
+    if case_operation.status not in {
+        CaseOperation.Status.AVAILABLE,
+        CaseOperation.Status.IN_PROGRESS,
+    }:
+        raise ValidationError("Only an available operation can be skipped.")
+    if not case_operation.operation.escalation_allowed:
+        raise ValidationError("This operation does not allow an exception.")
+    rationale = rationale.strip()
+    if len(rationale) < 5:
+        raise ValidationError("A meaningful exception rationale is required.")
+
+    approved_exception = CaseOperationException.objects.create(
+        case_operation=case_operation,
+        rationale=rationale,
+        authorized_by=authorizer.user_profile,
+    )
+    before = case_operation.status
+    case_operation.status = CaseOperation.Status.SKIPPED
+    case_operation.completed_by = authorizer.user_profile
+    case_operation.completed_at = timezone.now()
+    case_operation.result = {
+        "exception_id": approved_exception.pk,
+        "exception_rationale": rationale,
+    }
+    case_operation.save(
+        update_fields=["status", "completed_by", "completed_at", "result"]
+    )
+    _audit(
+        case_operation.repair_case,
+        authorizer.user_profile,
+        "operation_exception_approved",
+        case_operation=case_operation,
+        before=before,
+        after=case_operation.status,
+        payload={"exception_id": approved_exception.pk, "rationale": rationale},
+    )
+    _unlock_dependents(case_operation, authorizer.user_profile)
+    return approved_exception
+
+
+@transaction.atomic
+def cancel_repair_case(*, case: RepairCase, user, rationale: str) -> RepairCase:
+    case = RepairCase.objects.select_for_update().get(pk=case.pk)
+    authorizer = _manager_technician(user, case.organization_id)
+    _assert_case_open(case)
+    rationale = rationale.strip()
+    if len(rationale) < 5:
+        raise ValidationError("A meaningful cancellation rationale is required.")
+
+    cancelled_at = timezone.now()
+    unfinished = case.case_operations.exclude(
+        status__in=[CaseOperation.Status.COMPLETED, CaseOperation.Status.SKIPPED]
+    )
+    operation_ids = list(unfinished.values_list("id", flat=True))
+    unfinished.update(
+        status=CaseOperation.Status.SKIPPED,
+        completed_by=authorizer.user_profile,
+        completed_at=cancelled_at,
+        result={"cancelled": True, "rationale": rationale},
+    )
+    before = case.status
+    case.status = RepairCase.Status.CANCELLED
+    case.completed_at = cancelled_at
+    case.save(update_fields=["status", "completed_at"])
+    _audit(
+        case,
+        authorizer.user_profile,
+        "case_cancelled",
+        before=before,
+        after=case.status,
+        payload={"rationale": rationale, "cancelled_operation_ids": operation_ids},
+    )
+    return case
 
 
 @transaction.atomic
@@ -419,6 +522,7 @@ def complete_operation(case_operation: CaseOperation, user, result=None) -> Case
         "repair_case", "operation"
     ).get(pk=case_operation.pk)
     technician = assert_operation_authorized(case_operation, user)
+    _assert_case_open(case_operation.repair_case)
     if case_operation.status not in {CaseOperation.Status.AVAILABLE, CaseOperation.Status.IN_PROGRESS}:
         raise ValidationError("Operation is not available for completion.")
     missing = _missing_requirements(case_operation)
@@ -446,6 +550,7 @@ def complete_operation(case_operation: CaseOperation, user, result=None) -> Case
 def decide_operation(*, case_operation: CaseOperation, user, decision: str, rationale: str, evidence=()) -> ExpertDecision:
     case_operation = CaseOperation.objects.select_for_update().select_related("repair_case", "operation").get(pk=case_operation.pk)
     reviewer = _technician(user, case_operation.repair_case.organization_id)
+    _assert_case_open(case_operation.repair_case)
     required = ROLE_LEVEL.get(case_operation.operation.approval_minimum_role, 3)
     if ROLE_LEVEL.get(reviewer.role, -1) < required:
         raise PermissionDenied("Reviewer role is insufficient.")
@@ -507,6 +612,16 @@ def repair_record_snapshot(case: RepairCase) -> dict:
                 "completed_by_id": execution.completed_by_id,
                 "completed_at": execution.completed_at.isoformat() if execution.completed_at else None,
                 "result": execution.result,
+                "approved_exception": (
+                    {
+                        "id": execution.approved_exception.pk,
+                        "rationale": execution.approved_exception.rationale,
+                        "authorized_by_id": execution.approved_exception.authorized_by_id,
+                        "authorized_at": execution.approved_exception.authorized_at.isoformat(),
+                    }
+                    if hasattr(execution, "approved_exception")
+                    else None
+                ),
                 "evidence": [
                     {
                         "id": item.pk,
@@ -531,7 +646,9 @@ def repair_record_snapshot(case: RepairCase) -> dict:
                     for item in execution.expert_decisions.all()
                 ],
             }
-            for execution in case.case_operations.select_related("operation", "completed_by").prefetch_related("evidence", "expert_decisions")
+            for execution in case.case_operations.select_related(
+                "operation", "completed_by", "approved_exception"
+            ).prefetch_related("evidence", "expert_decisions")
         ],
         "verification_status": case.verification_status,
         "audit_event_ids": list(case.audit_events.values_list("id", flat=True)),
@@ -542,9 +659,21 @@ def repair_record_snapshot(case: RepairCase) -> dict:
 def verify_repair_case(case: RepairCase, user) -> Verification:
     reviewer = _technician(user, case.organization_id)
     case = RepairCase.objects.select_for_update().select_related("vehicle", "procedure_version__procedure").get(pk=case.pk)
-    executions = list(case.case_operations.select_related("operation"))
+    _assert_case_open(case)
+    executions = list(
+        case.case_operations.select_related("operation", "approved_exception")
+    )
     failed = [item.operation.key for item in executions if item.status == CaseOperation.Status.FAILED]
-    incomplete = [item.operation.key for item in executions if item.operation.mandatory and item.status != CaseOperation.Status.COMPLETED]
+    incomplete = [
+        item.operation.key
+        for item in executions
+        if item.operation.mandatory
+        and item.status != CaseOperation.Status.COMPLETED
+        and not (
+            item.status == CaseOperation.Status.SKIPPED
+            and hasattr(item, "approved_exception")
+        )
+    ]
     review = [item.operation.key for item in executions if item.status == CaseOperation.Status.REQUIRES_REVIEW]
     if failed:
         status = RepairCase.VerificationStatus.FAILED

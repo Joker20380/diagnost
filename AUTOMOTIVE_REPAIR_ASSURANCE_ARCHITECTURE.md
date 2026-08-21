@@ -173,6 +173,28 @@ case UI, audit events, and immutable repair-record snapshot. Supersession is
 allowed only while the operation can accept evidence; completed or locked
 operations must first enter a future controlled rework/exception workflow.
 
+## Case cancellation and operation exceptions
+
+Skipping a procedure operation is an authorization decision, not an ordinary
+technician status change. Only a senior technician or technical manager from
+the case organization can skip an available or in-progress operation, and only
+when the published procedure explicitly permits escalation. A mandatory
+rationale is stored in an append-only, one-to-one
+`CaseOperationException` record with its authorizer and timestamp.
+
+An approved skip is terminal for that execution and satisfies dependency
+unlocking and verification gates. The exception remains explicit in the case
+UI, audit trail, operation result, and immutable repair-record snapshot; a
+plain skipped status without the authorization record never satisfies a
+mandatory verification gate.
+
+Case cancellation uses the same senior-or-manager authority and requires a
+reason. It closes every unfinished execution as skipped, records the affected
+operations in the case audit event, and marks the case cancelled. Completed
+work and all previously captured evidence remain intact. Completed and
+cancelled cases reject further evidence, operation decisions, completion, or
+verification.
+
 ## First implementation slice
 
 The first slice will:

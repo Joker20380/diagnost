@@ -62,6 +62,13 @@ class EvidenceSupersessionForm(EvidenceSubmissionForm):
         self.fields["unit"].initial = evidence.unit
 
 
+class ReasonForm(forms.Form):
+    rationale = forms.CharField(
+        min_length=5,
+        widget=forms.Textarea(attrs={"rows": 2}),
+    )
+
+
 class ExpertDecisionForm(forms.Form):
     decision = forms.ChoiceField(choices=ExpertDecision.Decision.choices)
     rationale = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))

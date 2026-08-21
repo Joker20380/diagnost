@@ -10,13 +10,16 @@ from .forms import (
     EvidenceSubmissionForm,
     EvidenceSupersessionForm,
     ExpertDecisionForm,
+    ReasonForm,
     RepairCaseCreateForm,
 )
 from .models import CaseOperation, Evidence, RepairCase
 from .services import (
+    cancel_repair_case,
     complete_operation,
     decide_operation,
     create_repair_case,
+    skip_case_operation,
     submit_evidence,
     supersede_evidence,
     verify_repair_case,
@@ -88,7 +91,7 @@ def case_detail(request, case_id):
         pk=case_id,
     )
     operations = repair_case.case_operations.select_related(
-        "operation", "assigned_to"
+        "operation", "assigned_to", "approved_exception"
     ).prefetch_related(
         "operation__reference_media",
         "operation__evidence_requirements",
@@ -96,10 +99,20 @@ def case_detail(request, case_id):
         "evidence__superseded_by",
         "expert_decisions",
     )
+    profile = getattr(request.user, "userprofile", None)
+    technician = getattr(profile, "technician_profile", None) if profile else None
+    can_control = bool(
+        technician
+        and technician.is_active
+        and technician.role in {
+            TechnicianProfile.Role.SENIOR_EXPERT,
+            TechnicianProfile.Role.TECHNICAL_MANAGER,
+        }
+    )
     return render(
         request,
         "assurance/case_detail.html",
-        {"repair_case": repair_case, "operations": operations},
+        {"repair_case": repair_case, "operations": operations, "can_control": can_control},
     )
 
 
@@ -211,6 +224,50 @@ def complete_case_operation(request, execution_id):
             else:
                 messages.success(request, "Operation processed.")
     return redirect("assurance:case_detail", case_id=execution.repair_case_id)
+
+
+@login_required
+def skip_operation(request, execution_id):
+    execution = get_object_or_404(
+        CaseOperation.objects.select_related("repair_case", "operation"),
+        pk=execution_id,
+        repair_case__in=_visible_cases(request),
+    )
+    if request.method == "POST":
+        form = ReasonForm(request.POST)
+        if form.is_valid():
+            try:
+                skip_case_operation(
+                    case_operation=execution,
+                    user=request.user,
+                    rationale=form.cleaned_data["rationale"],
+                )
+            except (ValidationError, PermissionDenied) as exc:
+                messages.error(request, str(exc))
+            else:
+                messages.success(request, "Operation exception approved.")
+    return redirect("assurance:case_detail", case_id=execution.repair_case_id)
+
+
+@login_required
+def cancel_case(request, case_id):
+    repair_case = get_object_or_404(_visible_cases(request), pk=case_id)
+    if request.method == "POST":
+        form = ReasonForm(request.POST)
+        if form.is_valid():
+            try:
+                cancel_repair_case(
+                    case=repair_case,
+                    user=request.user,
+                    rationale=form.cleaned_data["rationale"],
+                )
+            except (ValidationError, PermissionDenied) as exc:
+                messages.error(request, str(exc))
+            else:
+                messages.success(request, "Repair case cancelled.")
+        else:
+            messages.error(request, "A meaningful cancellation rationale is required.")
+    return redirect("assurance:case_detail", case_id=repair_case.pk)
 
 
 @login_required

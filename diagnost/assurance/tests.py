@@ -20,10 +20,12 @@ from .models import (
     TechnicianSkill,
 )
 from .services import (
+    cancel_repair_case,
     complete_operation,
     create_repair_case,
     decide_operation,
     publish_procedure_version,
+    skip_case_operation,
     submit_evidence,
     supersede_evidence,
     verify_repair_case,
@@ -271,6 +273,69 @@ class RepairAssuranceExecutionTests(TestCase):
         complete_operation(execution, self.junior_user)
         execution.refresh_from_db()
         self.assertEqual(execution.status, CaseOperation.Status.COMPLETED)
+
+    def test_only_senior_can_approve_skip_and_it_unlocks_dependents(self):
+        scan_execution = self.execution(self.scan)
+        torque_execution = self.execution(self.torque)
+
+        with self.assertRaises(PermissionDenied):
+            skip_case_operation(
+                case_operation=scan_execution,
+                user=self.junior_user,
+                rationale="Diagnostic tool is unavailable.",
+            )
+
+        approved_exception = skip_case_operation(
+            case_operation=scan_execution,
+            user=self.senior_user,
+            rationale="Diagnostic tool is unavailable; manager approved manual checks.",
+        )
+
+        scan_execution.refresh_from_db()
+        torque_execution.refresh_from_db()
+        self.assertEqual(scan_execution.status, CaseOperation.Status.SKIPPED)
+        self.assertEqual(torque_execution.status, CaseOperation.Status.AVAILABLE)
+        self.assertEqual(
+            approved_exception.authorized_by,
+            self.senior_profile,
+        )
+        self.assertTrue(
+            self.case.audit_events.filter(
+                action="operation_exception_approved",
+                case_operation=scan_execution,
+            ).exists()
+        )
+
+    def test_case_cancellation_is_controlled_and_closes_all_execution(self):
+        with self.assertRaises(PermissionDenied):
+            cancel_repair_case(
+                case=self.case,
+                user=self.junior_user,
+                rationale="Customer withdrew authorization.",
+            )
+
+        cancel_repair_case(
+            case=self.case,
+            user=self.senior_user,
+            rationale="Customer withdrew authorization.",
+        )
+
+        self.case.refresh_from_db()
+        self.assertEqual(self.case.status, self.case.Status.CANCELLED)
+        self.assertFalse(
+            self.case.case_operations.exclude(
+                status=CaseOperation.Status.SKIPPED
+            ).exists()
+        )
+        with self.assertRaisesMessage(ValidationError, "repair case is closed"):
+            submit_evidence(
+                case_operation=self.execution(self.scan),
+                user=self.junior_user,
+                requirement=self.scan_requirement,
+                evidence_type=EvidenceRequirement.Type.DIAGNOSTIC_SCAN,
+                text="Late evidence",
+            )
+        self.assertTrue(self.case.audit_events.filter(action="case_cancelled").exists())
 
     def test_complete_repair_with_gates_approval_verification_and_record(self):
         scan_execution = self.execution(self.scan)
