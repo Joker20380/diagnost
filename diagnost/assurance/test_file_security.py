@@ -9,6 +9,7 @@ from .models import EvidenceRequirement
 
 
 @override_settings(
+    LANGUAGE_CODE="en",
     ASSURANCE_EVIDENCE_MAX_FILE_SIZE=1024,
     ASSURANCE_EVIDENCE_RETENTION_DAYS=2555,
 )

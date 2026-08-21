@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 
 from users.models import Organization, TechnicianProfile, UserProfile
 
@@ -15,6 +15,7 @@ from .models import (
 from .services import publish_procedure_version
 
 
+@override_settings(LANGUAGE_CODE="en")
 class ProcedureAuthoringTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_superuser(

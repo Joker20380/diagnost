@@ -5,6 +5,7 @@ import struct
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from .models import EvidenceRequirement
 
@@ -70,24 +71,23 @@ def scan_with_clamd(uploaded_file) -> str:
             connection.sendall(struct.pack("!I", 0))
             response = _read_clamd_response(connection)
     except (OSError, socket.timeout) as exc:
-        raise ValidationError(
-            "Malware scanner is unavailable; the file was not accepted."
-        ) from exc
+        raise ValidationError(_("Malware scanner is unavailable; the file was not accepted.")) from exc
     finally:
         uploaded_file.seek(position)
 
     if response.endswith(" OK"):
         return response
     if " FOUND" in response:
-        raise ValidationError("Malware was detected; the file was not accepted.")
-    raise ValidationError("Malware scan failed; the file was not accepted.")
+        raise ValidationError(_("Malware was detected; the file was not accepted."))
+    raise ValidationError(_("Malware scan failed; the file was not accepted."))
 
 
 def inspect_evidence_file(uploaded_file, evidence_type: str) -> dict:
     maximum_size = settings.ASSURANCE_EVIDENCE_MAX_FILE_SIZE
     if uploaded_file.size > maximum_size:
         raise ValidationError(
-            f"Evidence file exceeds the {maximum_size // (1024 * 1024)} MB limit."
+            _("Evidence file exceeds the %(limit)s MB limit.")
+            % {"limit": maximum_size // (1024 * 1024)}
         )
 
     position = uploaded_file.tell()
@@ -95,15 +95,11 @@ def inspect_evidence_file(uploaded_file, evidence_type: str) -> dict:
     uploaded_file.seek(position)
     detected_mime = detect_mime_type(header)
     if detected_mime not in ALLOWED_MIME_TYPES.get(evidence_type, set()):
-        raise ValidationError(
-            "Evidence file format is not allowed for this evidence type."
-        )
+        raise ValidationError(_("Evidence file format is not allowed for this evidence type."))
 
     claimed_mime = (getattr(uploaded_file, "content_type", "") or "").lower()
     if claimed_mime and claimed_mime != detected_mime:
-        raise ValidationError(
-            "Evidence file content does not match its declared MIME type."
-        )
+        raise ValidationError(_("Evidence file content does not match its declared MIME type."))
 
     scan_result = scan_with_clamd(uploaded_file)
     return {

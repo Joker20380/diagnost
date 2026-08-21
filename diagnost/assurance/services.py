@@ -7,6 +7,7 @@ from decimal import Decimal
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from users.models import TechnicianProfile, UserProfile
 
@@ -46,7 +47,7 @@ ROLE_LEVEL = {
 def _profile(user) -> UserProfile:
     profile = getattr(user, "userprofile", None)
     if profile is None:
-        raise PermissionDenied("User profile is required.")
+        raise PermissionDenied(_("User profile is required."))
     return profile
 
 
@@ -58,14 +59,14 @@ def _technician(user, organization_id) -> TechnicianProfile:
         or not technician.is_active
         or technician.organization_id != organization_id
     ):
-        raise PermissionDenied("Active technician in this organization is required.")
+        raise PermissionDenied(_("Active technician in this organization is required."))
     return technician
 
 
 def _manager_technician(user, organization_id) -> TechnicianProfile:
     technician = _technician(user, organization_id)
     if ROLE_LEVEL.get(technician.role, -1) < 3:
-        raise PermissionDenied("Senior or technical manager role is required.")
+        raise PermissionDenied(_("Senior or technical manager role is required."))
     return technician
 
 
@@ -74,7 +75,7 @@ def _assert_case_open(case: RepairCase):
         RepairCase.Status.COMPLETED,
         RepairCase.Status.CANCELLED,
     }:
-        raise ValidationError("The repair case is closed.")
+        raise ValidationError(_("The repair case is closed."))
 
 
 def _audit(case, actor, action, *, case_operation=None, before="", after="", payload=None):
@@ -197,16 +198,16 @@ def publish_procedure_version(version: ProcedureVersion, user) -> ProcedureVersi
     version = ProcedureVersion.objects.select_for_update().select_related("procedure").get(pk=version.pk)
     technician = _technician(user, version.procedure.organization_id)
     if ROLE_LEVEL.get(technician.role, -1) < 3:
-        raise PermissionDenied("Senior or technical manager role is required.")
+        raise PermissionDenied(_("Senior or technical manager role is required."))
     if version.status != ProcedureVersion.Status.DRAFT:
-        raise ValidationError("Only a draft version can be published.")
+        raise ValidationError(_("Only a draft version can be published."))
     operations = list(version.operations.prefetch_related("dependencies"))
     if not operations:
-        raise ValidationError("Procedure version must contain operations.")
+        raise ValidationError(_("Procedure version must contain operations."))
     for operation in operations:
         for dependency in operation.dependencies.all():
             if dependency.depends_on.sequence >= operation.sequence:
-                raise ValidationError("Dependencies must point to an earlier operation.")
+                raise ValidationError(_("Dependencies must point to an earlier operation."))
     snapshot = procedure_snapshot(version)
     ProcedureVersion.objects.filter(pk=version.pk).update(
         status=ProcedureVersion.Status.PUBLISHED,
@@ -232,9 +233,9 @@ def create_repair_case(
     profile = creator.user_profile
     procedure_version = ProcedureVersion.objects.select_related("procedure").get(pk=procedure_version.pk)
     if procedure_version.status != ProcedureVersion.Status.PUBLISHED:
-        raise ValidationError("Repair cases require a published procedure version.")
+        raise ValidationError(_("Repair cases require a published procedure version."))
     if procedure_version.procedure.organization_id != vehicle.organization_id:
-        raise ValidationError("Vehicle and procedure belong to different organizations.")
+        raise ValidationError(_("Vehicle and procedure belong to different organizations."))
     case = RepairCase.objects.create(
         organization=vehicle.organization,
         workshop=workshop,
@@ -272,41 +273,41 @@ def assert_operation_authorized(case_operation: CaseOperation, user) -> Technici
     if not RepairCaseTechnician.objects.filter(
         repair_case=case_operation.repair_case, technician=technician
     ).exists():
-        raise PermissionDenied("Technician is not assigned to this repair case.")
+        raise PermissionDenied(_("Technician is not assigned to this repair case."))
     operation = case_operation.operation
     required_role_level = ROLE_LEVEL.get(operation.minimum_role, 0)
     if ROLE_LEVEL.get(technician.role, -1) < required_role_level:
-        raise PermissionDenied("Technician role is insufficient for this operation.")
+        raise PermissionDenied(_("Technician role is insufficient for this operation."))
     if operation.required_skill_id:
         skill = technician.assurance_skills.filter(
             skill=operation.required_skill,
             level__gte=operation.required_skill_level,
         ).first()
         if skill is None:
-            raise PermissionDenied("Required verified skill level is missing.")
+            raise PermissionDenied(_("Required verified skill level is missing."))
     return technician
 
 
 def _validate_evidence_payload(requirement, evidence_type, file, text, numeric_value, unit):
     if requirement and requirement.evidence_type != evidence_type:
-        raise ValidationError("Evidence type does not match the requirement.")
+        raise ValidationError(_("Evidence type does not match the requirement."))
     if evidence_type in {
         EvidenceRequirement.Type.PHOTO,
         EvidenceRequirement.Type.VIDEO,
         EvidenceRequirement.Type.DOCUMENT,
     } and not file:
-        raise ValidationError("This evidence type requires a file.")
+        raise ValidationError(_("This evidence type requires a file."))
     if evidence_type in {
         EvidenceRequirement.Type.TEXT,
         EvidenceRequirement.Type.CONFIRMATION,
         EvidenceRequirement.Type.DIAGNOSTIC_SCAN,
     } and not (text or file):
-        raise ValidationError("Text or file evidence is required.")
+        raise ValidationError(_("Text or file evidence is required."))
     if evidence_type == EvidenceRequirement.Type.MEASUREMENT:
         if numeric_value is None:
-            raise ValidationError("Measurement value is required.")
+            raise ValidationError(_("Measurement value is required."))
         if requirement and requirement.unit and unit != requirement.unit:
-            raise ValidationError("Measurement unit does not match the requirement.")
+            raise ValidationError(_("Measurement unit does not match the requirement."))
 
 
 @transaction.atomic
@@ -330,18 +331,18 @@ def submit_evidence(
     technician = assert_operation_authorized(case_operation, user)
     _assert_case_open(case_operation.repair_case)
     if case_operation.status not in {CaseOperation.Status.AVAILABLE, CaseOperation.Status.IN_PROGRESS}:
-        raise ValidationError("Evidence can only be submitted for an available operation.")
+        raise ValidationError(_("Evidence can only be submitted for an available operation."))
     if requirement and requirement.operation_id != case_operation.operation_id:
-        raise ValidationError("Evidence requirement belongs to another operation.")
+        raise ValidationError(_("Evidence requirement belongs to another operation."))
     if supersedes:
         if supersedes.case_operation_id != case_operation.pk:
-            raise ValidationError("Superseded evidence belongs to another operation.")
+            raise ValidationError(_("Superseded evidence belongs to another operation."))
         if supersedes.requirement_id != getattr(requirement, "pk", None):
-            raise ValidationError("Replacement must use the same evidence requirement.")
+            raise ValidationError(_("Replacement must use the same evidence requirement."))
         if supersedes.evidence_type != evidence_type:
-            raise ValidationError("Replacement must use the same evidence type.")
+            raise ValidationError(_("Replacement must use the same evidence type."))
         if not supersession_reason.strip():
-            raise ValidationError("A supersession reason is required.")
+            raise ValidationError(_("A supersession reason is required."))
 
     _validate_evidence_payload(requirement, evidence_type, file, text, numeric_value, unit)
     evidence_metadata = dict(metadata or {})
@@ -415,7 +416,7 @@ def supersede_evidence(
         "case_operation__operation",
     ).get(pk=evidence.pk)
     if evidence.superseded_by.exists():
-        raise ValidationError("Evidence has already been superseded.")
+        raise ValidationError(_("Evidence has already been superseded."))
     return submit_evidence(
         case_operation=evidence.case_operation,
         user=user,
@@ -488,12 +489,12 @@ def skip_case_operation(
         CaseOperation.Status.AVAILABLE,
         CaseOperation.Status.IN_PROGRESS,
     }:
-        raise ValidationError("Only an available operation can be skipped.")
+        raise ValidationError(_("Only an available operation can be skipped."))
     if not case_operation.operation.escalation_allowed:
-        raise ValidationError("This operation does not allow an exception.")
+        raise ValidationError(_("This operation does not allow an exception."))
     rationale = rationale.strip()
     if len(rationale) < 5:
-        raise ValidationError("A meaningful exception rationale is required.")
+        raise ValidationError(_("A meaningful exception rationale is required."))
 
     approved_exception = CaseOperationException.objects.create(
         case_operation=case_operation,
@@ -531,7 +532,7 @@ def cancel_repair_case(*, case: RepairCase, user, rationale: str) -> RepairCase:
     _assert_case_open(case)
     rationale = rationale.strip()
     if len(rationale) < 5:
-        raise ValidationError("A meaningful cancellation rationale is required.")
+        raise ValidationError(_("A meaningful cancellation rationale is required."))
 
     cancelled_at = timezone.now()
     unfinished = case.case_operations.exclude(
@@ -567,7 +568,7 @@ def complete_operation(case_operation: CaseOperation, user, result=None) -> Case
     technician = assert_operation_authorized(case_operation, user)
     _assert_case_open(case_operation.repair_case)
     if case_operation.status not in {CaseOperation.Status.AVAILABLE, CaseOperation.Status.IN_PROGRESS}:
-        raise ValidationError("Operation is not available for completion.")
+        raise ValidationError(_("Operation is not available for completion."))
     missing = _missing_requirements(case_operation)
     if missing:
         raise ValidationError({"evidence": [item.pk for item in missing]})
@@ -598,11 +599,11 @@ def decide_operation(*, case_operation: CaseOperation, user, decision: str, rati
     _assert_case_open(case_operation.repair_case)
     required = ROLE_LEVEL.get(case_operation.operation.approval_minimum_role, 3)
     if ROLE_LEVEL.get(reviewer.role, -1) < required:
-        raise PermissionDenied("Reviewer role is insufficient.")
+        raise PermissionDenied(_("Reviewer role is insufficient."))
     if reviewer.user_profile_id == case_operation.completed_by_id:
-        raise PermissionDenied("An operation cannot approve itself.")
+        raise PermissionDenied(_("An operation cannot approve itself."))
     if case_operation.status != CaseOperation.Status.REQUIRES_REVIEW:
-        raise ValidationError("Operation is not awaiting expert review.")
+        raise ValidationError(_("Operation is not awaiting expert review."))
     authorized_keys = (
         list(case_operation.operation.unlocks.values_list("operation__key", flat=True))
         if decision == ExpertDecision.Decision.APPROVE else []
@@ -617,7 +618,7 @@ def decide_operation(*, case_operation: CaseOperation, user, decision: str, rati
     )
     for item in evidence:
         if item.case_operation_id != case_operation.pk:
-            raise ValidationError("Decision evidence belongs to another operation.")
+            raise ValidationError(_("Decision evidence belongs to another operation."))
         ExpertDecisionEvidence.objects.create(decision=expert_decision, evidence=item)
     before = case_operation.status
     unlock = False
@@ -707,34 +708,34 @@ def repair_record_snapshot(case: RepairCase) -> dict:
 def review_competency(*, technician, skill: Skill, requested_level: int, decision: str, rationale: str, evidence, user) -> CompetencyReview:
     reviewer = _manager_technician(user, skill.organization_id)
     if technician.organization_id != skill.organization_id:
-        raise ValidationError("Technician and skill must belong to one organization.")
+        raise ValidationError(_("Technician and skill must belong to one organization."))
     if reviewer.pk == technician.pk:
-        raise PermissionDenied("Reviewers cannot approve their own competency.")
+        raise PermissionDenied(_("Reviewers cannot approve their own competency."))
     if requested_level < 1 or requested_level > skill.max_level:
-        raise ValidationError("Requested competency level is invalid.")
+        raise ValidationError(_("Requested competency level is invalid."))
     if decision not in CompetencyReview.Decision.values:
-        raise ValidationError("Unsupported competency decision.")
+        raise ValidationError(_("Unsupported competency decision."))
     if len(rationale.strip()) < 5:
-        raise ValidationError("A substantive competency rationale is required.")
+        raise ValidationError(_("A substantive competency rationale is required."))
 
     evidence_items = list(Evidence.objects.select_for_update().select_related(
         "case_operation__operation", "repair_case"
     ).filter(pk__in=[item.pk for item in evidence]))
     if not evidence_items:
-        raise ValidationError("Competency review requires evidence.")
+        raise ValidationError(_("Competency review requires evidence."))
     if len(evidence_items) != len({item.pk for item in evidence}):
-        raise ValidationError("Some competency evidence does not exist.")
+        raise ValidationError(_("Some competency evidence does not exist."))
     for item in evidence_items:
         if item.repair_case.organization_id != skill.organization_id:
-            raise ValidationError("Competency evidence belongs to another organization.")
+            raise ValidationError(_("Competency evidence belongs to another organization."))
         if item.submitted_by_id != technician.user_profile_id:
-            raise ValidationError("Competency evidence was not submitted by this technician.")
+            raise ValidationError(_("Competency evidence was not submitted by this technician."))
         if item.case_operation.operation.required_skill_id != skill.pk:
-            raise ValidationError("Competency evidence does not demonstrate this skill.")
+            raise ValidationError(_("Competency evidence does not demonstrate this skill."))
         if item.case_operation.status != CaseOperation.Status.COMPLETED:
-            raise ValidationError("Competency evidence must come from a completed operation.")
+            raise ValidationError(_("Competency evidence must come from a completed operation."))
         if item.is_superseded:
-            raise ValidationError("Superseded evidence cannot support competency.")
+            raise ValidationError(_("Superseded evidence cannot support competency."))
 
     review = CompetencyReview.objects.create(
         technician=technician, skill=skill, requested_level=requested_level,

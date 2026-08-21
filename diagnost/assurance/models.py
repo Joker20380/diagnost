@@ -35,9 +35,9 @@ class TechnicianSkill(models.Model):
 
     def clean(self):
         if self.technician.organization_id != self.skill.organization_id:
-            raise ValidationError("Technician and skill must belong to one organization.")
+            raise ValidationError(_("Technician and skill must belong to one organization."))
         if self.level > self.skill.max_level:
-            raise ValidationError({"level": "Level exceeds the skill maximum."})
+            raise ValidationError({"level": _("Level exceeds the skill maximum.")})
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -87,14 +87,14 @@ class ProcedureVersion(models.Model):
         if self.pk:
             old = type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
             if old in {self.Status.PUBLISHED, self.Status.RETIRED}:
-                raise ValidationError("Published procedure versions are immutable.")
+                raise ValidationError(_("Published procedure versions are immutable."))
             if old == self.Status.DRAFT and self.status != self.Status.DRAFT:
-                raise ValidationError("Publish procedure versions through the publication service.")
+                raise ValidationError(_("Publish procedure versions through the publication service."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.is_locked:
-            raise ValidationError("Published procedure versions cannot be deleted.")
+            raise ValidationError(_("Published procedure versions cannot be deleted."))
         return super().delete(*args, **kwargs)
 
     def __str__(self):
@@ -110,7 +110,7 @@ class DraftSpecification(models.Model):
 
     def _assert_draft(self):
         if self.procedure_version().status != ProcedureVersion.Status.DRAFT:
-            raise ValidationError("Published procedure specifications are immutable.")
+            raise ValidationError(_("Published procedure specifications are immutable."))
 
     def save(self, *args, **kwargs):
         self._assert_draft()
@@ -164,9 +164,9 @@ class Operation(DraftSpecification):
 
     def clean(self):
         if self.required_skill_id and self.required_skill.organization_id != self.version.procedure.organization_id:
-            raise ValidationError("Required skill belongs to another organization.")
+            raise ValidationError(_("Required skill belongs to another organization."))
         if self.required_skill_id and self.required_skill_level < 1:
-            raise ValidationError({"required_skill_level": "Required skill needs a level."})
+            raise ValidationError({"required_skill_level": _("Required skill needs a level.")})
 
     def __str__(self):
         return f"{self.sequence}. {self.title}"
@@ -188,11 +188,11 @@ class OperationDependency(DraftSpecification):
     def clean(self):
         if self.operation.version_id != self.depends_on.version_id:
             raise ValidationError(
-                {"depends_on": "Dependency must use the same procedure version."}
+                {"depends_on": _("Dependency must use the same procedure version.")}
             )
         if self.depends_on.sequence >= self.operation.sequence:
             raise ValidationError(
-                {"depends_on": "Dependency must point to an earlier operation."}
+                {"depends_on": _("Dependency must point to an earlier operation.")}
             )
 
 
@@ -222,7 +222,7 @@ class EvidenceRequirement(DraftSpecification):
 
     def clean(self):
         if self.evidence_type == self.Type.NONE and self.required:
-            raise ValidationError("NONE cannot be required evidence.")
+            raise ValidationError(_("NONE cannot be required evidence."))
 
 
 class ReferenceMedia(DraftSpecification):
@@ -251,11 +251,11 @@ class ReferenceMedia(DraftSpecification):
     def clean(self):
         if self.source_type == self.Source.YOUTUBE_EMBED:
             if self.provider != "youtube" or not self.provider_asset_id:
-                raise ValidationError("YouTube embed needs provider and video id.")
+                raise ValidationError(_("YouTube embed needs provider and video id."))
             if self.file:
-                raise ValidationError("YouTube media must remain external.")
+                raise ValidationError(_("YouTube media must remain external."))
         if self.start_seconds is not None and self.end_seconds is not None and self.end_seconds <= self.start_seconds:
-            raise ValidationError("Media end must be after start.")
+            raise ValidationError(_("Media end must be after start."))
 
 
 class RepairCase(models.Model):
@@ -291,11 +291,11 @@ class RepairCase(models.Model):
 
     def clean(self):
         if self.vehicle.organization_id != self.organization_id:
-            raise ValidationError("Vehicle belongs to another organization.")
+            raise ValidationError(_("Vehicle belongs to another organization."))
         if self.procedure_version.procedure.organization_id != self.organization_id:
-            raise ValidationError("Procedure belongs to another organization.")
+            raise ValidationError(_("Procedure belongs to another organization."))
         if self.workshop_id and self.workshop.organization_id != self.organization_id:
-            raise ValidationError("Workshop belongs to another organization.")
+            raise ValidationError(_("Workshop belongs to another organization."))
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -313,7 +313,7 @@ class RepairCaseTechnician(models.Model):
 
     def clean(self):
         if self.technician.organization_id != self.repair_case.organization_id:
-            raise ValidationError("Technician belongs to another organization.")
+            raise ValidationError(_("Technician belongs to another organization."))
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -345,7 +345,7 @@ class CaseOperation(models.Model):
 
     def clean(self):
         if self.operation.version_id != self.repair_case.procedure_version_id:
-            raise ValidationError("Operation is outside the pinned procedure version.")
+            raise ValidationError(_("Operation is outside the pinned procedure version."))
 
 
 class CaseOperationException(models.Model):
@@ -364,12 +364,12 @@ class CaseOperationException(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Operation exceptions are append-only.")
+            raise ValidationError(_("Operation exceptions are append-only."))
         self.full_clean()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Operation exceptions are append-only.")
+        raise ValidationError(_("Operation exceptions are append-only."))
 
 
 class Evidence(models.Model):
@@ -406,22 +406,22 @@ class Evidence(models.Model):
             return
         previous = self.supersedes
         if previous.repair_case_id != self.repair_case_id:
-            raise ValidationError("Superseded evidence belongs to another repair case.")
+            raise ValidationError(_("Superseded evidence belongs to another repair case."))
         if previous.case_operation_id != self.case_operation_id:
-            raise ValidationError("Superseded evidence belongs to another operation.")
+            raise ValidationError(_("Superseded evidence belongs to another operation."))
         if previous.requirement_id != self.requirement_id:
-            raise ValidationError("Replacement must use the same evidence requirement.")
+            raise ValidationError(_("Replacement must use the same evidence requirement."))
         if previous.evidence_type != self.evidence_type:
-            raise ValidationError("Replacement must use the same evidence type.")
+            raise ValidationError(_("Replacement must use the same evidence type."))
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Evidence is append-only.")
+            raise ValidationError(_("Evidence is append-only."))
         self.full_clean()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Evidence is append-only.")
+        raise ValidationError(_("Evidence is append-only."))
 
 
 class ExpertDecision(models.Model):
@@ -441,11 +441,11 @@ class ExpertDecision(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Expert decisions are append-only.")
+            raise ValidationError(_("Expert decisions are append-only."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Expert decisions are append-only.")
+        raise ValidationError(_("Expert decisions are append-only."))
 
 
 class ExpertDecisionEvidence(models.Model):
@@ -502,11 +502,11 @@ class Verification(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Verification results are append-only.")
+            raise ValidationError(_("Verification results are append-only."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Verification results are append-only.")
+        raise ValidationError(_("Verification results are append-only."))
 
 
 class RepairRecord(models.Model):
@@ -518,11 +518,11 @@ class RepairRecord(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Repair records are immutable.")
+            raise ValidationError(_("Repair records are immutable."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Repair records are immutable.")
+        raise ValidationError(_("Repair records are immutable."))
 
 
 class RepairAuditEvent(models.Model):
@@ -540,11 +540,11 @@ class RepairAuditEvent(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Audit events are append-only.")
+            raise ValidationError(_("Audit events are append-only."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Audit events are append-only.")
+        raise ValidationError(_("Audit events are append-only."))
 
 class WorkshopWalkthroughObservation(models.Model):
     class Category(models.TextChoices):
@@ -575,16 +575,16 @@ class WorkshopWalkthroughObservation(models.Model):
 
     def clean(self):
         if self.case_operation_id and self.case_operation.repair_case_id != self.repair_case_id:
-            raise ValidationError("Walkthrough operation belongs to another repair case.")
+            raise ValidationError(_("Walkthrough operation belongs to another repair case."))
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Walkthrough observations are append-only.")
+            raise ValidationError(_("Walkthrough observations are append-only."))
         self.full_clean()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Walkthrough observations are append-only.")
+        raise ValidationError(_("Walkthrough observations are append-only."))
 
 
 class CompetencyReview(models.Model):
@@ -606,18 +606,18 @@ class CompetencyReview(models.Model):
 
     def clean(self):
         if self.technician.organization_id != self.skill.organization_id:
-            raise ValidationError("Technician and skill must belong to one organization.")
+            raise ValidationError(_("Technician and skill must belong to one organization."))
         if self.requested_level > self.skill.max_level:
-            raise ValidationError({"requested_level": "Level exceeds the skill maximum."})
+            raise ValidationError({"requested_level": _("Level exceeds the skill maximum.")})
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Competency reviews are append-only.")
+            raise ValidationError(_("Competency reviews are append-only."))
         self.full_clean()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Competency reviews are append-only.")
+        raise ValidationError(_("Competency reviews are append-only."))
 
 
 class CompetencyReviewEvidence(models.Model):
@@ -629,8 +629,8 @@ class CompetencyReviewEvidence(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk:
-            raise ValidationError("Competency review evidence links are append-only.")
+            raise ValidationError(_("Competency review evidence links are append-only."))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        raise ValidationError("Competency review evidence links are append-only.")
+        raise ValidationError(_("Competency review evidence links are append-only."))

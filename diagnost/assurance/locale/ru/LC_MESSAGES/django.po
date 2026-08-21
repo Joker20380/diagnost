@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 17:43+0000\n"
+"POT-Creation-Date: 2026-08-21 18:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,9 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
 #: admin.py:149
 msgid "операции"
 msgstr "операции"
@@ -29,6 +28,31 @@ msgstr "Опубликовать выбранные черновые верси�
 #: apps.py:8
 msgid "Контроль и подтверждение ремонта"
 msgstr "Контроль и подтверждение ремонта"
+
+#: file_security.py:74
+msgid "Malware scanner is unavailable; the file was not accepted."
+msgstr "Сканер вредоносных программ недоступен; файл не принят."
+
+#: file_security.py:81
+msgid "Malware was detected; the file was not accepted."
+msgstr "Обнаружена вредоносная программа; файл не принят."
+
+#: file_security.py:82
+msgid "Malware scan failed; the file was not accepted."
+msgstr "Проверка на вредоносные программы завершилась ошибкой; файл не принят."
+
+#: file_security.py:89
+#, python-format
+msgid "Evidence file exceeds the %(limit)s MB limit."
+msgstr "Размер файла подтверждения превышает ограничение %(limit)s МБ."
+
+#: file_security.py:98
+msgid "Evidence file format is not allowed for this evidence type."
+msgstr "Формат файла не разрешён для этого типа подтверждения."
+
+#: file_security.py:102
+msgid "Evidence file content does not match its declared MIME type."
+msgstr "Содержимое файла не соответствует заявленному MIME-типу."
 
 #: forms.py:11 templates/assurance/repair_certificate.html:14
 msgid "Vehicle"
@@ -102,6 +126,62 @@ msgstr "Решение"
 msgid "Evidence"
 msgstr "Доказательства"
 
+#: models.py:38 models.py:609 services.py:711
+msgid "Technician and skill must belong to one organization."
+msgstr "Техник и навык должны относиться к одной организации."
+
+#: models.py:40 models.py:611
+msgid "Level exceeds the skill maximum."
+msgstr "Уровень превышает максимально допустимый для навыка."
+
+#: models.py:90
+msgid "Published procedure versions are immutable."
+msgstr "Опубликованные версии процедур нельзя изменять."
+
+#: models.py:92
+msgid "Publish procedure versions through the publication service."
+msgstr "Публикуйте версии процедур через сервис публикации."
+
+#: models.py:97
+msgid "Published procedure versions cannot be deleted."
+msgstr "Опубликованные версии процедур нельзя удалять."
+
+#: models.py:113
+msgid "Published procedure specifications are immutable."
+msgstr "Спецификации опубликованной процедуры нельзя изменять."
+
+#: models.py:167
+msgid "Required skill belongs to another organization."
+msgstr "Требуемый навык относится к другой организации."
+
+#: models.py:169
+msgid "Required skill needs a level."
+msgstr "Для требуемого навыка необходимо указать уровень."
+
+#: models.py:191
+msgid "Dependency must use the same procedure version."
+msgstr "Зависимость должна использовать ту же версию процедуры."
+
+#: models.py:195
+msgid "Dependency must point to an earlier operation."
+msgstr "Зависимость должна указывать на более раннюю операцию."
+
+#: models.py:225
+msgid "NONE cannot be required evidence."
+msgstr "Тип «Нет» нельзя использовать как обязательное подтверждение."
+
+#: models.py:254
+msgid "YouTube embed needs provider and video id."
+msgstr "Для вставки YouTube необходимы провайдер и идентификатор видео."
+
+#: models.py:256
+msgid "YouTube media must remain external."
+msgstr "Материал YouTube должен оставаться внешним."
+
+#: models.py:258
+msgid "Media end must be after start."
+msgstr "Время окончания материала должно быть позже времени начала."
+
 #: models.py:263
 msgid "Draft"
 msgstr "Черновик"
@@ -146,6 +226,22 @@ msgstr "Не завершено"
 msgid "Requires review"
 msgstr "Требует проверки"
 
+#: models.py:294
+msgid "Vehicle belongs to another organization."
+msgstr "Автомобиль относится к другой организации."
+
+#: models.py:296
+msgid "Procedure belongs to another organization."
+msgstr "Процедура относится к другой организации."
+
+#: models.py:298
+msgid "Workshop belongs to another organization."
+msgstr "Мастерская относится к другой организации."
+
+#: models.py:316
+msgid "Technician belongs to another organization."
+msgstr "Техник относится к другой организации."
+
 #: models.py:325
 msgid "Locked"
 msgstr "Заблокировано"
@@ -157,6 +253,34 @@ msgstr "Доступно"
 #: models.py:331
 msgid "Skipped"
 msgstr "Пропущено"
+
+#: models.py:348
+msgid "Operation is outside the pinned procedure version."
+msgstr "Операция не входит в закреплённую версию процедуры."
+
+#: models.py:367 models.py:372
+msgid "Operation exceptions are append-only."
+msgstr "Исключения операций доступны только для добавления."
+
+#: models.py:409
+msgid "Superseded evidence belongs to another repair case."
+msgstr "Заменённое подтверждение относится к другому ремонтному делу."
+
+#: models.py:411 services.py:339
+msgid "Superseded evidence belongs to another operation."
+msgstr "Заменённое подтверждение относится к другой операции."
+
+#: models.py:413 services.py:341
+msgid "Replacement must use the same evidence requirement."
+msgstr "Замена должна соответствовать тому же требованию к подтверждению."
+
+#: models.py:415 services.py:343
+msgid "Replacement must use the same evidence type."
+msgstr "Замена должна иметь тот же тип подтверждения."
+
+#: models.py:419 models.py:424
+msgid "Evidence is append-only."
+msgstr "Подтверждения доступны только для добавления."
 
 #: models.py:429 models.py:592 templates/assurance/case_detail.html:60
 msgid "Approve"
@@ -173,6 +297,22 @@ msgstr "На доработку"
 #: models.py:432
 msgid "Escalate"
 msgstr "Передать выше"
+
+#: models.py:444 models.py:448
+msgid "Expert decisions are append-only."
+msgstr "Решения экспертов доступны только для добавления."
+
+#: models.py:505 models.py:509
+msgid "Verification results are append-only."
+msgstr "Результаты проверки доступны только для добавления."
+
+#: models.py:521 models.py:525
+msgid "Repair records are immutable."
+msgstr "Записи о ремонте нельзя изменять."
+
+#: models.py:543 models.py:547
+msgid "Audit events are append-only."
+msgstr "События аудита доступны только для добавления."
 
 #: models.py:551
 msgid "Usability"
@@ -213,6 +353,186 @@ msgstr "Высокая"
 #: models.py:562
 msgid "Blocker"
 msgstr "Блокирующая"
+
+#: models.py:578
+msgid "Walkthrough operation belongs to another repair case."
+msgstr "Операция наблюдения относится к другому ремонтному делу."
+
+#: models.py:582 models.py:587
+msgid "Walkthrough observations are append-only."
+msgstr "Наблюдения производственного обхода доступны только для добавления."
+
+#: models.py:615 models.py:620
+msgid "Competency reviews are append-only."
+msgstr "Проверки компетенций доступны только для добавления."
+
+#: models.py:632 models.py:636
+msgid "Competency review evidence links are append-only."
+msgstr "Связи подтверждений с проверкой компетенции доступны только для добавления."
+
+#: services.py:50
+msgid "User profile is required."
+msgstr "Требуется профиль пользователя."
+
+#: services.py:62
+msgid "Active technician in this organization is required."
+msgstr "Требуется активный техник этой организации."
+
+#: services.py:69 services.py:201
+msgid "Senior or technical manager role is required."
+msgstr "Требуется роль старшего специалиста или технического руководителя."
+
+#: services.py:78
+msgid "The repair case is closed."
+msgstr "Ремонтное дело закрыто."
+
+#: services.py:203
+msgid "Only a draft version can be published."
+msgstr "Можно опубликовать только черновую версию."
+
+#: services.py:206
+msgid "Procedure version must contain operations."
+msgstr "Версия процедуры должна содержать операции."
+
+#: services.py:210
+msgid "Dependencies must point to an earlier operation."
+msgstr "Зависимости должны указывать на более раннюю операцию."
+
+#: services.py:236
+msgid "Repair cases require a published procedure version."
+msgstr "Для ремонтного дела требуется опубликованная версия процедуры."
+
+#: services.py:238
+msgid "Vehicle and procedure belong to different organizations."
+msgstr "Автомобиль и процедура относятся к разным организациям."
+
+#: services.py:276
+msgid "Technician is not assigned to this repair case."
+msgstr "Техник не назначен на это ремонтное дело."
+
+#: services.py:280
+msgid "Technician role is insufficient for this operation."
+msgstr "Роли техника недостаточно для этой операции."
+
+#: services.py:287
+msgid "Required verified skill level is missing."
+msgstr "Отсутствует требуемый подтверждённый уровень навыка."
+
+#: services.py:293
+msgid "Evidence type does not match the requirement."
+msgstr "Тип подтверждения не соответствует требованию."
+
+#: services.py:299
+msgid "This evidence type requires a file."
+msgstr "Для этого типа подтверждения требуется файл."
+
+#: services.py:305
+msgid "Text or file evidence is required."
+msgstr "Требуется текстовое подтверждение или файл."
+
+#: services.py:308
+msgid "Measurement value is required."
+msgstr "Требуется значение измерения."
+
+#: services.py:310
+msgid "Measurement unit does not match the requirement."
+msgstr "Единица измерения не соответствует требованию."
+
+#: services.py:334
+msgid "Evidence can only be submitted for an available operation."
+msgstr "Подтверждение можно отправить только для доступной операции."
+
+#: services.py:336
+msgid "Evidence requirement belongs to another operation."
+msgstr "Требование к подтверждению относится к другой операции."
+
+#: services.py:345
+msgid "A supersession reason is required."
+msgstr "Необходимо указать причину замены."
+
+#: services.py:419
+msgid "Evidence has already been superseded."
+msgstr "Подтверждение уже заменено."
+
+#: services.py:492
+msgid "Only an available operation can be skipped."
+msgstr "Пропустить можно только доступную операцию."
+
+#: services.py:494
+msgid "This operation does not allow an exception."
+msgstr "Для этой операции исключение не допускается."
+
+#: services.py:497
+msgid "A meaningful exception rationale is required."
+msgstr "Необходимо указать содержательное обоснование исключения."
+
+#: services.py:535 views.py:517
+msgid "A meaningful cancellation rationale is required."
+msgstr "Необходимо указать содержательную причину отмены."
+
+#: services.py:571
+msgid "Operation is not available for completion."
+msgstr "Операция недоступна для завершения."
+
+#: services.py:602
+msgid "Reviewer role is insufficient."
+msgstr "Роли проверяющего недостаточно."
+
+#: services.py:604
+msgid "An operation cannot approve itself."
+msgstr "Операция не может подтвердить сама себя."
+
+#: services.py:606
+msgid "Operation is not awaiting expert review."
+msgstr "Операция не ожидает экспертной проверки."
+
+#: services.py:621
+msgid "Decision evidence belongs to another operation."
+msgstr "Подтверждение решения относится к другой операции."
+
+#: services.py:713
+msgid "Reviewers cannot approve their own competency."
+msgstr "Проверяющие не могут подтверждать собственную компетенцию."
+
+#: services.py:715
+msgid "Requested competency level is invalid."
+msgstr "Запрошенный уровень компетенции недопустим."
+
+#: services.py:717
+msgid "Unsupported competency decision."
+msgstr "Неподдерживаемое решение по компетенции."
+
+#: services.py:719
+msgid "A substantive competency rationale is required."
+msgstr "Необходимо содержательное обоснование решения по компетенции."
+
+#: services.py:725
+msgid "Competency review requires evidence."
+msgstr "Для проверки компетенции требуется подтверждение."
+
+#: services.py:727
+msgid "Some competency evidence does not exist."
+msgstr "Некоторые подтверждения компетенции не существуют."
+
+#: services.py:730
+msgid "Competency evidence belongs to another organization."
+msgstr "Подтверждение компетенции относится к другой организации."
+
+#: services.py:732
+msgid "Competency evidence was not submitted by this technician."
+msgstr "Подтверждение компетенции отправлено не этим техником."
+
+#: services.py:734
+msgid "Competency evidence does not demonstrate this skill."
+msgstr "Подтверждение компетенции не доказывает этот навык."
+
+#: services.py:736
+msgid "Competency evidence must come from a completed operation."
+msgstr "Подтверждение компетенции должно относиться к завершённой операции."
+
+#: services.py:738
+msgid "Superseded evidence cannot support competency."
+msgstr "Заменённое подтверждение нельзя использовать для подтверждения компетенции."
 
 #: templates/assurance/case_audit.html:5
 msgid "Back to repair case"
@@ -404,7 +724,7 @@ msgstr "Используйте это действие только для ос�
 msgid "Cancellation rationale"
 msgstr "Причина отмены"
 
-#: templates/assurance/case_list.html:5
+#: templates/assurance/case_list.html:5 tests.py:627 tests.py:631
 msgid "Repair Cases"
 msgstr "Ремонтные дела"
 
@@ -543,10 +863,6 @@ msgstr "Исключение для операции одобрено."
 #: views.py:515
 msgid "Repair case cancelled."
 msgstr "Ремонтное дело отменено."
-
-#: views.py:517
-msgid "A meaningful cancellation rationale is required."
-msgstr "Необходимо указать содержательную причину отмены."
 
 #: views.py:544
 msgid "Expert decision recorded."

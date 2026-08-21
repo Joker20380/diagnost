@@ -626,6 +626,10 @@ class RepairAssuranceExecutionTests(TestCase):
         with translation.override("ru"):
             self.assertEqual(gettext("Repair Cases"), "Ремонтные дела")
             self.assertEqual(str(CaseOperation.Status.IN_PROGRESS.label), "В работе")
+            self.assertEqual(
+                gettext("The repair case is closed."),
+                "Ремонтное дело закрыто.",
+            )
 
         with translation.override("en"):
             self.assertEqual(gettext("Repair Cases"), "Repair Cases")
