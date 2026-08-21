@@ -155,6 +155,24 @@ supersession rules must be evaluated before any purge workflow is introduced.
 Uploaded evidence remains under `runtime/media/assurance/evidence/`; production
 backup and restore must cover that volume together with PostgreSQL.
 
+## Evidence supersession
+
+Evidence correction never updates or deletes the original row. An authorized
+technician selects the current evidence, supplies a replacement with the same
+operation, requirement, and evidence type, and records a mandatory reason.
+The replacement points to the previous row through `supersedes`.
+
+Only one direct replacement is allowed for a row, enforced both under a
+transactional row lock and by a conditional database uniqueness constraint.
+Further correction continues from the latest row, producing a linear,
+attributable chain rather than competing branches.
+
+Completion gates, measurement range checks, and expert decisions use only leaf
+evidence that has not been superseded. The full chain remains visible in the
+case UI, audit events, and immutable repair-record snapshot. Supersession is
+allowed only while the operation can accept evidence; completed or locked
+operations must first enter a future controlled rework/exception workflow.
+
 ## First implementation slice
 
 The first slice will:

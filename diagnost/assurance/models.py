@@ -361,9 +361,36 @@ class Evidence(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True)
     supersedes = models.ForeignKey("self", on_delete=models.PROTECT, null=True, blank=True, related_name="superseded_by")
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["supersedes"],
+                condition=models.Q(supersedes__isnull=False),
+                name="unique_assurance_evidence_supersession",
+            )
+        ]
+
+    @property
+    def is_superseded(self):
+        return self.superseded_by.exists()
+
+    def clean(self):
+        if not self.supersedes_id:
+            return
+        previous = self.supersedes
+        if previous.repair_case_id != self.repair_case_id:
+            raise ValidationError("Superseded evidence belongs to another repair case.")
+        if previous.case_operation_id != self.case_operation_id:
+            raise ValidationError("Superseded evidence belongs to another operation.")
+        if previous.requirement_id != self.requirement_id:
+            raise ValidationError("Replacement must use the same evidence requirement.")
+        if previous.evidence_type != self.evidence_type:
+            raise ValidationError("Replacement must use the same evidence type.")
+
     def save(self, *args, **kwargs):
         if self.pk:
             raise ValidationError("Evidence is append-only.")
+        self.full_clean()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

@@ -262,6 +262,8 @@ def submit_evidence(
     numeric_value=None,
     unit="",
     metadata=None,
+    supersedes=None,
+    supersession_reason="",
 ) -> Evidence:
     case_operation = CaseOperation.objects.select_for_update().select_related(
         "repair_case", "operation"
@@ -271,8 +273,23 @@ def submit_evidence(
         raise ValidationError("Evidence can only be submitted for an available operation.")
     if requirement and requirement.operation_id != case_operation.operation_id:
         raise ValidationError("Evidence requirement belongs to another operation.")
+    if supersedes:
+        if supersedes.case_operation_id != case_operation.pk:
+            raise ValidationError("Superseded evidence belongs to another operation.")
+        if supersedes.requirement_id != getattr(requirement, "pk", None):
+            raise ValidationError("Replacement must use the same evidence requirement.")
+        if supersedes.evidence_type != evidence_type:
+            raise ValidationError("Replacement must use the same evidence type.")
+        if not supersession_reason.strip():
+            raise ValidationError("A supersession reason is required.")
+
     _validate_evidence_payload(requirement, evidence_type, file, text, numeric_value, unit)
     evidence_metadata = dict(metadata or {})
+    if supersedes:
+        evidence_metadata["supersession"] = {
+            "previous_evidence_id": supersedes.pk,
+            "reason": supersession_reason.strip(),
+        }
     if file:
         evidence_metadata["file_security"] = inspect_evidence_file(
             file, evidence_type
@@ -295,20 +312,71 @@ def submit_evidence(
         metadata=evidence_metadata,
         content_sha256=digest,
         submitted_by=technician.user_profile,
+        supersedes=supersedes,
     )
     before = case_operation.status
     if before == CaseOperation.Status.AVAILABLE:
         case_operation.status = CaseOperation.Status.IN_PROGRESS
         case_operation.started_at = timezone.now()
         case_operation.save(update_fields=["status", "started_at"])
-    _audit(case_operation.repair_case, technician.user_profile, "evidence_submitted", case_operation=case_operation, before=before, after=case_operation.status, payload={"evidence_id": evidence.pk, "type": evidence_type})
+    action = "evidence_superseded" if supersedes else "evidence_submitted"
+    payload = {"evidence_id": evidence.pk, "type": evidence_type}
+    if supersedes:
+        payload.update({
+            "superseded_evidence_id": supersedes.pk,
+            "reason": supersession_reason.strip(),
+        })
+    _audit(
+        case_operation.repair_case,
+        technician.user_profile,
+        action,
+        case_operation=case_operation,
+        before=before,
+        after=case_operation.status,
+        payload=payload,
+    )
     return evidence
+
+
+@transaction.atomic
+def supersede_evidence(
+    *,
+    evidence: Evidence,
+    user,
+    file=None,
+    text="",
+    numeric_value=None,
+    unit="",
+    reason: str,
+    metadata=None,
+) -> Evidence:
+    evidence = Evidence.objects.select_for_update().select_related(
+        "case_operation__repair_case",
+        "case_operation__operation",
+    ).get(pk=evidence.pk)
+    if evidence.superseded_by.exists():
+        raise ValidationError("Evidence has already been superseded.")
+    return submit_evidence(
+        case_operation=evidence.case_operation,
+        user=user,
+        requirement=evidence.requirement,
+        evidence_type=evidence.evidence_type,
+        file=file,
+        text=text,
+        numeric_value=numeric_value,
+        unit=unit,
+        metadata=metadata,
+        supersedes=evidence,
+        supersession_reason=reason,
+    )
 
 
 def _missing_requirements(case_operation):
     missing = []
     for requirement in case_operation.operation.evidence_requirements.filter(required=True):
-        count = case_operation.evidence.filter(requirement=requirement).count()
+        count = case_operation.evidence.filter(
+            requirement=requirement, superseded_by__isnull=True
+        ).count()
         if count < requirement.minimum_count:
             missing.append(requirement)
     return missing
@@ -316,7 +384,10 @@ def _missing_requirements(case_operation):
 
 def _measurement_out_of_range(case_operation):
     failures = []
-    for evidence in case_operation.evidence.filter(evidence_type=EvidenceRequirement.Type.MEASUREMENT).select_related("requirement"):
+    for evidence in case_operation.evidence.filter(
+        evidence_type=EvidenceRequirement.Type.MEASUREMENT,
+        superseded_by__isnull=True,
+    ).select_related("requirement"):
         requirement = evidence.requirement
         if not requirement or evidence.numeric_value is None:
             continue
@@ -445,6 +516,8 @@ def repair_record_snapshot(case: RepairCase) -> dict:
                         "content_sha256": item.content_sha256,
                         "submitted_by_id": item.submitted_by_id,
                         "submitted_at": item.submitted_at.isoformat(),
+                        "supersedes_id": item.supersedes_id,
+                        "is_superseded": item.is_superseded,
                     }
                     for item in execution.evidence.all()
                 ],

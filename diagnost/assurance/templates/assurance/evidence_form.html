@@ -2,10 +2,15 @@
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
   <div class="az-diagnostic-card">
-    <h1>Evidence — {{ execution.operation.title }}</h1>
+    {% if supersedes %}
+      <h1>Replace evidence #{{ supersedes.id }} — {{ execution.operation.title }}</h1>
+      <p>The original remains in the audit history. Record the corrected evidence and explain the reason.</p>
+    {% else %}
+      <h1>Evidence — {{ execution.operation.title }}</h1>
+    {% endif %}
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}{{ form.as_p }}
-      <button class="az-btn az-btn-primary" type="submit">Record evidence</button>
+      <button class="az-btn az-btn-primary" type="submit">{% if supersedes %}Replace evidence{% else %}Record evidence{% endif %}</button>
     </form>
   </div>
 </div></section>

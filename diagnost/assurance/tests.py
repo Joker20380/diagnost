@@ -25,6 +25,7 @@ from .services import (
     decide_operation,
     publish_procedure_version,
     submit_evidence,
+    supersede_evidence,
     verify_repair_case,
 )
 
@@ -222,6 +223,54 @@ class RepairAssuranceExecutionTests(TestCase):
                 evidence_type=EvidenceRequirement.Type.DIAGNOSTIC_SCAN,
                 text="scan",
             )
+
+    def test_evidence_supersession_preserves_history_and_active_count(self):
+        execution = self.execution(self.scan)
+        original = submit_evidence(
+            case_operation=execution,
+            user=self.junior_user,
+            requirement=self.scan_requirement,
+            evidence_type=EvidenceRequirement.Type.DIAGNOSTIC_SCAN,
+            text="Incorrect scan result",
+        )
+
+        replacement = supersede_evidence(
+            evidence=original,
+            user=self.junior_user,
+            text="Corrected scan result",
+            reason="Wrong vehicle report was selected.",
+        )
+
+        original.refresh_from_db()
+        self.assertEqual(original.text, "Incorrect scan result")
+        self.assertEqual(replacement.supersedes, original)
+        self.assertEqual(
+            replacement.metadata["supersession"]["reason"],
+            "Wrong vehicle report was selected.",
+        )
+        self.assertTrue(original.is_superseded)
+        self.assertFalse(replacement.is_superseded)
+        self.assertEqual(
+            execution.evidence.filter(superseded_by__isnull=True).count(),
+            1,
+        )
+        event = self.case.audit_events.get(action="evidence_superseded")
+        self.assertEqual(event.payload["superseded_evidence_id"], original.pk)
+        self.assertEqual(event.payload["evidence_id"], replacement.pk)
+
+        with self.assertRaisesMessage(
+            ValidationError, "Evidence has already been superseded."
+        ):
+            supersede_evidence(
+                evidence=original,
+                user=self.junior_user,
+                text="Conflicting branch",
+                reason="Must not create a second replacement.",
+            )
+
+        complete_operation(execution, self.junior_user)
+        execution.refresh_from_db()
+        self.assertEqual(execution.status, CaseOperation.Status.COMPLETED)
 
     def test_complete_repair_with_gates_approval_verification_and_record(self):
         scan_execution = self.execution(self.scan)

@@ -120,7 +120,7 @@ Evidence:
 - [x] add a curated steering rack demo seed with explicit non-OEM disclaimer;
 - [x] improve procedure authoring UX and dependency validation;
 - [x] add evidence file size, MIME, malware scanning, and storage policy;
-- [ ] implement an explicit evidence supersession workflow;
+- [x] implement an explicit evidence supersession workflow;
 - [ ] add case cancellation and controlled exception/skip workflow;
 - [ ] add notification queue for remote expert review;
 - [ ] add richer audit screens and export;
@@ -131,9 +131,11 @@ Evidence:
 
 - Active phase: **Iteration 2 — pilot hardening**.
 - Completed: safe rollout plus production admin access and localization.
-- Completed in the current hardening pass: curated non-OEM demo seed, procedure
-  authoring validation, and fail-closed evidence upload hardening.
-- Next planned deliverable: **explicit evidence supersession workflow**.
+- Completed in the current hardening pass: curated non-OEM demo seed,
+  procedure authoring validation, fail-closed evidence upload hardening, and
+  append-only evidence supersession.
+- Next planned deliverable: **case cancellation and controlled exception/skip
+  workflow**.
 - Iteration 3 has not started.
 
 ## Iteration 3 — competency and procedure library

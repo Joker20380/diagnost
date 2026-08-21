@@ -12,6 +12,22 @@
       {% for media in execution.operation.reference_media.all %}
         <p>Reference: {% if media.source_url %}<a href="{{ media.source_url }}">{{ media.title|default:media.source_url }}</a>{% else %}{{ media.title }}{% endif %}</p>
       {% endfor %}
+      {% if execution.evidence.exists %}
+        <h3>Evidence history</h3>
+        <ul>
+          {% for item in execution.evidence.all %}
+            <li>
+              #{{ item.id }} · {{ item.get_evidence_type_display }} · {{ item.submitted_at }}
+              {% if item.supersedes_id %} · replaces #{{ item.supersedes_id }}{% endif %}
+              {% if item.is_superseded %}
+                · superseded
+              {% elif execution.status == 'available' or execution.status == 'in_progress' %}
+                · <a href="{% url 'assurance:supersede_evidence' item.id %}">Replace</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
       {% if execution.status == 'available' or execution.status == 'in_progress' %}
         {% if execution.operation.evidence_requirements.exists %}
           <a class="az-btn az-btn-outline" href="{% url 'assurance:submit_evidence' execution.id %}">Add evidence</a>

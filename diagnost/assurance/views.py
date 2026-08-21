@@ -5,13 +5,20 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from users.models import TechnicianProfile
 
-from .forms import CompletionForm, EvidenceSubmissionForm, ExpertDecisionForm, RepairCaseCreateForm
-from .models import CaseOperation, RepairCase
+from .forms import (
+    CompletionForm,
+    EvidenceSubmissionForm,
+    EvidenceSupersessionForm,
+    ExpertDecisionForm,
+    RepairCaseCreateForm,
+)
+from .models import CaseOperation, Evidence, RepairCase
 from .services import (
     complete_operation,
     decide_operation,
     create_repair_case,
     submit_evidence,
+    supersede_evidence,
     verify_repair_case,
 )
 
@@ -86,6 +93,7 @@ def case_detail(request, case_id):
         "operation__reference_media",
         "operation__evidence_requirements",
         "evidence",
+        "evidence__superseded_by",
         "expert_decisions",
     )
     return render(
@@ -134,6 +142,55 @@ def submit_operation_evidence(request, execution_id):
 
 
 @login_required
+def supersede_operation_evidence(request, evidence_id):
+    evidence = get_object_or_404(
+        Evidence.objects.select_related(
+            "repair_case",
+            "case_operation__operation",
+            "requirement",
+        ),
+        pk=evidence_id,
+        repair_case__in=_visible_cases(request),
+        superseded_by__isnull=True,
+    )
+    if request.method == "POST":
+        form = EvidenceSupersessionForm(
+            request.POST,
+            request.FILES,
+            evidence=evidence,
+        )
+        if form.is_valid():
+            try:
+                replacement = supersede_evidence(
+                    evidence=evidence,
+                    user=request.user,
+                    file=form.cleaned_data["file"],
+                    text=form.cleaned_data["text"],
+                    numeric_value=form.cleaned_data["numeric_value"],
+                    unit=form.cleaned_data["unit"],
+                    reason=form.cleaned_data["reason"],
+                )
+            except (ValidationError, PermissionDenied) as exc:
+                form.add_error(None, str(exc))
+            else:
+                messages.success(
+                    request,
+                    f"Evidence #{evidence.pk} replaced by #{replacement.pk}.",
+                )
+                return redirect(
+                    "assurance:case_detail",
+                    case_id=evidence.repair_case_id,
+                )
+    else:
+        form = EvidenceSupersessionForm(evidence=evidence)
+    return render(
+        request,
+        "assurance/evidence_form.html",
+        {"form": form, "execution": evidence.case_operation, "supersedes": evidence},
+    )
+
+
+@login_required
 def complete_case_operation(request, execution_id):
     execution = get_object_or_404(
         CaseOperation.objects.select_related("repair_case", "operation"),
@@ -172,7 +229,9 @@ def review_case_operation(request, execution_id):
                     user=request.user,
                     decision=form.cleaned_data["decision"],
                     rationale=form.cleaned_data["rationale"],
-                    evidence=execution.evidence.all(),
+                    evidence=execution.evidence.filter(
+                        superseded_by__isnull=True
+                    ),
                 )
             except (ValidationError, PermissionDenied) as exc:
                 messages.error(request, str(exc))

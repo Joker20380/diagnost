@@ -45,6 +45,23 @@ class EvidenceSubmissionForm(forms.Form):
             field.widget.attrs.setdefault("class", "form-control")
 
 
+class EvidenceSupersessionForm(EvidenceSubmissionForm):
+    reason = forms.CharField(
+        min_length=5,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        help_text="Explain why the previous evidence must be replaced.",
+    )
+
+    def __init__(self, *args, evidence, **kwargs):
+        super().__init__(*args, case_operation=evidence.case_operation, **kwargs)
+        self.fields["requirement"].queryset = EvidenceRequirement.objects.filter(
+            pk=evidence.requirement_id
+        )
+        self.fields["requirement"].initial = evidence.requirement_id
+        self.fields["requirement"].disabled = True
+        self.fields["unit"].initial = evidence.unit
+
+
 class ExpertDecisionForm(forms.Form):
     decision = forms.ChoiceField(choices=ExpertDecision.Decision.choices)
     rationale = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
