@@ -66,6 +66,23 @@ services:
     networks:
       - diagnost_net
 
+  assurance-notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: diagnost_assurance_notifier
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      web:
+        condition: service_healthy
+    command: >
+      python manage.py dispatch_expert_review_notifications
+      --watch --interval 30 --limit 50
+    networks:
+      - diagnost_net
+
 volumes:
   diagnost_pgdata:
   diagnost_clamav_data:

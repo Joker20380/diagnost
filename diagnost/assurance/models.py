@@ -453,6 +453,40 @@ class ExpertDecisionEvidence(models.Model):
         constraints = [models.UniqueConstraint(fields=["decision", "evidence"], name="unique_assurance_decision_evidence")]
 
 
+class ExpertReviewNotification(models.Model):
+    class Status(models.TextChoices):
+        QUEUED = "queued", "Queued"
+        SENT = "sent", "Sent"
+        FAILED = "failed", "Failed"
+
+    repair_case = models.ForeignKey(
+        RepairCase, on_delete=models.PROTECT, related_name="expert_review_notifications"
+    )
+    case_operation = models.ForeignKey(
+        CaseOperation, on_delete=models.PROTECT, related_name="expert_review_notifications"
+    )
+    recipient = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="assurance_review_notifications"
+    )
+    recipient_email = models.EmailField()
+    review_requested_at = models.DateTimeField()
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.QUEUED, db_index=True)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    next_attempt_at = models.DateTimeField(default=timezone.now, db_index=True)
+    last_error = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["created_at", "id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["case_operation", "recipient", "review_requested_at"],
+                name="unique_assurance_review_notification",
+            )
+        ]
+
+
 class Verification(models.Model):
     repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="verifications")
     status = models.CharField(max_length=24, choices=RepairCase.VerificationStatus.choices)

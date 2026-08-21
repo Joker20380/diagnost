@@ -195,6 +195,31 @@ work and all previously captured evidence remain intact. Completed and
 cancelled cases reject further evidence, operation decisions, completion, or
 verification.
 
+## Remote expert-review notifications
+
+Moving an operation to `requires_review` writes one durable notification per
+eligible reviewer in the same database transaction. Recipients must be active,
+belong to the repair-case organization, have a non-empty email address, meet
+the operation's minimum approval role, and be different from the technician
+who completed the operation. The copied recipient address and request
+timestamp preserve what was routed at that moment.
+
+The uniqueness of operation, recipient, and review-request timestamp makes
+queueing idempotent while allowing a new notification after a rework cycle.
+An `expert_review_queued` audit event records the number of routable
+recipients, including zero so missing reviewer configuration is visible.
+
+The dedicated `assurance-notifier` process drains the transactional outbox
+every 30 seconds. It uses row locking with skip-locked semantics so multiple
+workers cannot deliver the same item concurrently. Delivery status, attempt
+count, last error, next retry time, and sent time are retained. Failures use
+bounded exponential backoff and stop automatically after five attempts.
+
+Email delivery uses the existing Django email configuration.
+`ASSURANCE_REVIEW_BASE_URL` supplies the public origin for the case link and
+must be set in production together with the SMTP variables. No email is sent
+inside the repair operation transaction.
+
 ## First implementation slice
 
 The first slice will:

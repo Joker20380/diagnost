@@ -18,6 +18,7 @@ from .models import (
     EvidenceRequirement,
     ExpertDecision,
     ExpertDecisionEvidence,
+    ExpertReviewNotification,
     Operation,
     ProcedureVersion,
     RepairAuditEvent,
@@ -82,6 +83,44 @@ def _audit(case, actor, action, *, case_operation=None, before="", after="", pay
         after_status=after,
         payload=payload or {},
     )
+
+
+def _queue_expert_review(case_operation: CaseOperation, actor: UserProfile) -> int:
+    required_level = ROLE_LEVEL.get(
+        case_operation.operation.approval_minimum_role,
+        ROLE_LEVEL[TechnicianProfile.Role.SENIOR_EXPERT],
+    )
+    eligible_roles = [
+        role
+        for role, level in ROLE_LEVEL.items()
+        if level >= required_level and role != TechnicianProfile.Role.AUDITOR
+    ]
+    reviewers = TechnicianProfile.objects.filter(
+        organization_id=case_operation.repair_case.organization_id,
+        role__in=eligible_roles,
+        is_active=True,
+        user_profile__user__is_active=True,
+    ).exclude(user_profile_id=case_operation.completed_by_id).exclude(
+        user_profile__user__email=""
+    ).select_related("user_profile__user")
+    queued = [
+        ExpertReviewNotification(
+            repair_case=case_operation.repair_case,
+            case_operation=case_operation,
+            recipient=reviewer.user_profile,
+            recipient_email=reviewer.user_profile.user.email,
+            review_requested_at=case_operation.completed_at,
+        )
+        for reviewer in reviewers
+    ]
+    ExpertReviewNotification.objects.bulk_create(queued, ignore_conflicts=True)
+    count = len(queued)
+    _audit(
+        case_operation.repair_case, actor, "expert_review_queued",
+        case_operation=case_operation,
+        payload={"recipient_count": count, "operation_key": case_operation.operation.key},
+    )
+    return count
 
 
 def procedure_snapshot(version: ProcedureVersion) -> dict:
@@ -541,6 +580,8 @@ def complete_operation(case_operation: CaseOperation, user, result=None) -> Case
         case_operation.status = CaseOperation.Status.COMPLETED
     case_operation.save(update_fields=["status", "result", "completed_by", "completed_at"])
     _audit(case_operation.repair_case, technician.user_profile, "operation_completed", case_operation=case_operation, before=before, after=case_operation.status, payload={"out_of_range_evidence": [item.pk for item in failures]})
+    if case_operation.status == CaseOperation.Status.REQUIRES_REVIEW:
+        _queue_expert_review(case_operation, technician.user_profile)
     if case_operation.status == CaseOperation.Status.COMPLETED:
         _unlock_dependents(case_operation, technician.user_profile)
     return case_operation

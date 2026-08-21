@@ -1,8 +1,9 @@
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from diagnostics.models import Vehicle
@@ -11,6 +12,7 @@ from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 from .models import (
     CaseOperation,
     EvidenceRequirement,
+    ExpertReviewNotification,
     ExpertDecision,
     Operation,
     OperationDependency,
@@ -19,6 +21,7 @@ from .models import (
     Skill,
     TechnicianSkill,
 )
+from .notifications import dispatch_expert_review_notifications
 from .services import (
     cancel_repair_case,
     complete_operation,
@@ -40,7 +43,9 @@ class RepairAssuranceExecutionTests(TestCase):
         self.workshop = Workshop.objects.create(
             organization=self.organization, name="Main", code="main"
         )
-        self.senior_user = User.objects.create_user("assurance-senior")
+        self.senior_user = User.objects.create_user(
+            "assurance-senior", email="senior@example.com"
+        )
         self.junior_user = User.objects.create_user("assurance-junior")
         self.outsider_user = User.objects.create_user("assurance-outsider")
         self.senior_profile, _ = UserProfile.objects.get_or_create(user=self.senior_user)
@@ -372,6 +377,24 @@ class RepairAssuranceExecutionTests(TestCase):
         qc_execution.refresh_from_db()
         self.assertEqual(torque_execution.status, CaseOperation.Status.REQUIRES_REVIEW)
         self.assertEqual(qc_execution.status, CaseOperation.Status.LOCKED)
+        notification = ExpertReviewNotification.objects.get(
+            case_operation=torque_execution,
+            recipient=self.senior_profile,
+        )
+        self.assertEqual(notification.status, ExpertReviewNotification.Status.QUEUED)
+        self.assertTrue(
+            self.case.audit_events.filter(action="expert_review_queued").exists()
+        )
+        with override_settings(
+            EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+            ASSURANCE_REVIEW_BASE_URL="https://diagnost.example",
+        ):
+            result = dispatch_expert_review_notifications()
+        self.assertEqual(result, {"sent": 1, "failed": 0})
+        notification.refresh_from_db()
+        self.assertEqual(notification.status, ExpertReviewNotification.Status.SENT)
+        self.assertIn("https://diagnost.example", mail.outbox[0].body)
+
 
         decision = decide_operation(
             case_operation=torque_execution,

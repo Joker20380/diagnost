@@ -122,7 +122,7 @@ Evidence:
 - [x] add evidence file size, MIME, malware scanning, and storage policy;
 - [x] implement an explicit evidence supersession workflow;
 - [x] add case cancellation and controlled exception/skip workflow;
-- [ ] add notification queue for remote expert review;
+- [x] add notification queue for remote expert review;
 - [ ] add richer audit screens and export;
 - [ ] add external Repair Certificate projection;
 - [ ] conduct one real workshop walkthrough and record UX failures.
@@ -134,8 +134,8 @@ Evidence:
 - Completed in the current hardening pass: curated non-OEM demo seed,
   procedure authoring validation, fail-closed evidence upload hardening, and
   append-only evidence supersession, plus controlled case cancellation and
-  operation exceptions.
-- Next planned deliverable: **notification queue for remote expert review**.
+  operation exceptions, plus a durable remote expert-review notification queue.
+- Next planned deliverable: **richer audit screens and export**.
 - Iteration 3 has not started.
 
 ## Iteration 3 — competency and procedure library

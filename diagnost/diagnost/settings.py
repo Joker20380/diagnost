@@ -438,6 +438,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@diagnost.local')
 SERVER_EMAIL = os.getenv('SERVER_EMAIL', DEFAULT_FROM_EMAIL)
+ASSURANCE_REVIEW_BASE_URL = os.getenv('ASSURANCE_REVIEW_BASE_URL', '').rstrip('/')
 
 
 # django-webp
