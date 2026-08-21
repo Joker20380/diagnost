@@ -1,12 +1,13 @@
 {% extends 'assurance/base.html' %}
+{% load i18n %}
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
   <div class="az-diagnostic-card">
-    <h1>Create Repair Case</h1>
-    <p>The selected published procedure version will be pinned to this repair.</p>
+    <h1>{% translate "Create Repair Case" %}</h1>
+    <p>{% translate "The selected published procedure version will be pinned to this repair." %}</p>
     <form method="post">
       {% csrf_token %}{{ form.as_p }}
-      <button class="az-btn az-btn-primary" type="submit">Create executable repair</button>
+      <button class="az-btn az-btn-primary" type="submit">{% translate "Create executable repair" %}</button>
     </form>
   </div>
 </div></section>

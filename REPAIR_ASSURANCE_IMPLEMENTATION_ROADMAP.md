@@ -111,6 +111,8 @@ Implementation commits:
 - [x] verify zero Cyrillic model/field/choice captions in EN / NL / FR / DE;
 - [x] deploy the localized admin image and confirm a healthy production container.
 - [x] align all Assurance pages with the site's typography and responsive visual system;
+- [x] localize the complete Assurance workflow interface in Russian while
+  preserving master-authored operations, procedures, rationales, and comments;
 
 Evidence:
 
@@ -140,7 +142,9 @@ Evidence:
   role-restricted audit screens with filtered CSV/JSON export, plus a
   privacy-minimized external Repair Certificate. All Assurance workflow screens
   now inherit the site's Montserrat/Oxygen typography and use a shared responsive
-  component layer for cards, forms, actions, and tables.
+  component layer for cards, forms, actions, and tables. The workflow interface
+  follows the selected Russian or English locale without translating workshop-authored
+  repair content.
 - Next planned deliverable: **real workshop walkthrough and UX failure log**.
 - Iteration 3 backend work has started while the field walkthrough remains open.
 

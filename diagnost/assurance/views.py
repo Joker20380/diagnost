@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
 
 from users.models import TechnicianProfile
 
@@ -176,7 +177,7 @@ def competency_review_create(request):
             except (ValidationError, PermissionDenied) as exc:
                 form.add_error(None, str(exc))
             else:
-                messages.success(request, f"Competency decision #{review.pk} recorded.")
+                messages.success(request, _("Competency decision #%(id)s recorded.") % {"id": review.pk})
                 return redirect("assurance:case_list")
     else:
         form = CompetencyReviewForm(reviewer=reviewer)
@@ -221,7 +222,7 @@ def case_create(request):
             except (ValidationError, PermissionDenied) as exc:
                 form.add_error(None, str(exc))
             else:
-                messages.success(request, "Repair case created.")
+                messages.success(request, _("Repair case created."))
                 return redirect("assurance:case_detail", case_id=repair_case.pk)
     else:
         form = RepairCaseCreateForm(technician=technician)
@@ -295,9 +296,9 @@ def record_walkthrough_observation(request, case_id):
         observation.repair_case = repair_case
         observation.recorded_by = request.user.userprofile
         observation.save()
-        messages.success(request, "Workshop observation recorded.")
+        messages.success(request, _("Workshop observation recorded."))
     else:
-        messages.error(request, "Workshop observation was not recorded. Check the fields.")
+        messages.error(request, _("Workshop observation was not recorded. Check the fields."))
     return redirect("assurance:case_detail", case_id=repair_case.pk)
 
 def case_audit(request, case_id):
@@ -390,7 +391,7 @@ def submit_operation_evidence(request, execution_id):
             except (ValidationError, PermissionDenied) as exc:
                 form.add_error(None, str(exc))
             else:
-                messages.success(request, "Evidence recorded.")
+                messages.success(request, _("Evidence recorded."))
                 return redirect("assurance:case_detail", case_id=execution.repair_case_id)
     else:
         form = EvidenceSubmissionForm(case_operation=execution)
@@ -435,7 +436,7 @@ def supersede_operation_evidence(request, evidence_id):
             else:
                 messages.success(
                     request,
-                    f"Evidence #{evidence.pk} replaced by #{replacement.pk}.",
+                    _("Evidence #%(old_id)s replaced by #%(new_id)s.") % {"old_id": evidence.pk, "new_id": replacement.pk},
                 )
                 return redirect(
                     "assurance:case_detail",
@@ -469,7 +470,7 @@ def complete_case_operation(request, execution_id):
             except (ValidationError, PermissionDenied) as exc:
                 messages.error(request, str(exc))
             else:
-                messages.success(request, "Operation processed.")
+                messages.success(request, _("Operation processed."))
     return redirect("assurance:case_detail", case_id=execution.repair_case_id)
 
 
@@ -492,7 +493,7 @@ def skip_operation(request, execution_id):
             except (ValidationError, PermissionDenied) as exc:
                 messages.error(request, str(exc))
             else:
-                messages.success(request, "Operation exception approved.")
+                messages.success(request, _("Operation exception approved."))
     return redirect("assurance:case_detail", case_id=execution.repair_case_id)
 
 
@@ -511,9 +512,9 @@ def cancel_case(request, case_id):
             except (ValidationError, PermissionDenied) as exc:
                 messages.error(request, str(exc))
             else:
-                messages.success(request, "Repair case cancelled.")
+                messages.success(request, _("Repair case cancelled."))
         else:
-            messages.error(request, "A meaningful cancellation rationale is required.")
+            messages.error(request, _("A meaningful cancellation rationale is required."))
     return redirect("assurance:case_detail", case_id=repair_case.pk)
 
 
@@ -540,7 +541,7 @@ def review_case_operation(request, execution_id):
             except (ValidationError, PermissionDenied) as exc:
                 messages.error(request, str(exc))
             else:
-                messages.success(request, "Expert decision recorded.")
+                messages.success(request, _("Expert decision recorded."))
     return redirect("assurance:case_detail", case_id=execution.repair_case_id)
 
 
@@ -553,5 +554,5 @@ def verify_case(request, case_id):
         except (ValidationError, PermissionDenied) as exc:
             messages.error(request, str(exc))
         else:
-            messages.success(request, f"Verification: {verification.get_status_display()}.")
+            messages.success(request, _("Verification: %(status)s.") % {"status": verification.get_status_display()})
     return redirect("assurance:case_detail", case_id=repair_case.pk)

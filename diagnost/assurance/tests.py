@@ -7,6 +7,8 @@ from django.core import mail
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import translation
+from django.utils.translation import gettext
 
 from diagnostics.models import Vehicle
 from users.models import Organization, TechnicianProfile, UserProfile, Workshop
@@ -41,6 +43,7 @@ from .services import (
 )
 
 
+@override_settings(LANGUAGE_CODE="en")
 class RepairAssuranceExecutionTests(TestCase):
     def setUp(self):
         self.organization = Organization.objects.create(
@@ -618,3 +621,19 @@ class RepairAssuranceExecutionTests(TestCase):
         )
         self.assertEqual(response.status_code, 403)
         self.assertEqual(TechnicianSkill.objects.get(technician=self.junior, skill=self.skill).level, 2)
+
+    def test_assurance_interface_follows_selected_language(self):
+        with translation.override("ru"):
+            self.assertEqual(gettext("Repair Cases"), "Ремонтные дела")
+            self.assertEqual(str(CaseOperation.Status.IN_PROGRESS.label), "В работе")
+
+        with translation.override("en"):
+            self.assertEqual(gettext("Repair Cases"), "Repair Cases")
+            self.assertEqual(str(CaseOperation.Status.IN_PROGRESS.label), "In progress")
+
+    def test_user_authored_operation_content_is_not_translated(self):
+        original_title = self.torque.title
+
+        with translation.override("ru"):
+            self.torque.refresh_from_db()
+            self.assertEqual(self.torque.title, original_title)

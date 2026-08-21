@@ -1,0 +1,558 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 17:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: admin.py:149
+msgid "операции"
+msgstr "операции"
+
+#: admin.py:153
+msgid "Опубликовать выбранные черновые версии"
+msgstr "Опубликовать выбранные черновые версии"
+
+#: apps.py:8
+msgid "Контроль и подтверждение ремонта"
+msgstr "Контроль и подтверждение ремонта"
+
+#: forms.py:11 templates/assurance/repair_certificate.html:14
+msgid "Vehicle"
+msgstr "Автомобиль"
+
+#: forms.py:12
+msgid "Procedure version"
+msgstr "Версия процедуры"
+
+#: forms.py:13
+msgid "Title"
+msgstr "Название"
+
+#: forms.py:14
+msgid "Complaint"
+msgstr "Жалоба"
+
+#: forms.py:15
+msgid "Technicians"
+msgstr "Техники"
+
+#: forms.py:36
+msgid "Requirement"
+msgstr "Требование"
+
+#: forms.py:37
+msgid "File"
+msgstr "Файл"
+
+#: forms.py:38
+msgid "Text"
+msgstr "Текст"
+
+#: forms.py:39
+msgid "Numeric value"
+msgstr "Числовое значение"
+
+#: forms.py:40
+msgid "Unit"
+msgstr "Единица измерения"
+
+#: forms.py:52
+msgid "Replacement reason"
+msgstr "Причина замены"
+
+#: forms.py:54
+msgid "Explain why the previous evidence must be replaced."
+msgstr "Объясните, почему предыдущее доказательство необходимо заменить."
+
+#: forms.py:68 forms.py:108
+msgid "Rationale"
+msgstr "Обоснование"
+
+#: forms.py:104
+msgid "Technician"
+msgstr "Техник"
+
+#: forms.py:105
+msgid "Skill"
+msgstr "Навык"
+
+#: forms.py:106
+msgid "Requested level"
+msgstr "Запрошенный уровень"
+
+#: forms.py:107
+msgid "Decision"
+msgstr "Решение"
+
+#: forms.py:111
+msgid "Evidence"
+msgstr "Доказательства"
+
+#: models.py:263
+msgid "Draft"
+msgstr "Черновик"
+
+#: models.py:264 models.py:327
+msgid "In progress"
+msgstr "В работе"
+
+#: models.py:265
+msgid "Blocked"
+msgstr "Заблокировано"
+
+#: models.py:266
+msgid "Verification"
+msgstr "Проверка"
+
+#: models.py:267 models.py:329
+msgid "Completed"
+msgstr "Завершено"
+
+#: models.py:268
+msgid "Cancelled"
+msgstr "Отменено"
+
+#: models.py:271
+msgid "Not run"
+msgstr "Не запускалась"
+
+#: models.py:272
+msgid "Verified"
+msgstr "Подтверждено"
+
+#: models.py:273 models.py:330
+msgid "Failed"
+msgstr "Ошибка"
+
+#: models.py:274
+msgid "Incomplete"
+msgstr "Не завершено"
+
+#: models.py:275 models.py:328
+msgid "Requires review"
+msgstr "Требует проверки"
+
+#: models.py:325
+msgid "Locked"
+msgstr "Заблокировано"
+
+#: models.py:326
+msgid "Available"
+msgstr "Доступно"
+
+#: models.py:331
+msgid "Skipped"
+msgstr "Пропущено"
+
+#: models.py:429 models.py:592 templates/assurance/case_detail.html:60
+msgid "Approve"
+msgstr "Одобрить"
+
+#: models.py:430 models.py:593
+msgid "Reject"
+msgstr "Отклонить"
+
+#: models.py:431
+msgid "Rework"
+msgstr "На доработку"
+
+#: models.py:432
+msgid "Escalate"
+msgstr "Передать выше"
+
+#: models.py:551
+msgid "Usability"
+msgstr "Удобство использования"
+
+#: models.py:552
+msgid "Workflow"
+msgstr "Рабочий процесс"
+
+#: models.py:553
+msgid "Procedure content"
+msgstr "Содержание процедуры"
+
+#: models.py:554
+msgid "Performance"
+msgstr "Производительность"
+
+#: models.py:555
+msgid "Safety"
+msgstr "Безопасность"
+
+#: models.py:556
+msgid "Other"
+msgstr "Другое"
+
+#: models.py:559
+msgid "Low"
+msgstr "Низкая"
+
+#: models.py:560
+msgid "Medium"
+msgstr "Средняя"
+
+#: models.py:561
+msgid "High"
+msgstr "Высокая"
+
+#: models.py:562
+msgid "Blocker"
+msgstr "Блокирующая"
+
+#: templates/assurance/case_audit.html:5
+msgid "Back to repair case"
+msgstr "Назад к ремонтному делу"
+
+#: templates/assurance/case_audit.html:6
+#, python-format
+msgid "Audit trail — case #%(id)s"
+msgstr "Журнал аудита — дело №%(id)s"
+
+#: templates/assurance/case_audit.html:11
+msgid "Event"
+msgstr "Событие"
+
+#: templates/assurance/case_audit.html:13
+msgid "All events"
+msgstr "Все события"
+
+#: templates/assurance/case_audit.html:18
+msgid "Operation"
+msgstr "Операция"
+
+#: templates/assurance/case_audit.html:20
+msgid "All operations"
+msgstr "Все операции"
+
+#: templates/assurance/case_audit.html:27
+msgid "Apply filters"
+msgstr "Применить фильтры"
+
+#: templates/assurance/case_audit.html:30
+msgid "Export current selection:"
+msgstr "Экспорт выбранных данных:"
+
+#: templates/assurance/case_audit.html:42
+msgid "Actor:"
+msgstr "Исполнитель:"
+
+#: templates/assurance/case_audit.html:44
+msgid "Operation:"
+msgstr "Операция:"
+
+#: templates/assurance/case_audit.html:48
+#: templates/assurance/case_detail.html:18
+#: templates/assurance/repair_certificate.html:8
+msgid "Status:"
+msgstr "Статус:"
+
+#: templates/assurance/case_audit.html:52
+msgid "Event data"
+msgstr "Данные события"
+
+#: templates/assurance/case_audit.html:58
+msgid "No audit events match these filters."
+msgstr "Нет событий аудита, соответствующих фильтрам."
+
+#: templates/assurance/case_audit.html:62
+msgid "Audit pages"
+msgstr "Страницы аудита"
+
+#: templates/assurance/case_audit.html:64
+msgid "Previous"
+msgstr "Назад"
+
+#: templates/assurance/case_audit.html:66
+#, python-format
+msgid "Page %(current)s of %(total)s"
+msgstr "Страница %(current)s из %(total)s"
+
+#: templates/assurance/case_audit.html:68
+msgid "Next"
+msgstr "Далее"
+
+#: templates/assurance/case_create.html:6 templates/assurance/case_list.html:6
+msgid "Create Repair Case"
+msgstr "Создать ремонтное дело"
+
+#: templates/assurance/case_create.html:7
+msgid "The selected published procedure version will be pinned to this repair."
+msgstr "Выбранная опубликованная версия процедуры будет закреплена за этим ремонтом."
+
+#: templates/assurance/case_create.html:10
+msgid "Create executable repair"
+msgstr "Создать исполняемый ремонт"
+
+#: templates/assurance/case_detail.html:8
+msgid "Audit trail and export"
+msgstr "Журнал аудита и экспорт"
+
+#: templates/assurance/case_detail.html:11
+msgid "Public Repair Certificate"
+msgstr "Публичный сертификат ремонта"
+
+#: templates/assurance/case_detail.html:15
+#, python-format
+msgid "Step %(number)s"
+msgstr "Шаг %(number)s"
+
+#: templates/assurance/case_detail.html:20
+msgid "Approved exception:"
+msgstr "Одобренное исключение:"
+
+#: templates/assurance/case_detail.html:23
+msgid "Reference:"
+msgstr "Справочный материал:"
+
+#: templates/assurance/case_detail.html:26
+msgid "Evidence history"
+msgstr "История доказательств"
+
+#: templates/assurance/case_detail.html:31
+msgid "replaces"
+msgstr "заменяет"
+
+#: templates/assurance/case_detail.html:33
+msgid "superseded"
+msgstr "заменено"
+
+#: templates/assurance/case_detail.html:35
+msgid "Replace"
+msgstr "Заменить"
+
+#: templates/assurance/case_detail.html:43
+msgid "Add evidence"
+msgstr "Добавить доказательство"
+
+#: templates/assurance/case_detail.html:46
+msgid "Complete"
+msgstr "Завершить"
+
+#: templates/assurance/case_detail.html:51
+msgid "Exception rationale"
+msgstr "Обоснование исключения"
+
+#: templates/assurance/case_detail.html:52
+msgid "Approve exception and skip"
+msgstr "Одобрить исключение и пропустить"
+
+#: templates/assurance/case_detail.html:59
+msgid "Expert rationale"
+msgstr "Обоснование эксперта"
+
+#: templates/assurance/case_detail.html:63
+msgid "BLOCKED"
+msgstr "ЗАБЛОКИРОВАНО"
+
+#: templates/assurance/case_detail.html:63
+msgid "complete prerequisite operations."
+msgstr "завершите предшествующие операции."
+
+#: templates/assurance/case_detail.html:69
+msgid "Workshop walkthrough log"
+msgstr "Журнал производственного обхода"
+
+#: templates/assurance/case_detail.html:70
+msgid "Record friction, ambiguity, delays, and safety concerns observed during a real repair walkthrough."
+msgstr "Фиксируйте затруднения, неоднозначности, задержки и риски безопасности, выявленные при реальном ремонте."
+
+#: templates/assurance/case_detail.html:74
+msgid "Record observation"
+msgstr "Записать наблюдение"
+
+#: templates/assurance/case_detail.html:77
+msgid "Recorded observations"
+msgstr "Записанные наблюдения"
+
+#: templates/assurance/case_detail.html:81
+msgid "Step"
+msgstr "Шаг"
+
+#: templates/assurance/case_detail.html:89
+msgid "Case verification"
+msgstr "Проверка дела"
+
+#: templates/assurance/case_detail.html:91
+msgid "Run verification"
+msgstr "Запустить проверку"
+
+#: templates/assurance/case_detail.html:97
+#: templates/assurance/case_detail.html:102
+msgid "Cancel repair case"
+msgstr "Отменить ремонтное дело"
+
+#: templates/assurance/case_detail.html:98
+msgid "Use this action only when the repair case must be stopped. The rationale is retained in the audit trail."
+msgstr "Используйте это действие только для остановки ремонтного дела. Обоснование сохраняется в журнале аудита."
+
+#: templates/assurance/case_detail.html:101
+msgid "Cancellation rationale"
+msgstr "Причина отмены"
+
+#: templates/assurance/case_list.html:5
+msgid "Repair Cases"
+msgstr "Ремонтные дела"
+
+#: templates/assurance/case_list.html:8
+msgid "Review technician competency"
+msgstr "Оценить компетенцию техника"
+
+#: templates/assurance/case_list.html:15
+msgid "No assigned repair cases."
+msgstr "Назначенных ремонтных дел нет."
+
+#: templates/assurance/competency_review_form.html:5
+msgid "Evidence-based competency review"
+msgstr "Оценка компетенции по доказательствам"
+
+#: templates/assurance/competency_review_form.html:6
+msgid "Select only evidence personally submitted by the technician for completed operations requiring this skill."
+msgstr "Выбирайте только доказательства, лично отправленные техником по завершённым операциям, требующим этого навыка."
+
+#: templates/assurance/competency_review_form.html:11
+msgid "Record immutable decision"
+msgstr "Зафиксировать неизменяемое решение"
+
+#: templates/assurance/competency_review_form.html:12
+msgid "Cancel"
+msgstr "Отмена"
+
+#: templates/assurance/evidence_form.html:7
+#, python-format
+msgid "Replace evidence #%(id)s — %(title)s"
+msgstr "Замена доказательства №%(id)s — %(title)s"
+
+#: templates/assurance/evidence_form.html:8
+msgid "The original remains in the audit history. Record the corrected evidence and explain the reason."
+msgstr "Исходная запись сохранится в истории аудита. Добавьте исправленное доказательство и объясните причину."
+
+#: templates/assurance/evidence_form.html:10
+#, python-format
+msgid "Evidence — %(title)s"
+msgstr "Доказательство — %(title)s"
+
+#: templates/assurance/evidence_form.html:14
+msgid "Replace evidence"
+msgstr "Заменить доказательство"
+
+#: templates/assurance/evidence_form.html:14
+msgid "Record evidence"
+msgstr "Записать доказательство"
+
+#: templates/assurance/repair_certificate.html:6
+msgid "Repair Certificate"
+msgstr "Сертификат ремонта"
+
+#: templates/assurance/repair_certificate.html:7
+msgid "Verified repair procedure"
+msgstr "Подтверждённая процедура ремонта"
+
+#: templates/assurance/repair_certificate.html:9
+msgid "Certificate ID:"
+msgstr "Идентификатор сертификата:"
+
+#: templates/assurance/repair_certificate.html:10
+msgid "Issued:"
+msgstr "Выдан:"
+
+#: templates/assurance/repair_certificate.html:19
+msgid "VIN:"
+msgstr "VIN:"
+
+#: templates/assurance/repair_certificate.html:23
+msgid "Verified procedure"
+msgstr "Подтверждённая процедура"
+
+#: templates/assurance/repair_certificate.html:24
+msgid "version"
+msgstr "версия"
+
+#: templates/assurance/repair_certificate.html:31
+msgid "evidence items:"
+msgstr "доказательств:"
+
+#: templates/assurance/repair_certificate.html:32
+msgid "authorized exception"
+msgstr "разрешённое исключение"
+
+#: templates/assurance/repair_certificate.html:39
+msgid "Integrity"
+msgstr "Целостность"
+
+#: templates/assurance/repair_certificate.html:40
+msgid "This certificate is projected from an immutable, checksummed repair record."
+msgstr "Этот сертификат сформирован из неизменяемой записи ремонта с контрольной суммой."
+
+#: templates/assurance/repair_certificate.html:42
+msgid "The public view omits technician identities, internal notes, evidence files, and the full VIN."
+msgstr "Публичная версия не содержит данных техников, внутренних заметок, файлов доказательств и полного VIN."
+
+#: templates/assurance/repair_certificate.html:43
+msgid "This certificate confirms the recorded procedure and verification result. It is not a warranty or an OEM endorsement."
+msgstr "Сертификат подтверждает зафиксированную процедуру и результат проверки. Он не является гарантией или одобрением производителя."
+
+#: views.py:180
+#, python-format
+msgid "Competency decision #%(id)s recorded."
+msgstr "Решение по компетенции №%(id)s зафиксировано."
+
+#: views.py:225
+msgid "Repair case created."
+msgstr "Ремонтное дело создано."
+
+#: views.py:299
+msgid "Workshop observation recorded."
+msgstr "Наблюдение производственного обхода записано."
+
+#: views.py:301
+msgid "Workshop observation was not recorded. Check the fields."
+msgstr "Наблюдение не записано. Проверьте заполненные поля."
+
+#: views.py:394
+msgid "Evidence recorded."
+msgstr "Доказательство записано."
+
+#: views.py:439
+#, python-format
+msgid "Evidence #%(old_id)s replaced by #%(new_id)s."
+msgstr "Доказательство №%(old_id)s заменено доказательством №%(new_id)s."
+
+#: views.py:473
+msgid "Operation processed."
+msgstr "Операция обработана."
+
+#: views.py:496
+msgid "Operation exception approved."
+msgstr "Исключение для операции одобрено."
+
+#: views.py:515
+msgid "Repair case cancelled."
+msgstr "Ремонтное дело отменено."
+
+#: views.py:517
+msgid "A meaningful cancellation rationale is required."
+msgstr "Необходимо указать содержательную причину отмены."
+
+#: views.py:544
+msgid "Expert decision recorded."
+msgstr "Решение эксперта зафиксировано."
+
+#: views.py:557
+#, python-format
+msgid "Verification: %(status)s."
+msgstr "Проверка: %(status)s."

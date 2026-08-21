@@ -1,14 +1,15 @@
 {% extends 'assurance/base.html' %}
+{% load i18n %}
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
-  <h1>Evidence-based competency review</h1>
-  <p>Select only evidence personally submitted by the technician for completed operations requiring this skill.</p>
+  <h1>{% translate "Evidence-based competency review" %}</h1>
+  <p>{% translate "Select only evidence personally submitted by the technician for completed operations requiring this skill." %}</p>
   <form method="post" class="az-diagnostic-card">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {{ form.as_p }}
-    <button class="az-btn az-btn-primary" type="submit">Record immutable decision</button>
-    <a class="az-btn az-btn-outline" href="{% url 'assurance:case_list' %}">Cancel</a>
+    <button class="az-btn az-btn-primary" type="submit">{% translate "Record immutable decision" %}</button>
+    <a class="az-btn az-btn-outline" href="{% url 'assurance:case_list' %}">{% translate "Cancel" %}</a>
   </form>
 </div></section>
 {% endblock %}

@@ -1,16 +1,17 @@
 {% extends 'assurance/base.html' %}
+{% load i18n %}
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
   <div class="az-diagnostic-card">
     {% if supersedes %}
-      <h1>Replace evidence #{{ supersedes.id }} — {{ execution.operation.title }}</h1>
-      <p>The original remains in the audit history. Record the corrected evidence and explain the reason.</p>
+      <h1>{% blocktranslate with id=supersedes.id title=execution.operation.title %}Replace evidence #{{ id }} — {{ title }}{% endblocktranslate %}</h1>
+      <p>{% translate "The original remains in the audit history. Record the corrected evidence and explain the reason." %}</p>
     {% else %}
-      <h1>Evidence — {{ execution.operation.title }}</h1>
+      <h1>{% blocktranslate with title=execution.operation.title %}Evidence — {{ title }}{% endblocktranslate %}</h1>
     {% endif %}
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}{{ form.as_p }}
-      <button class="az-btn az-btn-primary" type="submit">{% if supersedes %}Replace evidence{% else %}Record evidence{% endif %}</button>
+      <button class="az-btn az-btn-primary" type="submit">{% if supersedes %}{% translate "Replace evidence" %}{% else %}{% translate "Record evidence" %}{% endif %}</button>
     </form>
   </div>
 </div></section>

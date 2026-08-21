@@ -5,6 +5,7 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from users.models import UserProfile
 
 
@@ -259,19 +260,19 @@ class ReferenceMedia(DraftSpecification):
 
 class RepairCase(models.Model):
     class Status(models.TextChoices):
-        DRAFT = "draft", "Draft"
-        IN_PROGRESS = "in_progress", "In progress"
-        BLOCKED = "blocked", "Blocked"
-        VERIFICATION = "verification", "Verification"
-        COMPLETED = "completed", "Completed"
-        CANCELLED = "cancelled", "Cancelled"
+        DRAFT = "draft", _("Draft")
+        IN_PROGRESS = "in_progress", _("In progress")
+        BLOCKED = "blocked", _("Blocked")
+        VERIFICATION = "verification", _("Verification")
+        COMPLETED = "completed", _("Completed")
+        CANCELLED = "cancelled", _("Cancelled")
 
     class VerificationStatus(models.TextChoices):
-        NOT_RUN = "not_run", "Not run"
-        VERIFIED = "verified", "Verified"
-        FAILED = "failed", "Failed"
-        INCOMPLETE = "incomplete", "Incomplete"
-        REQUIRES_REVIEW = "requires_review", "Requires review"
+        NOT_RUN = "not_run", _("Not run")
+        VERIFIED = "verified", _("Verified")
+        FAILED = "failed", _("Failed")
+        INCOMPLETE = "incomplete", _("Incomplete")
+        REQUIRES_REVIEW = "requires_review", _("Requires review")
 
     organization = models.ForeignKey("users.Organization", on_delete=models.PROTECT, related_name="assurance_repair_cases")
     workshop = models.ForeignKey("users.Workshop", on_delete=models.PROTECT, null=True, blank=True, related_name="assurance_repair_cases")
@@ -321,13 +322,13 @@ class RepairCaseTechnician(models.Model):
 
 class CaseOperation(models.Model):
     class Status(models.TextChoices):
-        LOCKED = "locked", "Locked"
-        AVAILABLE = "available", "Available"
-        IN_PROGRESS = "in_progress", "In progress"
-        REQUIRES_REVIEW = "requires_review", "Requires review"
-        COMPLETED = "completed", "Completed"
-        FAILED = "failed", "Failed"
-        SKIPPED = "skipped", "Skipped"
+        LOCKED = "locked", _("Locked")
+        AVAILABLE = "available", _("Available")
+        IN_PROGRESS = "in_progress", _("In progress")
+        REQUIRES_REVIEW = "requires_review", _("Requires review")
+        COMPLETED = "completed", _("Completed")
+        FAILED = "failed", _("Failed")
+        SKIPPED = "skipped", _("Skipped")
 
     repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="case_operations")
     operation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name="case_executions")
@@ -425,10 +426,10 @@ class Evidence(models.Model):
 
 class ExpertDecision(models.Model):
     class Decision(models.TextChoices):
-        APPROVE = "approve", "Approve"
-        REJECT = "reject", "Reject"
-        REWORK = "rework", "Rework"
-        ESCALATE = "escalate", "Escalate"
+        APPROVE = "approve", _("Approve")
+        REJECT = "reject", _("Reject")
+        REWORK = "rework", _("Rework")
+        ESCALATE = "escalate", _("Escalate")
 
     repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="expert_decisions")
     case_operation = models.ForeignKey(CaseOperation, on_delete=models.PROTECT, related_name="expert_decisions")
@@ -547,18 +548,18 @@ class RepairAuditEvent(models.Model):
 
 class WorkshopWalkthroughObservation(models.Model):
     class Category(models.TextChoices):
-        USABILITY = "usability", "Usability"
-        WORKFLOW = "workflow", "Workflow"
-        CONTENT = "content", "Procedure content"
-        PERFORMANCE = "performance", "Performance"
-        SAFETY = "safety", "Safety"
-        OTHER = "other", "Other"
+        USABILITY = "usability", _("Usability")
+        WORKFLOW = "workflow", _("Workflow")
+        CONTENT = "content", _("Procedure content")
+        PERFORMANCE = "performance", _("Performance")
+        SAFETY = "safety", _("Safety")
+        OTHER = "other", _("Other")
 
     class Severity(models.TextChoices):
-        LOW = "low", "Low"
-        MEDIUM = "medium", "Medium"
-        HIGH = "high", "High"
-        BLOCKER = "blocker", "Blocker"
+        LOW = "low", _("Low")
+        MEDIUM = "medium", _("Medium")
+        HIGH = "high", _("High")
+        BLOCKER = "blocker", _("Blocker")
 
     repair_case = models.ForeignKey(RepairCase, on_delete=models.PROTECT, related_name="walkthrough_observations")
     case_operation = models.ForeignKey(CaseOperation, on_delete=models.PROTECT, null=True, blank=True, related_name="walkthrough_observations")
@@ -588,8 +589,8 @@ class WorkshopWalkthroughObservation(models.Model):
 
 class CompetencyReview(models.Model):
     class Decision(models.TextChoices):
-        APPROVE = "approve", "Approve"
-        REJECT = "reject", "Reject"
+        APPROVE = "approve", _("Approve")
+        REJECT = "reject", _("Reject")
 
     technician = models.ForeignKey("users.TechnicianProfile", on_delete=models.PROTECT, related_name="competency_reviews")
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, related_name="competency_reviews")

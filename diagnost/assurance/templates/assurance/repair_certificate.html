@@ -1,45 +1,46 @@
 {% extends 'assurance/base.html' %}
+{% load i18n %}
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
   <header class="az-diagnostic-card">
-    <p>Repair Certificate</p>
-    <h1>Verified repair procedure</h1>
-    <p><strong>Status:</strong> {{ certificate.verification_status|upper }}</p>
-    <p>Certificate ID: <code>{{ certificate.public_id }}</code></p>
-    <p>Issued: {{ certificate.created_at }}</p>
+    <p>{% translate "Repair Certificate" %}</p>
+    <h1>{% translate "Verified repair procedure" %}</h1>
+    <p><strong>{% translate "Status:" %}</strong> {{ certificate.verification_status|upper }}</p>
+    <p>{% translate "Certificate ID:" %} <code>{{ certificate.public_id }}</code></p>
+    <p>{% translate "Issued:" %} {{ certificate.created_at }}</p>
   </header>
 
   <section class="az-diagnostic-card">
-    <h2>Vehicle</h2>
+    <h2>{% translate "Vehicle" %}</h2>
     <p>
       {{ certificate.vehicle.make }} {{ certificate.vehicle.model }}
       {% if certificate.vehicle.year %}({{ certificate.vehicle.year }}){% endif %}
     </p>
-    <p>VIN: <code>{{ certificate.vehicle.vin }}</code></p>
+    <p>{% translate "VIN:" %} <code>{{ certificate.vehicle.vin }}</code></p>
   </section>
 
   <section class="az-diagnostic-card">
-    <h2>Verified procedure</h2>
-    <p>{{ certificate.procedure_name }} · version {{ certificate.procedure_version }}</p>
+    <h2>{% translate "Verified procedure" %}</h2>
+    <p>{{ certificate.procedure_name }} · {% translate "version" %} {{ certificate.procedure_version }}</p>
     <ol>
       {% for operation in certificate.operations %}
         <li>
           <strong>{{ operation.title }}</strong>
           — {{ operation.status }}
           {% if operation.completed_at %} · {{ operation.completed_at }}{% endif %}
-          · evidence items: {{ operation.evidence_count }}
-          {% if operation.approved_exception %} · authorized exception{% endif %}
+          · {% translate "evidence items:" %} {{ operation.evidence_count }}
+          {% if operation.approved_exception %} · {% translate "authorized exception" %}{% endif %}
         </li>
       {% endfor %}
     </ol>
   </section>
 
   <section class="az-diagnostic-card">
-    <h2>Integrity</h2>
-    <p>This certificate is projected from an immutable, checksummed repair record.</p>
+    <h2>{% translate "Integrity" %}</h2>
+    <p>{% translate "This certificate is projected from an immutable, checksummed repair record." %}</p>
     <p>SHA-256: <code>{{ certificate.content_sha256 }}</code></p>
-    <p>The public view omits technician identities, internal notes, evidence files, and the full VIN.</p>
-    <p>This certificate confirms the recorded procedure and verification result. It is not a warranty or an OEM endorsement.</p>
+    <p>{% translate "The public view omits technician identities, internal notes, evidence files, and the full VIN." %}</p>
+    <p>{% translate "This certificate confirms the recorded procedure and verification result. It is not a warranty or an OEM endorsement." %}</p>
   </section>
 </div></section>
 {% endblock %}

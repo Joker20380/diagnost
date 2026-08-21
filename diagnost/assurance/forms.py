@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from diagnostics.models import Vehicle
 from users.models import TechnicianProfile
@@ -7,11 +8,11 @@ from .models import CaseOperation, CompetencyReview, Evidence, EvidenceRequireme
 
 
 class RepairCaseCreateForm(forms.Form):
-    vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.none())
-    procedure_version = forms.ModelChoiceField(queryset=ProcedureVersion.objects.none())
-    title = forms.CharField(max_length=255)
-    complaint = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
-    technicians = forms.ModelMultipleChoiceField(
+    vehicle = forms.ModelChoiceField(label=_("Vehicle"), queryset=Vehicle.objects.none())
+    procedure_version = forms.ModelChoiceField(label=_("Procedure version"), queryset=ProcedureVersion.objects.none())
+    title = forms.CharField(label=_("Title"), max_length=255)
+    complaint = forms.CharField(label=_("Complaint"), required=False, widget=forms.Textarea(attrs={"rows": 3}))
+    technicians = forms.ModelMultipleChoiceField(label=_("Technicians"),
         queryset=TechnicianProfile.objects.none(), required=False
     )
 
@@ -32,11 +33,11 @@ class RepairCaseCreateForm(forms.Form):
 
 
 class EvidenceSubmissionForm(forms.Form):
-    requirement = forms.ModelChoiceField(queryset=EvidenceRequirement.objects.none())
-    file = forms.FileField(required=False)
-    text = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
-    numeric_value = forms.DecimalField(required=False, max_digits=16, decimal_places=4)
-    unit = forms.CharField(required=False, max_length=32)
+    requirement = forms.ModelChoiceField(label=_("Requirement"), queryset=EvidenceRequirement.objects.none())
+    file = forms.FileField(label=_("File"), required=False)
+    text = forms.CharField(label=_("Text"), required=False, widget=forms.Textarea(attrs={"rows": 3}))
+    numeric_value = forms.DecimalField(label=_("Numeric value"), required=False, max_digits=16, decimal_places=4)
+    unit = forms.CharField(label=_("Unit"), required=False, max_length=32)
 
     def __init__(self, *args, case_operation, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,8 +49,9 @@ class EvidenceSubmissionForm(forms.Form):
 class EvidenceSupersessionForm(EvidenceSubmissionForm):
     reason = forms.CharField(
         min_length=5,
+        label=_("Replacement reason"),
         widget=forms.Textarea(attrs={"rows": 3}),
-        help_text="Explain why the previous evidence must be replaced.",
+        help_text=_("Explain why the previous evidence must be replaced."),
     )
 
     def __init__(self, *args, evidence, **kwargs):
@@ -63,7 +65,7 @@ class EvidenceSupersessionForm(EvidenceSubmissionForm):
 
 
 class ReasonForm(forms.Form):
-    rationale = forms.CharField(
+    rationale = forms.CharField(label=_("Rationale"),
         min_length=5,
         widget=forms.Textarea(attrs={"rows": 2}),
     )
@@ -99,13 +101,14 @@ class WorkshopWalkthroughObservationForm(forms.ModelForm):
 
 
 class CompetencyReviewForm(forms.Form):
-    technician = forms.ModelChoiceField(queryset=TechnicianProfile.objects.none())
-    skill = forms.ModelChoiceField(queryset=Skill.objects.none())
-    requested_level = forms.IntegerField(min_value=1)
-    decision = forms.ChoiceField(choices=CompetencyReview.Decision.choices)
-    rationale = forms.CharField(min_length=5, widget=forms.Textarea(attrs={"rows": 3}))
+    technician = forms.ModelChoiceField(label=_("Technician"), queryset=TechnicianProfile.objects.none())
+    skill = forms.ModelChoiceField(label=_("Skill"), queryset=Skill.objects.none())
+    requested_level = forms.IntegerField(label=_("Requested level"), min_value=1)
+    decision = forms.ChoiceField(label=_("Decision"), choices=CompetencyReview.Decision.choices)
+    rationale = forms.CharField(label=_("Rationale"), min_length=5, widget=forms.Textarea(attrs={"rows": 3}))
     evidence = forms.ModelMultipleChoiceField(
-        queryset=Evidence.objects.none(), widget=forms.CheckboxSelectMultiple
+        queryset=Evidence.objects.none(), widget=forms.CheckboxSelectMultiple,
+        label=_("Evidence"),
     )
 
     def __init__(self, *args, reviewer, **kwargs):

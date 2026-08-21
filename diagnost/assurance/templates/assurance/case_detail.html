@@ -1,37 +1,38 @@
 {% extends 'assurance/base.html' %}
+{% load i18n %}
 {% block content %}
 <section class="az-diagnostic-page"><div class="container">
   <h1>{{ repair_case.vehicle }} — {{ repair_case.title }}</h1>
   <p>{{ repair_case.procedure_version }} · {{ repair_case.get_status_display }} · {{ repair_case.get_verification_status_display }}</p>
   {% if can_audit %}
-    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:case_audit' repair_case.id %}">Audit trail and export</a></p>
+    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:case_audit' repair_case.id %}">{% translate "Audit trail and export" %}</a></p>
   {% endif %}
   {% if repair_case.repair_record %}
-    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:repair_certificate' repair_case.repair_record.public_id %}">Public Repair Certificate</a></p>
+    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:repair_certificate' repair_case.repair_record.public_id %}">{% translate "Public Repair Certificate" %}</a></p>
   {% endif %}
   {% for execution in operations %}
     <section class="az-diagnostic-card">
-      <span>Step {{ execution.operation.sequence }}</span>
+      <span>{% blocktranslate with number=execution.operation.sequence %}Step {{ number }}{% endblocktranslate %}</span>
       <h2>{{ execution.operation.title }}</h2>
       <p>{{ execution.operation.description }}</p>
-      <p><strong>Status:</strong> {{ execution.get_status_display }}</p>
+      <p><strong>{% translate "Status:" %}</strong> {{ execution.get_status_display }}</p>
       {% if execution.approved_exception %}
-        <p><strong>Approved exception:</strong> {{ execution.approved_exception.rationale }}</p>
+        <p><strong>{% translate "Approved exception:" %}</strong> {{ execution.approved_exception.rationale }}</p>
       {% endif %}
       {% for media in execution.operation.reference_media.all %}
-        <p>Reference: {% if media.source_url %}<a href="{{ media.source_url }}">{{ media.title|default:media.source_url }}</a>{% else %}{{ media.title }}{% endif %}</p>
+        <p>{% translate "Reference:" %} {% if media.source_url %}<a href="{{ media.source_url }}">{{ media.title|default:media.source_url }}</a>{% else %}{{ media.title }}{% endif %}</p>
       {% endfor %}
       {% if execution.evidence.exists %}
-        <h3>Evidence history</h3>
+        <h3>{% translate "Evidence history" %}</h3>
         <ul>
           {% for item in execution.evidence.all %}
             <li>
               #{{ item.id }} · {{ item.get_evidence_type_display }} · {{ item.submitted_at }}
-              {% if item.supersedes_id %} · replaces #{{ item.supersedes_id }}{% endif %}
+              {% if item.supersedes_id %} · {% translate "replaces" %} #{{ item.supersedes_id }}{% endif %}
               {% if item.is_superseded %}
-                · superseded
+                · {% translate "superseded" %}
               {% elif execution.status == 'available' or execution.status == 'in_progress' %}
-                · <a href="{% url 'assurance:supersede_evidence' item.id %}">Replace</a>
+                · <a href="{% url 'assurance:supersede_evidence' item.id %}">{% translate "Replace" %}</a>
               {% endif %}
             </li>
           {% endfor %}
@@ -39,45 +40,45 @@
       {% endif %}
       {% if execution.status == 'available' or execution.status == 'in_progress' %}
         {% if execution.operation.evidence_requirements.exists %}
-          <a class="az-btn az-btn-outline" href="{% url 'assurance:submit_evidence' execution.id %}">Add evidence</a>
+          <a class="az-btn az-btn-outline" href="{% url 'assurance:submit_evidence' execution.id %}">{% translate "Add evidence" %}</a>
         {% endif %}
         <form method="post" action="{% url 'assurance:complete_operation' execution.id %}">
-          {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Complete</button>
+          {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">{% translate "Complete" %}</button>
         </form>
         {% if can_control and execution.operation.escalation_allowed %}
           <form method="post" action="{% url 'assurance:skip_operation' execution.id %}">
             {% csrf_token %}
-            <textarea name="rationale" minlength="5" required placeholder="Exception rationale"></textarea>
-            <button class="az-btn az-btn-outline" type="submit">Approve exception and skip</button>
+            <textarea name="rationale" minlength="5" required placeholder="{% translate 'Exception rationale' %}"></textarea>
+            <button class="az-btn az-btn-outline" type="submit">{% translate "Approve exception and skip" %}</button>
           </form>
         {% endif %}
       {% elif execution.status == 'requires_review' %}
         <form method="post" action="{% url 'assurance:review_operation' execution.id %}">
           {% csrf_token %}
           <input type="hidden" name="decision" value="approve">
-          <textarea name="rationale" required placeholder="Expert rationale"></textarea>
-          <button class="az-btn az-btn-primary" type="submit">Approve</button>
+          <textarea name="rationale" required placeholder="{% translate 'Expert rationale' %}"></textarea>
+          <button class="az-btn az-btn-primary" type="submit">{% translate "Approve" %}</button>
         </form>
       {% elif execution.status == 'locked' %}
-        <p><strong>BLOCKED</strong> — complete prerequisite operations.</p>
+        <p><strong>{% translate "BLOCKED" %}</strong> — {% translate "complete prerequisite operations." %}</p>
       {% endif %}
     </section>
   {% endfor %}
 
   <section class="az-diagnostic-card">
-    <h2>Workshop walkthrough log</h2>
-    <p>Record friction, ambiguity, delays, and safety concerns observed during a real repair walkthrough.</p>
+    <h2>{% translate "Workshop walkthrough log" %}</h2>
+    <p>{% translate "Record friction, ambiguity, delays, and safety concerns observed during a real repair walkthrough." %}</p>
     <form method="post" action="{% url 'assurance:record_walkthrough_observation' repair_case.id %}">
       {% csrf_token %}
       {{ walkthrough_form.as_p }}
-      <button class="az-btn az-btn-primary" type="submit">Record observation</button>
+      <button class="az-btn az-btn-primary" type="submit">{% translate "Record observation" %}</button>
     </form>
     {% if walkthrough_observations %}
-      <h3>Recorded observations</h3>
+      <h3>{% translate "Recorded observations" %}</h3>
       <ul>
         {% for observation in walkthrough_observations %}
           <li><strong>{{ observation.get_severity_display }}</strong> · {{ observation.get_category_display }}
-            {% if observation.case_operation %} · Step {{ observation.case_operation.operation.sequence }}{% endif %}
+            {% if observation.case_operation %} · {% translate "Step" %} {{ observation.case_operation.operation.sequence }}{% endif %}
             · {{ observation.description }} · {{ observation.recorded_at }}</li>
         {% endfor %}
       </ul>
@@ -85,20 +86,20 @@
   </section>
 
   <section class="az-diagnostic-card">
-    <h2>Case verification</h2>
+    <h2>{% translate "Case verification" %}</h2>
     <form method="post" action="{% url 'assurance:verify_case' repair_case.id %}">
-      {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">Run verification</button>
+      {% csrf_token %}<button class="az-btn az-btn-primary" type="submit">{% translate "Run verification" %}</button>
     </form>
   </section>
 
   {% if can_control and repair_case.status != 'completed' and repair_case.status != 'cancelled' %}
     <section class="az-diagnostic-card">
-      <h2>Cancel repair case</h2>
-      <p>Use this action only when the repair case must be stopped. The rationale is retained in the audit trail.</p>
+      <h2>{% translate "Cancel repair case" %}</h2>
+      <p>{% translate "Use this action only when the repair case must be stopped. The rationale is retained in the audit trail." %}</p>
       <form method="post" action="{% url 'assurance:cancel_case' repair_case.id %}">
         {% csrf_token %}
-        <textarea name="rationale" minlength="5" required placeholder="Cancellation rationale"></textarea>
-        <button class="az-btn az-btn-outline" type="submit">Cancel repair case</button>
+        <textarea name="rationale" minlength="5" required placeholder="{% translate 'Cancellation rationale' %}"></textarea>
+        <button class="az-btn az-btn-outline" type="submit">{% translate "Cancel repair case" %}</button>
       </form>
     </section>
   {% endif %}
