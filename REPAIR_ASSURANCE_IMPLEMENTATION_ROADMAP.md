@@ -139,11 +139,13 @@ Evidence:
   role-restricted audit screens with filtered CSV/JSON export, plus a
   privacy-minimized external Repair Certificate.
 - Next planned deliverable: **real workshop walkthrough and UX failure log**.
-- Iteration 3 has not started.
+- Iteration 3 backend work has started while the field walkthrough remains open.
 
 ## Iteration 3 — competency and procedure library
 
 - [ ] evidence-based competency review;
+  - [x] immutable evidence-backed decision service and level update;
+  - [ ] senior-review user interface;
 - [ ] certification validity and vehicle scope;
 - [ ] moderated Evidence → ReferenceMedia promotion;
 - [ ] procedure revision cloning and comparison;

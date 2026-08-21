@@ -13,6 +13,8 @@ from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 
 from .models import (
     CaseOperation,
+    CompetencyReview,
+    Evidence,
     EvidenceRequirement,
     ExpertReviewNotification,
     ExpertDecision,
@@ -31,6 +33,7 @@ from .services import (
     create_repair_case,
     decide_operation,
     publish_procedure_version,
+    review_competency,
     skip_case_operation,
     submit_evidence,
     supersede_evidence,
@@ -555,3 +558,48 @@ class RepairAssuranceExecutionTests(TestCase):
             scan_evidence.save()
         with self.assertRaises(ValidationError):
             confirmation.delete()
+
+    def test_competency_approval_requires_attributable_completed_evidence(self):
+        execution = self.execution(self.torque)
+        CaseOperation.objects.filter(pk=execution.pk).update(status=CaseOperation.Status.COMPLETED)
+        execution.refresh_from_db()
+        evidence = Evidence.objects.create(
+            repair_case=self.case,
+            case_operation=execution,
+            operation=self.torque,
+            requirement=self.torque_requirement,
+            evidence_type=EvidenceRequirement.Type.MEASUREMENT,
+            numeric_value=Decimal("105"),
+            unit="Nm",
+            submitted_by=self.junior_profile,
+        )
+        review = review_competency(
+            technician=self.junior,
+            skill=self.skill,
+            requested_level=3,
+            decision=CompetencyReview.Decision.APPROVE,
+            rationale="Repeated controlled work demonstrates level three.",
+            evidence=[evidence],
+            user=self.senior_user,
+        )
+        competency = TechnicianSkill.objects.get(technician=self.junior, skill=self.skill)
+        self.assertEqual(competency.level, 3)
+        self.assertEqual(list(review.evidence.all()), [evidence])
+        review.rationale = "Changed"
+        with self.assertRaises(ValidationError):
+            review.save()
+
+    def test_competency_reject_does_not_change_level(self):
+        execution = self.execution(self.torque)
+        CaseOperation.objects.filter(pk=execution.pk).update(status=CaseOperation.Status.COMPLETED)
+        evidence = Evidence.objects.create(
+            repair_case=self.case, case_operation=execution, operation=self.torque,
+            requirement=self.torque_requirement, evidence_type=EvidenceRequirement.Type.MEASUREMENT,
+            numeric_value=Decimal("105"), unit="Nm", submitted_by=self.junior_profile,
+        )
+        review_competency(
+            technician=self.junior, skill=self.skill, requested_level=3,
+            decision=CompetencyReview.Decision.REJECT, rationale="More supervised work is required.",
+            evidence=[evidence], user=self.senior_user,
+        )
+        self.assertEqual(TechnicianSkill.objects.get(technician=self.junior, skill=self.skill).level, 2)

@@ -290,3 +290,22 @@ from `RepairAuditEvent`: an observation is product research, not proof of a
 controlled repair transition. Completing the roadmap walkthrough still
 requires a real workshop session; the capture tool alone is not completion
 evidence.
+
+## Evidence-based competency decisions
+
+Competency is granted only through an immutable `CompetencyReview` performed
+by a senior expert or technical manager from the same organization. Reviewers
+cannot approve themselves. Every decision records the requested level,
+approve/reject outcome, rationale, reviewer, timestamp, and the exact evidence
+set considered.
+
+Supporting evidence must have been submitted by the assessed technician during
+a completed operation that explicitly requires the reviewed skill. Evidence
+from another tenant, another technician, another skill, an unfinished step, or
+a superseded submission is rejected. A rejection preserves the current level;
+an approval updates the operational `TechnicianSkill` projection while the
+append-only decisions retain its provenance.
+
+This backend service does not make an automatic competency judgment. The
+senior reviewer remains accountable for the decision; a dedicated review UI is
+the remaining part of the roadmap item.

@@ -584,3 +584,52 @@ class WorkshopWalkthroughObservation(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Walkthrough observations are append-only.")
+
+
+class CompetencyReview(models.Model):
+    class Decision(models.TextChoices):
+        APPROVE = "approve", "Approve"
+        REJECT = "reject", "Reject"
+
+    technician = models.ForeignKey("users.TechnicianProfile", on_delete=models.PROTECT, related_name="competency_reviews")
+    skill = models.ForeignKey(Skill, on_delete=models.PROTECT, related_name="competency_reviews")
+    requested_level = models.PositiveSmallIntegerField()
+    decision = models.CharField(max_length=12, choices=Decision.choices)
+    rationale = models.TextField()
+    reviewer = models.ForeignKey(UserProfile, on_delete=models.PROTECT, related_name="competency_reviews_performed")
+    evidence = models.ManyToManyField(Evidence, through="CompetencyReviewEvidence", related_name="competency_reviews")
+    decided_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["decided_at", "id"]
+
+    def clean(self):
+        if self.technician.organization_id != self.skill.organization_id:
+            raise ValidationError("Technician and skill must belong to one organization.")
+        if self.requested_level > self.skill.max_level:
+            raise ValidationError({"requested_level": "Level exceeds the skill maximum."})
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Competency reviews are append-only.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Competency reviews are append-only.")
+
+
+class CompetencyReviewEvidence(models.Model):
+    review = models.ForeignKey(CompetencyReview, on_delete=models.PROTECT, related_name="evidence_links")
+    evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT, related_name="competency_review_links")
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["review", "evidence"], name="unique_competency_review_evidence")]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Competency review evidence links are append-only.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Competency review evidence links are append-only.")

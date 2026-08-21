@@ -14,6 +14,8 @@ from .file_security import inspect_evidence_file
 from .models import (
     CaseOperation,
     CaseOperationException,
+    CompetencyReview,
+    CompetencyReviewEvidence,
     Evidence,
     EvidenceRequirement,
     ExpertDecision,
@@ -24,6 +26,8 @@ from .models import (
     RepairAuditEvent,
     RepairCase,
     RepairCaseTechnician,
+    TechnicianSkill,
+    Skill,
     RepairRecord,
     Verification,
 )
@@ -697,6 +701,54 @@ def repair_record_snapshot(case: RepairCase) -> dict:
 
 
 @transaction.atomic
+
+
+@transaction.atomic
+def review_competency(*, technician, skill: Skill, requested_level: int, decision: str, rationale: str, evidence, user) -> CompetencyReview:
+    reviewer = _manager_technician(user, skill.organization_id)
+    if technician.organization_id != skill.organization_id:
+        raise ValidationError("Technician and skill must belong to one organization.")
+    if reviewer.pk == technician.pk:
+        raise PermissionDenied("Reviewers cannot approve their own competency.")
+    if requested_level < 1 or requested_level > skill.max_level:
+        raise ValidationError("Requested competency level is invalid.")
+    if decision not in CompetencyReview.Decision.values:
+        raise ValidationError("Unsupported competency decision.")
+    if len(rationale.strip()) < 5:
+        raise ValidationError("A substantive competency rationale is required.")
+
+    evidence_items = list(Evidence.objects.select_for_update().select_related(
+        "case_operation__operation", "repair_case"
+    ).filter(pk__in=[item.pk for item in evidence]))
+    if not evidence_items:
+        raise ValidationError("Competency review requires evidence.")
+    if len(evidence_items) != len({item.pk for item in evidence}):
+        raise ValidationError("Some competency evidence does not exist.")
+    for item in evidence_items:
+        if item.repair_case.organization_id != skill.organization_id:
+            raise ValidationError("Competency evidence belongs to another organization.")
+        if item.submitted_by_id != technician.user_profile_id:
+            raise ValidationError("Competency evidence was not submitted by this technician.")
+        if item.case_operation.operation.required_skill_id != skill.pk:
+            raise ValidationError("Competency evidence does not demonstrate this skill.")
+        if item.case_operation.status != CaseOperation.Status.COMPLETED:
+            raise ValidationError("Competency evidence must come from a completed operation.")
+        if item.is_superseded:
+            raise ValidationError("Superseded evidence cannot support competency.")
+
+    review = CompetencyReview.objects.create(
+        technician=technician, skill=skill, requested_level=requested_level,
+        decision=decision, rationale=rationale.strip(), reviewer=reviewer.user_profile,
+    )
+    CompetencyReviewEvidence.objects.bulk_create([
+        CompetencyReviewEvidence(review=review, evidence=item) for item in evidence_items
+    ])
+    if decision == CompetencyReview.Decision.APPROVE:
+        TechnicianSkill.objects.update_or_create(
+            technician=technician, skill=skill,
+            defaults={"level": requested_level, "verified_by": reviewer.user_profile, "verified_at": timezone.now()},
+        )
+    return review
 def verify_repair_case(case: RepairCase, user) -> Verification:
     reviewer = _technician(user, case.organization_id)
     case = RepairCase.objects.select_for_update().select_related("vehicle", "procedure_version__procedure").get(pk=case.pk)
