@@ -13,6 +13,7 @@ from django.utils.translation import gettext
 from diagnostics.models import Vehicle
 from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 
+from .forms import WorkshopWalkthroughObservationForm
 from .models import (
     CaseOperation,
     CompetencyReview,
@@ -630,6 +631,9 @@ class RepairAssuranceExecutionTests(TestCase):
                 gettext("The repair case is closed."),
                 "Ремонтное дело закрыто.",
             )
+            form = WorkshopWalkthroughObservationForm(repair_case=self.case)
+            self.assertEqual(form.fields["category"].label, "Категория")
+            self.assertEqual(form.fields["expected_behavior"].label, "Ожидаемое поведение")
 
         with translation.override("en"):
             self.assertEqual(gettext("Repair Cases"), "Repair Cases")

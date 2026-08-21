@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 18:14+0000\n"
+"POT-Creation-Date: 2026-08-21 18:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,27 +102,51 @@ msgstr "Причина замены"
 msgid "Explain why the previous evidence must be replaced."
 msgstr "Объясните, почему предыдущее доказательство необходимо заменить."
 
-#: forms.py:68 forms.py:108
+#: forms.py:68 forms.py:76 forms.py:117
 msgid "Rationale"
 msgstr "Обоснование"
 
-#: forms.py:104
-msgid "Technician"
-msgstr "Техник"
-
-#: forms.py:105
-msgid "Skill"
-msgstr "Навык"
-
-#: forms.py:106
-msgid "Requested level"
-msgstr "Запрошенный уровень"
-
-#: forms.py:107
+#: forms.py:75 forms.py:116
 msgid "Decision"
 msgstr "Решение"
 
-#: forms.py:111
+#: forms.py:81
+msgid "Result note"
+msgstr "Результат / примечание"
+
+#: forms.py:90
+msgid "Operation execution"
+msgstr "Выполнение операции"
+
+#: forms.py:91
+msgid "Category"
+msgstr "Категория"
+
+#: forms.py:92
+msgid "Severity"
+msgstr "Критичность"
+
+#: forms.py:93
+msgid "Description"
+msgstr "Описание"
+
+#: forms.py:94
+msgid "Expected behavior"
+msgstr "Ожидаемое поведение"
+
+#: forms.py:113
+msgid "Technician"
+msgstr "Техник"
+
+#: forms.py:114
+msgid "Skill"
+msgstr "Навык"
+
+#: forms.py:115
+msgid "Requested level"
+msgstr "Запрошенный уровень"
+
+#: forms.py:120
 msgid "Evidence"
 msgstr "Доказательства"
 
@@ -382,7 +406,7 @@ msgstr "Требуется активный техник этой организ
 msgid "Senior or technical manager role is required."
 msgstr "Требуется роль старшего специалиста или технического руководителя."
 
-#: services.py:78
+#: services.py:78 tests.py:630
 msgid "The repair case is closed."
 msgstr "Ремонтное дело закрыто."
 
@@ -724,7 +748,7 @@ msgstr "Используйте это действие только для ос�
 msgid "Cancellation rationale"
 msgstr "Причина отмены"
 
-#: templates/assurance/case_list.html:5 tests.py:627 tests.py:631
+#: templates/assurance/case_list.html:5 tests.py:627 tests.py:635
 msgid "Repair Cases"
 msgstr "Ремонтные дела"
 

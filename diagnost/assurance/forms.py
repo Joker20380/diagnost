@@ -72,18 +72,27 @@ class ReasonForm(forms.Form):
 
 
 class ExpertDecisionForm(forms.Form):
-    decision = forms.ChoiceField(choices=ExpertDecision.Decision.choices)
-    rationale = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
+    decision = forms.ChoiceField(label=_("Decision"), choices=ExpertDecision.Decision.choices)
+    rationale = forms.CharField(label=_("Rationale"), widget=forms.Textarea(attrs={"rows": 3}))
 
 
 class CompletionForm(forms.Form):
-    result_note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
+    result_note = forms.CharField(
+        label=_("Result note"), required=False, widget=forms.Textarea(attrs={"rows": 2})
+    )
 
 
 class WorkshopWalkthroughObservationForm(forms.ModelForm):
     class Meta:
         model = WorkshopWalkthroughObservation
         fields = ("case_operation", "category", "severity", "description", "expected_behavior")
+        labels = {
+            "case_operation": _("Operation execution"),
+            "category": _("Category"),
+            "severity": _("Severity"),
+            "description": _("Description"),
+            "expected_behavior": _("Expected behavior"),
+        }
         widgets = {
             "description": forms.Textarea(attrs={"rows": 3}),
             "expected_behavior": forms.Textarea(attrs={"rows": 2}),
