@@ -13,6 +13,7 @@ from users.models import TechnicianProfile
 
 from .forms import (
     CompletionForm,
+    CompetencyReviewForm,
     EvidenceSubmissionForm,
     EvidenceSupersessionForm,
     ExpertDecisionForm,
@@ -26,6 +27,7 @@ from .services import (
     complete_operation,
     decide_operation,
     create_repair_case,
+    review_competency,
     skip_case_operation,
     submit_evidence,
     supersede_evidence,
@@ -139,7 +141,46 @@ def _repair_certificate_projection(record):
 @login_required
 def case_list(request):
     cases = _visible_cases(request).select_related("vehicle", "procedure_version__procedure")
-    return render(request, "assurance/case_list.html", {"cases": cases})
+    profile = getattr(request.user, "userprofile", None)
+    technician = getattr(profile, "technician_profile", None) if profile else None
+    can_review_competency = bool(technician and technician.is_active and technician.role in {
+        TechnicianProfile.Role.SENIOR_EXPERT,
+        TechnicianProfile.Role.TECHNICAL_MANAGER,
+    })
+    return render(request, "assurance/case_list.html", {
+        "cases": cases, "can_review_competency": can_review_competency,
+    })
+
+
+@login_required
+def competency_review_create(request):
+    reviewer = _technician(request)
+    if reviewer.role not in {
+        TechnicianProfile.Role.SENIOR_EXPERT,
+        TechnicianProfile.Role.TECHNICAL_MANAGER,
+    }:
+        raise PermissionDenied
+    if request.method == "POST":
+        form = CompetencyReviewForm(request.POST, reviewer=reviewer)
+        if form.is_valid():
+            try:
+                review = review_competency(
+                    technician=form.cleaned_data["technician"],
+                    skill=form.cleaned_data["skill"],
+                    requested_level=form.cleaned_data["requested_level"],
+                    decision=form.cleaned_data["decision"],
+                    rationale=form.cleaned_data["rationale"],
+                    evidence=form.cleaned_data["evidence"],
+                    user=request.user,
+                )
+            except (ValidationError, PermissionDenied) as exc:
+                form.add_error(None, str(exc))
+            else:
+                messages.success(request, f"Competency decision #{review.pk} recorded.")
+                return redirect("assurance:case_list")
+    else:
+        form = CompetencyReviewForm(reviewer=reviewer)
+    return render(request, "assurance/competency_review_form.html", {"form": form})
 
 def repair_certificate(request, public_id):
     record = get_object_or_404(RepairRecord, public_id=public_id)

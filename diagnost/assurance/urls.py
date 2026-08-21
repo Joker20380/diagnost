@@ -11,6 +11,7 @@ urlpatterns = [
         name="repair_certificate",
     ),
     path("cases/", views.case_list, name="case_list"),
+    path("competency-reviews/new/", views.competency_review_create, name="competency_review_create"),
     path("cases/new/", views.case_create, name="case_create"),
     path("cases/<int:case_id>/", views.case_detail, name="case_detail"),
     path(

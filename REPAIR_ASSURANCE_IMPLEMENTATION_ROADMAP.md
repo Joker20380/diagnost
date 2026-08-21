@@ -143,9 +143,9 @@ Evidence:
 
 ## Iteration 3 — competency and procedure library
 
-- [ ] evidence-based competency review;
+- [x] evidence-based competency review;
   - [x] immutable evidence-backed decision service and level update;
-  - [ ] senior-review user interface;
+  - [x] senior-review user interface;
 - [ ] certification validity and vehicle scope;
 - [ ] moderated Evidence → ReferenceMedia promotion;
 - [ ] procedure revision cloning and comparison;

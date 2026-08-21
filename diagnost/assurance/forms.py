@@ -3,7 +3,7 @@ from django import forms
 from diagnostics.models import Vehicle
 from users.models import TechnicianProfile
 
-from .models import CaseOperation, EvidenceRequirement, ExpertDecision, ProcedureVersion, WorkshopWalkthroughObservation
+from .models import CaseOperation, CompetencyReview, Evidence, EvidenceRequirement, ExpertDecision, ProcedureVersion, Skill, WorkshopWalkthroughObservation
 
 
 class RepairCaseCreateForm(forms.Form):
@@ -94,5 +94,33 @@ class WorkshopWalkthroughObservationForm(forms.ModelForm):
             repair_case=repair_case
         ).select_related("operation")
         self.fields["case_operation"].required = False
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("class", "form-control")
+
+
+class CompetencyReviewForm(forms.Form):
+    technician = forms.ModelChoiceField(queryset=TechnicianProfile.objects.none())
+    skill = forms.ModelChoiceField(queryset=Skill.objects.none())
+    requested_level = forms.IntegerField(min_value=1)
+    decision = forms.ChoiceField(choices=CompetencyReview.Decision.choices)
+    rationale = forms.CharField(min_length=5, widget=forms.Textarea(attrs={"rows": 3}))
+    evidence = forms.ModelMultipleChoiceField(
+        queryset=Evidence.objects.none(), widget=forms.CheckboxSelectMultiple
+    )
+
+    def __init__(self, *args, reviewer, **kwargs):
+        super().__init__(*args, **kwargs)
+        organization = reviewer.organization
+        self.fields["technician"].queryset = TechnicianProfile.objects.filter(
+            organization=organization, is_active=True
+        ).exclude(pk=reviewer.pk).select_related("user_profile__user")
+        self.fields["skill"].queryset = Skill.objects.filter(
+            organization=organization, is_active=True
+        )
+        self.fields["evidence"].queryset = Evidence.objects.filter(
+            repair_case__organization=organization,
+            case_operation__status=CaseOperation.Status.COMPLETED,
+            superseded_by__isnull=True,
+        ).select_related("case_operation__operation", "submitted_by__user").distinct()
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "form-control")

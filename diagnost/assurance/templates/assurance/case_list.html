@@ -3,6 +3,9 @@
 <section class="az-diagnostic-page"><div class="container">
   <h1>Repair Cases</h1>
   <p><a class="az-btn az-btn-primary" href="{% url 'assurance:case_create' %}">Create Repair Case</a></p>
+  {% if can_review_competency %}
+    <p><a class="az-btn az-btn-outline" href="{% url 'assurance:competency_review_create' %}">Review technician competency</a></p>
+  {% endif %}
   {% for case in cases %}
     <div class="az-diagnostic-card">
       <h2><a href="{% url 'assurance:case_detail' case.id %}">{{ case.vehicle }} — {{ case.title }}</a></h2>

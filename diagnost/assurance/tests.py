@@ -602,4 +602,19 @@ class RepairAssuranceExecutionTests(TestCase):
             decision=CompetencyReview.Decision.REJECT, rationale="More supervised work is required.",
             evidence=[evidence], user=self.senior_user,
         )
+
+    def test_senior_can_open_competency_review_screen(self):
+        self.client.force_login(self.senior_user)
+        response = self.client.get(
+            reverse("assurance:competency_review_create"), secure=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Evidence-based competency review")
+
+    def test_junior_cannot_open_competency_review_screen(self):
+        self.client.force_login(self.junior_user)
+        response = self.client.get(
+            reverse("assurance:competency_review_create"), secure=True
+        )
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(TechnicianSkill.objects.get(technician=self.junior, skill=self.skill).level, 2)
