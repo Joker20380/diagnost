@@ -161,7 +161,10 @@ Evidence:
   - [x] independent senior/manager approval and self-review prevention;
   - [x] immutable provenance, rights basis, SHA-256 and audit events;
   - [x] controlled admin workflow and Russian operator guide;
-- [ ] procedure revision cloning and comparison;
+- [x] procedure revision cloning and comparison;
+  - [x] deep clone into the next draft version, including operation children and dependencies;
+  - [x] structured added/removed/changed operation comparison;
+  - [x] admin actions, comparison views, tests and Russian operator guide;
 - [ ] external DMS/GMS adapter interface;
 - [ ] procedure import provenance and licensing controls.
 

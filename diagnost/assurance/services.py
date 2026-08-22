@@ -24,6 +24,8 @@ from .models import (
     ExpertDecisionEvidence,
     ExpertReviewNotification,
     Operation,
+    OperationCertificationRequirement,
+    OperationDependency,
     ProcedureVersion,
     ReferenceMedia,
     RepairAuditEvent,
@@ -221,6 +223,86 @@ def publish_procedure_version(version: ProcedureVersion, user) -> ProcedureVersi
     )
     version.refresh_from_db()
     return version
+
+
+def _copy_concrete(instance, **overrides):
+    values = {}
+    for field in instance._meta.concrete_fields:
+        if field.primary_key or field.name in overrides or field.attname in overrides:
+            continue
+        values[field.attname] = getattr(instance, field.attname)
+    values.update(overrides)
+    return type(instance).objects.create(**values)
+
+
+@transaction.atomic
+def clone_procedure_version(*, source_version: ProcedureVersion, user, change_summary=""):
+    source = ProcedureVersion.objects.select_for_update().select_related(
+        "procedure"
+    ).get(pk=source_version.pk)
+    technician = _manager_technician(user, source.procedure.organization_id)
+    latest = (
+        ProcedureVersion.objects.select_for_update()
+        .filter(procedure=source.procedure)
+        .order_by("-version")
+        .first()
+    )
+    clone = ProcedureVersion.objects.create(
+        procedure=source.procedure,
+        version=(latest.version if latest else 0) + 1,
+        change_summary=change_summary.strip() or f"Cloned from version {source.version}",
+        created_by=technician.user_profile,
+    )
+    source_operations = list(
+        source.operations.select_related("required_skill").prefetch_related(
+            "evidence_requirements", "reference_media",
+            "certification_requirements", "dependencies"
+        )
+    )
+    operation_map = {}
+    for operation in source_operations:
+        copied = _copy_concrete(operation, version=clone)
+        operation_map[operation.pk] = copied
+        for requirement in operation.evidence_requirements.all():
+            _copy_concrete(requirement, operation=copied)
+        for media in operation.reference_media.all():
+            _copy_concrete(media, operation=copied)
+        for requirement in operation.certification_requirements.all():
+            _copy_concrete(requirement, operation=copied)
+    for operation in source_operations:
+        for dependency in operation.dependencies.all():
+            OperationDependency.objects.create(
+                operation=operation_map[operation.pk],
+                depends_on=operation_map[dependency.depends_on_id],
+            )
+    return clone
+
+
+def compare_procedure_versions(*, base: ProcedureVersion, candidate: ProcedureVersion):
+    if base.procedure_id != candidate.procedure_id:
+        raise ValidationError(_("Only versions of the same procedure can be compared."))
+    base_operations = {item["key"]: item for item in procedure_snapshot(base)["operations"]}
+    candidate_operations = {item["key"]: item for item in procedure_snapshot(candidate)["operations"]}
+    added = sorted(candidate_operations.keys() - base_operations.keys())
+    removed = sorted(base_operations.keys() - candidate_operations.keys())
+    changed = {}
+    for key in sorted(base_operations.keys() & candidate_operations.keys()):
+        fields = {}
+        for field in sorted(base_operations[key].keys() | candidate_operations[key].keys()):
+            before = base_operations[key].get(field)
+            after = candidate_operations[key].get(field)
+            if before != after:
+                fields[field] = {"from": before, "to": after}
+        if fields:
+            changed[key] = fields
+    return {
+        "base_version": base.version,
+        "candidate_version": candidate.version,
+        "added_operations": added,
+        "removed_operations": removed,
+        "changed_operations": changed,
+    }
+
 
 
 @transaction.atomic

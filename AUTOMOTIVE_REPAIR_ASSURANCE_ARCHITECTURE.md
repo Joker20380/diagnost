@@ -335,3 +335,20 @@ creates service-capture ReferenceMedia with immutable provenance to the source
 evidence, its content checksum and reviewer. Rejection creates no media.
 Published procedure versions remain unchanged. Operator steps and privacy
 checks are documented in EVIDENCE_PROMOTION_GUIDE.md.
+
+## Procedure revision cloning and comparison
+
+Procedure changes start by cloning an existing version into the next numbered
+draft. The clone service runs transactionally and copies operations, evidence
+requirements, reference media, certification requirements and operation
+dependencies. Dependency links are rebuilt against the cloned operations, so
+the draft does not point into the source version. Only a senior expert or
+technical manager from the procedure's organization may clone a revision.
+
+Comparison uses the canonical procedure snapshot and reports operation keys
+that were added or removed plus field-level before/after values for changed
+operations. The admin shows a compact `+ / - / delta` summary and a read-only
+structured detail against the immediately preceding version. Cloning never
+changes the source; the new revision remains subject to the normal validation
+and publication workflow. Operator steps are documented in
+PROCEDURE_REVISION_GUIDE.md.

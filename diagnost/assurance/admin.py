@@ -1,7 +1,13 @@
+import json
+
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .services import moderate_evidence_promotion, publish_procedure_version
+from django.utils.html import format_html
+from .services import (
+    clone_procedure_version, compare_procedure_versions,
+    moderate_evidence_promotion, publish_procedure_version,
+)
 
 from .models import (
     Certification,
@@ -156,16 +162,45 @@ class OperationAdmin(RussianAdminMixin, admin.ModelAdmin):
 
 @admin.register(ProcedureVersion)
 class ProcedureVersionAdmin(RussianAdminMixin, admin.ModelAdmin):
-    list_display = ("procedure", "version", "status", "operation_count", "published_at")
+    list_display = ("procedure", "version", "status", "operation_count", "comparison_summary", "published_at")
     list_filter = ("status",)
     search_fields = ("procedure__code", "procedure__name", "change_summary")
     list_select_related = ("procedure",)
-    readonly_fields = ("status", "content_sha256", "published_at")
-    actions = ("publish_selected_versions",)
+    readonly_fields = ("status", "content_sha256", "published_at", "comparison_with_previous")
+    actions = ("publish_selected_versions", "clone_selected_versions")
 
     @admin.display(description=_("операции"))
     def operation_count(self, obj):
         return obj.operations.count()
+    def _comparison(self, obj):
+        previous = obj.procedure.versions.filter(version__lt=obj.version).order_by("-version").first()
+        return compare_procedure_versions(base=previous, candidate=obj) if previous else None
+
+    @admin.display(description=_("изменения"))
+    def comparison_summary(self, obj):
+        comparison = self._comparison(obj)
+        if not comparison:
+            return _("первая версия")
+        return f"+{len(comparison['added_operations'])} / -{len(comparison['removed_operations'])} / Δ{len(comparison['changed_operations'])}"
+
+    @admin.display(description=_("Сравнение с предыдущей версией"))
+    def comparison_with_previous(self, obj):
+        comparison = self._comparison(obj)
+        if not comparison:
+            return _("Предыдущая версия отсутствует.")
+        return format_html("<pre>{}</pre>", json.dumps(comparison, ensure_ascii=False, indent=2))
+
+    @admin.action(description=_("Клонировать выбранные версии в новые черновики"))
+    def clone_selected_versions(self, request, queryset):
+        for version in queryset.order_by("procedure_id", "version"):
+            try:
+                clone = clone_procedure_version(source_version=version, user=request.user)
+            except Exception as exc:
+                self.message_user(request, f"{version}: {exc}", level=messages.ERROR)
+            else:
+                self.message_user(request, f"{version} → {clone}", level=messages.SUCCESS)
+
+
 
     @admin.action(description=_("Опубликовать выбранные черновые версии"))
     def publish_selected_versions(self, request, queryset):

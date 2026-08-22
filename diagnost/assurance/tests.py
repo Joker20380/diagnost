@@ -41,6 +41,8 @@ from .notifications import dispatch_expert_review_notifications
 from .services import (
     assert_operation_authorized,
     cancel_repair_case,
+    clone_procedure_version,
+    compare_procedure_versions,
     complete_operation,
     create_repair_case,
     decide_operation,
@@ -316,6 +318,58 @@ class RepairAssuranceExecutionTests(TestCase):
         self.assertEqual(reviewed.status, EvidencePromotionRequest.Status.REJECTED)
         self.assertIsNone(reviewed.reference_media_id)
 
+
+    def test_clone_procedure_version_copies_complete_specification(self):
+        clone = clone_procedure_version(
+            source_version=self.version,
+            user=self.senior_user,
+            change_summary="Prepare updated workshop revision",
+        )
+
+        self.assertEqual(clone.status, ProcedureVersion.Status.DRAFT)
+        self.assertEqual(clone.version, 2)
+        self.assertEqual(clone.operations.count(), self.version.operations.count())
+        cloned_torque = clone.operations.get(key=self.torque.key)
+        self.assertEqual(
+            cloned_torque.evidence_requirements.count(),
+            self.torque.evidence_requirements.count(),
+        )
+        self.assertEqual(
+            cloned_torque.required_certifications.count(),
+            self.torque.required_certifications.count(),
+        )
+        self.assertEqual(
+            cloned_torque.dependencies.get().depends_on.key,
+            self.scan.key,
+        )
+        comparison = compare_procedure_versions(base=self.version, candidate=clone)
+        self.assertEqual(comparison["added_operations"], [])
+        self.assertEqual(comparison["removed_operations"], [])
+        self.assertEqual(comparison["changed_operations"], {})
+
+    def test_compare_procedure_versions_reports_added_and_changed_operations(self):
+        clone = clone_procedure_version(
+            source_version=self.version, user=self.senior_user
+        )
+        cloned_torque = clone.operations.get(key=self.torque.key)
+        cloned_torque.title = "Updated torque application"
+        cloned_torque.save()
+        Operation.objects.create(
+            version=clone,
+            key="final-inspection",
+            sequence=4,
+            title="Final visual inspection",
+            description="Inspect completed repair before release.",
+        )
+
+        comparison = compare_procedure_versions(base=self.version, candidate=clone)
+
+        self.assertEqual(comparison["added_operations"], ["final-inspection"])
+        self.assertIn("critical-torque", comparison["changed_operations"])
+        self.assertEqual(
+            comparison["changed_operations"]["critical-torque"]["title"]["to"],
+            "Updated torque application",
+        )
 
     def test_assigned_mechanic_sees_simple_case_screen(self):
         self.client.force_login(self.junior_user)
