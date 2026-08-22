@@ -153,7 +153,10 @@ Evidence:
 - [x] evidence-based competency review;
   - [x] immutable evidence-backed decision service and level update;
   - [x] senior-review user interface;
-- [ ] certification validity and vehicle scope;
+- [x] certification validity and vehicle scope;
+  - [x] organization-scoped catalog and technician grants;
+  - [x] validity dates and brand/model scope enforced by backend gates;
+  - [x] admin authoring and Russian operator guide;
 - [ ] moderated Evidence → ReferenceMedia promotion;
 - [ ] procedure revision cloning and comparison;
 - [ ] external DMS/GMS adapter interface;

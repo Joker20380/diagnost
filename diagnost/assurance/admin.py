@@ -4,11 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from .services import publish_procedure_version
 
 from .models import (
+    Certification,
     CaseOperation,
     Evidence,
     EvidenceRequirement,
     ExpertDecision,
     Operation,
+    OperationCertificationRequirement,
     OperationDependency,
     ProcedureVersion,
     ReferenceMedia,
@@ -17,6 +19,7 @@ from .models import (
     RepairProcedure,
     RepairRecord,
     Skill,
+    TechnicianCertification,
     TechnicianSkill,
     Verification,
 )
@@ -25,6 +28,9 @@ from .models import (
 FIELD_LABELS = {
     "organization": "Организация", "workshop": "Автосервис", "code": "Код", "name": "Название",
     "description": "Описание", "technician": "Специалист", "skill": "Компетенция", "level": "Уровень",
+    "certification": "Сертификат", "required_certifications": "Требуемые сертификаты",
+    "valid_from": "Действует с", "valid_until": "Действует до", "issued_by": "Выдал",
+    "issued_at": "Выдано", "vehicle_brands": "Марки автомобилей", "vehicle_models": "Модели автомобилей",
     "verified_by": "Подтвердил", "verified_at": "Подтверждено", "created_by": "Создал", "created_at": "Создано",
     "procedure": "Процедура", "version": "Версия", "status": "Статус", "change_summary": "Описание изменений",
     "published_at": "Опубликовано", "sequence": "Порядок", "title": "Название", "operation_type": "Тип операции",
@@ -108,6 +114,11 @@ class OperationDependencyInline(RussianAdminMixin, admin.TabularInline):
         return formset
 
 
+class OperationCertificationRequirementInline(RussianAdminMixin, admin.TabularInline):
+    model = OperationCertificationRequirement
+    extra = 0
+
+
 class EvidenceRequirementInline(RussianAdminMixin, admin.TabularInline):
     model = EvidenceRequirement
     extra = 0
@@ -132,6 +143,7 @@ class OperationAdmin(RussianAdminMixin, admin.ModelAdmin):
     ordering = ("version", "sequence")
     inlines = (
         OperationDependencyInline,
+        OperationCertificationRequirementInline,
         EvidenceRequirementInline,
         ReferenceMediaInline,
     )
@@ -176,9 +188,12 @@ class RepairCaseAdmin(RussianAdminMixin, admin.ModelAdmin):
 MODEL_NAMES = {
     Skill: ("компетенция", "компетенции"),
     TechnicianSkill: ("компетенция специалиста", "компетенции специалистов"),
+    Certification: ("сертификат", "сертификаты"),
+    TechnicianCertification: ("сертификат специалиста", "сертификаты специалистов"),
     RepairProcedure: ("ремонтная процедура", "ремонтные процедуры"),
     ProcedureVersion: ("версия процедуры", "версии процедур"),
     Operation: ("операция", "операции"),
+    OperationCertificationRequirement: ("требование сертификата", "требования сертификатов"),
     OperationDependency: ("зависимость операции", "зависимости операций"),
     EvidenceRequirement: ("требование к доказательству", "требования к доказательствам"),
     ReferenceMedia: ("справочный материал", "справочные материалы"),
@@ -204,6 +219,7 @@ class RussianDefaultAdmin(RussianAdminMixin, admin.ModelAdmin):
     pass
 
 
-for model in (RepairProcedure, OperationDependency, Skill, TechnicianSkill, CaseOperation,
+for model in (RepairProcedure, OperationDependency, Skill, TechnicianSkill, Certification,
+              TechnicianCertification, CaseOperation,
               Evidence, ExpertDecision, Verification, RepairRecord, RepairAuditEvent):
     admin.site.register(model, RussianDefaultAdmin)

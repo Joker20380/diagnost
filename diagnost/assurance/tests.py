@@ -1,5 +1,6 @@
 import uuid
 
+from datetime import timedelta
 from decimal import Decimal
 
 from django.contrib.auth.models import User
@@ -7,14 +8,16 @@ from django.core import mail
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 from django.utils import translation
 from django.utils.translation import gettext
 
-from diagnostics.models import Vehicle
+from diagnostics.models import Vehicle, VehicleBrand, VehicleModel
 from users.models import Organization, TechnicianProfile, UserProfile, Workshop
 
 from .forms import WorkshopWalkthroughObservationForm
 from .models import (
+    Certification,
     CaseOperation,
     CompetencyReview,
     Evidence,
@@ -22,15 +25,18 @@ from .models import (
     ExpertReviewNotification,
     ExpertDecision,
     Operation,
+    OperationCertificationRequirement,
     OperationDependency,
     ProcedureVersion,
     RepairProcedure,
     Skill,
+    TechnicianCertification,
     TechnicianSkill,
     WorkshopWalkthroughObservation,
 )
 from .notifications import dispatch_expert_review_notifications
 from .services import (
+    assert_operation_authorized,
     cancel_repair_case,
     complete_operation,
     create_repair_case,
@@ -148,6 +154,20 @@ class RepairAssuranceExecutionTests(TestCase):
             minimum_value=Decimal("105"),
             maximum_value=Decimal("105"),
         )
+        self.certification = Certification.objects.create(
+            organization=self.organization,
+            code="critical-steering-work",
+            name="Critical steering work",
+        )
+        OperationCertificationRequirement.objects.create(
+            operation=self.torque,
+            certification=self.certification,
+        )
+        self.technician_certification = TechnicianCertification.objects.create(
+            technician=self.junior,
+            certification=self.certification,
+            issued_by=self.senior_profile,
+        )
         self.qc = Operation.objects.create(
             version=self.version,
             key="road-test",
@@ -178,6 +198,49 @@ class RepairAssuranceExecutionTests(TestCase):
 
     def execution(self, operation):
         return self.case.case_operations.get(operation=operation)
+
+    def test_valid_unrestricted_certification_authorizes_operation(self):
+        technician = assert_operation_authorized(
+            self.execution(self.torque), self.junior_user
+        )
+        self.assertEqual(technician, self.junior)
+
+    def test_expired_certification_blocks_operation(self):
+        TechnicianCertification.objects.filter(
+            pk=self.technician_certification.pk
+        ).update(valid_until=timezone.localdate() - timedelta(days=1))
+
+        with self.assertRaisesMessage(
+            PermissionDenied, "A valid certification for this vehicle is required."
+        ):
+            assert_operation_authorized(self.execution(self.torque), self.junior_user)
+
+    def test_certification_outside_vehicle_scope_blocks_operation(self):
+        bmw = VehicleBrand.objects.create(name="BMW", slug="bmw")
+        audi = VehicleBrand.objects.create(name="Audi", slug="audi")
+        bmw_model = VehicleModel.objects.create(
+            brand=bmw, name="5 Series", slug="5-series"
+        )
+        self.vehicle.vehicle_model = bmw_model
+        self.vehicle.save()
+        self.technician_certification.vehicle_brands.add(audi)
+
+        with self.assertRaisesMessage(
+            PermissionDenied, "A valid certification for this vehicle is required."
+        ):
+            assert_operation_authorized(self.execution(self.torque), self.junior_user)
+
+    def test_matching_model_scope_authorizes_operation(self):
+        bmw = VehicleBrand.objects.create(name="BMW", slug="bmw")
+        model = VehicleModel.objects.create(brand=bmw, name="5 Series", slug="5-series")
+        self.vehicle.vehicle_model = model
+        self.vehicle.save()
+        self.technician_certification.vehicle_models.add(model)
+
+        technician = assert_operation_authorized(
+            self.execution(self.torque), self.junior_user
+        )
+        self.assertEqual(technician, self.junior)
 
     def test_assigned_mechanic_sees_simple_case_screen(self):
         self.client.force_login(self.junior_user)

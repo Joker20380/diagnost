@@ -309,3 +309,16 @@ append-only decisions retain its provenance.
 This backend service does not make an automatic competency judgment. The
 senior reviewer remains accountable for the decision; a dedicated review UI is
 the remaining part of the roadmap item.
+
+## Certification validity and vehicle scope
+
+Operations may require organization-scoped Certification records. Published
+requirements use immutable OperationCertificationRequirement rows. A
+TechnicianCertification attributes the grant, validity interval and optional
+normalized brand/model scope to an issuer.
+
+The execution gate evaluates every certificate at action time. Model scope takes
+precedence over brand scope; empty scope is global. Missing, inactive, future,
+expired or out-of-scope grants fail closed. Role and verified skill checks must
+also pass. Operator workflow and rollout checks are documented in
+CERTIFICATION_AND_VEHICLE_SCOPE_GUIDE.md.

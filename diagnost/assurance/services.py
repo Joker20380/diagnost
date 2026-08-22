@@ -149,6 +149,9 @@ def procedure_snapshot(version: ProcedureVersion) -> dict:
                 "specification": operation.specification,
                 "required_skill": operation.required_skill.code if operation.required_skill else "",
                 "required_skill_level": operation.required_skill_level,
+                "required_certifications": sorted(
+                    operation.required_certifications.values_list("code", flat=True)
+                ),
                 "minimum_role": operation.minimum_role,
                 "approval_required": operation.approval_required,
                 "approval_minimum_role": operation.approval_minimum_role,
@@ -285,6 +288,19 @@ def assert_operation_authorized(case_operation: CaseOperation, user) -> Technici
         ).first()
         if skill is None:
             raise PermissionDenied(_("Required verified skill level is missing."))
+    required_certifications = list(operation.required_certifications.all())
+    if required_certifications:
+        grants = technician.assurance_certifications.filter(
+            certification__in=required_certifications
+        ).select_related("certification").prefetch_related("vehicle_brands", "vehicle_models")
+        grants_by_certification = {grant.certification_id: grant for grant in grants}
+        vehicle = case_operation.repair_case.vehicle
+        for certification in required_certifications:
+            grant = grants_by_certification.get(certification.pk)
+            if grant is None or not grant.is_valid_for(vehicle):
+                raise PermissionDenied(
+                    _("A valid certification for this vehicle is required.")
+                )
     return technician
 
 

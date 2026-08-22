@@ -44,6 +44,80 @@ class TechnicianSkill(models.Model):
         return super().save(*args, **kwargs)
 
 
+class Certification(models.Model):
+    organization = models.ForeignKey(
+        "users.Organization", on_delete=models.PROTECT, related_name="assurance_certifications"
+    )
+    code = models.SlugField(max_length=80)
+    name = models.CharField(max_length=160)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "code"], name="unique_assurance_certification_code"
+            )
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class TechnicianCertification(models.Model):
+    technician = models.ForeignKey(
+        "users.TechnicianProfile", on_delete=models.PROTECT, related_name="assurance_certifications"
+    )
+    certification = models.ForeignKey(
+        Certification, on_delete=models.PROTECT, related_name="technician_grants"
+    )
+    valid_from = models.DateField(default=timezone.localdate)
+    valid_until = models.DateField(null=True, blank=True)
+    issued_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, related_name="issued_assurance_certifications"
+    )
+    issued_at = models.DateTimeField(default=timezone.now)
+    vehicle_brands = models.ManyToManyField(
+        "diagnostics.VehicleBrand", blank=True, related_name="technician_certifications"
+    )
+    vehicle_models = models.ManyToManyField(
+        "diagnostics.VehicleModel", blank=True, related_name="technician_certifications"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["technician", "certification"],
+                name="unique_assurance_technician_certification",
+            )
+        ]
+
+    def clean(self):
+        if self.technician.organization_id != self.certification.organization_id:
+            raise ValidationError(
+                _("Technician and certification must belong to one organization.")
+            )
+        if self.valid_until and self.valid_until < self.valid_from:
+            raise ValidationError(
+                {"valid_until": _("Certification expiry cannot precede its start date.")}
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def is_valid_for(self, vehicle, at_date=None):
+        at_date = at_date or timezone.localdate()
+        if not self.certification.is_active or self.valid_from > at_date:
+            return False
+        if self.valid_until and self.valid_until < at_date:
+            return False
+        model_ids = set(self.vehicle_models.values_list("pk", flat=True))
+        if model_ids:
+            return vehicle.vehicle_model_id in model_ids
+        brand_ids = set(self.vehicle_brands.values_list("pk", flat=True))
+        return not brand_ids or vehicle.brand_id in brand_ids
+
+
 class RepairProcedure(models.Model):
     organization = models.ForeignKey("users.Organization", on_delete=models.PROTECT, related_name="repair_procedures")
     code = models.SlugField(max_length=120)
@@ -147,6 +221,10 @@ class Operation(DraftSpecification):
     specification = models.JSONField(default=dict, blank=True)
     required_skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True, related_name="operations")
     required_skill_level = models.PositiveSmallIntegerField(default=0)
+    required_certifications = models.ManyToManyField(
+        Certification, blank=True, related_name="operations",
+        through="OperationCertificationRequirement",
+    )
     minimum_role = models.CharField(max_length=32, blank=True)
     approval_required = models.BooleanField(default=False)
     approval_minimum_role = models.CharField(max_length=32, blank=True)
@@ -170,6 +248,35 @@ class Operation(DraftSpecification):
 
     def __str__(self):
         return f"{self.sequence}. {self.title}"
+
+
+class OperationCertificationRequirement(DraftSpecification):
+    operation = models.ForeignKey(
+        Operation, on_delete=models.PROTECT, related_name="certification_requirements"
+    )
+    certification = models.ForeignKey(
+        Certification, on_delete=models.PROTECT, related_name="operation_requirements"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["operation", "certification"],
+                name="unique_operation_certification_requirement",
+            )
+        ]
+
+    def procedure_version(self):
+        return self.operation.version
+
+    def clean(self):
+        if (
+            self.certification.organization_id
+            != self.operation.version.procedure.organization_id
+        ):
+            raise ValidationError(
+                _("Required certification belongs to another organization.")
+            )
 
 
 class OperationDependency(DraftSpecification):
