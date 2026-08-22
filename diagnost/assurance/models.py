@@ -351,6 +351,16 @@ class ReferenceMedia(DraftSpecification):
     end_seconds = models.PositiveIntegerField(null=True, blank=True)
     file = models.FileField(upload_to="assurance/reference/", null=True, blank=True)
     metadata = models.JSONField(default=dict, blank=True)
+    source_evidence = models.ForeignKey(
+        "Evidence", on_delete=models.PROTECT, null=True, blank=True,
+        related_name="promoted_reference_media"
+    )
+    promoted_by = models.ForeignKey(
+        UserProfile, on_delete=models.PROTECT, null=True, blank=True,
+        related_name="promoted_reference_media"
+    )
+    promoted_at = models.DateTimeField(null=True, blank=True)
+
 
     def procedure_version(self):
         return self.operation.version
@@ -529,6 +539,51 @@ class Evidence(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError(_("Evidence is append-only."))
+
+
+class EvidencePromotionRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending")
+        APPROVED = "approved", _("Approved")
+        REJECTED = "rejected", _("Rejected")
+
+    evidence = models.ForeignKey(Evidence, on_delete=models.PROTECT, related_name="promotion_requests")
+    target_operation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name="evidence_promotion_requests")
+    proposed_title = models.CharField(max_length=255)
+    license_basis = models.TextField()
+    rationale = models.TextField()
+    requested_by = models.ForeignKey(UserProfile, on_delete=models.PROTECT, related_name="evidence_promotion_requests")
+    requested_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.PENDING)
+    reviewed_by = models.ForeignKey(UserProfile, on_delete=models.PROTECT, null=True, blank=True, related_name="evidence_promotions_reviewed")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    review_rationale = models.TextField(blank=True)
+    reference_media = models.OneToOneField(ReferenceMedia, on_delete=models.PROTECT, null=True, blank=True, related_name="promotion_request")
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["evidence", "target_operation"], name="unique_evidence_promotion_target")]
+
+    def clean(self):
+        if self.evidence.repair_case.organization_id != self.target_operation.version.procedure.organization_id:
+            raise ValidationError(_("Evidence and target operation belong to different organizations."))
+        if self.target_operation.version.status != ProcedureVersion.Status.DRAFT:
+            raise ValidationError(_("Evidence can only be promoted into a draft procedure version."))
+        if not self.evidence.file:
+            raise ValidationError(_("Only file-backed evidence can be promoted."))
+        if self.evidence.is_superseded:
+            raise ValidationError(_("Superseded evidence cannot be promoted."))
+        if self.evidence.case_operation.status != CaseOperation.Status.COMPLETED:
+            raise ValidationError(_("Only evidence from a completed operation can be promoted."))
+        if len((self.license_basis or "").strip()) < 10:
+            raise ValidationError({"license_basis": _("A substantive license basis is required.")})
+        if len((self.rationale or "").strip()) < 10:
+            raise ValidationError({"rationale": _("A substantive promotion rationale is required.")})
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError(_("Promotion requests are append-only; use the moderation service."))
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
 
 class ExpertDecision(models.Model):

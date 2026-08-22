@@ -5,6 +5,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.core import mail
+from django.core.files.base import ContentFile
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -21,12 +22,14 @@ from .models import (
     CaseOperation,
     CompetencyReview,
     Evidence,
+    EvidencePromotionRequest,
     EvidenceRequirement,
     ExpertReviewNotification,
     ExpertDecision,
     Operation,
     OperationCertificationRequirement,
     OperationDependency,
+    ReferenceMedia,
     ProcedureVersion,
     RepairProcedure,
     Skill,
@@ -42,6 +45,8 @@ from .services import (
     create_repair_case,
     decide_operation,
     publish_procedure_version,
+    moderate_evidence_promotion,
+    request_evidence_promotion,
     review_competency,
     skip_case_operation,
     submit_evidence,
@@ -241,6 +246,76 @@ class RepairAssuranceExecutionTests(TestCase):
             self.execution(self.torque), self.junior_user
         )
         self.assertEqual(technician, self.junior)
+
+    def _promotion_fixture(self):
+        execution = self.execution(self.scan)
+        CaseOperation.objects.filter(pk=execution.pk).update(
+            status=CaseOperation.Status.COMPLETED
+        )
+        execution.refresh_from_db()
+        evidence = Evidence.objects.create(
+            repair_case=self.case,
+            case_operation=execution,
+            operation=self.scan,
+            requirement=self.scan_requirement,
+            evidence_type=EvidenceRequirement.Type.DOCUMENT,
+            file=ContentFile(b"approved workshop material", name="capture.pdf"),
+            content_sha256="a" * 64,
+            submitted_by=self.junior_profile,
+        )
+        draft = ProcedureVersion.objects.create(
+            procedure=self.procedure, version=2, created_by=self.senior_profile
+        )
+        target = Operation.objects.create(
+            version=draft, key="reference-target", sequence=1,
+            title="Reference target", description="Draft operation"
+        )
+        return evidence, target
+
+    def test_moderated_evidence_promotion_preserves_provenance(self):
+        evidence, target = self._promotion_fixture()
+        promotion = request_evidence_promotion(
+            evidence=evidence,
+            target_operation=target,
+            proposed_title="Approved workshop capture",
+            license_basis="Customer consent and workshop reuse agreement",
+            rationale="Useful verified example for future technicians",
+            user=self.junior_user,
+        )
+
+        reviewed = moderate_evidence_promotion(
+            promotion_request=promotion,
+            decision=EvidencePromotionRequest.Status.APPROVED,
+            review_rationale="Rights and technical relevance were independently verified",
+            user=self.senior_user,
+        )
+
+        self.assertEqual(reviewed.status, EvidencePromotionRequest.Status.APPROVED)
+        media = ReferenceMedia.objects.get(pk=reviewed.reference_media_id)
+        self.assertEqual(media.source_evidence, evidence)
+        self.assertEqual(media.promoted_by, self.senior_profile)
+        self.assertEqual(media.source_type, ReferenceMedia.Source.SERVICE_CAPTURE)
+        self.assertEqual(media.metadata["content_sha256"], "a" * 64)
+
+    def test_rejected_evidence_promotion_creates_no_reference_media(self):
+        evidence, target = self._promotion_fixture()
+        promotion = request_evidence_promotion(
+            evidence=evidence,
+            target_operation=target,
+            proposed_title="Unsafe reuse candidate",
+            license_basis="Consent status requires independent review",
+            rationale="Candidate material requested for moderation",
+            user=self.junior_user,
+        )
+        reviewed = moderate_evidence_promotion(
+            promotion_request=promotion,
+            decision=EvidencePromotionRequest.Status.REJECTED,
+            review_rationale="Reuse rights are insufficiently documented",
+            user=self.senior_user,
+        )
+        self.assertEqual(reviewed.status, EvidencePromotionRequest.Status.REJECTED)
+        self.assertIsNone(reviewed.reference_media_id)
+
 
     def test_assigned_mechanic_sees_simple_case_screen(self):
         self.client.force_login(self.junior_user)

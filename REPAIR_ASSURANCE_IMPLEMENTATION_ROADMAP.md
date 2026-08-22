@@ -157,7 +157,10 @@ Evidence:
   - [x] organization-scoped catalog and technician grants;
   - [x] validity dates and brand/model scope enforced by backend gates;
   - [x] admin authoring and Russian operator guide;
-- [ ] moderated Evidence → ReferenceMedia promotion;
+- [x] moderated Evidence → ReferenceMedia promotion;
+  - [x] independent senior/manager approval and self-review prevention;
+  - [x] immutable provenance, rights basis, SHA-256 and audit events;
+  - [x] controlled admin workflow and Russian operator guide;
 - [ ] procedure revision cloning and comparison;
 - [ ] external DMS/GMS adapter interface;
 - [ ] procedure import provenance and licensing controls.

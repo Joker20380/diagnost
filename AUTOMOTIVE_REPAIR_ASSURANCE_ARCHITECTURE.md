@@ -322,3 +322,16 @@ precedence over brand scope; empty scope is global. Missing, inactive, future,
 expired or out-of-scope grants fail closed. Role and verified skill checks must
 also pass. Operator workflow and rollout checks are documented in
 CERTIFICATION_AND_VEHICLE_SCOPE_GUIDE.md.
+
+## Moderated evidence promotion
+
+Evidence is never reused as procedure guidance automatically. A promotion
+request identifies file-backed, non-superseded evidence from a completed
+operation, a target operation in a draft version, the rights basis and the
+technical rationale. Tenant boundaries are enforced.
+
+An independent senior or manager approves or rejects the request. Approval
+creates service-capture ReferenceMedia with immutable provenance to the source
+evidence, its content checksum and reviewer. Rejection creates no media.
+Published procedure versions remain unchanged. Operator steps and privacy
+checks are documented in EVIDENCE_PROMOTION_GUIDE.md.

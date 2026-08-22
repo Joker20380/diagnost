@@ -18,12 +18,14 @@ from .models import (
     CompetencyReview,
     CompetencyReviewEvidence,
     Evidence,
+    EvidencePromotionRequest,
     EvidenceRequirement,
     ExpertDecision,
     ExpertDecisionEvidence,
     ExpertReviewNotification,
     Operation,
     ProcedureVersion,
+    ReferenceMedia,
     RepairAuditEvent,
     RepairCase,
     RepairCaseTechnician,
@@ -446,6 +448,75 @@ def supersede_evidence(
         supersedes=evidence,
         supersession_reason=reason,
     )
+
+
+@transaction.atomic
+def request_evidence_promotion(*, evidence, target_operation, proposed_title, license_basis, rationale, user):
+    evidence = Evidence.objects.select_for_update().select_related(
+        "repair_case", "case_operation", "submitted_by"
+    ).get(pk=evidence.pk)
+    technician = _technician(user, evidence.repair_case.organization_id)
+    if evidence.submitted_by_id != technician.user_profile_id and ROLE_LEVEL.get(technician.role, -1) < 3:
+        raise PermissionDenied(_("Only the submitter or a senior may request promotion."))
+    if evidence.is_superseded:
+        raise ValidationError(_("Superseded evidence cannot be promoted."))
+    if evidence.case_operation.status != CaseOperation.Status.COMPLETED:
+        raise ValidationError(_("Only evidence from a completed operation can be promoted."))
+    request = EvidencePromotionRequest.objects.create(
+        evidence=evidence, target_operation=target_operation,
+        proposed_title=proposed_title.strip(), license_basis=license_basis.strip(),
+        rationale=rationale.strip(), requested_by=technician.user_profile,
+    )
+    _audit(
+        evidence.repair_case, technician.user_profile, "evidence_promotion_requested",
+        case_operation=evidence.case_operation,
+        payload={"promotion_request_id": request.pk, "target_operation_id": target_operation.pk},
+    )
+    return request
+
+
+@transaction.atomic
+def moderate_evidence_promotion(*, promotion_request, decision, review_rationale, user):
+    request = EvidencePromotionRequest.objects.select_for_update().select_related(
+        "evidence__repair_case", "evidence__case_operation",
+        "target_operation__version__procedure", "requested_by"
+    ).get(pk=promotion_request.pk)
+    reviewer = _manager_technician(user, request.evidence.repair_case.organization_id)
+    if request.status != EvidencePromotionRequest.Status.PENDING:
+        raise ValidationError(_("Promotion request has already been reviewed."))
+    if request.requested_by_id == reviewer.user_profile_id:
+        raise PermissionDenied(_("Reviewers cannot approve their own promotion request."))
+    if decision not in {EvidencePromotionRequest.Status.APPROVED, EvidencePromotionRequest.Status.REJECTED}:
+        raise ValidationError(_("Unsupported promotion decision."))
+    if len((review_rationale or "").strip()) < 10:
+        raise ValidationError(_("A substantive moderation rationale is required."))
+    evidence = request.evidence
+    if evidence.is_superseded:
+        raise ValidationError(_("Superseded evidence cannot be promoted."))
+    if request.target_operation.version.status != ProcedureVersion.Status.DRAFT:
+        raise ValidationError(_("The target procedure version is no longer a draft."))
+    media = None
+    if decision == EvidencePromotionRequest.Status.APPROVED:
+        media = ReferenceMedia.objects.create(
+            operation=request.target_operation,
+            source_type=ReferenceMedia.Source.SERVICE_CAPTURE,
+            title=request.proposed_title, file=evidence.file.name,
+            source_evidence=evidence, promoted_by=reviewer.user_profile,
+            promoted_at=timezone.now(),
+            metadata={"source_evidence_id": evidence.pk, "content_sha256": evidence.content_sha256, "license_basis": request.license_basis},
+        )
+    EvidencePromotionRequest.objects.filter(pk=request.pk).update(
+        status=decision, reviewed_by=reviewer.user_profile, reviewed_at=timezone.now(),
+        review_rationale=review_rationale.strip(), reference_media=media,
+    )
+    request.refresh_from_db()
+    _audit(
+        evidence.repair_case, reviewer.user_profile, f"evidence_promotion_{decision}",
+        case_operation=evidence.case_operation,
+        payload={"promotion_request_id": request.pk, "reference_media_id": media.pk if media else None},
+    )
+    return request
+
 
 
 def _missing_requirements(case_operation):

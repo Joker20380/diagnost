@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-from .services import publish_procedure_version
+from .services import moderate_evidence_promotion, publish_procedure_version
 
 from .models import (
     Certification,
@@ -9,6 +9,7 @@ from .models import (
     Evidence,
     EvidenceRequirement,
     ExpertDecision,
+    EvidencePromotionRequest,
     Operation,
     OperationCertificationRequirement,
     OperationDependency,
@@ -36,6 +37,10 @@ FIELD_LABELS = {
     "published_at": "Опубликовано", "sequence": "Порядок", "title": "Название", "operation_type": "Тип операции",
     "mandatory": "Обязательная", "blocking": "Блокирующая", "qc_operation": "Контроль качества",
     "expected_result": "Ожидаемый результат", "technical_requirements": "Технические требования",
+    "target_operation": "Целевая операция", "proposed_title": "Предлагаемое название",
+    "license_basis": "Основание прав на повторное использование", "rationale": "Обоснование",
+    "requested_by": "Запросил", "requested_at": "Запрошено", "reviewed_by": "Проверил",
+    "reviewed_at": "Проверено", "review_rationale": "Обоснование модерации",
     "required_tools": "Необходимые инструменты", "specification": "Спецификация", "required_skill": "Компетенция",
     "required_skill_level": "Требуемый уровень", "minimum_role": "Минимальная роль",
     "approval_required": "Требуется согласование", "approval_minimum_role": "Роль согласующего",
@@ -176,6 +181,53 @@ class ProcedureVersionAdmin(RussianAdminMixin, admin.ModelAdmin):
             self.message_user(request, f"Опубликовано версий: {published}", level=messages.SUCCESS)
 
 
+@admin.register(EvidencePromotionRequest)
+class EvidencePromotionRequestAdmin(RussianAdminMixin, admin.ModelAdmin):
+    list_display = ("id", "evidence", "target_operation", "status", "requested_by", "requested_at")
+    list_filter = ("status", "target_operation__version__procedure")
+    search_fields = ("proposed_title", "license_basis", "rationale")
+    readonly_fields = (
+        "requested_by", "requested_at", "status", "reviewed_by",
+        "reviewed_at", "review_rationale", "reference_media",
+    )
+    actions = ("approve_selected", "reject_selected")
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            return
+        obj.requested_by = request.user.userprofile
+        super().save_model(request, obj, form, change)
+
+    def _moderate(self, request, queryset, decision, rationale):
+        count = 0
+        for item in queryset:
+            try:
+                moderate_evidence_promotion(
+                    promotion_request=item, decision=decision,
+                    review_rationale=rationale, user=request.user,
+                )
+            except Exception as exc:
+                self.message_user(request, f"{item.pk}: {exc}", level=messages.ERROR)
+            else:
+                count += 1
+        if count:
+            self.message_user(request, f"Обработано заявок: {count}", level=messages.SUCCESS)
+
+    @admin.action(description=_("Одобрить выбранные заявки на справочный материал"))
+    def approve_selected(self, request, queryset):
+        self._moderate(
+            request, queryset, EvidencePromotionRequest.Status.APPROVED,
+            "Права и техническая применимость подтверждены модератором.",
+        )
+
+    @admin.action(description=_("Отклонить выбранные заявки на справочный материал"))
+    def reject_selected(self, request, queryset):
+        self._moderate(
+            request, queryset, EvidencePromotionRequest.Status.REJECTED,
+            "Заявка отклонена модератором после проверки прав и применимости.",
+        )
+
+
 @admin.register(RepairCase)
 class RepairCaseAdmin(RussianAdminMixin, admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -195,6 +247,7 @@ MODEL_NAMES = {
     Operation: ("операция", "операции"),
     OperationCertificationRequirement: ("требование сертификата", "требования сертификатов"),
     OperationDependency: ("зависимость операции", "зависимости операций"),
+    EvidencePromotionRequest: ("заявка на справочный материал", "заявки на справочные материалы"),
     EvidenceRequirement: ("требование к доказательству", "требования к доказательствам"),
     ReferenceMedia: ("справочный материал", "справочные материалы"),
     RepairCase: ("ремонтный кейс", "ремонтные кейсы"),
